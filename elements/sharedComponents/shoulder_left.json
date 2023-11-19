@@ -1,0 +1,18 @@
+{
+	"mainMesh": {
+		"vertices": [
+			"v5-h",
+			"v6-h"
+		],
+		"uvs": [
+			"vec2(absX5, absZ5) * (-0.25)",
+			"vec2(absX6, absZ6) * (-0.25)"
+		],
+		"faces": [
+			0
+		],
+		"facesTextures": [
+			0
+		]
+	}
+}

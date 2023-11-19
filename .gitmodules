@@ -1,0 +1,3 @@
+[submodule "exporters/psdl/common"]
+	path = exporters/psdl/common
+	url = https://github.com/wilkovatch/psdl-exporter-common

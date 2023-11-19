@@ -1,0 +1,12 @@
+{
+	"label": "PROP_CONTAINER_TYPE_LINE",
+	"parameters": [
+		{
+			"name": "element",
+			"allowedTypes": [
+				"line"
+			],
+			"maxNumber": 1
+		}
+	]
+}

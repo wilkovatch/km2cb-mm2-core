@@ -1,0 +1,22 @@
+{
+	"parameters": [
+		{
+			"name": "fixBound",
+			"label": "FIX_BOUND",
+			"tooltip": "FIX_BOUND_TOOLTIP",
+			"type": "bool"
+		}
+	],
+	"staticDefinitions": [
+		{
+			"name": "uMult",
+			"type": "float",
+			"value": "-0.25"
+		},
+		{
+			"name": "vMult",
+			"type": "float",
+			"value": "-0.25"
+		}
+	]
+}

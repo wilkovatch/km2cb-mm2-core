@@ -1,0 +1,38 @@
+{
+	"variableSections": false,
+	"sectionVertices": [
+		"0",
+		"0",
+		"0",
+		"0",
+		"0",
+		"0",
+		"0"
+	],
+	"anchors": [
+		"v3"
+	],
+	"textures": [
+		"rail_texture1",
+		"rail_texture4"
+	],
+	"texturesMapping": {
+		"rail_rail_left": [
+			0
+		],
+		"rail_wall_left": [
+			0,
+			1
+		]
+	},
+	"components": [
+		{
+			"name": "rail_rail_left",
+			"condition": "rail_type = 1"
+		},
+		{
+			"name": "rail_wall_left",
+			"condition": "rail_type = 2"
+		}
+	]
+}

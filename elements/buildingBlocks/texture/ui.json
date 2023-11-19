@@ -1,0 +1,19 @@
+{
+	"label": "BS_B_TYPE_TEXTURE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "assetName",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

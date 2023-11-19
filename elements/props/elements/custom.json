@@ -1,0 +1,96 @@
+{
+	"label": "PROP_TYPE_CUSTOM",
+	"parametersInfo": {
+		"parameters": [
+			{
+				"name": "start",
+				"label": "PROP_ELEM_START",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "end",
+				"label": "PROP_ELEM_END",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "elemDistance",
+				"label": "PROP_ELEM_DISTANCE",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "maxNumber",
+				"label": "PROP_ELEM_MAX_NUM",
+				"placeholder": "VALUE_PH",
+				"type": "int"
+			},
+			{
+				"name": "minHorizPos",
+				"label": "PROP_ELEM_MIN_POS",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "maxHorizPos",
+				"label": "PROP_ELEM_MAX_POS",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "rotationAngle",
+				"label": "PROP_ELEM_ROTATION",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "random",
+				"label": "PROP_ELEM_RND",
+				"tooltip": "PROP_ELEM_RND_TOOLTIP",
+				"type": "bool"
+			}
+		]
+	},
+	"uiInfo": [
+		{
+			"name": "end",
+			"width": 0.75
+		},
+		{
+			"name": "start",
+			"width": 0.75
+		},
+		{
+			"name": "elemDistance",
+			"width": 1.5
+		},
+		{
+			"name": "maxNumber",
+			"width": 1.5
+		},
+		{
+			"name": "minHorizPos",
+			"width": 1.5
+		},
+		{
+			"name": "maxHorizPos",
+			"width": 1.5
+		},
+		{
+			"name": "rotationAngle",
+			"width": 0.75
+		},
+		{
+			"name": "random",
+			"width": 0.75
+		}
+	],
+	"placementRules": {
+		"meshIndex": "if(random, rnd(0, meshNum, 0), i%meshNum)",
+		"whileCondition": "elemDistance > 0 and i < maxNumber and z <= (totalLength-end)",
+		"xPos": "rnd(minHorizPos, maxHorizPos, 0)",
+		"zPos": "if(i=0, start, lastZ+elemDistance)",
+		"forward": "rotate(localForward, localUp, deg2rad*rotationAngle)"
+	}
+}

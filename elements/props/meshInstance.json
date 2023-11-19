@@ -1,0 +1,23 @@
+{
+	"parametersInfo": {
+		"parameters": [
+			{
+				"name": "prop",
+				"label": "MESH_INSTANCE_PROP",
+				"placeholder": "VALUE_PH",
+				"type": "bool"
+			}
+		]
+	},
+	"uiInfo": [
+		{
+			"name": "prop",
+			"width": 1.5
+		}
+	],
+	"placementRules": {
+		"layer": "if(prop, 13, 11)",
+		"placerLayerMask": "-1-2^if(prop, 13, 7)",
+		"autoYOffset": "prop"
+	}
+}

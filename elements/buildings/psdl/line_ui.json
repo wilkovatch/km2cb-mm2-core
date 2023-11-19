@@ -1,0 +1,37 @@
+{
+	"label": "PSDL_COMPATIBLE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "BL_TAB_MAIN",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "BL_TAB_PROPERTIES",
+			"elements": [
+				{
+					"name": "propertiesGroup",
+					"width": 1.5
+				},
+				{
+					"name": "fixBound",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "BL_TAB_LOOP",
+			"elements": [
+				{
+					"name": "loopGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

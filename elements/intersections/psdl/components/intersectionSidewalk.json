@@ -1,0 +1,76 @@
+{
+	"localDefinitions": [
+	    {
+			"name": "zAdj",
+			"type": "float",
+			"value": "max(z-CwASize, 0)"
+		},
+	    {
+			"name": "totalLengthAdj",
+			"type": "float",
+			"value": "max(totalLength-CwASize-CwBSize, 0)"
+		},
+		{
+			"name": "percent",
+			"type": "float",
+			"value": "zAdj/totalLengthAdj"
+		},
+		{
+			"name": "swh",
+			"type": "vec3",
+			"value": "lerp(A_swh, B_swh, percent)"
+		},
+		{
+			"name": "g",
+			"type": "vec3",
+			"value": "vec3(0, -ground, 0)"
+		},
+		{
+			"name": "zSw",
+			"type": "float",
+			"value": "z * 2 * max(1, round(totalLength/magnitude(v1_0-v0_0)))/totalLength"
+		},
+		{
+			"name": "uv0U",
+			"type": "float",
+			"value": "if(fixSidewalksUV, zSw, absX1 * (-0.25))"
+		},
+		{
+			"name": "uv0V",
+			"type": "float",
+			"value": "if(fixSidewalksUV, 1, absZ1 * (-0.25))"
+		},
+		{
+			"name": "uv1U",
+			"type": "float",
+			"value": "if(fixSidewalksUV, zSw, absX0 * (-0.25))"
+		},
+		{
+			"name": "uv1V",
+			"type": "float",
+			"value": "if(fixSidewalksUV, 0, absZ0 * (-0.25))"
+		}
+	],
+	"mainMesh": {
+		"vertices": [
+			"v1+g",
+			"v1+swh",
+			"v1+swh",
+			"v0+swh"
+		],
+		"uvs": [
+			"vec2(uv0U, uv0V)",
+			"vec2(uv0U, uv0V)",
+			"vec2(uv0U, uv0V)",
+			"vec2(uv1U, uv1V)"
+		],
+		"faces": [
+			0,
+			2
+		],
+		"facesTextures": [
+			0,
+			0
+		]
+	}
+}

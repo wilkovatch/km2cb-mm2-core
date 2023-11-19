@@ -1,0 +1,4239 @@
+{
+  "presets": {
+    "propElem": [
+      {
+        "start": 9.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightstreet_l.pkg"
+        ],
+        "random": true,
+        "name": "Default",
+        "type": "psdl",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightstreet_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight",
+        "type": "psdl",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 11.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_benchwood_f.pkg"
+        ],
+        "random": true,
+        "name": "bench",
+        "type": "psdl",
+        "elemDistance": 10.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_dumpstr_l.pkg"
+        ],
+        "random": true,
+        "name": "dumpster",
+        "type": "psdl",
+        "elemDistance": 10.0
+      },
+      {
+        "start": 2.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.2,
+        "maxHorizPos": 0.2,
+        "meshes": [
+          "geometry/sp_mailbox_l.pkg"
+        ],
+        "random": true,
+        "name": "mailbox",
+        "type": "psdl",
+        "elemDistance": 1.0
+      },
+      {
+        "start": 13.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_parkmtr_f.pkg"
+        ],
+        "random": true,
+        "name": "meter",
+        "type": "psdl",
+        "elemDistance": 17.0
+      },
+      {
+        "start": 7.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_newsgroup01_l.pkg"
+        ],
+        "random": true,
+        "name": "newsboxs",
+        "type": "psdl",
+        "elemDistance": 10.0
+      },
+      {
+        "start": 16.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_phonebooth_l.pkg"
+        ],
+        "random": true,
+        "name": "phone",
+        "type": "psdl",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightpark_f.pkg"
+        ],
+        "random": true,
+        "name": "streetlight02",
+        "type": "psdl",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightpark_f.pkg"
+        ],
+        "random": true,
+        "name": "streetlight02b",
+        "type": "psdl",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightthames_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight03",
+        "type": "psdl",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightthames_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight03b",
+        "type": "psdl",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_light_tall_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight04",
+        "type": "psdl",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_light_tall_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight04b",
+        "type": "psdl",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightstreet_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlightb",
+        "type": "psdl",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 14.0,
+        "maxNumber": 2,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_tree1_s.pkg",
+          "geometry/sp_tree1_s.pkg"
+        ],
+        "random": true,
+        "name": "streetree",
+        "type": "psdl",
+        "elemDistance": 50.0
+      },
+      {
+        "start": 4.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_can_royal_l.pkg"
+        ],
+        "random": true,
+        "name": "trashcan",
+        "type": "psdl",
+        "elemDistance": 10.0
+      }
+    ],
+    "propContainer": [
+      {
+        "name": "Default",
+        "type": "psdl"
+      },
+      {
+        "name": "n01left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n01right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n02left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n02right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n03left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n03right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n04left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n04right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n05left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n05right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n06left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n06right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n07left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n07right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          }
+        ]
+      },
+      {
+        "name": "n08left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n08right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n09left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n09right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n10left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n10right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n11left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n11right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n12left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdl",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n12right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n13left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n13right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n14left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightthames_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight03",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n14right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightthames_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight03b",
+            "type": "psdl",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n15left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdl",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n15right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdl",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n16left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdl",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n16right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdl",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdl",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdl",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdl",
+            "elemDistance": 10.0
+          }
+        ]
+      }
+    ],
+    "roadPropRule": [
+      {
+        "name": "Default",
+        "type": "psdl"
+      },
+      {
+        "name": "n01",
+        "type": "psdl",
+        "left": {
+          "name": "n01left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n01right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n02",
+        "type": "psdl",
+        "left": {
+          "name": "n02left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n02right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n03",
+        "type": "psdl",
+        "left": {
+          "name": "n03left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n03right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n04",
+        "type": "psdl",
+        "left": {
+          "name": "n04left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n04right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlightb",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n05",
+        "type": "psdl",
+        "left": {
+          "name": "n05left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n05right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlightb",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n06",
+        "type": "psdl",
+        "left": {
+          "name": "n06left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n06right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlightb",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n07",
+        "type": "psdl",
+        "left": {
+          "name": "n07left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n07right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n08",
+        "type": "psdl",
+        "left": {
+          "name": "n08left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n08right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlightb",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n09",
+        "type": "psdl",
+        "left": {
+          "name": "n09left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n09right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n10",
+        "type": "psdl",
+        "left": {
+          "name": "n10left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n10right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n11",
+        "type": "psdl",
+        "left": {
+          "name": "n11left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n11right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightpark_f.pkg"
+              ],
+              "random": true,
+              "name": "streetlight02b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n12",
+        "type": "psdl",
+        "left": {
+          "name": "n12left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 14.0,
+              "maxNumber": 2,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_tree1_s.pkg",
+                "geometry/sp_tree1_s.pkg"
+              ],
+              "random": true,
+              "name": "streetree",
+              "type": "psdl",
+              "elemDistance": 50.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n12right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n13",
+        "type": "psdl",
+        "left": {
+          "name": "n13left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n13right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_light_tall_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight04b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n14",
+        "type": "psdl",
+        "left": {
+          "name": "n14left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightthames_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight03",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n14right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 6,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightthames_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight03b",
+              "type": "psdl",
+              "elemDistance": 40.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n15",
+        "type": "psdl",
+        "left": {
+          "name": "n15left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlightb",
+              "type": "psdl",
+              "elemDistance": 29.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n15right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight",
+              "type": "psdl",
+              "elemDistance": 29.0
+            }
+          ]
+        }
+      },
+      {
+        "name": "n16",
+        "type": "psdl",
+        "left": {
+          "name": "n16left",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 9.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlight",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 16.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_phonebooth_l.pkg"
+              ],
+              "random": true,
+              "name": "phone",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 4.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_can_royal_l.pkg"
+              ],
+              "random": true,
+              "name": "trashcan",
+              "type": "psdl",
+              "elemDistance": 10.0
+            },
+            {
+              "start": 7.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_newsgroup01_l.pkg"
+              ],
+              "random": true,
+              "name": "newsboxs",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        },
+        "right": {
+          "name": "n16right",
+          "type": "psdl",
+          "elements": [
+            {
+              "start": 18.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_lightstreet_l.pkg"
+              ],
+              "random": true,
+              "name": "streetlightb",
+              "type": "psdl",
+              "elemDistance": 29.0
+            },
+            {
+              "start": 2.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.2,
+              "maxHorizPos": 0.2,
+              "meshes": [
+                "geometry/sp_mailbox_l.pkg"
+              ],
+              "random": true,
+              "name": "mailbox",
+              "type": "psdl",
+              "elemDistance": 1.0
+            },
+            {
+              "start": 13.0,
+              "maxNumber": 9999,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_parkmtr_f.pkg"
+              ],
+              "random": true,
+              "name": "meter",
+              "type": "psdl",
+              "elemDistance": 17.0
+            },
+            {
+              "start": 11.0,
+              "maxNumber": 1,
+              "minHorizPos": 0.1,
+              "maxHorizPos": 0.1,
+              "meshes": [
+                "geometry/sp_benchwood_f.pkg"
+              ],
+              "random": true,
+              "name": "bench",
+              "type": "psdl",
+              "elemDistance": 10.0
+            }
+          ]
+        }
+      }
+    ],
+    "road": [
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 40.0,
+        "roadWidth": 30.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r6_nopark_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r6_nopark_lo_l.tex",
+        "forwardLanes": 3,
+        "backwardLanes": 3,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "Default",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 15.0,
+        "roadWidth": 5.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r1_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r1_lo_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 0,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "1 lane road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 20.0,
+        "roadWidth": 10.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r2_nopark_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r2_nopark_lo_l.tex",
+        "forwardLanes": 2,
+        "backwardLanes": 0,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "2-lane one-way road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 20.0,
+        "roadWidth": 10.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r2_nopark_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r2_nopark_lo_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 1,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "2-lane road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 30.0,
+        "roadWidth": 20.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r4_nopark_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r4_nopark_lo_l.tex",
+        "forwardLanes": 4,
+        "backwardLanes": 0,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "4-lane one-way road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 30.0,
+        "roadWidth": 20.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r4_nopark_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r4_nopark_lo_l.tex",
+        "forwardLanes": 2,
+        "backwardLanes": 2,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "4-lane road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 40.0,
+        "roadWidth": 30.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r6_nopark_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r6_nopark_lo_l.tex",
+        "forwardLanes": 3,
+        "backwardLanes": 3,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "6-lane road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 40.0,
+        "roadWidth": 30.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 3,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r6_nopark_l.tex",
+        "texture2": "texture/s_jersey_rail.tex",
+        "texture3": "texture/s_jersey_rail.tex",
+        "texture4": "texture/s_jersey_rail.tex",
+        "texture5": "texture/s_jersey_rail.tex",
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r6_nopark_lo_l.tex",
+        "forwardLanes": 3,
+        "backwardLanes": 3,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "6-lane road, wedge divider",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl"
+      }
+    ],
+    "intersection": [
+      {
+        "sidewalkSegments": 5,
+        "sizeIncrease": 0.0,
+        "texture0": "texture/swalk_stone02_l.tex",
+        "texture1": "texture/rinter_l.tex",
+        "texture2": "texture/rxwalk02_l.tex",
+        "fixSwVerticalUV": false,
+        "roadStyleSwUV": false,
+        "echo": false,
+        "uMult": -0.25,
+        "vMult": -0.25,
+        "uMultSW": 1.0,
+        "vMultSW": 1.0,
+        "Name": "Default",
+        "name": "Default",
+        "type": "psdl"
+      }
+    ],
+    "rail": [
+      {
+        "type": 0,
+        "hasRight": false,
+        "hasLeft": false,
+        "height": 0.0,
+        "texture0": "",
+        "texture1": "",
+        "texture2": "",
+        "texture3": "",
+        "texture4": "",
+        "texture5": "",
+        "offsetStartLeft": false,
+        "offsetEndLeft": false,
+        "offsetStartRight": false,
+        "offsetEndRight": false,
+        "Name": "Default",
+        "name": "Default"
+      },
+      {
+        "type": 1,
+        "hasRight": true,
+        "hasLeft": true,
+        "height": 1.0,
+        "texture0": "texture/s_conc_rail.tex",
+        "texture1": "texture/s_conc_rail.tex",
+        "texture2": "texture/s_conc_rail.tex",
+        "texture3": "texture/s_conc_rail.tex",
+        "texture4": "texture/s_conc_rail.tex",
+        "texture5": "texture/s_conc_rail.tex",
+        "offsetStartLeft": false,
+        "offsetEndLeft": false,
+        "offsetStartRight": false,
+        "offsetEndRight": false,
+        "Name": "Railing",
+        "name": "Railing"
+      },
+      {
+        "type": 2,
+        "hasRight": true,
+        "hasLeft": true,
+        "height": 1.0,
+        "texture0": "texture/el_justinhermbrick_f.tex",
+        "texture1": "texture/el_justinhermbrick_f.tex",
+        "texture2": "texture/el_justinhermbrick_f.tex",
+        "texture3": "texture/el_justinhermbrick_f.tex",
+        "texture4": "texture/el_justinhermbrick_f.tex",
+        "texture5": "texture/el_justinhermbrick_f.tex",
+        "offsetStartLeft": false,
+        "offsetEndLeft": false,
+        "offsetStartRight": false,
+        "offsetEndRight": false,
+        "Name": "Wall",
+        "name": "Wall"
+      }
+    ],
+    "buildingSide": [
+      {
+        "type": "psdl",
+        "hasGroundFloor": true,
+        "groundFloor": {
+          "minHeight": 3.0,
+          "Slices": [
+            {
+              "bottom": 1,
+              "middle": 0,
+              "top": 1,
+              "Repetitions": 1,
+              "Width": 3.0,
+              "repetitions": 1,
+              "width": 3.0
+            }
+          ]
+        },
+        "lowUpperFloorsCount": 0,
+        "highUpperFloorsCount": 0,
+        "upperFloors": [
+          {
+            "height": 4.0,
+            "Slices": [
+              {
+                "block": 2,
+                "Repetitions": 1,
+                "Width": 4.0,
+                "repetitions": 1,
+                "width": 4.0
+              }
+            ]
+          }
+        ],
+        "blockDict": [
+          {
+            "type": "texture",
+            "assetName": "texture/sf_storedoor01_4_f.tex",
+            "listName": "Ground"
+          },
+          {
+            "type": "sliver",
+            "assetName": "texture/sw_brickwall01_s.tex",
+            "listName": "Sliver"
+          },
+          {
+            "type": "texture",
+            "assetName": "texture/sf_3s_win06_6_f.tex",
+            "listName": "Window"
+          }
+        ],
+        "Name": "Default",
+        "name": "Default"
+      }
+    ],
+    "building": [
+      {
+        "type": "psdl",
+        "front": true,
+        "left": true,
+        "right": true,
+        "back": true,
+        "top": true,
+        "frontState": {
+          "type": "psdl",
+          "hasGroundFloor": true,
+          "groundFloor": {
+            "minHeight": 3.0,
+            "Slices": [
+              {
+                "bottom": 1,
+                "middle": 0,
+                "top": 1,
+                "Repetitions": 1,
+                "Width": 3.0,
+                "repetitions": 1,
+                "width": 3.0
+              }
+            ]
+          },
+          "lowUpperFloorsCount": 0,
+          "highUpperFloorsCount": 0,
+          "upperFloors": [
+            {
+              "height": 4.0,
+              "Slices": [
+                {
+                  "block": 2,
+                  "Repetitions": 1,
+                  "Width": 4.0,
+                  "repetitions": 1,
+                  "width": 4.0
+                }
+              ]
+            }
+          ],
+          "blockDict": [
+            {
+              "type": "texture",
+              "assetName": "texture/sf_storedoor01_4_f.tex",
+              "listName": "Ground"
+            },
+            {
+              "type": "sliver",
+              "assetName": "texture/sw_brickwall01_s.tex",
+              "listName": "Sliver"
+            },
+            {
+              "type": "texture",
+              "assetName": "texture/sf_3s_win06_6_f.tex",
+              "listName": "Window"
+            }
+          ],
+          "Name": "Default",
+          "name": "Default"
+        },
+        "leftState": {
+          "type": "psdl",
+          "hasGroundFloor": true,
+          "groundFloor": {
+            "minHeight": 3.0,
+            "Slices": [
+              {
+                "bottom": 1,
+                "middle": 0,
+                "top": 1,
+                "Repetitions": 1,
+                "Width": 3.0,
+                "repetitions": 1,
+                "width": 3.0
+              }
+            ]
+          },
+          "lowUpperFloorsCount": 0,
+          "highUpperFloorsCount": 0,
+          "upperFloors": [
+            {
+              "height": 4.0,
+              "Slices": [
+                {
+                  "block": 2,
+                  "Repetitions": 1,
+                  "Width": 4.0,
+                  "repetitions": 1,
+                  "width": 4.0
+                }
+              ]
+            }
+          ],
+          "blockDict": [
+            {
+              "type": "texture",
+              "assetName": "texture/sf_storedoor01_4_f.tex",
+              "listName": "Ground"
+            },
+            {
+              "type": "sliver",
+              "assetName": "texture/sw_brickwall01_s.tex",
+              "listName": "Sliver"
+            },
+            {
+              "type": "texture",
+              "assetName": "texture/sf_3s_win06_6_f.tex",
+              "listName": "Window"
+            }
+          ],
+          "Name": "Default",
+          "name": "Default"
+        },
+        "rightState": {
+          "type": "psdl",
+          "hasGroundFloor": true,
+          "groundFloor": {
+            "minHeight": 3.0,
+            "Slices": [
+              {
+                "bottom": 1,
+                "middle": 0,
+                "top": 1,
+                "Repetitions": 1,
+                "Width": 3.0,
+                "repetitions": 1,
+                "width": 3.0
+              }
+            ]
+          },
+          "lowUpperFloorsCount": 0,
+          "highUpperFloorsCount": 0,
+          "upperFloors": [
+            {
+              "height": 4.0,
+              "Slices": [
+                {
+                  "block": 2,
+                  "Repetitions": 1,
+                  "Width": 4.0,
+                  "repetitions": 1,
+                  "width": 4.0
+                }
+              ]
+            }
+          ],
+          "blockDict": [
+            {
+              "type": "texture",
+              "assetName": "texture/sf_storedoor01_4_f.tex",
+              "listName": "Ground"
+            },
+            {
+              "type": "sliver",
+              "assetName": "texture/sw_brickwall01_s.tex",
+              "listName": "Sliver"
+            },
+            {
+              "type": "texture",
+              "assetName": "texture/sf_3s_win06_6_f.tex",
+              "listName": "Window"
+            }
+          ],
+          "Name": "Default",
+          "name": "Default"
+        },
+        "backState": {
+          "type": "psdl",
+          "hasGroundFloor": true,
+          "groundFloor": {
+            "minHeight": 3.0,
+            "Slices": [
+              {
+                "bottom": 1,
+                "middle": 0,
+                "top": 1,
+                "Repetitions": 1,
+                "Width": 3.0,
+                "repetitions": 1,
+                "width": 3.0
+              }
+            ]
+          },
+          "lowUpperFloorsCount": 0,
+          "highUpperFloorsCount": 0,
+          "upperFloors": [
+            {
+              "height": 4.0,
+              "Slices": [
+                {
+                  "block": 2,
+                  "Repetitions": 1,
+                  "Width": 4.0,
+                  "repetitions": 1,
+                  "width": 4.0
+                }
+              ]
+            }
+          ],
+          "blockDict": [
+            {
+              "type": "texture",
+              "assetName": "texture/sf_storedoor01_4_f.tex",
+              "listName": "Ground"
+            },
+            {
+              "type": "sliver",
+              "assetName": "texture/sw_brickwall01_s.tex",
+              "listName": "Sliver"
+            },
+            {
+              "type": "texture",
+              "assetName": "texture/sf_3s_win06_6_f.tex",
+              "listName": "Window"
+            }
+          ],
+          "Name": "Default",
+          "name": "Default"
+        },
+        "height": 15.0,
+        "depth": 7.0,
+        "topTexture": "texture/s_concrt.tex",
+        "fixAcuteAngles": true,
+        "uMult": -0.25,
+        "vMult": -0.25,
+        "Name": "Default",
+        "name": "Default"
+      }
+    ],
+    "buildingLine": [
+      {
+        "type": "psdl",
+        "frontOnly": false,
+        "projectToGround": false,
+        "invertDirection": false,
+        "loop": false,
+        "height": 15.0,
+        "roofTex": null,
+        "uMult": -0.25,
+        "vMult": -0.25,
+        "Name": "Default",
+        "name": "Default"
+      }
+    ],
+    "terrainPatchBorderMesh": [
+      {
+        "type": "psdl",
+        "rail_type": 1,
+        "rail_height": 5.0,
+        "rail_texture4": "texture/kl_rahrock_l.tex",
+        "rail_texture1": "texture/kl_rahrock_l.tex",
+        "name": "Default"
+      }
+    ],
+    "buildingBlock": [
+      {
+        "type": "texture",
+        "assetName": "texture/sf_3s_win06_6_f.tex",
+        "name": "Default"
+      },
+      {
+        "type": "texture",
+        "assetName": "texture/gf_vict_window01.tex",
+        "name": "gf_vict_window01"
+      }
+    ]
+  }
+}

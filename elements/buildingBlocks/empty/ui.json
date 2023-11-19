@@ -1,0 +1,15 @@
+{
+	"label": "BS_B_TYPE_EMPTY",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,514 @@
+{
+	"parameters": [
+		{
+			"name": "isDouble",
+			"label": "RD_DOUBLE",
+			"type": "bool"
+		},
+		{
+			"name": "echo",
+			"label": "RD_ECHO",
+			"tooltip": "RD_ECHO_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "flatSidewalk",
+			"label": "RD_SW_SHOULDERS",
+			"type": "bool"
+		},
+		{
+			"name": "applyHeightAnyway",
+			"label": "RD_LOWER_WO_SW",
+			"tooltip": "RD_LOWER_WO_SW_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "hasSidewalks",
+			"label": "RD_SW",
+			"type": "bool"
+		},
+		{
+			"name": "totalWidth",
+			"label": "RD_TOTAL_WIDTH",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "roadWidth",
+			"label": "RD_RD_WIDTH",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "texture0",
+			"label": "SW_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "texture1",
+			"label": "ROAD_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "textureLOD",
+			"label": "RD_LOW_LOD_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "textureCW0",
+			"label": "RD_CW_TEX_0",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "textureCW1",
+			"label": "RD_CW_TEX_1",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "forwardLanes",
+			"label": "RD_FW_LANES",
+			"placeholder": "LANES_PH",
+			"type": "int"
+		},
+		{
+			"name": "backwardLanes",
+			"label": "RD_BW_LANES",
+			"placeholder": "LANES_PH",
+			"type": "int"
+		},
+		{
+			"name": "forwardLanesSpace",
+			"label": "RD_FW_LANES_SZ",
+			"placeholder": "SIZE_PH",
+			"type": "float"
+		},
+		{
+			"name": "backwardLanesSpace",
+			"label": "RD_BW_LANES_SZ",
+			"placeholder": "SIZE_PH",
+			"type": "float"
+		},
+		{
+			"name": "forwardPark",
+			"label": "RD_FW_PK_LANE",
+			"type": "bool"
+		},
+		{
+			"name": "backwardPark",
+			"label": "RD_BW_PK_LANE",
+			"type": "bool"
+		},
+		{
+			"name": "forwardParkWidth",
+			"label": "RD_FW_PK_LANE_W",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "backwardParkWidth",
+			"label": "RD_BW_PK_LANE_W",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "pedestrianStreet",
+			"label": "RD_PEDESTRIAN",
+			"type": "bool"
+		},
+		{
+			"name": "disableTraffic",
+			"label": "RD_NO_TRAFFIC",
+			"type": "bool"
+		},
+		{
+			"name": "disableRightPedestrians",
+			"label": "RD_NO_RIGHT_PED",
+			"type": "bool"
+		},
+		{
+			"name": "disableLeftPedestrians",
+			"label": "RD_NO_LEFT_PED",
+			"type": "bool"
+		},
+		{
+			"name": "doNotStopOnEndIntersection",
+			"label": "RD_NO_STOP_END",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "doNotStopOnStartIntersection",
+			"label": "RD_NO_STOP_START",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "forceStraightLeftEndSidewalk",
+			"label": "RD_FRC_L_E_SW",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "forceStraightRightEndSidewalk",
+			"label": "RD_FRC_R_E_SW",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "forceStraightLeftStartSidewalk",
+			"label": "RD_FRC_L_S_SW",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "forceStraightRightStartSidewalk",
+			"label": "RD_FRC_R_S_SW",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "divider",
+			"label": "TYPE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_D_T_NONE",
+				"RD_D_T_FLAT",
+				"RD_D_T_ELEVATED",
+				"RD_D_T_WEDGED"
+			]
+		},
+		{
+			"name": "dividerWidth",
+			"label": "RD_DIV_W",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "dividerParam",
+			"label": "RD_DIV_PARAM",
+			"placeholder": "RD_DIV_PARAM_PH",
+			"type": "float"
+		},
+		{
+			"name": "texture2",
+			"label": "RD_DIV_TEX_1",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "texture3",
+			"label": "RD_DIV_TEX_2",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "texture4",
+			"label": "RD_DIV_TEX_3",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "texture5",
+			"label": "RD_DIV_TEX_4",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "type",
+			"label": "TYPE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_RL_T_NONE",
+				"RD_RL_T_RAIL",
+				"RD_RL_T_WALL",
+				"RD_RL_T_FLAT_GALLERY",
+				"RD_RL_T_CURVED_GALLERY"
+			]
+		},
+		{
+			"container": "rail",
+			"name": "hasRight",
+			"label": "RIGHT",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
+			"name": "hasLeft",
+			"label": "LEFT",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
+			"name": "height",
+			"label": "HEIGHT",
+			"placeholder": "HEIGHT_PH",
+			"type": "float"
+		},
+		{
+			"container": "rail",
+			"name": "texture0",
+			"label": "RD_RL_R_WALL_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "texture1",
+			"label": "RD_RL_L_WALL_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "texture2",
+			"label": "RD_RL_CEIL_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "texture3",
+			"label": "RD_RL_R_OUT_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "texture4",
+			"label": "RD_RL_L_OUT_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "texture5",
+			"label": "RD_RL_GROUND_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"container": "rail",
+			"name": "offsetEndLeft",
+			"label": "RD_RL_OFFSET_EL",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
+			"name": "offsetStartLeft",
+			"label": "RD_RL_OFFSET_SL",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
+			"name": "offsetEndRight",
+			"label": "RD_RL_OFFSET_ER",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
+			"name": "offsetStartRight",
+			"label": "RD_RL_OFFSET_SR",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
+			"name": "continueRightOnStartIntersection",
+			"label": "RD_RL_CONTINUE_R_S_IS",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"container": "rail",
+			"name": "continueLeftOnStartIntersection",
+			"label": "RD_RL_CONTINUE_L_S_IS",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"container": "rail",
+			"name": "continueRightOnEndIntersection",
+			"label": "RD_RL_CONTINUE_R_E_IS",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"container": "rail",
+			"name": "continueLeftOnEndIntersection",
+			"label": "RD_RL_CONTINUE_L_E_IS",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "blockNumber",
+			"label": "BLOCK_NUMBER",
+			"placeholder": "VALUE_PH",
+			"tooltip": "BLOCK_NUMBER_TOOLTIP",
+			"type": "int",
+			"instanceSpecific": true
+		}
+	],
+	"internalParametersSettings": [
+		{
+			"name": "makeCoplanar",
+			"enabled": true
+		}
+	],
+	"loopVariables": [
+		"i"
+	],
+	"staticDefinitions": [
+		{
+			"name": "trueDivWidth",
+			"type": "float",
+			"value": "if(divider=0, 0, dividerWidth)"
+		},
+		{
+			"name": "totalWidthI",
+			"type": "float",
+			"value": "if(throughIntersection, roadWidth, totalWidth)"
+		},
+		{
+			"name": "applyHeightAnywayI",
+			"type": "bool",
+			"value": "(not throughIntersection and applyHeightAnyway) or (throughIntersection and (not flatSidewalk or applyHeightAnyway))"
+		},
+		{
+			"name": "hasSidewalksI",
+			"type": "bool",
+			"value": "hasSidewalks and not throughIntersection"
+		},
+		{
+			"name": "rail_typeI",
+			"type": "int",
+			"value": "if(throughIntersection, 0, rail_type)"
+		},
+		{
+			"name": "hasSidewalksOrShoulders",
+			"type": "bool",
+			"value": "isDouble and hasSidewalksI"
+		},
+		{
+			"name": "hasRealSidewalks",
+			"type": "bool",
+			"value": "hasSidewalksOrShoulders and not flatSidewalk"
+		},
+		{
+			"name": "hasShoulders",
+			"type": "bool",
+			"value": "hasSidewalksOrShoulders and flatSidewalk"
+		},
+		{
+			"name": "roadWidthT",
+			"type": "float",
+			"value": "if(hasSidewalksOrShoulders, roadWidth, totalWidthI)"
+		},
+		{
+			"name": "hasElevatedTop",
+			"type": "bool",
+			"value": "hasRealSidewalks and not applyHeightAnywayI"
+		},
+		{
+			"name": "hasRealDivider",
+			"type": "bool",
+			"value": "isDouble and divider > 0"
+		},
+		{
+			"name": "hasRail",
+			"type": "bool",
+			"value": "rail_type > 0 and (rail_hasLeft or rail_hasRight)"
+		},
+		{
+			"name": "canBeSimplified",
+			"type": "bool",
+			"value": "not hasRail or rail_type < 4"
+		},
+		{
+			"name": "hasGallery",
+			"type": "bool",
+			"value": "(rail_hasLeft or rail_hasRight) and (rail_type = 3 or rail_type = 4)"
+		},
+		{
+			"name": "realBwParkW",
+			"type": "float",
+			"value": "if(backwardPark, backwardParkWidth, 0)"
+		},
+		{
+			"name": "realFwParkW",
+			"type": "float",
+			"value": "if(forwardPark, forwardParkWidth, 0)"
+		},
+		{
+			"name": "singleSwWidth",
+			"type": "float",
+			"value": "if(hasSidewalksOrShoulders, (totalWidthI - roadWidth) * 0.5, 0)"
+		},
+		{
+			"name": "texWidth",
+			"type": "float",
+			"value": "if(isDouble, if(hasSidewalksOrShoulders, roadWidth, totalWidthI) * 0.5, totalWidthI)"
+		},
+		{
+			"name": "swAdjLen",
+			"type": "float",
+			"value": "2*max(1, round(totalLength/singleSwWidth))/totalLength"
+		},
+		{
+			"name": "rdAdjLen",
+			"type": "float",
+			"value": "2*max(1, round(totalLength/texWidth))/totalLength"
+		},
+		{
+			"name": "adjLen",
+			"type": "float",
+			"value": "max(1, round(totalLength))/totalLength"
+		},
+		{
+			"name": "hVal",
+			"type": "float",
+			"value": "if(hasShoulders, applyHeightAnywayI * 0.15, max(hasSidewalksI, applyHeightAnywayI) * 0.15)"
+		},
+		{
+			"name": "sidewalkHeight",
+			"type": "vec3",
+			"value": "-worldUp * if(not hasRealSidewalks, applyHeightAnywayI * 0.15, 0)"
+		}
+	],
+	"dynamicDefinitions": [
+		{
+			"name": "h",
+			"type": "vec3",
+			"value": "localUp * hVal"
+		},
+		{
+			"name": "zRd",
+			"type": "float",
+			"value": "z*rdAdjLen"
+		},
+		{
+			"name": "zSw",
+			"type": "float",
+			"value": "z*swAdjLen"
+		},
+		{
+			"name": "zDiv",
+			"type": "float",
+			"value": "z*adjLen"
+		},
+		{
+			"name": "rlPos",
+			"type": "float",
+			"value": "if(rail_height>0, z / rail_height, 0)"
+		},
+		{
+			"name": "anchorH",
+			"type": "vec3",
+			"value": "h * if(not hasRealSidewalks, applyHeightAnywayI, 0)"
+		}
+	]
+}

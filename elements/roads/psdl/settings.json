@@ -1,0 +1,248 @@
+{
+	"variableSections": false,
+	"sectionVertices": [
+		"-0.5*totalWidthI",
+		"-0.5*roadWidthT",
+		"-0.5*trueDivWidth",
+		"0",
+		"0.5*trueDivWidth",
+		"0.5*roadWidthT",
+		"0.5*totalWidthI"
+	],
+	"anchors": [
+		"v6-anchorH",
+		"v0-anchorH"
+	],
+	"intersectionRoadVertices": [
+		"v1",
+		"v5"
+	],
+	"intersectionLeftSideVertices": [
+		"v1",
+		"v0"
+	],
+	"intersectionRightSideVertices": [
+		"v5",
+		"v6"
+	],
+	"propsContainers": [
+		"right",
+		"left",
+		"middle",
+		"middleRight",
+		"middleLeft",
+		"rightParking",
+		"leftParking"
+	],
+	"propsLines": [
+		{
+			"containerName": "rightParking",
+			"condition": "forwardPark and forwardParkWidth > 0",
+			"bounds": [
+				"v1-h+localRight*realFwParkW",
+				"v1-h"
+			]
+		},
+		{
+			"containerName": "leftParking",
+			"condition": "backwardPark and backwardParkWidth > 0",
+			"bounds": [
+				"v5-h-localRight*realBwParkW",
+				"v5-h"
+			]
+		}
+	],
+	"trafficTypes": [
+		{
+			"name": "pedestrian",
+			"color": [
+				224,
+				32,
+				224
+			]
+		},
+		{
+			"name": "forward",
+			"color": [
+				0,
+				128,
+				255
+			]
+		},
+		{
+			"name": "backward",
+			"color": [
+				224,
+				32,
+				0
+			]
+		}
+	],
+	"textures": [
+		"texture0",
+		"texture1",
+		"texture2",
+		"texture3",
+		"texture4",
+		"texture5",
+		"rail_texture0",
+		"rail_texture1",
+		"rail_texture2",
+		"rail_texture3",
+		"rail_texture4",
+		"rail_texture5"
+	],
+	"texturesMapping": {
+		"dividedRoad": [
+			1
+		],
+		"rail_curvedGallery": [
+			6,
+			7,
+			8
+		],
+		"rail_flatGallery": [
+			6,
+			7,
+			8
+		],
+		"rail_wall_left": [
+			7,
+			10
+		],
+		"rail_wall_right": [
+			6,
+			9
+		],
+		"rail_wall_bottom": [
+			11
+		],
+		"singleRoad": [
+			1
+		],
+		"divider_elevated": [
+			2,
+			3,
+			4,
+			5
+		],
+		"divider_flat": [
+			3
+		],
+		"divider_wedged": [
+			3,
+			4,
+			5
+		],
+		"doubleRoad": [
+			1
+		],
+		"shoulder_left": [
+			0
+		],
+		"shoulder_right": [
+			0
+		],
+		"sidewalk_left": [
+			0
+		],
+		"sidewalk_right": [
+			0
+		],
+		"rail_rail_left": [
+			7
+		],
+		"rail_rail_right": [
+			6
+		]
+	},
+	"widths": [
+		"totalWidth",
+		"roadWidth",
+		"dividerWidth",
+		"backwardParkWidth",
+		"forwardParkWidth",
+		"backwardLanesSpace",
+		"forwardLanesSpace"
+	],
+	"getters": {
+		"totalWidth": "totalWidthI",
+		"roadWidth": "roadWidthT",
+		"height": "hVal",
+		"mainTex": "texture1",
+		"canBeSimplified": "canBeSimplified",
+		"startCrosswalkTex": "textureCW0",
+		"endCrosswalkTex": "textureCW1",
+		"hasSidewalks": "hasSidewalksOrShoulders"
+	},
+	"components": [
+		{
+			"name": "sidewalk_right",
+			"condition": "hasRealSidewalks"
+		},
+		{
+			"name": "shoulder_right",
+			"condition": "hasShoulders"
+		},
+		{
+			"name": "doubleRoad",
+			"condition": "isDouble and divider = 0"
+		},
+		{
+			"name": "dividedRoad",
+			"condition": "isDouble and divider > 0"
+		},
+		{
+			"name": "singleRoad",
+			"condition": "not isDouble"
+		},
+		{
+			"name": "shoulder_left",
+			"condition": "hasShoulders"
+		},
+		{
+			"name": "sidewalk_left",
+			"condition": "hasRealSidewalks"
+		},
+		{
+			"name": "divider_flat",
+			"condition": "isDouble and divider = 1"
+		},
+		{
+			"name": "divider_elevated",
+			"condition": "isDouble and divider = 2"
+		},
+		{
+			"name": "divider_wedged",
+			"condition": "isDouble and divider = 3"
+		},
+		{
+			"name": "rail_curvedGallery",
+			"condition": "rail_typeI = 4"
+		},
+		{
+			"name": "rail_flatGallery",
+			"condition": "rail_typeI = 3"
+		},
+		{
+			"name": "rail_rail_right",
+			"condition": "rail_typeI = 1 and rail_hasRight"
+		},
+		{
+			"name": "rail_rail_left",
+			"condition": "rail_typeI = 1 and rail_hasLeft"
+		},
+		{
+			"name": "rail_wall_right",
+			"condition": "rail_typeI = 2 and rail_hasRight"
+		},
+		{
+			"name": "rail_wall_left",
+			"condition": "rail_typeI = 2 and rail_hasLeft"
+		},
+		{
+			"name": "rail_wall_bottom",
+			"condition": "rail_typeI = 2 and rail_hasLeft and rail_hasRight"
+		}
+	]
+}

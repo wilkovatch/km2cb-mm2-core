@@ -1,0 +1,83 @@
+{
+	"localDefinitions": [
+		{
+			"name": "divHeight",
+			"type": "vec3",
+			"value": "if(divider=1, -h, -h+localUp*dividerParam)"
+		}
+	],
+	"mainMesh": {
+		"vertices": [
+			"v1-h",
+			"v2-h",
+			"v4-h",
+			"v5-h"
+		],
+		"uvs": [
+			"vec2(zRd, 0)",
+			"vec2(zRd, 1)",
+			"vec2(zRd, 1)",
+			"vec2(zRd, 0)"
+		],
+		"faces": [
+			0,
+			2
+		],
+		"facesTextures": [
+			0,
+			0
+		]
+	},
+	"propsLines": [
+		{
+			"containerName": "middle",
+			"condition": "hasRealDivider and (divider = 1 or divider = 2)",
+			"bounds": [
+				"v2+divHeight",
+				"v4+divHeight"
+			]
+		},
+		{
+			"containerName": "middleLeft",
+			"condition": "hasRealDivider and (divider = 1 or divider = 2)",
+			"bounds": [
+				"v2+divHeight",
+				"v3+divHeight"
+			]
+		},
+		{
+			"containerName": "middleRight",
+			"condition": "hasRealDivider and (divider = 1 or divider = 2)",
+			"bounds": [
+				"v4+divHeight",
+				"v3+divHeight"
+			]
+		}
+	],
+	"trafficLanes": [
+		{
+			"type": "if(pedestrianStreet, 0, 1)",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"v1-h+localRight*(realBwParkW+backwardLanesSpace)",
+				"v2-h"
+			],
+			"lanes": {
+				"for": "i; 0; forwardLanes",
+				"value": "(i+0.5)/forwardLanes"
+			}
+		},
+		{
+			"type": "if(pedestrianStreet, 0, 2)",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"v5-h-localRight*(realFwParkW+forwardLanesSpace)",
+				"v4-h"
+			],
+			"lanes": {
+				"for": "i; 0; backwardLanes",
+				"value": "(i+0.5)/backwardLanes"
+			}
+		}
+	]
+}

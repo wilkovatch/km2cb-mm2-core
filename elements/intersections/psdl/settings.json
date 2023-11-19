@@ -1,0 +1,35 @@
+{
+	"roadTexture": "texture1",
+	"defaultCrosswalkTexture": "texture2",
+	"roadStartCrosswalkTexture": "startCrosswalkTex",
+	"roadEndCrosswalkTexture": "endCrosswalkTex",
+	"minimizeSubmeshes": false,
+	"extraTerrainPieces": [
+		{
+			"name": "wall",
+			"junctionCondition": "hasWall",
+			"junctionConditionMode": "or",
+			"parametersSourceIndex": "0",
+			"splineOverride": true,
+			"facingUp": false,
+			"uMult": "1",
+			"vMult": "1",
+			"texture": "rail_texture5",
+			"textureSource": "junction",
+			"condition": "wall_active and (not gallery_active or wall_index < gallery_index)"
+		},
+		{
+			"name": "gallery",
+			"junctionCondition": "hasGallery",
+			"junctionConditionMode": "or",
+			"parametersSourceIndex": "0",
+			"splineOverride": true,
+			"facingUp": false,
+			"uMult": "1",
+			"vMult": "1",
+			"texture": "rail_texture2",
+			"textureSource": "junction",
+			"condition": "gallery_active and (not wall_active or gallery_index < wall_index)"
+		}
+	]
+}

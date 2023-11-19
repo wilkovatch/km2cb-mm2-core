@@ -1,0 +1,23 @@
+{
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "BS_TAB_MAIN",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "BS_TAB_BLOCKS",
+			"elements": [
+				{
+					"name": "blocksGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

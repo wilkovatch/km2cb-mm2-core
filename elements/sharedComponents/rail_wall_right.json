@@ -1,0 +1,119 @@
+{
+	"localDefinitions": [
+		{
+			"name": "right",
+			"type": "vec3",
+			"value": "localRight*rail_height/3"
+		},
+		{
+			"name": "offR_start",
+			"type": "vec3",
+			"value": "if(rail_offsetStartRight, localForward * 2, vec3(0,0,0))"
+		},
+		{
+			"name": "offR_end",
+			"type": "vec3",
+			"value": "if(rail_offsetEndRight, -localForward * 2, vec3(0,0,0))"
+		},
+		{
+			"name": "offR",
+			"type": "vec3",
+			"value": "if(segment=1, offR_start, if(segment=segments, offR_end, vec3(0,0,0)))"
+		},
+		{
+			"name": "rRight",
+			"type": "vec3",
+			"value": "-right+offR"
+		},
+		{
+			"name": "rH",
+			"type": "vec3",
+			"value": "localUp*rail_height"
+		},
+		{
+			"name": "vU0",
+			"type": "vec3",
+			"value": "v0+rH"
+		}
+	],
+	"mainMesh": {
+		"vertices": [
+			"vU0",
+			"v0",
+			"vU0+rRight",
+			"vU0",
+			"v0+rRight-localUp",
+			"vU0+rRight"
+		],
+		"uvs": [
+			"vec2(rlPos, 0)",
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 0)",
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 0)"
+		],
+		"faces": [
+			0,
+			2,
+			4
+		],
+		"facesTextures": [
+			0,
+			1,
+			1
+		]
+	},
+	"startMesh": {
+		"vertices": [
+			"vU0",
+			"v0",
+			"v0+rRight-localUp",
+			"vU0+rRight"
+		],
+		"uvs": [
+			"vec2(0, 0)",
+			"vec2(0, 1)",
+			"vec2(1, 1)",
+			"vec2(1, 0)"
+		],
+		"faces": [
+			0,
+			3,
+			2,
+			0,
+			2,
+			1
+		],
+		"facesTextures": [
+			1,
+			1
+		]
+	},
+	"endMesh": {
+		"vertices": [
+			"vU0",
+			"v0",
+			"v0+rRight-localUp",
+			"vU0+rRight"
+		],
+		"uvs": [
+			"vec2(0, 0)",
+			"vec2(0, 1)",
+			"vec2(1, 1)",
+			"vec2(1, 0)"
+		],
+		"faces": [
+			0,
+			2,
+			3,
+			0,
+			1,
+			2
+		],
+		"facesTextures": [
+			1,
+			1
+		]
+	}
+}

@@ -1,0 +1,66 @@
+{
+	"label": "EXPORTER_PSDL",
+	"format": "psdl",
+	"flags": [
+		{
+			"id": "propRules",
+			"label": "EXPORT_PROP_RULES",
+			"defaultValue": true
+		},
+		{
+			"id": "bin",
+			"label": "EXPORT_BIN",
+			"disables": [
+				"psdl",
+				"psdl_splitNonCoplanarRoads",
+				"bai",
+				"bai_accurateCulling",
+				"inst",
+				"pathset"
+			],
+			"defaultValue": false
+		},
+		{
+			"id": "psdl",
+			"label": "EXPORT_PSDL",
+			"defaultValue": true
+		},
+		{
+			"id": "inst",
+			"label": "EXPORT_INST",
+			"defaultValue": true
+		},
+		{
+			"id": "bai",
+			"label": "EXPORT_BAI",
+			"defaultValue": true
+		},
+		{
+			"id": "pathset",
+			"label": "EXPORT_PATHSET",
+			"defaultValue": true
+		},
+		{
+			"id": "psdl_splitNonCoplanarRoads",
+			"label": "EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS",
+			"tooltip": "EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS_TOOLTIP",
+			"defaultValue": false
+		},
+		{
+			"id": "psdl_capMaterials",
+			"label": "EXPORT_PSDL_CAP_MATERIALS",
+			"tooltip": "EXPORT_PSDL_CAP_MATERIALS_TOOLTIP",
+			"defaultValue": false
+		},
+		{
+			"id": "bai_accurateCulling",
+			"label": "EXPORT_BAI_ACCURATE_CULLING",
+			"defaultValue": false
+		},
+		{
+			"id": "verbose",
+			"label": "EXPORT_VERBOSE",
+			"defaultValue": false
+		}
+	]
+}

@@ -1,0 +1,46 @@
+{
+	"mainMesh": {
+		"vertices": [
+			"v5-h",
+			"v5",
+			"v5",
+			"v6"
+		],
+		"uvs": [
+			"vec2(zSw, 1)",
+			"vec2(zSw, 1)",
+			"vec2(zSw, 1)",
+			"vec2(zSw, 0)"
+		],
+		"faces": [
+			0,
+			2
+		],
+		"facesTextures": [
+			0,
+			0
+		]
+	},
+	"trafficLanes": [
+		{
+			"type": "0",
+			"condition": "not disableLeftPedestrians",
+			"bounds": [
+				"v5",
+				"v6"
+			],
+			"lanes": [
+				0.5
+			]
+		}
+	],
+	"propsLines": [
+		{
+			"containerName": "left",
+			"bounds": [
+				"v5",
+				"v6"
+			]
+		}
+	]
+}

@@ -1,0 +1,11 @@
+{
+	"label": "PSDL_COMPATIBLE",
+	"parameters": [
+		{
+			"name": "elements",
+			"allowedTypes": [
+				"psdl"
+			]
+		}
+	]
+}

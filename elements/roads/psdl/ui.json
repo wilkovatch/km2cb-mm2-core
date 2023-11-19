@@ -1,0 +1,276 @@
+{
+	"label": "PSDL_COMPATIBLE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "RD_TAB_MAIN",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "echo",
+					"width": 0.5
+				},
+				{
+					"name": "totalWidth",
+					"width": 0.5
+				},
+				{
+					"name": "roadWidth",
+					"width": 0.5
+				},
+				{
+					"name": "isDouble",
+					"width": 0.5
+				},
+				{
+					"name": "hasSidewalks",
+					"width": 0.5
+				},
+				{
+					"name": "flatSidewalk",
+					"width": 0.5
+				},
+				{
+					"name": "applyHeightAnyway",
+					"width": 0.75
+				},
+				{
+					"name": "blockNumber",
+					"width": 0.75
+				},
+				{
+					"name": "texture1",
+					"width": 1.5
+				},
+				{
+					"name": "texture0",
+					"width": 1.5
+				},
+				{
+					"name": "textureLOD",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_INTERS",
+			"elements": [
+				{
+					"name": "intersectionGroup",
+					"width": 1.5
+				},
+				{
+					"name": "textureCW0",
+					"width": 1.5
+				},
+				{
+					"name": "textureCW1",
+					"width": 1.5
+				},
+				{
+					"name": "forceStraightLeftStartSidewalk",
+					"width": 0.75
+				},
+				{
+					"name": "forceStraightRightStartSidewalk",
+					"width": 0.75
+				},
+				{
+					"name": "forceStraightLeftEndSidewalk",
+					"width": 0.75
+				},
+				{
+					"name": "forceStraightRightEndSidewalk",
+					"width": 0.75
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_TRAFFIC",
+			"elements": [
+				{
+					"name": "forwardLanes",
+					"width": 0.75
+				},
+				{
+					"name": "backwardLanes",
+					"width": 0.75
+				},
+				{
+					"name": "forwardLanesSpace",
+					"width": 0.75
+				},
+				{
+					"name": "backwardLanesSpace",
+					"width": 0.75
+				},
+				{
+					"name": "forwardPark",
+					"width": 0.75
+				},
+				{
+					"name": "backwardPark",
+					"width": 0.75
+				},
+				{
+					"name": "forwardParkWidth",
+					"width": 0.75
+				},
+				{
+					"name": "backwardParkWidth",
+					"width": 0.75
+				},
+				{
+					"name": "pedestrianStreet",
+					"width": 0.75
+				},
+				{
+					"name": "disableTraffic",
+					"width": 0.75
+				},
+				{
+					"name": "disableRightPedestrians",
+					"width": 0.75
+				},
+				{
+					"name": "disableLeftPedestrians",
+					"width": 0.75
+				},
+				{
+					"name": "doNotStopOnEndIntersection",
+					"width": 0.75
+				},
+				{
+					"name": "doNotStopOnStartIntersection",
+					"width": 0.75
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_DIVIDER",
+			"elements": [
+				{
+					"name": "divider",
+					"width": 1.5
+				},
+				{
+					"name": "dividerWidth",
+					"width": 0.75
+				},
+				{
+					"name": "dividerParam",
+					"width": 0.75
+				},
+				{
+					"name": "texture2",
+					"width": 1.5
+				},
+				{
+					"name": "texture3",
+					"width": 1.5
+				},
+				{
+					"name": "texture4",
+					"width": 1.5
+				},
+				{
+					"name": "texture5",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_PROPS",
+			"elements": [
+				{
+					"name": "propsGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_RAIL",
+			"elements": [
+				{
+					"name": "PRESET_rail",
+					"width": 1.5
+				},
+				{
+					"name": "rail_type",
+					"width": 1.5
+				},
+				{
+					"name": "rail_hasRight",
+					"width": 0.5
+				},
+				{
+					"name": "rail_hasLeft",
+					"width": 0.5
+				},
+				{
+					"name": "rail_height",
+					"width": 0.5
+				},
+				{
+					"name": "rail_texture0",
+					"width": 0.75
+				},
+				{
+					"name": "rail_texture1",
+					"width": 0.75
+				},
+				{
+					"name": "rail_texture3",
+					"width": 0.75
+				},
+				{
+					"name": "rail_texture4",
+					"width": 0.75
+				},
+				{
+					"name": "rail_texture5",
+					"width": 0.75
+				},
+				{
+					"name": "rail_texture2",
+					"width": 0.75
+				},
+				{
+					"name": "rail_offsetEndLeft",
+					"width": 0.75
+				},
+				{
+					"name": "rail_offsetStartLeft",
+					"width": 0.75
+				},
+				{
+					"name": "rail_offsetEndRight",
+					"width": 0.75
+				},
+				{
+					"name": "rail_offsetStartRight",
+					"width": 0.75
+				},
+				{
+					"name": "rail_continueRightOnStartIntersection",
+					"width": 0.75
+				},
+				{
+					"name": "rail_continueLeftOnStartIntersection",
+					"width": 0.75
+				},
+				{
+					"name": "rail_continueRightOnEndIntersection",
+					"width": 0.75
+				},
+				{
+					"name": "rail_continueLeftOnEndIntersection",
+					"width": 0.75
+				}
+			]
+		}
+	]
+}

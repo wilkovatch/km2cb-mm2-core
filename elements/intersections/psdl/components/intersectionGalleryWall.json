@@ -1,0 +1,33 @@
+{
+	"localDefinitions": [
+		{
+			"name": "rH",
+			"type": "vec3",
+			"value": "localUp*rail_height"
+		},
+		{
+			"name": "vU0",
+			"type": "vec3",
+			"value": "v0+rH"
+		}
+	],
+	"anchors": [
+		"vU0"
+	],
+	"mainMesh": {
+		"vertices": [
+			"v0",
+			"vU0",
+		],
+		"uvs": [
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 0)",
+		],
+		"faces": [
+			0,
+		],
+		"facesTextures": [
+			0
+		]
+	}
+}

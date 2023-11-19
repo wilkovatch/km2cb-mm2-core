@@ -1,0 +1,30 @@
+{
+	"localDefinitions": [
+		{
+			"name": "percent",
+			"type": "float",
+			"value": "z/totalLength"
+		},
+		{
+			"name": "swh",
+			"type": "vec3",
+			"value": "lerp(A_swh, B_swh, percent)"
+		}
+	],
+	"mainMesh": {
+		"vertices": [
+			"v1+swh",
+			"v0+swh"
+		],
+		"uvs": [
+			"vec2(absX1, absZ1) * (-0.25)",
+			"vec2(absX0, absZ0) * (-0.25)"
+		],
+		"faces": [
+			0
+		],
+		"facesTextures": [
+			0
+		]
+	}
+}

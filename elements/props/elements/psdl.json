@@ -1,0 +1,65 @@
+{
+	"label": "PROP_TYPE_PSDL",
+	"parametersInfo": {
+		"parameters": [
+			{
+				"name": "start",
+				"label": "PROP_ELEM_START",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "elemDistance",
+				"label": "PROP_ELEM_DISTANCE",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "maxNumber",
+				"label": "PROP_ELEM_MAX_NUM",
+				"placeholder": "VALUE_PH",
+				"type": "int"
+			},
+			{
+				"name": "minHorizPos",
+				"label": "PROP_ELEM_MIN_POS",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "maxHorizPos",
+				"label": "PROP_ELEM_MAX_POS",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			}
+		]
+	},
+	"uiInfo": [
+		{
+			"name": "elemDistance",
+			"width": 1.5
+		},
+		{
+			"name": "start",
+			"width": 0.75
+		},
+		{
+			"name": "maxNumber",
+			"width": 0.75
+		},
+		{
+			"name": "minHorizPos",
+			"width": 1.5
+		},
+		{
+			"name": "maxHorizPos",
+			"width": 1.5
+		}
+	],
+	"placementRules": {
+		"meshIndex": "rnd(0, meshNum, 0)",
+		"whileCondition": "elemDistance > 0 and i < maxNumber and z <= totalLength",
+		"xPos": "rnd(minHorizPos, maxHorizPos, 0)",
+		"zPos": "if(i=0, start, lastZ+elemDistance)"
+	}
+}

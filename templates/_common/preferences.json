@@ -1,0 +1,10 @@
+{
+  "extraFolders": [
+    ".\\MidtownMadness2\\"
+  ],
+  "overlayTex": "",
+  "curTerrainTexture": "",
+  "core": "MidtownMadness2",
+  "coreVersion": 1,
+  "programVersion": 1
+}

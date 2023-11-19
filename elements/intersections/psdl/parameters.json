@@ -1,0 +1,53 @@
+{
+	"parameters": [
+		{
+			"name": "echo",
+			"label": "RD_ECHO",
+			"tooltip": "RD_ECHO_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "blockNumber",
+			"label": "BLOCK_NUMBER",
+			"placeholder": "VALUE_PH",
+			"tooltip": "BLOCK_NUMBER_TOOLTIP",
+			"type": "int"
+		},
+		{
+			"name": "fixSidewalksUV",
+			"label": "RD_FIX_SIDEWALKS_UV",
+			"tooltip": "RD_FIX_SIDEWALKS_UV_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "texture0",
+			"label": "IS_TEX_0",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "texture1",
+			"label": "IS_TEX_1",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "texture2",
+			"label": "IS_TEX_2",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		}
+	],
+	"staticDefinitions": [
+		{
+			"name": "uMult",
+			"type": "float",
+			"value": "-0.25"
+		},
+		{
+			"name": "vMult",
+			"type": "float",
+			"value": "-0.25"
+		}
+	]
+}

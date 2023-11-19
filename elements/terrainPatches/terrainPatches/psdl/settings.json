@@ -1,0 +1,7 @@
+{
+	"borderMeshTypes": [
+		"psdl"
+	],
+	"borderMeshName": "Rail",
+	"maxBorderMeshes": 15
+}

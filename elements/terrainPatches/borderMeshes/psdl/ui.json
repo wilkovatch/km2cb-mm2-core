@@ -1,0 +1,31 @@
+{
+	"label": "PSDL_COMPATIBLE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "TP_TAB_RAIL",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "rail_type",
+					"width": 1.5
+				},
+				{
+					"name": "rail_height",
+					"width": 1.5
+				},
+				{
+					"name": "rail_texture1",
+					"width": 1.5
+				},
+				{
+					"name": "rail_texture4",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

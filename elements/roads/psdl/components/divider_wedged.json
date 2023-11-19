@@ -1,0 +1,104 @@
+{
+	"localDefinitions": [
+		{
+			"name": "v2a",
+			"type": "vec3",
+			"value": "v2-h"
+		},
+		{
+			"name": "v2b",
+			"type": "vec3",
+			"value": "v2-h+localUp+localRight*0.5"
+		},
+		{
+			"name": "v4b",
+			"type": "vec3",
+			"value": "v4-h+localUp-localRight*0.5"
+		},
+		{
+			"name": "v4a",
+			"type": "vec3",
+			"value": "v4-h"
+		}
+	],
+	"mainMesh": {
+		"vertices": [
+			"v2a",
+			"v2b",
+			"v2b",
+			"v4b",
+			"v4b",
+			"v4a"
+		],
+		"uvs": [
+			"vec2(zDiv, 1)",
+			"vec2(zDiv, 0)",
+			"vec2(zDiv, 1)",
+			"vec2(zDiv, 0)",
+			"vec2(zDiv, 0)",
+			"vec2(zDiv, 1)"
+		],
+		"faces": [
+			0,
+			2,
+			4
+		],
+		"facesTextures": [
+			0,
+			1,
+			0
+		]
+	},
+	"startMesh": {
+		"vertices": [
+			"v2a",
+			"v2b",
+			"v4b",
+			"v4a"
+		],
+		"uvs": [
+			"vec2(0, 1)",
+			"vec2(0, 0)",
+			"vec2(1, 0)",
+			"vec2(1, 1)"
+		],
+		"faces": [
+			0,
+			3,
+			2,
+			0,
+			2,
+			1
+		],
+		"facesTextures": [
+			2,
+			2
+		]
+	},
+	"endMesh": {
+		"vertices": [
+			"v2a",
+			"v2b",
+			"v4b",
+			"v4a"
+		],
+		"uvs": [
+			"vec2(0, 1)",
+			"vec2(0, 0)",
+			"vec2(1, 0)",
+			"vec2(1, 1)"
+		],
+		"faces": [
+			0,
+			2,
+			3,
+			0,
+			1,
+			2
+		],
+		"facesTextures": [
+			2,
+			2
+		]
+	}
+}

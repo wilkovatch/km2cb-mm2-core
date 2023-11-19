@@ -1,0 +1,51 @@
+{
+	"localDefinitions": [
+		{
+			"name": "rH",
+			"type": "vec3",
+			"value": "localUp*rail_height"
+		},
+		{
+			"name": "vU0",
+			"type": "vec3",
+			"value": "v0+rH"
+		},
+		{
+			"name": "vU6",
+			"type": "vec3",
+			"value": "v6+rH"
+		}
+	],
+	"anchors": [
+		"vU6",
+		"vU0"
+	],
+	"mainMesh": {
+		"vertices": [
+			"vU0",
+			"v0",
+			"vU6",
+			"vU0",
+			"v6",
+			"vU6"
+		],
+		"uvs": [
+			"vec2(rlPos, 0)",
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 0)",
+			"vec2(rlPos, 1)",
+			"vec2(rlPos, 0)"
+		],
+		"faces": [
+			0,
+			2,
+			4
+		],
+		"facesTextures": [
+			0,
+			1,
+			2
+		]
+	}
+}

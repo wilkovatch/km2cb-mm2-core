@@ -1,0 +1,18 @@
+{
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "fixBound",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

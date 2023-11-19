@@ -1,0 +1,467 @@
+{
+	"standardFloatsBoolsAndInts": [
+		"totalWidth",
+		"roadWidth"
+	],
+	"standardVec3s": [],
+	"standardVec2s": [],
+	"sectionVertices": [
+		"totalWidth",
+		"roadWidth",
+		"0"
+	],
+	"roadSplineVertex": 1,
+	"importedParameters": [
+		{
+			"fromStart": true,
+			"name": "hasRealSidewalks",
+			"type": "bool",
+			"newName": "A_hasRealSidewalks"
+		},
+		{
+			"fromStart": false,
+			"name": "hasRealSidewalks",
+			"type": "bool",
+			"newName": "B_hasRealSidewalks"
+		},
+		{
+			"fromStart": true,
+			"name": "hasShoulders",
+			"type": "bool",
+			"newName": "A_hasShoulders"
+		},
+		{
+			"fromStart": false,
+			"name": "hasShoulders",
+			"type": "bool",
+			"newName": "B_hasShoulders"
+		},
+		{
+			"fromStart": true,
+			"name": "sidewalkHeight",
+			"type": "vec3",
+			"newName": "A_swh"
+		},
+		{
+			"fromStart": false,
+			"name": "sidewalkHeight",
+			"type": "vec3",
+			"newName": "B_swh"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_type",
+			"type": "int",
+			"newName": "A_railType"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_type",
+			"type": "int",
+			"newName": "B_railType"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_height",
+			"type": "float",
+			"newName": "rail_height_A"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_height",
+			"type": "float",
+			"newName": "rail_height_B"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_texture1",
+			"type": "texture",
+			"newName": "rail_A_texture1"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_texture1",
+			"type": "texture",
+			"newName": "rail_B_texture1"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_texture2",
+			"type": "texture",
+			"newName": "rail_A_texture2"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_texture2",
+			"type": "texture",
+			"newName": "rail_B_texture2"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_texture4",
+			"type": "texture",
+			"newName": "rail_A_texture4"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_texture4",
+			"type": "texture",
+			"newName": "rail_B_texture4"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_texture5",
+			"type": "texture",
+			"newName": "rail_A_texture5"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_texture5",
+			"type": "texture",
+			"newName": "rail_B_texture5"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_continueRightOnStartIntersection",
+			"type": "bool",
+			"newName": "rail_A_CS"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_continueLeftOnEndIntersection",
+			"type": "bool",
+			"newName": "rail_A_CE"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_continueLeftOnStartIntersection",
+			"type": "bool",
+			"newName": "rail_B_CS"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_continueRightOnEndIntersection",
+			"type": "bool",
+			"newName": "rail_B_CE"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_hasLeft",
+			"type": "bool",
+			"newName": "A_hasLeftRail"
+		},
+		{
+			"fromStart": true,
+			"name": "rail_hasRight",
+			"type": "bool",
+			"newName": "A_hasRightRail"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_hasLeft",
+			"type": "bool",
+			"newName": "B_hasLeftRail"
+		},
+		{
+			"fromStart": false,
+			"name": "rail_hasRight",
+			"type": "bool",
+			"newName": "B_hasRightRail"
+		},
+		{
+			"fromStart": true,
+			"name": "forceStraightLeftStartSidewalk",
+			"type": "bool",
+			"newName": "A_forcedStart"
+		},
+		{
+			"fromStart": true,
+			"name": "forceStraightLeftEndSidewalk",
+			"type": "bool",
+			"newName": "A_forcedEnd"
+		},
+		{
+			"fromStart": false,
+			"name": "forceStraightRightStartSidewalk",
+			"type": "bool",
+			"newName": "B_forcedStart"
+		},
+		{
+			"fromStart": false,
+			"name": "forceStraightRightEndSidewalk",
+			"type": "bool",
+			"newName": "B_forcedEnd"
+		},
+		{
+			"fromStart": true,
+			"name": "startCrosswalkSize",
+			"type": "float",
+			"newName": "CwASizeS"
+		},
+		{
+			"fromStart": true,
+			"name": "endCrosswalkSize",
+			"type": "float",
+			"newName": "CwASizeE"
+		},
+		{
+			"fromStart": false,
+			"name": "startCrosswalkSize",
+			"type": "float",
+			"newName": "CwBSizeS"
+		},
+		{
+			"fromStart": false,
+			"name": "endCrosswalkSize",
+			"type": "float",
+			"newName": "CwBSizeE"
+		}
+	],
+	"staticDefinitions": [
+		{
+			"name": "AHasAnyRail",
+			"type": "bool",
+			"value": "(thisIsEndA and rail_A_CE and A_hasLeftRail) or (not thisIsEndA and rail_A_CS and A_hasRightRail)"
+		},
+		{
+			"name": "BHasAnyRail",
+			"type": "bool",
+			"value": "(thisIsEndB and rail_B_CE and B_hasRightRail) or (not thisIsEndB and rail_B_CS and B_hasLeftRail)"
+		},
+		{
+			"name": "AHasRail",
+			"type": "bool",
+			"value": "A_railType=1 and AHasAnyRail"
+		},
+		{
+			"name": "BHasRail",
+			"type": "bool",
+			"value": "B_railType=1 and BHasAnyRail"
+		},
+		{
+			"name": "AHasWall",
+			"type": "bool",
+			"value": "A_railType=2 and AHasAnyRail"
+		},
+		{
+			"name": "BHasWall",
+			"type": "bool",
+			"value": "B_railType=2 and BHasAnyRail"
+		},
+		{
+			"name": "AHasGallery",
+			"type": "bool",
+			"value": "A_railType>2 and AHasAnyRail"
+		},
+		{
+			"name": "BHasGallery",
+			"type": "bool",
+			"value": "B_railType>2 and BHasAnyRail"
+		},
+		{
+			"name": "hasWall",
+			"type": "bool",
+			"value": "AHasWall or BHasWall"
+		},
+		{
+			"name": "hasGallery",
+			"type": "bool",
+			"value": "AHasGallery or BHasGallery"
+		},
+		{
+			"name": "rail_height",
+			"type": "int",
+			"value": "if(AHasAnyRail, rail_height_A, rail_height_B)"
+		},
+		{
+			"name": "rail_offsetStartLeft",
+			"type": "bool",
+			"value": "false"
+		},
+		{
+			"name": "rail_offsetEndLeft",
+			"type": "bool",
+			"value": "false"
+		},
+		{
+			"name": "rail_texIndex",
+			"type": "int",
+			"value": "if(AHasAnyRail, 0, 1)"
+		},
+		{
+			"name": "rail_texIndex_extra",
+			"type": "int",
+			"value": "if(AHasWall or AHasGallery, 0, 1)"
+		},
+		{
+			"name": "forcedStraightStart",
+			"type": "bool",
+			"value": "(thisIsEndA and A_forcedEnd) or (not thisIsEndA and A_forcedStart)"
+		},
+		{
+			"name": "forcedStraightEnd",
+			"type": "bool",
+			"value": "(thisIsEndB and B_forcedEnd) or (not thisIsEndB and B_forcedStart)"
+		},
+		{
+			"name": "forcedStraight",
+			"type": "bool",
+			"value": "not convex and (forcedStraightStart or forcedStraightEnd)"
+		},
+		{
+			"name": "CwASize",
+			"type": "float",
+			"value": "if(thisIsEndA, CwASizeE, CwASizeS)"
+		},
+		{
+			"name": "CwBSize",
+			"type": "float",
+			"value": "if(thisIsEndB, CwBSizeE, CwBSizeS)"
+		}
+	],
+	"dynamicDefinitions": [
+	    {
+			"name": "zAdj0",
+			"type": "float",
+			"value": "max(z-CwASize, 0)"
+		},
+	    {
+			"name": "totalLengthAdj0",
+			"type": "float",
+			"value": "max(totalLength-CwASize-CwBSize, 0)"
+		},
+		{
+			"name": "rlPos",
+			"type": "float",
+			"value": "if(rail_height>0, z / rail_height, 0)"
+		},
+		{
+			"name": "percentAnchor",
+			"type": "float",
+			"value": "if(totalLengthAdj0 > 0, zAdj0/totalLengthAdj0, 0)"
+		},
+		{
+			"name": "swhAnchor",
+			"type": "vec3",
+			"value": "lerp(A_swh, B_swh, percentAnchor)"
+		},
+		{
+			"name": "v0",
+			"type": "vec3",
+			"value": "if((selfIntersectingSpline or forcedStraight) and z > 0 and z < totalLength, v0_0, v0)"
+		},
+		{
+			"name": "absX0",
+			"type": "float",
+			"value": "v3x(v0)"
+		},
+		{
+			"name": "absZ0",
+			"type": "float",
+			"value": "v3z(v0)"
+		},
+		{
+			"name": "v5",
+			"type": "vec3",
+			"value": "v1"
+		},
+		{
+			"name": "v6",
+			"type": "vec3",
+			"value": "v0"
+		}
+	],
+	"textureDefinitions": [
+		{
+			"name": "rail_texture1",
+			"options": [
+				"rail_A_texture1",
+				"rail_B_texture1"
+			],
+			"index": "rail_texIndex"
+		},
+		{
+			"name": "rail_texture2",
+			"options": [
+				"rail_A_texture2",
+				"rail_B_texture2"
+			],
+			"index": "rail_texIndex_extra"
+		},
+		{
+			"name": "rail_texture4",
+			"options": [
+				"rail_A_texture4",
+				"rail_B_texture4"
+			],
+			"index": "rail_texIndex"
+		},
+		{
+			"name": "rail_texture5",
+			"options": [
+				"rail_A_texture5",
+				"rail_B_texture5"
+			],
+			"index": "rail_texIndex_extra"
+		}
+	],
+	"actualSegments": "if(notDefaultTex, 1, segments)",
+	"anchors": [
+		"v0+swhAnchor"
+	],
+	"textures": [
+		"texture0",
+		"rail_texture1",
+		"rail_texture4"
+	],
+	"texturesMapping": {
+		"intersectionSidewalk": [
+			0
+		],
+		"intersectionShoulder": [
+			0
+		],
+		"rail_rail_left": [
+			1
+		],
+		"rail_wall_left": [
+			1,
+			2
+		],
+		"intersectionGalleryWall": [
+			1
+		]
+	},
+	"components": [
+		{
+			"name": "intersectionSidewalk",
+			"condition": "(A_hasRealSidewalks or B_hasRealSidewalks) and not (A_hasShoulders and B_hasShoulders)"
+		},
+		{
+			"name": "intersectionShoulder",
+			"condition": "A_hasShoulders and B_hasShoulders"
+		},
+		{
+			"name": "rail_rail_left",
+			"condition": "AHasRail or (BHasRail and not AHasAnyRail)"
+		},
+		{
+			"name": "rail_wall_left",
+			"condition": "AHasWall or (BHasWall and not AHasAnyRail)"
+		},
+		{
+			"name": "intersectionGalleryWall",
+			"condition": "AHasGallery or (BHasGallery and not AHasAnyRail)"
+		}
+	],
+	"extraTerrainSplines": [
+		{
+			"name": "wall",
+			"vertex": "v0-localUp+localRight*(rail_height/3)"
+		},
+		{
+			"name": "gallery",
+			"vertex": "v0+localUp*rail_height"
+		}
+	]
+}

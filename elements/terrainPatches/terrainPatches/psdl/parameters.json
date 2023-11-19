@@ -1,0 +1,35 @@
+{
+	"parameters": [
+		{
+			"name": "echo",
+			"label": "RD_ECHO",
+			"tooltip": "RD_ECHO_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "blockNumber",
+			"label": "BLOCK_NUMBER",
+			"placeholder": "VALUE_PH",
+			"tooltip": "BLOCK_NUMBER_TOOLTIP",
+			"type": "int"
+		},
+		{
+			"name": "mergeWithConnected",
+			"label": "TP_MERGE",
+			"tooltip": "TP_MERGE_TOOLTIP",
+			"type": "bool"
+		}
+	],
+	"staticDefinitions": [
+		{
+			"name": "uMult",
+			"type": "float",
+			"value": "-0.25"
+		},
+		{
+			"name": "vMult",
+			"type": "float",
+			"value": "-0.25"
+		}
+	]
+}

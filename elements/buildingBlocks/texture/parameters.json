@@ -1,0 +1,22 @@
+{
+	"parameters": [
+		{
+			"name": "assetName",
+			"label": "BS_B_TEX",
+			"placeholder": "BS_B_TEX_PH",
+			"type": "texture"
+		}
+	],
+	"staticDefinitions": [
+		{
+			"name": "uMult",
+			"type": "float",
+			"value": "-1"
+		},
+		{
+			"name": "vMult",
+			"type": "float",
+			"value": "1"
+		}
+	]
+}

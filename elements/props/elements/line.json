@@ -1,0 +1,66 @@
+{
+	"label": "PROP_TYPE_LINE",
+	"maxMeshes": 1,
+	"parametersInfo": {
+		"parameters": [
+			{
+				"name": "start",
+				"label": "PROP_ELEM_START",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "end",
+				"label": "PROP_ELEM_END",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "elemDistance",
+				"label": "PROP_ELEM_DISTANCE",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			},
+			{
+				"name": "maxNumber",
+				"label": "PROP_ELEM_MAX_NUM",
+				"placeholder": "VALUE_PH",
+				"type": "int"
+			},
+			{
+				"name": "xPos",
+				"label": "PROP_ELEM_XPOS",
+				"placeholder": "VALUE_PH",
+				"type": "float"
+			}
+		]
+	},
+	"uiInfo": [
+		{
+			"name": "end",
+			"width": 0.75
+		},
+		{
+			"name": "start",
+			"width": 0.75
+		},
+		{
+			"name": "elemDistance",
+			"width": 1.5
+		},
+		{
+			"name": "maxNumber",
+			"width": 0.75
+		},
+		{
+			"name": "xPos",
+			"width": 0.75
+		}
+	],
+	"placementRules": {
+		"whileCondition": "elemDistance > 0 and i < maxNumber and z <= (totalLength-end)",
+		"xPos": "xPos",
+		"zPos": "if(i=0, start, lastZ+elemDistance)",
+		"forward": "localForward"
+	}
+}

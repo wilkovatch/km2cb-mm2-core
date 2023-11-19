@@ -1,0 +1,19 @@
+{
+	"alwaysDraw": false,
+	"thumbnail": "assetName",
+	"mergeable": true,
+	"textures": [
+		"assetName"
+	],
+	"texturesMapping": {
+		"mesh": [
+			0
+		]
+	},
+	"components": [
+		{
+			"name": "mesh",
+			"condition": "true"
+		}
+	]
+}

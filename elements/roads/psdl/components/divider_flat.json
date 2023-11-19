@@ -1,0 +1,18 @@
+{
+	"mainMesh": {
+		"vertices": [
+			"v2-h",
+			"v4-h"
+		],
+		"uvs": [
+			"vec2(zDiv, 0)",
+			"vec2(zDiv, dividerParam)"
+		],
+		"faces": [
+			0
+		],
+		"facesTextures": [
+			0
+		]
+	}
+}

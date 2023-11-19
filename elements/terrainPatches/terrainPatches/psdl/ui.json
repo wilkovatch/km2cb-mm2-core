@@ -1,0 +1,36 @@
+{
+	"label": "PSDL_COMPATIBLE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "TP_TAB_MAIN",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "echo",
+					"width": 0.75
+				},
+				{
+					"name": "blockNumber",
+					"width": 0.75
+				},
+				{
+					"name": "mergeWithConnected",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "TP_TAB_RAIL",
+			"elements": [
+				{
+					"name": "borderMeshGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,15 @@
+{
+	"parameters": [],
+	"staticDefinitions": [
+		{
+			"name": "uMult",
+			"type": "float",
+			"value": "-1"
+		},
+		{
+			"name": "vMult",
+			"type": "float",
+			"value": "1"
+		}
+	]
+}

@@ -1,0 +1,64 @@
+{
+	"parameters": [
+		{
+			"name": "rail_type",
+			"label": "TYPE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_RL_T_NONE",
+				"RD_RL_T_RAIL",
+				"RD_RL_T_WALL"
+			]
+		},
+		{
+			"name": "rail_height",
+			"label": "HEIGHT",
+			"placeholder": "HEIGHT_PH",
+			"type": "float"
+		},
+		{
+			"name": "rail_texture1",
+			"label": "TP_RL_WALL_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		},
+		{
+			"name": "rail_texture4",
+			"label": "TP_RL_OUT_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		}
+	],
+	"loopVariables": [
+		"i"
+	],
+	"staticDefinitions": [
+		{
+			"name": "rail_offsetStartLeft",
+			"type": "float",
+			"value": "0"
+		},
+		{
+			"name": "rail_offsetEndLeft",
+			"type": "float",
+			"value": "0"
+		},
+		{
+			"name": "rail_offsetStartRight",
+			"type": "float",
+			"value": "0"
+		},
+		{
+			"name": "rail_offsetEndRight",
+			"type": "float",
+			"value": "0"
+		}
+	],
+	"dynamicDefinitions": [
+		{
+			"name": "rlPos",
+			"type": "float",
+			"value": "if(rail_height>0, z / rail_height, 0)"
+		}
+	]
+}
