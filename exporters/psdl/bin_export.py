@@ -832,7 +832,7 @@ class BINExporter:
                 roof_tex = self.state_val(state, 'roofTex', '')
                 self.get_roof(res, line['roof'], block + 1, roof_tex, line['data']['name'])
         for building in line['buildings']:
-            self.get_building(res, building, line['data']['name'], state['frontOnly'], self.state_bool(state, 'fixBound'))
+            self.get_building(res, building, line['data']['name'], self.state_bool(state, 'frontOnly'), self.state_bool(state, 'fixBound'))
 
     def does_ray_intersect_segment(self, point, direction, p1, p2):
         v1 = np.subtract(point, p1)
