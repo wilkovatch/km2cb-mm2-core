@@ -15,6 +15,7 @@
 	"EXPORT_VERBOSE": "Verbose",
 	"PSDL_COMPATIBLE": "PSDL compatible",
 	"CUSTOM": "Custom",
+	"TP_PERIMETER_ONLY": "Perimeter-only block",
 	"TP_MERGE": "Merge with other connected patches",
 	"RD_DOUBLE": "Double",
 	"ROAD_TEX": "Road texture",

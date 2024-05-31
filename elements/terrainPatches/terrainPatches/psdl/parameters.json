@@ -18,6 +18,11 @@
 			"label": "TP_MERGE",
 			"tooltip": "TP_MERGE_TOOLTIP",
 			"type": "bool"
+		},
+		{
+			"name": "invisible",
+			"label": "TP_PERIMETER_ONLY",
+			"type": "bool"
 		}
 	],
 	"staticDefinitions": [
