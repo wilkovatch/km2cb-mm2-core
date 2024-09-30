@@ -91,6 +91,6 @@
 		"whileCondition": "elemDistance > 0 and i < maxNumber and z <= (totalLength-end)",
 		"xPos": "rnd(minHorizPos, maxHorizPos, 0)",
 		"zPos": "if(i=0, start, lastZ+elemDistance)",
-		"forward": "rotate(localForward, localUp, deg2rad*rotationAngle)"
+		"forward": "rotate(localForward, localUp, rotationAngle)"
 	}
 }
