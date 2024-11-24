@@ -1030,11 +1030,6 @@ class BINExporter:
         traffic_elem.properties['start_intersection'] = str(ti[imap[start_int]][2])
         traffic_elem.properties['end_intersection'] = str(ti[imap[end_int]][2])
 
-
-        #PATCHED
-        if traffic_elem.properties['start_intersection'] == "126":
-          traffic_elem.properties['start_rule'] = "1"
-
         traffic_elem.properties['blocks'] = blocks
         traffic_elem.mat = 'NONE'
         res.append(traffic_elem)
