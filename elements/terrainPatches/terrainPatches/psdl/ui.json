@@ -14,6 +14,10 @@
 					"width": 0.75
 				},
 				{
+					"name": "warp",
+					"width": 0.75
+				},
+				{
 					"name": "blockNumber",
 					"width": 0.75
 				},

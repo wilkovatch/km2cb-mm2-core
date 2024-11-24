@@ -7,6 +7,12 @@
 			"type": "bool"
 		},
 		{
+			"name": "warp",
+			"label": "RD_WARP",
+			"tooltip": "RD_WARP_TOOLTIP",
+			"type": "bool"
+		},
+		{
 			"name": "blockNumber",
 			"label": "BLOCK_NUMBER",
 			"placeholder": "VALUE_PH",

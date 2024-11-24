@@ -11,19 +11,19 @@
 				},
 				{
 					"name": "echo",
-					"width": 0.5
+					"width": 0.75
+				},
+				{
+					"name": "warp",
+					"width": 0.75
 				},
 				{
 					"name": "totalWidth",
-					"width": 0.5
+					"width": 0.75
 				},
 				{
 					"name": "roadWidth",
-					"width": 0.5
-				},
-				{
-					"name": "isDouble",
-					"width": 0.5
+					"width": 0.75
 				},
 				{
 					"name": "hasSidewalks",
@@ -31,6 +31,10 @@
 				},
 				{
 					"name": "flatSidewalk",
+					"width": 0.5
+				},
+				{
+					"name": "isDouble",
 					"width": 0.5
 				},
 				{

@@ -12,6 +12,12 @@
 			"type": "bool"
 		},
 		{
+			"name": "warp",
+			"label": "RD_WARP",
+			"tooltip": "RD_WARP_TOOLTIP",
+			"type": "bool"
+		},
+		{
 			"name": "flatSidewalk",
 			"label": "RD_SW_SHOULDERS",
 			"type": "bool"
