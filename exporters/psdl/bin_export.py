@@ -587,6 +587,7 @@ class BINExporter:
                 elem.properties['original_name'] = intersection['data']['name']
                 if self.state_bool(state, 'echo'):
                     elem.properties['echo'] = '1'
+                if state.get('warp', False): elem.properties['warp'] = '1'
                 elem.mat = self.get_tex(mat_tex) + ','
                 for i in ['0', '2']:
                     comma = ',' if i != '2' else ''

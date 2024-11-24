@@ -22,6 +22,10 @@
 					"width": 1.5
 				},
 				{
+					"name": "warp",
+					"width": 1.5
+				},
+				{
 					"name": "texture0",
 					"width": 1.5
 				},

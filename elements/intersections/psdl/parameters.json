@@ -36,6 +36,12 @@
 			"label": "IS_TEX_2",
 			"placeholder": "TEXTURE_PH",
 			"type": "texture"
+		},
+		{
+			"name": "warp",
+			"label": "RD_WARP",
+			"tooltip": "RD_WARP_TOOLTIP",
+			"type": "bool"
 		}
 	],
 	"staticDefinitions": [
