@@ -1022,9 +1022,7 @@ class BINExporter:
         traffic_elem.properties['speed'] = str(int(self.state_int(r_state, 'speedLimit')))
         traffic_elem.properties['vertices_per_section'] = str(vps)
         traffic_elem.properties['start_rule'] = start_rule
-        #traffic_elem.properties['start_rule'] = '1'
         traffic_elem.properties['end_rule'] = end_rule
-        #traffic_elem.properties['end_rule'] = '1'
         ti = self.traffic_intersections
         imap = self.intersection_map
         traffic_elem.properties['start_intersection'] = str(ti[imap[start_int]][2])

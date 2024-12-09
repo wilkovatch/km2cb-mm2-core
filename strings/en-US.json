@@ -141,15 +141,6 @@
 	"EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS_TOOLTIP": "",
 	"EXPORT_PSDL_CAP_MATERIALS_TOOLTIP": "Stock MM2 and tools like MM2 City Toolkit cannot handle PSDL files with more than 511 textures, enabling this flag will cap texture IDs to 511 if greater.\nIt will break them though if this happens, use it only for testing.\nIf disabled, there is still a cap of 2047 materials.",
 	"RD_LOWER_WO_SW_TOOLTIP": "It will look weird if the road is connected to an intersection where other roads have sidewalks, as they will always be 15cm high ingame",
-
-	"RD_START_RULE": "Behavior at start intersection",
-	"RD_END_RULE": "Behavior at end intersection",
-	"RD_START_RULE_DEFAULT": "Default (use legacy switches)",
-	"RD_START_RULE_FIFO": "First in, first out (default)",
-	"RD_START_RULE_LIGHTS": "Traffic lights",
-	"RD_START_RULE_ALWAYS_STOP": "Always stop",
-	"RD_START_RULE_NEVER_STOP": "Never stop",
-
 	"RD_WARP": "Add warp",
 	"RD_WARP_TOOLTIP": "For PSDL rooms that lay atop another, e.g. when there's a bridge going over something"
 }
