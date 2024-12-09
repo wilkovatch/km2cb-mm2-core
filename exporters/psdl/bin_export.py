@@ -339,6 +339,7 @@ class BINExporter:
                                 res.append(prop_elem)
                             break
         if state['echo']: elem.properties['echo'] = '1'
+        if state.get('warp', False): elem.properties['warp'] = '1'
         if div_type is not None: elem.properties['divider_type'] = str(div_type)
         if div_caps is not None: elem.properties['caps'] = str(div_caps)
         if div_param is not None: elem.properties['divider_param'] = str(div_param)
@@ -586,6 +587,7 @@ class BINExporter:
                 elem.properties['original_name'] = intersection['data']['name']
                 if self.state_bool(state, 'echo'):
                     elem.properties['echo'] = '1'
+                if state.get('warp', False): elem.properties['warp'] = '1'
                 elem.mat = self.get_tex(mat_tex) + ','
                 for i in ['0', '2']:
                     comma = ',' if i != '2' else ''
@@ -645,8 +647,11 @@ class BINExporter:
         elem.indices = split_parts[0]['indices']
         elem.vertices = split_parts[0]['vertices']
         elem.name = str(cur_block) + ('_NUL' if self.state_bool(state, 'invisible') else '_BLOCK')
+
         if self.state_bool(state, 'echo'):
             elem.properties['echo'] = '1'
+        if state.get('warp', False): elem.properties['warp'] = '1'
+
         elem.mat = self.get_tex(self.state_val(state, 'texture', None))
         res.append(elem)
         if detected_block == 0:
@@ -1017,11 +1022,14 @@ class BINExporter:
         traffic_elem.properties['speed'] = str(int(self.state_int(r_state, 'speedLimit')))
         traffic_elem.properties['vertices_per_section'] = str(vps)
         traffic_elem.properties['start_rule'] = start_rule
+        #traffic_elem.properties['start_rule'] = '1'
         traffic_elem.properties['end_rule'] = end_rule
+        #traffic_elem.properties['end_rule'] = '1'
         ti = self.traffic_intersections
         imap = self.intersection_map
         traffic_elem.properties['start_intersection'] = str(ti[imap[start_int]][2])
         traffic_elem.properties['end_intersection'] = str(ti[imap[end_int]][2])
+
         traffic_elem.properties['blocks'] = blocks
         traffic_elem.mat = 'NONE'
         res.append(traffic_elem)
