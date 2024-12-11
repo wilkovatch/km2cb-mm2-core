@@ -10,6 +10,7 @@
 	"EXPORT_BAI_ACCURATE_CULLING": "Accurate BAI culling",
 	"EXPORT_INST": "Export INST",
 	"EXPORT_PATHSET": "Export PATHSET",
+	"EXPORT_PKGS": "Export PKGs (not working yet)",
 	"EXPORT_PROP_RULES": "Export prop rules",
 	"EXPORT_BIN": "Export BIN only",
 	"EXPORT_VERBOSE": "Verbose",

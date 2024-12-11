@@ -10,11 +10,14 @@ import numpy as np
 
 class ExportedCityElement:
     def __init__(self):
+        self.is_mesh = False
         self.name = ''
         self.mat = ''
         self.properties = {}
         self.vertices = []
         self.indices = []
+        self.normals = []
+        self.uvs = []
         self.translation = (0,0,0)
         self.rotation = (0,0,0,1)
         self.scale = (1,1,1)
@@ -31,8 +34,8 @@ class BinaryWriter:
 
     def write_string(self, string):
         length = len(string)
+        self.write_byte(length)
         if length > 0:
-            self.write_byte(length)
             self.file.write(string.encode('ascii'))
 
     def write_uint32(self, value):
@@ -52,6 +55,10 @@ class BinaryWriter:
         self.write_float(value[2])
         self.write_float(value[1])
 
+    def write_vec2(self, value):
+        self.write_float(value[0])
+        self.write_float(value[1])
+
     def close(self):
         self.file.close()
 
@@ -61,6 +68,7 @@ class BINExporter:
         self.cur_facade_index = 0
         self.prop_rules = []
         self.verbose = verbose
+        self.cur_mesh_idx = 0
 
     # Functions to get a value from a dictionary without throwing an error if the state or the key is missing
     def state_val(self, state, key, default = None):
@@ -158,28 +166,45 @@ class BINExporter:
         i += section_index * n
         return [i+n, i+1+n, i, i+1+n, i+1, i]
 
-    def get_road(self,
-                 res,
-                 road,
-                 instance_state,
-                 has_start_intersection,
-                 has_end_intersection,
-                 in_block,
-                 cur_block,
-                 manual_blocks,
-                 parent_intersection = None):
-        state = road['data']['fields']['state']
-        if state['type'] != 'psdl':
-            return
-        block_perimeters = self.block_perimeters
-        mesh = road['data']['mesh']
-        elem_name = ''
-        og_name = road['data']['name'] if parent_intersection == None else parent_intersection['data']['name']
-        if cur_block == -1:
-            cur_block = len(block_perimeters) + 1
-            block_number = self.get_manual_block_number(state)
-            if block_number > 0 and block_number in manual_blocks:
-                cur_block = manual_blocks.index(block_number) + 1
+    def get_mesh_mat(self, mat_id):
+        return self.get_tex(self.data['materialDict'][mat_id]['data']['texture']) if mat_id >= 0 else "NONE"
+
+    def get_mesh(self, mesh, cur_block, elem_name, original_name, mesh_idx = -1):
+        indices = [m['indices'] for m in mesh['submeshes']]
+        materials = [self.get_mesh_mat(m['materialId']) for m in mesh['submeshes']]
+        elem = ExportedCityElement()
+        elem.is_mesh = True
+        elem.indices = indices
+        elem.normals = mesh['normals']
+        elem.uvs = mesh['uvs']
+        if (len(elem.uvs) != len(elem.normals)):
+            elem.uvs = [(0, 0) for i in range(len(elem.normals))] #if missing
+        elem.vertices = mesh['vertices']
+        elem.mat = ','.join(materials)
+        elem.name = str(cur_block) + '_PKG'
+        elem.properties['original_name'] = original_name
+        idx = self.cur_mesh_idx
+        if mesh_idx >= 0:
+            idx = mesh_idx
+        elem.properties['pkg_name'] = "mesh" + str(idx)
+        elem.properties['lod_name'] = elem_name
+        if mesh_idx < 0:
+            self.cur_mesh_idx += 1
+        return elem
+
+    def get_psdl_road(self,
+                      mesh,
+                      num_segments,
+                      parent_intersection,
+                      state,
+                      vps,
+                      cur_block,
+                      og_name,
+                      prop_rule,
+                      instance_state,
+                      has_start_intersection,
+                      has_end_intersection,
+                      res):
         section_verts = []
         shoulder_1_section_verts = []
         shoulder_2_section_verts = []
@@ -240,9 +265,6 @@ class BINExporter:
             section_verts.append(cur_v + 1)
             cur_v += 2
         section_verts.reverse() #they're reversed compared to the psdl requirements
-        has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1
-        vps = road['data']['fields']['vertsPerSection']
-        num_segments = (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
         textures = ''
         if num_tex == 1:
             textures = self.get_tex(state['texture1'])
@@ -259,7 +281,6 @@ class BINExporter:
         indices = []
         shoulder_1_indices = []
         shoulder_2_indices = []
-        block = []
         for i in range(num_segments):
             # the road mesh
             for j in section_verts:
@@ -281,20 +302,14 @@ class BINExporter:
                 for j in range(len(shoulder_2_section_verts) - 1):
                     sec_indices = self.get_section_indices(j, len(shoulder_2_section_verts), i)
                     shoulder_2_indices.extend(sec_indices)
-        for i in range(num_segments):
-            # one block side (road forward, from start to end)
-            block.append(mesh['vertices'][i * vps])
-        for i in range(num_segments - 1, -1, -1): # the order is important to obtain a valid polygon
-            # the other block side (road backward, from end to start)
-            block.append(mesh['vertices'][(i + 1) * vps - 1])
         elem = ExportedCityElement()
         elem.indices = indices
         elem.vertices = vertices
         elem.name = str(cur_block) + '_' + elem_name
         elem.properties['original_name'] = og_name
+        elem.properties['bai_vps'] = str(len(section_verts))
 
         # psdl prop rules
-        prop_rule = self.state_val(state, 'propRule')
         if parent_intersection is None and type(prop_rule) is dict and self.road_has_sidewalks(state):
             left_rule = self.state_val(prop_rule, 'left')
             if self.state_val(left_rule, 'type') != 'psdl':
@@ -309,35 +324,6 @@ class BINExporter:
                 index = self.prop_rules.index(rule)
                 elem.properties['prop_rule'] = str(index + 1)
 
-        # non-psdl props
-        prop_lines = road['data']['propLines'] if 'propLines' in road['data'] else None
-        if prop_lines is not None and type(prop_rule) is dict:
-            for key in prop_rule:
-                value = prop_rule[key]
-                if isinstance(value, dict) and value['type'] != 'psdl':
-                    for value2 in prop_lines:
-                        if value2['name'] == key:
-                            # TODO: prop lines
-                            for prop in value2['props']:
-                                dict_mesh = self.data['meshDict'][int(prop['meshId'])]
-                                prop_elem = ExportedCityElement()
-                                cube = self.get_cube(1)
-                                prop_elem.vertices = cube['vertices']
-                                prop_elem.indices = cube['indices']
-                                mesh_name_parts = dict_mesh['name'].replace('\\', '/').split('/')
-                                mesh_name = mesh_name_parts[-1].split('.')[0]
-                                no_transf = prop['rotation'] == (0, 0, 0, 1) and prop['scale'] == (1, 1, 1)
-                                flags = '0' if no_transf else '1'
-                                prop_elem.name = '0_PTH'
-                                prop_elem.properties['original_name'] = og_name + ' [prop]'
-                                prop_elem.properties['object'] = mesh_name
-                                prop_elem.properties['flags'] = flags
-                                prop_elem.translation = list(np.add(prop['position'], (0, dict_mesh['boundsMin'][1], 0)))
-                                prop_elem.rotation = prop['rotation']
-                                prop_elem.scale = prop['scale']
-                                prop_elem.mat = 'NONE'
-                                res.append(prop_elem)
-                            break
         if state['echo']: elem.properties['echo'] = '1'
         if state.get('warp', False): elem.properties['warp'] = '1'
         if div_type is not None: elem.properties['divider_type'] = str(div_type)
@@ -345,10 +331,7 @@ class BINExporter:
         if div_param is not None: elem.properties['divider_param'] = str(div_param)
         elem.mat = textures
         res.append(elem)
-        
-        if road['data']['fields']['hasStartIntersection'] and road['data']['fields']['hasEndIntersection']:
-            self.traffic_roads.append([elem, road, instance_state, len(self.traffic_roads), [cur_block]])
-        
+
         if len(shoulder_1_vertices) > 0:
             s_elem = ExportedCityElement()
             s_elem.indices = shoulder_1_indices
@@ -366,7 +349,7 @@ class BINExporter:
             s_elem.mat = self.get_tex(state['texture0'])
             s_elem.properties['original_name'] = og_name + ' [shoulder]'
             res.append(s_elem)
-        
+
         if self.road_has_rail(state):
             def rail_val(state, name, default):
                 return self.state_val(state, 'rail_' + name, default)
@@ -405,6 +388,155 @@ class BINExporter:
                 comma = ',' if i < 5 else ''
                 rl_elem.mat += self.get_tex(rail_val(state, 'texture' + str(i), '')) + comma
             res.append(rl_elem)
+        return elem
+
+    def get_pkg_road(self,
+                     mesh,
+                     road,
+                     state,
+                     num_segments,
+                     cur_block,
+                     og_name,
+                     vps,
+                     res):
+        # empty block to contain the pkg
+        psdl_block = []
+        indices = []
+        bai_vps = 0
+        if vps <= 2:
+            for i in range(num_segments):
+                psdl_block.append(mesh['vertices'][i * vps])
+                psdl_block.append(mesh['vertices'][(i + 1) * vps - 1])
+                bai_vps = 2
+            for i in range(num_segments - 1):
+                # triangle 1
+                indices.append(i)
+                indices.append(i + 1)
+                indices.append(i + 2)
+                # triangle 2
+                indices.append(i + 1)
+                indices.append(i + 3)
+                indices.append(i + 2)
+        else:
+            sw_skip = (2 if self.road_has_shoulders(state) else 3) if self.road_has_sidewalks(state) else 0
+            for i in range(num_segments):
+                psdl_block.append(mesh['vertices'][i * vps])
+                psdl_block.append(mesh['vertices'][i * vps + sw_skip])
+                psdl_block.append(mesh['vertices'][(i + 1) * vps - 1 - sw_skip])
+                psdl_block.append(mesh['vertices'][(i + 1) * vps - 1])
+                bai_vps = 4
+            for i in range(num_segments - 1):
+                for j in range(3):
+                    # triangle 1
+                    indices.append(i + j)
+                    indices.append(i + j + 1)
+                    indices.append(i + j + 4)
+                    # triangle 2
+                    indices.append(i + j + 1)
+                    indices.append(i + j + 5)
+                    indices.append(i + j + 4)
+        elem_pkg = self.get_mesh(road['data']['mesh'], cur_block, 'VL', og_name)
+        if (res):
+            elem = ExportedCityElement()
+            elem.indices = indices
+            elem.vertices = psdl_block
+            elem.name = str(cur_block) + '_NUL'
+            elem.properties['original_name'] = og_name
+            elem.properties['bai_vps'] = str(bai_vps)
+            res.append(elem)
+            res.append(elem_pkg)
+            return elem
+        else:
+            return {"nul": {"indices": indices, "vertices": psdl_block}, "pkg": elem_pkg}
+
+    def get_road(self,
+                 res,
+                 road,
+                 instance_state,
+                 has_start_intersection,
+                 has_end_intersection,
+                 in_block,
+                 cur_block,
+                 manual_blocks,
+                 parent_intersection = None):
+        state = road['data']['fields']['state']
+        block_perimeters = self.block_perimeters
+        mesh = road['data']['mesh']
+        og_name = road['data']['name'] if parent_intersection == None else parent_intersection['data']['name']
+        if cur_block == -1:
+            cur_block = len(block_perimeters) + 1
+            block_number = self.get_manual_block_number(state)
+            if block_number > 0 and block_number in manual_blocks:
+                cur_block = manual_blocks.index(block_number) + 1
+        has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1 #todo: change if non psdl roads will be introduced
+        vps = road['data']['fields']['vertsPerSection']
+        num_segments = (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
+        prop_rule = self.state_val(state, 'propRule')
+
+        #get the block
+        block = []
+        for i in range(num_segments):
+            # one block side (road forward, from start to end)
+            block.append(mesh['vertices'][i * vps])
+        for i in range(num_segments - 1, -1, -1): # the order is important to obtain a valid polygon
+            # the other block side (road backward, from end to start)
+            block.append(mesh['vertices'][(i + 1) * vps - 1])
+
+        if state['type'] == 'psdl' and not self.state_bool(instance_state, 'exportToPKG'):
+            elem = self.get_psdl_road(mesh,
+                                      num_segments,
+                                      parent_intersection,
+                                      state,
+                                      vps,
+                                      cur_block,
+                                      og_name,
+                                      prop_rule,
+                                      instance_state,
+                                      has_start_intersection,
+                                      has_end_intersection,
+                                      res)
+        else: #non psdl road, export to pkg
+            elem = self.get_pkg_road(mesh,
+                                     road,
+                                     state,
+                                     num_segments,
+                                     cur_block,
+                                     og_name,
+                                     vps,
+                                     res)
+
+        # non-psdl props
+        prop_lines = road['data']['propLines'] if 'propLines' in road['data'] else None
+        if prop_lines is not None and type(prop_rule) is dict:
+            for key in prop_rule:
+                value = prop_rule[key]
+                if isinstance(value, dict) and value['type'] != 'psdl':
+                    for value2 in prop_lines:
+                        if value2['name'] == key:
+                            # TODO: prop lines
+                            for prop in value2['props']:
+                                dict_mesh = self.data['meshDict'][int(prop['meshId'])]
+                                prop_elem = ExportedCityElement()
+                                cube = self.get_cube(1)
+                                prop_elem.vertices = cube['vertices']
+                                prop_elem.indices = cube['indices']
+                                mesh_name_parts = dict_mesh['name'].replace('\\', '/').split('/')
+                                mesh_name = mesh_name_parts[-1].split('.')[0]
+                                no_transf = prop['rotation'] == (0, 0, 0, 1) and prop['scale'] == (1, 1, 1)
+                                flags = '0' if no_transf else '1'
+                                prop_elem.name = '0_PTH'
+                                prop_elem.properties['original_name'] = og_name + ' [prop]'
+                                prop_elem.properties['object'] = mesh_name
+                                prop_elem.properties['flags'] = flags
+                                prop_elem.translation = list(np.add(prop['position'], (0, dict_mesh['boundsMin'][1], 0)))
+                                prop_elem.rotation = prop['rotation']
+                                prop_elem.scale = prop['scale']
+                                prop_elem.mat = 'NONE'
+                                res.append(prop_elem)
+                            break
+
+        if road['data']['fields']['hasStartIntersection'] and road['data']['fields']['hasEndIntersection']:
+            self.traffic_roads.append([elem, road, instance_state, len(self.traffic_roads), [cur_block]])
         
         if in_block is None:
             if cur_block == len(block_perimeters) + 1:
@@ -508,17 +640,7 @@ class BINExporter:
         else:
             return None
 
-    def get_intersection(self, res, intersection, manual_blocks):
-        state = intersection['data']['fields']['state']
-        if state['type'] != 'psdl':
-            return
-        block_perimeters = self.block_perimeters
-        mesh = intersection['data']['mesh']
-        cur_block = len(block_perimeters) + 1
-        block_number = self.get_manual_block_number(state)
-        if block_number > 0 and block_number in manual_blocks:
-            cur_block = manual_blocks.index(block_number) + 1
-        block = []
+    def get_psdl_intersection(self, res, intersection, manual_blocks, state, block, mesh, cur_block):
         roads = intersection['roadsThrough']
         for road in roads:
             self.get_road(res, road, [], False, False, block, cur_block, manual_blocks, intersection)
@@ -597,6 +719,83 @@ class BINExporter:
                 if not traffic_added and typ == 'terrain' and len(roadsJ) > 0:
                     self.traffic_intersections.append([elem, intersection, cur_block])
                     traffic_added = True
+
+    def get_pkg_road_through(self,
+                             road,
+                             cur_block,
+                             parent_intersection):
+        state = road['data']['fields']['state']
+        mesh = road['data']['mesh']
+        og_name = parent_intersection['data']['name']
+        has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1 #todo: change if non psdl roads will be introduced
+        vps = road['data']['fields']['vertsPerSection']
+        num_segments = (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
+        return self.get_pkg_road(mesh,
+                                 road,
+                                 state,
+                                 num_segments,
+                                 cur_block,
+                                 og_name,
+                                 vps,
+                                 None)
+
+    def get_pkg_intersection(self, res, intersection, state, block, mesh, cur_block):
+        nul_block = []
+        roads = intersection['roadsThrough']
+        for road in roads:
+            subroad = self.get_pkg_road_through(road, cur_block, intersection)
+            nul_block.append(subroad["nul"])
+            res.append(subroad["pkg"])
+        submeshes = self.get_split_submeshes(mesh)
+        cur_part_types = intersection['data']['fields']['partsInfo']
+        for i in range(len(submeshes)):
+            p = submeshes[i]
+            if '.' in cur_part_types[i]:
+                typ_parts = cur_part_types[i].split('.')
+                typ = typ_parts[0]
+            else:
+                typ = cur_part_types[i]
+            if typ == 'junction_0': #sidewalk
+                sw_indices = []
+                sw_vertices = []
+                for j in range(len(p['vertices']) - 4, -1, -4):
+                    sw_vertices.append(p['vertices'][j + 3])
+                    sw_vertices.append(p['vertices'][j])
+                    if j < len(p['vertices']) - 4:
+                        sw_indices.extend(self.get_section_indices(0, 2, j // 4))
+                nul_block.append({"indices": sw_indices, "vertices": sw_vertices})
+            elif typ == 'terrain' or typ == 'crosswalk':
+                nul_block.append({"indices": p['indices'], "vertices": p['vertices']})
+        traf_elem = None
+        for elem0 in nul_block:
+            nul_elem = ExportedCityElement()
+            nul_elem.indices = elem0['indices']
+            nul_elem.vertices = elem0['vertices']
+            nul_elem.name = str(cur_block) + "_NUL"
+            nul_elem.properties['original_name'] = intersection['data']['name']
+            res.append(nul_elem)
+            traf_elem = nul_elem
+        elem = self.get_mesh(intersection['data']['mesh'], cur_block, 'VL', intersection['data']['name'])
+        res.append(elem)
+        if len(intersection['roads']) > 0:
+            self.traffic_intersections.append([traf_elem, intersection, cur_block])
+
+    def get_intersection(self, res, intersection, manual_blocks):
+        state = intersection['data']['fields']['state']
+        instance_state = intersection['data']['fields']['instanceState']
+        if state['type'] != 'psdl':
+            return
+        block_perimeters = self.block_perimeters
+        mesh = intersection['data']['mesh']
+        cur_block = len(block_perimeters) + 1
+        block_number = self.get_manual_block_number(state)
+        if block_number > 0 and block_number in manual_blocks:
+            cur_block = manual_blocks.index(block_number) + 1
+        block = []
+        if not self.state_bool(instance_state, 'exportToPKG'):
+            self.get_psdl_intersection(res, intersection, manual_blocks, state, block, mesh, cur_block)
+        else:
+            self.get_pkg_intersection(res, intersection, state, block, mesh, cur_block)
         if cur_block == len(block_perimeters) + 1:
             self.add_block_perimeter_multi(block, 0)
         else:
@@ -646,8 +845,9 @@ class BINExporter:
         elem = ExportedCityElement()
         elem.indices = split_parts[0]['indices']
         elem.vertices = split_parts[0]['vertices']
-        elem.name = str(cur_block) + ('_NUL' if self.state_bool(state, 'invisible') else '_BLOCK')
-
+        to_pkg = self.state_bool(state, 'exportToPKG')
+        is_nul = self.state_bool(state, 'invisible') or to_pkg
+        elem.name = str(cur_block) + ('_NUL' if is_nul else '_BLOCK')
         if self.state_bool(state, 'echo'):
             elem.properties['echo'] = '1'
         if state.get('warp', False): elem.properties['warp'] = '1'
@@ -662,19 +862,22 @@ class BINExporter:
         else:
             self.extend_block_perimeter(detected_block - 1, patch['perimeterPoints'])
 
-        # rails
-        rails = patch['borderMeshes']
-        if len(rails) > 0:
-            for i in range(len(rails)):
-                r = rails[i]
-                r_vertices = []
-                r_indices = []
-                for j in range(len(r['segment'])):
-                    r_vertices.append(r['segment'][j])
-                    r_vertices.append(np.add(r['segment'][j], (0.0, 1.0, 0.0)))
-                    if j < len(r['segment']) - 1:
-                        r_indices.extend(self.get_section_indices_rev(0, 2, j))
-                self.get_junction_rail(res, r['fields']['state'], r_vertices, r_indices, cur_block, patch)
+        if to_pkg:
+            res.append(self.get_mesh(patch['data']['mesh'], cur_block, 'VL', patch['data']['name']))
+        if not to_pkg:
+            # rails
+            rails = patch['borderMeshes']
+            if len(rails) > 0:
+                for i in range(len(rails)):
+                    r = rails[i]
+                    r_vertices = []
+                    r_indices = []
+                    for j in range(len(r['segment'])):
+                        r_vertices.append(r['segment'][j])
+                        r_vertices.append(np.add(r['segment'][j], (0.0, 1.0, 0.0)))
+                        if j < len(r['segment']) - 1:
+                            r_indices.extend(self.get_section_indices_rev(0, 2, j))
+                    self.get_junction_rail(res, r['fields']['state'], r_vertices, r_indices, cur_block, patch)
 
     def get_roof(self, res, submesh, cur_block, tex, obj_name):
         if len(submesh['submeshes']) > 0 and len(submesh['submeshes'][0]['indices']) > 0:
@@ -822,22 +1025,31 @@ class BINExporter:
             if building['roof'] is not None:
                 self.get_roof(res, building['roof'], block, state['topTexture'], obj_name)
 
+    def get_block_from_line_points(self, line):
+        point_sum = (0.0, 0.0, 0.0)
+        for point in line['linePoints']:
+            point_sum = np.add(point_sum, point)
+        point_sum = np.divide(point_sum, len(line['linePoints']))
+        return self.find_block(point_sum)
+
     def get_building_line(self, res, line):
         state = line['data']['fields']['state']
-        if state['type'] != 'psdl':
-            return
-        block_perimeters = self.block_perimeters
-        if line['roof'] is not None:
-            point_sum = (0.0, 0.0, 0.0)
-            for point in line['linePoints']:
-                point_sum = np.add(point_sum, point)
-            point_sum = np.divide(point_sum, len(line['linePoints']))
-            block = self.find_block(point_sum)
-            if block >= 0 and 'roof' in line:
-                roof_tex = self.state_val(state, 'roofTex', '')
-                self.get_roof(res, line['roof'], block + 1, roof_tex, line['data']['name'])
-        for building in line['buildings']:
-            self.get_building(res, building, line['data']['name'], self.state_bool(state, 'frontOnly'), self.state_bool(state, 'fixBound'))
+        instance_state = line['data']['fields']['instanceState']
+        to_pkg = self.state_bool(instance_state, "exportToPKG")
+        if state['type'] != 'psdl' or to_pkg:
+            block = self.get_block_from_line_points(line) + 1
+            elem = self.get_mesh(line['data']['mesh'], block, 'VL', line['data']['name'])
+            bnd = self.get_mesh(line['data']['collider'], block, 'BND', line['data']['name'], self.cur_mesh_idx - 1)
+            res.append(elem)
+            res.append(bnd)
+        else:
+            if line['roof'] is not None:
+                block = self.get_block_from_line_points(line)
+                if block >= 0 and 'roof' in line:
+                    roof_tex = self.state_val(state, 'roofTex', '')
+                    self.get_roof(res, line['roof'], block + 1, roof_tex, line['data']['name'])
+            for building in line['buildings']:
+                self.get_building(res, building, line['data']['name'], self.state_bool(state, 'frontOnly'), self.state_bool(state, 'fixBound'))
 
     def does_ray_intersect_segment(self, point, direction, p1, p2):
         v1 = np.subtract(point, p1)
@@ -927,7 +1139,7 @@ class BINExporter:
         indices.extend(get_face(7, 4, 0, 3))
         return {'vertices': vertices, 'indices': indices}
 
-    def get_mesh(self, res, mesh, index):
+    def get_mesh_instance(self, res, mesh, index):
         block_perimeters = self.block_perimeters
         mref = mesh['reference']
         dict_mesh = self.data['meshDict'][mref['meshId']]
@@ -988,15 +1200,8 @@ class BINExporter:
         with_both = with_peds and with_traffic
         traffic_type = '0' if with_both else ('1' if with_peds else ('2' if with_traffic else '3'))
         name_split_comma = obj[0].name.split(',')
-        road_type = name_split_comma[-1].split('_')[1].split('.')[0]
-        vps = 0
-        if road_type == 'ROADS' or road_type == 'ROADDN':
-            vps = 4
-        elif road_type == 'ROADN' or road_type == 'ROADSN':
-            vps = 2
-        elif road_type == 'ROADD':
-            vps = 6
-        if vps == 0:
+        vps = obj[0].properties['bai_vps']
+        if vps == '0':
             raise Exception('Invalid road while exporting traffic info on road: ' + obj[0].properties['original_name'])
         start_int_state = self.data['intersections'][start_int]['data']['fields']['state']
         end_int_state = self.data['intersections'][end_int]['data']['fields']['state']
@@ -1020,7 +1225,7 @@ class BINExporter:
         traffic_elem.properties['has_sidewalks'] = right_ped + ':' + left_ped
         traffic_elem.properties['traffic_type'] = traffic_type
         traffic_elem.properties['speed'] = str(int(self.state_int(r_state, 'speedLimit')))
-        traffic_elem.properties['vertices_per_section'] = str(vps)
+        traffic_elem.properties['vertices_per_section'] = vps
         traffic_elem.properties['start_rule'] = start_rule
         traffic_elem.properties['end_rule'] = end_rule
         ti = self.traffic_intersections
@@ -1099,7 +1304,7 @@ class BINExporter:
         print("exporting meshes to bin...")
         for i in range(len(sorted_meshes)):
             if self.verbose: print("exporting " + sorted_meshes[i]['name'])
-            self.get_mesh(res, sorted_meshes[i], i)
+            self.get_mesh_instance(res, sorted_meshes[i], i)
 
         # Traffic data
 
@@ -1242,6 +1447,7 @@ class BINExporter:
         if export_prop_rules:
             self.export_props_rules(filepath)
         def write_element(writer, element):
+            writer.write_byte(element.is_mesh)
             writer.write_string(element.name)
             writer.write_uint32(len(element.properties))
             for key in element.properties:
@@ -1251,8 +1457,19 @@ class BINExporter:
             for vert in element.vertices:
                 writer.write_vec3(vert)
             writer.write_uint32(len(element.indices))
-            for i in range(len(element.indices) - 1, -1, -1):
-                writer.write_uint16(element.indices[i])
+            if element.is_mesh:
+                for j in range(len(element.indices)):
+                    iJ = element.indices[j]
+                    writer.write_uint32(len(iJ))
+                    for i in range(len(iJ) - 1, -1, -1):
+                        writer.write_uint16(iJ[i])
+                for norm in element.normals:
+                    writer.write_vec3(norm)
+                for uv in element.uvs:
+                    writer.write_vec2(uv)
+            else:
+                for i in range(len(element.indices) - 1, -1, -1):
+                    writer.write_uint16(element.indices[i])
             mats = element.mat.split(',')
             writer.write_uint32(len(mats))
             for mat in mats:
@@ -1270,6 +1487,7 @@ class BINExporter:
                 
         writer = BinaryWriter(filepath)
         writer.write_raw(b'km2B')
+        writer.write_string('MidtownMadness2')
         writer.write_uint32(len(elements))
         for element in elements:
             write_element(writer, element)

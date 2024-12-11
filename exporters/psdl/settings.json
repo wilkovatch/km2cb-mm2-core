@@ -16,7 +16,9 @@
 				"bai",
 				"bai_accurateCulling",
 				"inst",
-				"pathset"
+				"pathset",
+				"pkgs",
+				"psdl_capMaterials"
 			],
 			"defaultValue": false
 		},
@@ -41,20 +43,25 @@
 			"defaultValue": true
 		},
 		{
+			"id": "pkgs",
+			"label": "EXPORT_PKGS",
+			"defaultValue": true
+		},
+		{
 			"id": "psdl_splitNonCoplanarRoads",
 			"label": "EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS",
 			"tooltip": "EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS_TOOLTIP",
 			"defaultValue": false
 		},
 		{
-			"id": "psdl_capMaterials",
-			"label": "EXPORT_PSDL_CAP_MATERIALS",
-			"tooltip": "EXPORT_PSDL_CAP_MATERIALS_TOOLTIP",
+			"id": "bai_accurateCulling",
+			"label": "EXPORT_BAI_ACCURATE_CULLING",
 			"defaultValue": false
 		},
 		{
-			"id": "bai_accurateCulling",
-			"label": "EXPORT_BAI_ACCURATE_CULLING",
+			"id": "psdl_capMaterials",
+			"label": "EXPORT_PSDL_CAP_MATERIALS",
+			"tooltip": "EXPORT_PSDL_CAP_MATERIALS_TOOLTIP",
 			"defaultValue": false
 		},
 		{
