@@ -1,4 +1,4 @@
-# Decoder for Angel Studios PKG format, as described here: http://mm2kiwi.apan.is-a-geek.com/index.php?title=PKG
+# Decoder for Angel Studios PKG format, as described here: https://github.com/Dummiesman/angel-file-formats/blob/master/Midtown%20Madness%202/PKG.md
 import sys
 import math
 import struct
