@@ -1,5 +1,13 @@
 This core for km2 City Builder adds support for Midtown Madness 2 cities
 
+The main repository for the city builder is here: https://github.com/wilkovatch/km2-city-builder
+
+This core uses code from this repository: https://github.com/wilkovatch/psdl-exporter-common, it's included as a submodule, so make sure to use `--recurse-submodules` when cloning this repository.
+
+To import the output in Blender you can use these two plugins:
+- https://github.com/wilkovatch/km2cb-to-blender-mm2-plugin (to import the resulting .bin file in Blender)
+- https://github.com/wilkovatch/mm2-blender-psdl-plugin (to export the PSDL and other files)
+
 Exporters supported (accessible by selecting the PSDL format when exporting):
  - PSDL
  - BAI (still incomplete and broken)
