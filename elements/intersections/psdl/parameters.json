@@ -42,6 +42,12 @@
 			"label": "RD_WARP",
 			"tooltip": "RD_WARP_TOOLTIP",
 			"type": "bool"
+		},
+		{
+			"name": "exportToPKG",
+			"label": "EXPORT_TO_PKG",
+			"type": "bool",
+			"instanceSpecific": true
 		}
 	],
 	"staticDefinitions": [

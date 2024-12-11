@@ -64,6 +64,12 @@
 			"type": "texture"
 		},
 		{
+			"name": "exportToPKG",
+			"label": "EXPORT_TO_PKG",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
 			"name": "textureCW0",
 			"label": "RD_CW_TEX_0",
 			"placeholder": "TEXTURE_PH",

@@ -29,6 +29,11 @@
 			"name": "invisible",
 			"label": "TP_PERIMETER_ONLY",
 			"type": "bool"
+		},
+		{
+			"name": "exportToPKG",
+			"label": "EXPORT_TO_PKG",
+			"type": "bool"
 		}
 	],
 	"staticDefinitions": [
