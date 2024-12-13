@@ -148,16 +148,26 @@
 			"type": "bool"
 		},
 		{
-			"name": "doNotStopOnEndIntersection",
-			"label": "RD_NO_STOP_END",
-			"type": "bool",
-			"instanceSpecific": true
+			"name": "start_rule",
+			"label": "RD_START_RULE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_START_RULE_FIFO",
+				"RD_START_RULE_LIGHTS",
+				"RD_START_RULE_ALWAYS_STOP",
+				"RD_START_RULE_NEVER_STOP"
+			]
 		},
 		{
-			"name": "doNotStopOnStartIntersection",
-			"label": "RD_NO_STOP_START",
-			"type": "bool",
-			"instanceSpecific": true
+			"name": "end_rule",
+			"label": "RD_END_RULE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_START_RULE_FIFO",
+				"RD_START_RULE_LIGHTS",
+				"RD_START_RULE_ALWAYS_STOP",
+				"RD_START_RULE_NEVER_STOP"
+			]
 		},
 		{
 			"name": "forceStraightLeftEndSidewalk",
