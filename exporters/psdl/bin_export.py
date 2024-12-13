@@ -1176,6 +1176,7 @@ class BINExporter:
         #obj: (ExportedCityElement elem, RoadGenerator road, State instanceState, int id, int[] blocks)
         road = obj[1]
         r_state = road['data']['fields']['state']
+        r_inst_state = road['data']['fields']['instanceState']
         start_int = road['startIntersectionId']
         end_int = road['endIntersectionId']
         i_state = obj[2]
@@ -1204,8 +1205,8 @@ class BINExporter:
         if vps == '0':
             raise Exception('Invalid road while exporting traffic info on road: ' + obj[0].properties['original_name'])
 
-        start_rule = str(int(self.state_int(r_state, 'start_rule')))
-        end_rule = str(int(self.state_int(r_state, 'end_rule')))
+        start_rule = str(int(self.state_int(r_inst_state, 'start_rule')))
+        end_rule = str(int(self.state_int(r_inst_state, 'end_rule')))
 
         blocks = ''
         for i in range(len(obj[4])):
