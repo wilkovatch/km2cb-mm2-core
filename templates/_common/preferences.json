@@ -5,6 +5,6 @@
   "overlayTex": "",
   "curTerrainTexture": "",
   "core": "MidtownMadness2",
-  "coreVersion": 1,
-  "coreFeatureVersion": 1
+  "coreVersion": 2,
+  "coreFeatureVersion": 3
 }
