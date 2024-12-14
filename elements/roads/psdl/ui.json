@@ -148,12 +148,12 @@
 					"width": 0.75
 				},
 				{
-					"name": "doNotStopOnEndIntersection",
-					"width": 0.75
+					"name": "start_rule",
+					"width": 1.5
 				},
 				{
-					"name": "doNotStopOnStartIntersection",
-					"width": 0.75
+					"name": "end_rule",
+					"width": 1.5
 				}
 			]
 		},
