@@ -56,10 +56,6 @@
 				{
 					"name": "textureLOD",
 					"width": 1.5
-				},
-				{
-					"name": "exportToPKG",
-					"width": 1.5
 				}
 			]
 		},

@@ -19,7 +19,7 @@ try:
     # - write inst
     # - write bai
     # - write pathset
-    # - write pkgs
+    # - //write pkgs (disabled, not working yet)
     # - split non coplanar roads
     # - accurate bai culling
     # - cap materials to 511
@@ -40,8 +40,8 @@ try:
         writer = MainWriter(
             psdl_file, scene_input,
             int(sys.argv[6]), int(sys.argv[7]), int(sys.argv[8]),
-            int(sys.argv[9]), int(sys.argv[10]), int(sys.argv[11]),
-            int(sys.argv[12]), int(sys.argv[13])
+            0, int(sys.argv[9]), int(sys.argv[10]), int(sys.argv[11]),
+            int(sys.argv[12]))
         )
         writer.write()
         os.remove(bin_file)

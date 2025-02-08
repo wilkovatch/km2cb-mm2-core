@@ -43,11 +43,6 @@
 			"defaultValue": true
 		},
 		{
-			"id": "pkgs",
-			"label": "EXPORT_PKGS",
-			"defaultValue": true
-		},
-		{
 			"id": "psdl_splitNonCoplanarRoads",
 			"label": "EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS",
 			"tooltip": "EXPORT_PSDL_SPLIT_NON_COPLANAR_ROADS_TOOLTIP",
