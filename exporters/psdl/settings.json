@@ -25,6 +25,10 @@
 		{
 			"id": "psdl",
 			"label": "EXPORT_PSDL",
+			"enables": [
+				"psdl_splitNonCoplanarRoads",
+				"psdl_capMaterials"
+			],
 			"defaultValue": true
 		},
 		{
@@ -35,6 +39,9 @@
 		{
 			"id": "bai",
 			"label": "EXPORT_BAI",
+			"enables": [
+				"bai_accurateCulling"
+			],
 			"defaultValue": true
 		},
 		{
