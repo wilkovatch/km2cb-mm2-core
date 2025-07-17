@@ -150,6 +150,46 @@
 				{
 					"name": "end_rule",
 					"width": 1.5
+				},
+				{
+					"name": "startTrafficLight",
+					"width": 1.5
+				},
+				{
+					"name": "endTrafficLight",
+					"width": 1.5
+				},
+				{
+					"name": "swapTrafficLights",
+					"width": 1.5
+				},
+				{
+					"name": "trafficLightOnOppositeRoad",
+					"width": 1.5
+				},
+				{
+					"name": "endTrafficLightInOffset",
+					"width": 0.75
+				},
+				{
+					"name": "startTrafficLightInOffset",
+					"width": 0.75
+				},
+				{
+					"name": "endTrafficLightOppInv",
+					"width": 0.75
+				},
+				{
+					"name": "startTrafficLightOppInv",
+					"width": 0.75
+				},
+				{
+					"name": "endTrafficLightRoadIdxAdj",
+					"width": 0.75
+				},
+				{
+					"name": "startTrafficLightRoadIdxAdj",
+					"width": 0.75
 				}
 			]
 		},

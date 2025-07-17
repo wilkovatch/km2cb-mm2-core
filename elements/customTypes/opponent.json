@@ -1,0 +1,131 @@
+{
+	"label": "carModel",
+	"exclusiveEditing": {
+		"enabled": true,
+		"optional": true,
+		"category": "opponent"
+	},
+	"parameters": [
+		{
+			"name": "carModel",
+			"label": "OPPONENT_CAR",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "car",
+				"defaultModel": {
+					"model": "geometry/vpbug.pkg"
+				},
+				"allowCustomModel": true,
+				"allowPosition": [
+					true,
+					true,
+					true
+				],
+				"allowRotation": [
+					false,
+					true,
+					false
+				],
+				"allowScale": [
+					false,
+					false,
+					false
+				]
+			}
+		},
+		{
+			"name": "waypoints",
+			"label": "WAYPOINTS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"elementProperties": [
+					{
+						"name": "waypoint",
+						"label": "WAYPOINT",
+						"type": "objectInstance",
+						"objectInstanceSettings": {
+							"type": "waypoint",
+							"defaultModel": {
+								"model": "@handle"
+							},
+							"defaultScale": [
+								0.1, 0.1, 0.1
+							],
+							"allowCustomModel": false,
+							"allowPosition": [
+								true,
+								true,
+								true
+							],
+							"allowRotation": [
+								false,
+								false,
+								false
+							],
+							"allowScale": [
+								false,
+								false,
+								false
+							]
+						}
+					}
+				]
+			}
+		},
+		{
+			"name": "speedMultiplier",
+			"label": "OPPONENT_PARAM_SPEED_MULTIPLIER",
+			"type": "float",
+			"defaultValueInArray": 1.0
+		},
+		{
+			"name": "cautionInCorners",
+			"label": "OPPONENT_PARAM_CAUTION_IN_CORNERS",
+			"type": "float",
+			"defaultValueInArray": 50.0
+		},
+		{
+			"name": "cautionInCornersThreshold",
+			"label": "OPPONENT_PARAM_CAUTION_IN_CORNERS_THRESHOLD",
+			"type": "float",
+			"defaultValueInArray": 0.7
+		},
+		{
+			"name": "avoidTraffic",
+			"label": "OPPONENT_PARAM_AVOID_TRAFFIC",
+			"type": "bool",
+			"defaultValueInArray": true
+		},
+		{
+			"name": "avoidProps",
+			"label": "OPPONENT_PARAM_AVOID_PROPS",
+			"type": "bool",
+			"defaultValueInArray": true
+		},
+		{
+			"name": "avoidPlayers",
+			"label": "OPPONENT_PARAM_AVOID_PLAYERS",
+			"type": "bool",
+			"defaultValueInArray": true
+		},
+		{
+			"name": "avoidOpponents",
+			"label": "OPPONENT_PARAM_AVOID_OPPONENTS",
+			"type": "bool",
+			"defaultValueInArray": true
+		},
+		{
+			"name": "badPathfinding",
+			"label": "OPPONENT_PARAM_BAD_PATHFINDING",
+			"type": "bool",
+			"defaultValueInArray": false
+		},
+		{
+			"name": "brakingBias",
+			"label": "OPPONENT_PARAM_BRAKING_BIAS",
+			"type": "float",
+			"defaultValueInArray": 1.0
+		}
+	]
+}

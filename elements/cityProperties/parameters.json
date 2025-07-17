@@ -1,0 +1,110 @@
+{
+	"parameters": [
+		{
+			"name": "cityName",
+			"label": "CITY_NAME",
+			"type": "string"
+		},
+		{
+			"name": "cityFileName",
+			"label": "CITY_FILE_NAME",
+			"type": "string"
+		},
+		{
+			"name": "speedLimit",
+			"label": "SPEED_LIMIT",
+			"type": "float"
+		},
+		{
+			"name": "driveOnLeft",
+			"label": "DRIVE_ON_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "trafficCars",
+			"label": "TRAFFIC_CARS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"elementLabel": "carModel",
+				"elementProperties": [
+					{
+						"name": "carModel",
+						"label": "TRAFFIC_CAR_MODEL",
+						"type": "mesh"
+					},
+					{
+						"name": "frequency",
+						"label": "TRAFFIC_CAR_FREQUENCY",
+						"tooltip": "TRAFFIC_CAR_FREQUENCY_TOOLTIP",
+						"type": "float"
+					}
+				]
+			}
+		},
+		{
+			"name": "pedModels",
+			"label": "PED_MODELS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"elementLabel": "goodWeatherPedName",
+				"elementProperties": [
+					{
+						"name": "goodWeatherPedName",
+						"label": "PED_GOOD_WEATHER_NAME",
+						"type": "string"
+					},
+					{
+						"name": "badWeatherPedName",
+						"label": "PED_BAD_WEATHER_NAME",
+						"type": "string"
+					}
+				]
+			}
+		},
+		{
+			"name": "roamPoliceCars",
+			"label": "EDIT_POLICE_CARS",
+			"type": "customElement",
+			"customElementType": "roamPoliceCars"
+		},
+		{
+			"name": "trafficLight1",
+			"label": "TRAFFIC_LIGHT_1",
+			"type": "mesh"
+		},
+		{
+			"name": "trafficLight2",
+			"label": "TRAFFIC_LIGHT_2",
+			"type": "mesh"
+		},
+		{
+			"name": "circuitRaces",
+			"label": "CP_CIRCUIT",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "circuitRace"
+			}
+		},
+		{
+			"name": "checkpointRaces",
+			"label": "CP_CHECKPOINT",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "checkpointRace"
+			}
+		},
+		{
+			"name": "blitzRaces",
+			"label": "CP_BLITZ",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "blitzRace"
+			}
+		}
+	]
+}

@@ -1,0 +1,131 @@
+{
+	"label": "name",
+	"exclusiveEditing": {
+		"enabled": true,
+		"category": "race"
+	},
+	"parameters": [
+		{
+			"name": "name",
+			"label": "RACE_NAME",
+			"type": "string"
+		},
+		{
+			"name": "timeOfDay",
+			"label": "TIME_OF_DAY",
+			"type": "enum",
+			"enumLabels": [
+				"TIME_OF_DAY_MORNING",
+				"TIME_OF_DAY_NOON",
+				"TIME_OF_DAY_EVENING",
+				"TIME_OF_DAY_NIGHT"
+			],
+		},
+		{
+			"name": "timeOfDay_professional",
+			"label": "TIME_OF_DAY_PROFESSIONAL",
+			"type": "enum",
+			"enumLabels": [
+				"TIME_OF_DAY_MORNING",
+				"TIME_OF_DAY_NOON",
+				"TIME_OF_DAY_EVENING",
+				"TIME_OF_DAY_NIGHT"
+			],
+		},
+		{
+			"name": "weather",
+			"label": "WEATHER",
+			"type": "enum",
+			"enumLabels": [
+				"WEATHER_CLEAR",
+				"WEATHER_CLOUDY",
+				"WEATHER_FOGGY",
+				"WEATHER_RAINY"
+			],
+		},
+		{
+			"name": "weather_professional",
+			"label": "WEATHER_PROFESSIONAL",
+			"type": "enum",
+			"enumLabels": [
+				"WEATHER_CLEAR",
+				"WEATHER_CLOUDY",
+				"WEATHER_FOGGY",
+				"WEATHER_RAINY"
+			],
+		},
+		{
+			"name": "speedLimit",
+			"label": "SPEED_LIMIT",
+			"type": "float"
+		},
+		{
+			"name": "trafficDensity",
+			"label": "TRAFFIC_DENSITY",
+			"type": "float"
+		},
+		{
+			"name": "trafficDensity_professional",
+			"label": "TRAFFIC_DENSITY_PROFESSIONAL",
+			"tooltip": "PROFESSIONAL_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "pedestriansDensity",
+			"label": "PEDESTRIANS_DENSITY",
+			"type": "float"
+		},
+		{
+			"name": "pedestriansDensity_professional",
+			"label": "PEDESTRIANS_DENSITY_PROFESSIONAL",
+			"tooltip": "PROFESSIONAL_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "checkpoints",
+			"label": "CHECKPOINTS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "checkpoint"
+			}
+		},
+		{
+			"name": "policeCars",
+			"label": "POLICE_CARS",
+			"type": "customElement",
+			"customElementType": "racePoliceCars"
+		},
+		{
+			"name": "policeCars_professional",
+			"label": "POLICE_CARS_PROFESSIONAL",
+			"tooltip": "PROFESSIONAL_TOOLTIP",
+			"type": "customElement",
+			"customElementType": "racePoliceCars"
+		},
+		{
+			"name": "opponents",
+			"label": "EDIT_OPPONENTS",
+			"type": "customElement",
+			"customElementType": "opponentSet"
+		},
+		{
+			"name": "opponents_professional",
+			"label": "EDIT_OPPONENTS_PROFESSIONAL",
+			"tooltip": "PROFESSIONAL_TOOLTIP",
+			"type": "customElement",
+			"customElementType": "opponentSet"
+		},
+		{
+			"name": "laps",
+			"label": "RACE_LAPS",
+			"type": "int"
+		},
+		{
+			"name": "laps_professional",
+			"label": "RACE_LAPS_PROFESSIONAL",
+			"tooltip": "PROFESSIONAL_TOOLTIP",
+			"type": "int"
+		}
+	]
+}

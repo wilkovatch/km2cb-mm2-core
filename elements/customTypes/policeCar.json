@@ -1,0 +1,32 @@
+{
+	"label": "carModel",
+	"parameters": [
+		{
+			"name": "carModel",
+			"label": "POLICE_CAR",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "car",
+				"defaultModel": {
+					"model": "geometry/vpcop.pkg"
+				},
+				"allowCustomModel": true,
+				"allowPosition": [
+					true,
+					true,
+					true
+				],
+				"allowRotation": [
+					false,
+					true,
+					false
+				],
+				"allowScale": [
+					false,
+					false,
+					false
+				]
+			}
+		}
+	]
+}

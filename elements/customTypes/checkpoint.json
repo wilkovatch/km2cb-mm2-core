@@ -1,0 +1,35 @@
+{
+	"label": null,
+	"parameters": [
+		{
+			"name": "checkpoint",
+			"label": "CHECKPOINT",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "checkpoint",
+				"defaultModel": {
+					"model": "geometry/pt_check.pkg"
+				},
+				"defaultScale": [
+					15, 7.5, 15
+				],
+				"allowCustomModel": false,
+				"allowPosition": [
+					true,
+					true,
+					true
+				],
+				"allowRotation": [
+					false,
+					true,
+					false
+				],
+				"allowScale": [
+					true,
+					false,
+					false
+				]
+			}
+		}
+	]
+}

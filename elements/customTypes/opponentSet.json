@@ -1,0 +1,18 @@
+{
+	"label": null,
+	"exclusiveEditing": {
+		"enabled": true,
+		"category": "opponentSet"
+	},
+	"parameters": [
+		{
+			"name": "opponents",
+			"label": "OPPONENTS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "opponent"
+			}
+		}
+	]
+}

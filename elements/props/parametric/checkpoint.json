@@ -1,0 +1,11 @@
+{
+	"parametersInfo": {
+		"parameters": []
+	},
+	"uiInfo": [],
+	"placementRules": {
+		"layer": "13",
+		"placerLayerMask": "-1-2^13",
+		"autoYOffset": "true"
+	}
+}

@@ -4,6 +4,7 @@ import struct
 import csv
 import json
 import copy
+import shutil
 from pathlib import Path
 import numpy as np
 
@@ -1140,37 +1141,57 @@ class BINExporter:
         return {'vertices': vertices, 'indices': indices}
 
     def get_mesh_instance(self, res, mesh, index):
-        block_perimeters = self.block_perimeters
+        def get_instance_mesh_name(dict):
+            mesh_name_parts = dict['name'].replace('\\', '/').split('/')
+            mesh_name = mesh_name_parts[-1].split('.')[0]
+            return mesh_name
         mref = mesh['reference']
         dict_mesh = self.data['meshDict'][mref['meshId']]
         state = mesh['settings']
-        block = 0
-        is_prop = self.state_bool(state, 'prop')
-        if not is_prop:
-            block = self.find_block(np.add(mref['position'], (0.0, dict_mesh['boundsMin'][1], 0.0)))
-        if block >= 0 or is_prop:
-            cur_block = block + 1
-            elem = ExportedCityElement()
-            cube = self.get_cube(1 if is_prop else 10)
-            elem.vertices = cube['vertices']
-            elem.indices = cube['indices']
-            mesh_name_parts = dict_mesh['name'].replace('\\', '/').split('/')
-            mesh_name = mesh_name_parts[-1].split('.')[0]
-            if is_prop:
-                no_transf = mref['rotation'] == (0, 0, 0, 1) and mref['scale'] == (1, 1, 1)
-                flags = '0' if no_transf else '1'
-                elem.name = str(index) + ',' + '0_PTH'
-            else:
-                elem.name = str(index) + ',' + str(cur_block) + '_INST'
-                flags = '256' # 256 is for inst objects visible from every angle (0 is for front only)
-            elem.properties['original_name'] = mesh['name']
-            elem.properties['object'] = mesh_name
-            elem.properties['flags'] = flags
-            elem.translation = mref['position']
-            elem.rotation = mref['rotation']
-            elem.scale = mref['scale']
-            elem.mat = 'NONE'
-            res.append(elem)
+        parameter_name = self.state_val(state, '_parameterName')
+        if parameter_name in ("startTrafficLight", "endTrafficLight"):
+            road_id = self.state_val(state, '_parentObjectId', -1)
+            if road_id >= 0:
+                elem = ExportedCityElement()
+                cube = self.get_cube(1)
+                elem.vertices = cube['vertices']
+                elem.indices = cube['indices']
+                elem.name = '0_TRAFL'
+                elem.properties['is_start_intersection_light'] = "1" if parameter_name == "startTrafficLight" else "0"
+                elem.properties['road_id'] = str(self.road_map[road_id])
+                elem.properties['original_name'] = mesh['name']
+                elem.properties['object'] = get_instance_mesh_name(dict_mesh)
+                elem.translation = mref['position']
+                elem.rotation = mref['rotation']
+                elem.scale = mref['scale']
+                elem.mat = 'NONE'
+                res.append(elem)
+        else:
+            block = 0
+            is_prop = self.state_bool(state, 'prop')
+            if not is_prop:
+                block = self.find_block(np.add(mref['position'], (0.0, dict_mesh['boundsMin'][1], 0.0)))
+            if block >= 0 or is_prop:
+                cur_block = block + 1
+                elem = ExportedCityElement()
+                cube = self.get_cube(1 if is_prop else 10)
+                elem.vertices = cube['vertices']
+                elem.indices = cube['indices']
+                if is_prop:
+                    no_transf = mref['rotation'] == (0, 0, 0, 1) and mref['scale'] == (1, 1, 1)
+                    flags = '0' if no_transf else '1'
+                    elem.name = str(index) + ',' + '0_PTH'
+                else:
+                    elem.name = str(index) + ',' + str(cur_block) + '_INST'
+                    flags = '256' # 256 is for inst objects visible from every angle (0 is for front only)
+                elem.properties['original_name'] = mesh['name']
+                elem.properties['object'] = get_instance_mesh_name(dict_mesh)
+                elem.properties['flags'] = flags
+                elem.translation = mref['position']
+                elem.rotation = mref['rotation']
+                elem.scale = mref['scale']
+                elem.mat = 'NONE'
+                res.append(elem)
 
     def get_traffic_road(self, res, obj):
         #obj: (ExportedCityElement elem, RoadGenerator road, State instanceState, int id, int[] blocks)
@@ -1205,8 +1226,8 @@ class BINExporter:
         if vps == '0':
             raise Exception('Invalid road while exporting traffic info on road: ' + obj[0].properties['original_name'])
 
-        start_rule = str(int(self.state_int(r_inst_state, 'start_rule')))
-        end_rule = str(int(self.state_int(r_inst_state, 'end_rule')))
+        start_rule = str(int(self.state_int(r_inst_state, 'start_rule'))) if b_lanes > 0 else "0"
+        end_rule = str(int(self.state_int(r_inst_state, 'end_rule'))) if f_lanes > 0 else "0"
 
         blocks = ''
         for i in range(len(obj[4])):
@@ -1296,13 +1317,6 @@ class BINExporter:
             if self.verbose: print("exporting " + line['data']['name'])
             self.get_building_line(res, line)
 
-        # Sort order of INST meshes can matter for rendering when transparent objects are involved, here the current order gets preserved
-        sorted_meshes = sorted(data['meshInstances'], key=lambda mesh: mesh['name'])
-        print("exporting meshes to bin...")
-        for i in range(len(sorted_meshes)):
-            if self.verbose: print("exporting " + sorted_meshes[i]['name'])
-            self.get_mesh_instance(res, sorted_meshes[i], i)
-
         # Traffic data
 
         # first create lookup tables
@@ -1321,8 +1335,16 @@ class BINExporter:
         for obj in self.traffic_intersections:
             self.get_traffic_intersection(res, obj)
 
+        # Sort order of INST meshes can matter for rendering when transparent objects are involved, here the current order gets preserved
+        sorted_meshes = sorted(data['meshInstances'], key=lambda mesh: mesh['name'])
+        print("exporting meshes to bin...") #done at the end to access traffic info (for traffic lights)
+        for i in range(len(sorted_meshes)):
+            if self.verbose: print("exporting " + sorted_meshes[i]['name'])
+            self.get_mesh_instance(res, sorted_meshes[i], i)
+
         return res
 
+    # TODO: move to its own class
     def export_props_rules(self, filename):
         #get the unique elements
         elems = []
@@ -1381,6 +1403,13 @@ class BINExporter:
 
         self.write_prop_rules(elems, new_rules, filename)
 
+    def clean_city_path(self, filename):
+        return str(Path(str(Path(filename).with_suffix(''))).with_suffix(''))
+
+    def create_folder_if_not_exists(self, foldername):
+        if not os.path.exists(foldername): os.makedirs(foldername)
+
+    # TODO: move to its own class
     def write_prop_rules(self, defs, rules, filename):
         def get_rule(r, num, side):
             if num > 99:
@@ -1406,8 +1435,8 @@ class BINExporter:
                 else: new_row.append(elem)
             return new_row
 
-        foldername = str(Path(str(Path(filename).with_suffix(''))).with_suffix('')) + '/'
-        if not os.path.exists(foldername): os.makedirs(foldername)
+        foldername = self.clean_city_path(filename) + '/'
+        self.create_folder_if_not_exists(foldername)
 
         #rules
         f_rules = open(foldername + 'proprules.csv', 'w', newline='')
@@ -1438,11 +1467,372 @@ class BINExporter:
         f_defs.close()
         print("Prop rules exported!")
 
-    def export_bin_file(self, filepath, export_prop_rules):
+    def state_vector(self, state, key):
+        return self.state_val(state, key, {"x": 0, "y": 0, "z": 0})
+
+    def state_vector_scale(self, state, key):
+        return self.state_val(state, key, {"x": 1, "y": 1, "z": 1})
+
+    def export_opponent(self, racesubfolder, opponent, opponent_id):
+        model = self.state_val(opponent, "carModel", None)
+        if model is None:
+            return
+        pos0 = self.state_vector(model, "localPosition")
+        rot0 = self.state_vector(model, "localRotation")
+        rot0_y = rot0["y"] if rot0["y"] != 0 else 0.001 # exactly 0 breaks things
+        waypoints = self.state_val(opponent, "waypoints", [])
+        lines = [
+            "x,y,z,brake,forward offset,side offset,target speed,speed start,side start",
+            ",".join([str(-pos0["x"]), str(pos0["y"]), str(pos0["z"]), str(rot0_y), "0", "0", "0", "0"]),
+        ]
+        for w in waypoints:
+            wdata = self.state_val(w, "waypoint", None)
+            if wdata is not None:
+                pos = self.state_vector(wdata, "localPosition") #TODO: snap to BAI intersections
+                line = ",".join([str(-pos["x"]), str(pos["y"]), str(pos["z"]), "0", "0", "0", "0", "0"])
+                lines.append(line)
+        oppfilename = racesubfolder + "/" + opponent_id + ".opp"
+        oppfile = open(oppfilename, 'w', newline='')
+        oppfile.writelines(line + '\n' for line in lines)
+        oppfile.close()
+
+    def get_opponent_str(self, car, opponent_id):
+        model = self.state_val(car, "carModel", None)
+        if model is None:
+            return ""
+        m = Path(self.state_val(model, "meshPath", "vpbug.pkg")).stem
+        oppfilename = opponent_id + ".opp"
+        speed_mult = str(self.state_val(car, "speedMultiplier", 1.0))
+        caution = str(self.state_val(car, "cautionInCorners", 50.0))
+        caution_t = str(self.state_val(car, "cautionInCornersThreshold", 0.7))
+        avoid_traffic = str(int(self.state_bool(car, "avoidTraffic")))
+        avoid_props = str(int(self.state_bool(car, "avoidProps")))
+        avoid_players = str(int(self.state_bool(car, "avoidPlayers")))
+        avoid_opponents = str(int(self.state_bool(car, "avoidOpponents")))
+        bad_pathfinding = str(int(self.state_bool(car, "badPathfinding")))
+        braking_bias = str(self.state_val(car, "brakingBias", 1.0))
+        return " ".join([
+            m, oppfilename, speed_mult, "0", caution, caution_t,
+            avoid_traffic, avoid_props, avoid_players, avoid_opponents,
+            bad_pathfinding, braking_bias
+        ])
+
+    def get_opponent_id(self, race_id, i, is_professional):
+        return race_id + "-" + ("p" if is_professional else "a") + "-" + str(i)
+
+    def get_race_array_in_container(self, data, key, is_p):
+        container = self.state_val(data, key + ("_professional" if is_p else ""), [])
+        array = self.state_val(container, key, [])
+        if array == [] and is_p:
+            container = self.state_val(data, key, [])
+            array = self.state_val(container, key, [])
+        return array
+
+    def export_race_aimap_and_opponents(self, racesubfolder, race, race_id, is_professional):
+        is_p = is_professional
+        aimapfilename = racesubfolder + "/" + race_id + ".aimap" + ("_p" if is_p else "")
+        aimap = open(aimapfilename, 'w', newline='')
+
+        density = str(self.state_val(race, "trafficDensity", 0.0))
+
+        speed_limit = str(self.state_val(race, "speedLimit", 0.0))
+
+        police_cars = self.get_race_array_in_container(race, "policeCars", is_p)
+        police_cars_str = "\n".join(self.get_police_car_str(car) for car in police_cars)
+
+        opponents = self.get_race_array_in_container(race, "opponents", is_p)
+        opponents_str = "\n".join(self.get_opponent_str(opponents[i], self.get_opponent_id(race_id, i, is_p)) for i in range(len(opponents)))
+
+        lines = [
+            "# Ambient Traffic Density",
+            "[Density]",
+            str(density),
+            "",
+            "# Default Road Speed Limit",
+            "[Speed Limit]",
+            str(speed_limit),
+            "",
+            "# Ambient Traffic Exceptions",
+            "# Rd Id, Density, Speed Limit",
+            "[Exceptions]",
+            "0",
+            "",
+            "# Police Init",
+            "# Geo File, StartLink, Start Dist, Start Mode, Start Lane, Patrol Route",
+            "[Police]",
+            str(len(police_cars)),
+            police_cars_str,
+            "",
+            "# Opponent Init",
+            "# Geo File, WavePoint File",
+            "# vpfer vpbug vpcaddie vpmtruck",
+            "[Opponent]",
+            str(len(opponents)),
+            opponents_str,
+        ]
+        aimap.writelines(line + '\n' for line in lines)
+        aimap.close()
+        for i in range(len(opponents)):
+            self.export_opponent(racesubfolder, opponents[i], self.get_opponent_id(race_id, i, is_p))
+        return aimapfilename
+
+    def export_race(self, racesubfolder, race, race_id):        
+        # aimap
+        aimapfilename = self.export_race_aimap_and_opponents(racesubfolder, race, race_id, False)
+        
+        # aimap_p
+        opponents_a = self.get_race_array_in_container(race, "opponents", False)
+        opponents_p = self.get_race_array_in_container(race, "opponents", True)
+        if opponents_p is None:
+            opponents_p = opponents_a
+            shutil.copy(aimapfilename, aimapfilename + "_p")
+        else:
+            self.export_race_aimap_and_opponents(racesubfolder, race, race_id, True)
+
+        # waypoints
+        waypointsfilename = racesubfolder + "/" + race_id + "waypoints.csv"
+        waypointsfile = open(waypointsfilename, 'w', newline='')
+        lines = [
+            "x,y,z,a,poly count,frane rate,state changes,texture changes,msg",
+        ]
+        checkpoints = self.state_val(race, "checkpoints", [])
+        for c in checkpoints:
+            cm = self.state_val(c, "checkpoint", {})
+            pos = self.state_vector(cm, "localPosition")
+            rot = self.state_vector(cm, "localRotation")
+            scale = self.state_vector_scale(cm, "localScale")
+            rot_y = rot["y"] if rot["y"] != 0 else 0.001 # exactly 0 triggers some kind of automatic rotation+position towards the next one
+            lines.append(",".join([str(-pos["x"]), str(pos["y"]), str(pos["z"]),  str(rot_y), str(scale["x"]), "0", "0", "0"]))
+        waypointsfile.writelines(line + '\n' for line in lines)
+        waypointsfile.close()
+
+        # data for mm<blitz/circuit/race>data.csv
+        time_of_day_a = self.state_val(race, "timeOfDay", 0)
+        time_of_day_p = self.state_val(race, "timeOfDay_professional", time_of_day_a)
+
+        weather_a = self.state_val(race, "weather", 0)
+        weather_p = self.state_val(race, "weather_professional", weather_a)
+        
+        num_laps_a = self.state_val(race, "laps", 0)
+        num_laps_p = self.state_val(race, "laps", num_laps_a)
+
+        time_limit_a = self.state_val(race, "timeLimit", 0)
+        time_limit_p = self.state_val(race, "timeLimit", time_limit_a)
+
+        traffic_density_a = self.state_val(race, "trafficDensity", 0)
+        traffic_density_p = self.state_val(race, "trafficDensity", traffic_density_a)
+
+        ped_density_a = self.state_val(race, "pedestriansDensity", 0)
+        ped_density_p = self.state_val(race, "pedestriansDensity", ped_density_a)
+
+        return ",".join([
+            "none",                            # Description (unused?)
+            "0",                               # CarType (always 0?)
+            str(time_of_day_a),                # TimeOfDay
+            str(weather_a),                    # Weather
+            str(len(opponents_a)),             # Opponents
+            "1",                               # Cops (always 1?)
+            str(traffic_density_a),            # Ambient
+            str(ped_density_a),                # Peds
+            str(num_laps_a),                   # NumLaps
+            str(time_limit_a),                 # TimeLimit
+            "1",                               # Difficulty (always 1?)
+            "0",                               # ProCarType (always 0?)
+            str(time_of_day_p),                # ProTimeOfDay
+            str(weather_p),                    # ProWeather
+            str(len(opponents_p)),             # ProOpponents
+            "1",                               # ProCops (always 1?)
+            str(traffic_density_a),            # ProAmbient
+            str(ped_density_p),                # ProPeds
+            str(num_laps_p),                   # ProNumLaps
+            str(time_limit_p),                 # ProTimeLimit
+            "1",                               # ProDifficulty (always 1?)
+        ])
+
+    def get_police_car_str(self, car):
+        model = self.state_val(car, "carModel", None)
+        if model is None:
+            return ""
+        m = Path(self.state_val(model, "meshPath", "vpcop.pkg")).stem
+        pos = self.state_vector(model, "localPosition")
+        rot = self.state_vector(model, "localRotation")
+        rot_y = rot["y"] if rot["y"] != 0 else 0.001 # exactly 0 breaks things
+        transf = " ".join([str(-pos["x"]), str(pos["y"]), str(pos["z"]), str(rot_y)])
+        return m + "\t" + transf + " 0 15 0.5 50.0"
+
+    def export_roam_aimap(self, racesubfolder, data):
+        aimapfilename = racesubfolder + "/roam.aimap"
+        aimap = open(aimapfilename, 'w', newline='')
+
+        speed_limit = str(self.state_val(data, "speedLimit", 0.0))
+
+        drive_on_left = "1" if self.state_val(data, "driveOnLeft", False) else "0"
+
+        police_cars_container = self.state_val(data, "roamPoliceCars", [])
+        police_cars = self.state_val(police_cars_container, "policeCars", [])
+        police_cars_str = "\n".join(self.get_police_car_str(car) for car in police_cars)
+
+        lines = [
+            "[AmbientLaneChanges]",
+            "1",
+            "",
+            "[Exceptions]",
+            "0",
+            "",
+            "# Police Init",
+            "# Geo File, StartLink, Start Dist, Start Mode, Start Lane, Patrol Route",
+            "[Police]",
+            str(len(police_cars)),
+            police_cars_str,
+            "",
+            "[Opponent]",
+            "0",
+            "",
+            "[Hookmen]",
+            "0",
+        ]
+        aimap.writelines(line + '\n' for line in lines)
+        aimap.close()
+        shutil.copy(aimapfilename, aimapfilename + "_p")
+
+    def export_city_aimap(self, filename, data):
+        aimapfilename = str(Path(filename).with_suffix('.aimap'))
+        aimap = open(aimapfilename, 'w', newline='')
+        speed_limit = str(self.state_val(data, "speedLimit", 0.0))
+        drive_on_left = "1" if self.state_val(data, "driveOnLeft", False) else "0"
+
+        #ambient cars
+        ambient_cars = self.state_val(data, "trafficCars", [])
+        traffic_total = sum(max(self.state_val(car, "frequency", 1), 1) for car in ambient_cars)
+        for car in ambient_cars:
+            car["adjFreq"] = max(self.state_val(car, "frequency", 1), 1) / traffic_total
+        cur_range = 0
+        for i in range(len(ambient_cars)):
+            ambient_cars[i]["range"] = ambient_cars[i]["adjFreq"] + cur_range
+            cur_range += ambient_cars[i]["adjFreq"]
+        ambient_cars[-1]["range"] = 1 # the last must be 1, this is to avoid rounding issues
+        ambient_cars_str = "\n".join(Path(car["carModel"]).stem + " " + str(car["range"]) + " 0" for car in ambient_cars)
+
+        peds = self.state_val(data, "pedModels", [])
+        peds_str = "\n".join(ped["goodWeatherPedName"] + " " + ped["badWeatherPedName"] for ped in peds)
+        trafl1 = Path(self.state_val(data, "trafficLight1", "geometry/sp_traflitsingle_f.pkg")).stem
+        trafl2 = Path(self.state_val(data, "trafficLight2", "geometry/sp_traflitdual_f.pkg")).stem
+        traf_lights_str = trafl1 + " " + trafl2
+        lines = [
+            "[Speed Limit]",
+            speed_limit,
+            "",
+            "[Ambients Drive On The Left]",
+            drive_on_left,
+            "",
+            "[Ambient Types/Density]",
+            str(len(ambient_cars)),
+            ambient_cars_str,
+            "",
+            "[GoodWeatherPedName / BadWeatherPedName]",
+            str(len(peds)),
+            peds_str,
+            "",
+            "[Traffic Lights]",
+            traf_lights_str
+        ]
+        aimap.writelines(line + '\n' for line in lines)
+        aimap.close()
+
+    def parse_race_names(self, races):
+        return '|'.join(self.state_val(race, "name", "noname") for race in races)
+
+    def export_races_csv(self, racesubfolder, races, racetype):
+        header =("Description, CarType, TimeofDay, Weather, Opponents, Cops, "
+                 "Ambient, Peds, NumLaps, TimeLimit, Difficulty, "
+                 "ProCarType, ProTimeofDay, ProWeather, ProOpponents, ProCops, "
+                 "ProAmbient, ProPeds, ProNumLaps, ProTimeLimit, ProDifficulty")
+        lines = [header]
+        lines.extend(races)
+        csvfilename = racesubfolder + "/mm" + racetype + "data.csv"
+        csvfile = open(csvfilename, 'w', newline='')
+        csvfile.writelines(line + '\n' for line in lines)
+        csvfile.close()
+
+    # TODO: move to its own class
+    def export_cinfo_aimap(self, filename):
+        if "cityProperties" not in self.data:
+            print("cityProperties not found, skipping cinfo and aimap")
+            return
+        p = self.data['cityProperties']
+        citypath = self.clean_city_path(filename)
+        cityname = Path(filename).stem
+
+        # parse the data
+        localized_name = self.state_val(p, "cityName", "noname")
+        blitz_races = self.state_val(p, "blitzRaces", [])
+        circuit_races = self.state_val(p, "circuitRaces", [])
+        checkpoint_races = self.state_val(p, "checkpointRaces", [])
+        blitz_count = len(blitz_races)
+        circuit_count = len(circuit_races)
+        checkpoint_count = len(checkpoint_races)
+        blitz_names = self.parse_race_names(blitz_races)
+        circuit_names = self.parse_race_names(circuit_races)
+        checkpoint_names = self.parse_race_names(checkpoint_races)
+        
+        # write the cinfo
+        tunefolder = citypath + '_tune/'
+        self.create_folder_if_not_exists(tunefolder)
+        cinfo = open(tunefolder + cityname + '.cinfo', 'w', newline='')
+        cinfo_lines = [
+            "LocalizedName=" + localized_name,
+            "MapName=" + cityname,
+            "RaceDir=" + cityname,
+            "BlitzCount=" + str(blitz_count),
+            "CircuitCount=" + str(circuit_count),
+            "CheckpointCount=" + str(checkpoint_count),
+            "BlitzNames=" + blitz_names,
+            "CircuitNames=" + circuit_names,
+            "CheckpointNames=" + checkpoint_names,
+            "MustPlace=1",
+            "UnlockGroup=1",
+        ]
+        cinfo.writelines(line + '\n' for line in cinfo_lines)
+        cinfo.close()
+
+        # write the aimaps
+        racefolder = citypath + '_race/'
+        self.create_folder_if_not_exists(racefolder)
+        racesubfolder = racefolder + cityname + '/'
+        self.create_folder_if_not_exists(racesubfolder)
+
+        self.export_city_aimap(filename, p)
+
+        self.export_roam_aimap(racesubfolder, p)
+
+        blitzdata = []
+        for i in range(len(blitz_races)):
+            race = blitz_races[i]
+            blitzdata.append(self.export_race(racesubfolder, race, "blitz" + str(i)))
+        self.export_races_csv(racesubfolder, blitzdata, "blitz")
+
+        circuitdata = []
+        for i in range(len(circuit_races)):
+            race = circuit_races[i]
+            circuitdata.append(self.export_race(racesubfolder, race, "circuit" + str(i)))
+        self.export_races_csv(racesubfolder, circuitdata, "circuit")
+
+        checkpointdata = []
+        for i in range(len(checkpoint_races)):
+            race = checkpoint_races[i]
+            checkpointdata.append(self.export_race(racesubfolder, race, "race" + str(i)))
+        self.export_races_csv(racesubfolder, checkpointdata, "race")
+
+        print("cinfo and aimap exported!")
+
+    # TODO: move this to a separate class and rename this class to CityParser
+    def export_bin_file(self, filepath, export_prop_rules, export_cinfo_aimap):
         print("Exporting BIN file...")
         elements = self.get_objects()
         if export_prop_rules:
             self.export_props_rules(filepath)
+        if export_cinfo_aimap:
+            self.export_cinfo_aimap(filepath)
         def write_element(writer, element):
             writer.write_byte(element.is_mesh)
             writer.write_string(element.name)

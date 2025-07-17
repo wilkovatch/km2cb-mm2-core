@@ -1,0 +1,18 @@
+{
+	"label": null,
+	"exclusiveEditing": {
+		"enabled": true,
+		"category": "race"
+	},
+	"parameters": [
+		{
+			"name": "policeCars",
+			"label": "POLICE_CARS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "policeCar"
+			}
+		}
+	]
+}

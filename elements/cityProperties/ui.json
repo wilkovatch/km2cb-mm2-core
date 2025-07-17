@@ -1,0 +1,79 @@
+{
+	"label": "CITY_PROPERTIES",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "CP_INFO",
+			"elements": [
+				{
+					"name": "cityName",
+					"width": 1.5
+				},
+				{
+					"name": "cityFileName",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "CP_AIMAP",
+			"elements": [
+				{
+					"name": "speedLimit",
+					"width": 1.5
+				},
+				{
+					"name": "driveOnLeft",
+					"width": 1.5
+				},
+				{
+					"name": "trafficCars",
+					"width": 1.5
+				},
+				{
+					"name": "pedModels",
+					"width": 1.5
+				},
+				{
+					"name": "roamPoliceCars",
+					"width": 1.5
+				},
+				{
+					"name": "trafficLight1",
+					"width": 1.5
+				},
+				{
+					"name": "trafficLight2",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "CP_CIRCUIT",
+			"elements": [
+				{
+					"name": "circuitRaces",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "CP_CHECKPOINT",
+			"elements": [
+				{
+					"name": "checkpointRaces",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "CP_BLITZ",
+			"elements": [
+				{
+					"name": "blitzRaces",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

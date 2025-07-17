@@ -2,9 +2,9 @@
     "program": "km2CityBuilder",
     "version": "0.1.3",
 	"coreVersion": 2,
-	"coreFeatureVersion": 3,
+	"coreFeatureVersion": 4,
 	"programVersion": 1,
-	"featureVersion": 3,
+	"featureVersion": 4,
 	"customTextureFormats": [
 		"tex"
 	],

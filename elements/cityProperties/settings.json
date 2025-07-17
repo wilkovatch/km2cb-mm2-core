@@ -1,0 +1,12 @@
+{
+	"injectableParameters": [
+		{
+			"parameter": "trafficLight1",
+			"onRoads": true
+		},
+		{
+			"parameter": "trafficLight2",
+			"onRoads": true
+		}
+	]
+}
