@@ -86,15 +86,15 @@ class JsonProcessor:
     def road_has_divider(self, state):
         return state_bool(state, 'isDouble') and state_int(state, 'divider') > 0
 
-    def road_has_sidewalks_or_shoulders(self, state):
-        has_sidewalks_i = state_bool(state, 'hasSidewalks') and not state_bool(state, 'throughIntersection')
+    def road_has_sidewalks_or_shoulders(self, state, runtime_state):
+        has_sidewalks_i = state_bool(state, 'hasSidewalks') and not state_bool(runtime_state, 'throughIntersection')
         return has_sidewalks_i and state_bool(state, 'isDouble')
 
-    def road_has_sidewalks(self, state):
-        return self.road_has_sidewalks_or_shoulders(state) and not state_bool(state, 'flatSidewalk')
+    def road_has_sidewalks(self, state, runtime_state):
+        return self.road_has_sidewalks_or_shoulders(state, runtime_state) and not state_bool(state, 'flatSidewalk')
 
-    def road_has_shoulders(self, state):
-        return self.road_has_sidewalks_or_shoulders(state) and state_bool(state, 'flatSidewalk')
+    def road_has_shoulders(self, state, runtime_state):
+        return self.road_has_sidewalks_or_shoulders(state, runtime_state) and state_bool(state, 'flatSidewalk')
 
     def road_has_rail(self, state):
         return state_int(state, 'rail_type') > 0 and (state_bool(state, 'rail_hasLeft') or state_bool(state, 'rail_hasRight'))
@@ -137,6 +137,7 @@ class JsonProcessor:
                       mesh,
                       num_segments,
                       parent_intersection,
+                      runtime_state,
                       state,
                       vps,
                       cur_block,
@@ -150,7 +151,7 @@ class JsonProcessor:
         shoulder_1_section_verts = []
         shoulder_2_section_verts = []
         cur_v = 0
-        sw_skip = (2 if self.road_has_shoulders(state) else 3) if self.road_has_sidewalks(state) else 0
+        sw_skip = (2 if self.road_has_shoulders(state, runtime_state) else 3) if self.road_has_sidewalks(state, runtime_state) else 0
         div_skip = 0
         num_tex = 0
         div_type = None
@@ -251,7 +252,7 @@ class JsonProcessor:
         elem.properties['bai_vps'] = str(len(section_verts))
 
         # psdl prop rules
-        if parent_intersection is None and type(prop_rule) is dict and self.road_has_sidewalks(state):
+        if parent_intersection is None and type(prop_rule) is dict and self.road_has_sidewalks(state, runtime_state):
             left_rule = state_val(prop_rule, 'left')
             if state_val(left_rule, 'type') != 'psdl':
                 left_rule = None
@@ -334,6 +335,7 @@ class JsonProcessor:
     def get_pkg_road(self,
                      mesh,
                      road,
+                     runtime_state,
                      state,
                      num_segments,
                      cur_block,
@@ -359,7 +361,7 @@ class JsonProcessor:
                 indices.append(i + 3)
                 indices.append(i + 2)
         else:
-            sw_skip = (2 if self.road_has_shoulders(state) else 3) if self.road_has_sidewalks(state) else 0
+            sw_skip = (2 if self.road_has_shoulders(state, runtime_state) else 3) if self.road_has_sidewalks(state, runtime_state) else 0
             for i in range(num_segments):
                 psdl_block.append(mesh['vertices'][i * vps])
                 psdl_block.append(mesh['vertices'][i * vps + sw_skip])
@@ -401,6 +403,7 @@ class JsonProcessor:
                  manual_blocks,
                  parent_intersection = None):
         state = road['data']['fields']['state']
+        runtime_state = road['data']['fields']['runtimeState']
         block_perimeters = self.block_perimeters
         mesh = road['data']['mesh']
         og_name = road['data']['name'] if parent_intersection == None else parent_intersection['data']['name']
@@ -427,6 +430,7 @@ class JsonProcessor:
             elem = self.get_psdl_road(mesh,
                                       num_segments,
                                       parent_intersection,
+                                      runtime_state,
                                       state,
                                       vps,
                                       cur_block,
@@ -439,6 +443,7 @@ class JsonProcessor:
         else: #non psdl road, export to pkg
             elem = self.get_pkg_road(mesh,
                                      road,
+                                     runtime_state,
                                      state,
                                      num_segments,
                                      cur_block,
