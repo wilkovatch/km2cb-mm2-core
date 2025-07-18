@@ -5,7 +5,10 @@ import traceback
 sys.path.append(sys.argv[1])
 
 import DecodeExportedJson
+from json_processor import JsonProcessor
 from bin_export import BINExporter
+from prop_rules_export import PropRulesExporter
+from cinfo_aimap_export import CinfoAimapExporter
 from scene_input import StandaloneSceneInput
 from common.main_writer import MainWriter
 
@@ -48,8 +51,10 @@ try:
     # export BIN
     dj = DecodeExportedJson.DecodeExportedJson()
     data = dj.decode_json(sys.argv[2])
-    exp = BINExporter(data, verbose)
-    exp.export_bin_file(bin_file, write_prop_rules, write_cinfo_aimap)
+    jp = JsonProcessor(data, verbose)
+    jp.get_objects()
+    bin_exp = BINExporter(jp, verbose)
+    bin_exp.export_bin_file(bin_file)
 
     if not write_bin_only:
         # not a bin only export
@@ -61,6 +66,15 @@ try:
         )
         writer.write()
         os.remove(bin_file)
+
+    if write_prop_rules:
+        prop_exp = PropRulesExporter(jp, verbose)
+        prop_exp.export_props_rules(bin_file)
+
+    if write_cinfo_aimap:
+        cinfo_aimap_exp = CinfoAimapExporter(jp, verbose)
+        cinfo_aimap_exp.export_cinfo_aimap(bin_file)
+
     input("Press any key to continue...")
 
 except Exception:
