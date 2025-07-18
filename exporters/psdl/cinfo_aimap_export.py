@@ -256,11 +256,12 @@ class CinfoAimapExporter:
         for i in range(len(ambient_cars)):
             ambient_cars[i]["range"] = ambient_cars[i]["adjFreq"] + cur_range
             cur_range += ambient_cars[i]["adjFreq"]
-        ambient_cars[-1]["range"] = 1 # the last must be 1, this is to avoid rounding issues
-        ambient_cars_str = "\n".join(Path(car["carModel"]).stem + " " + str(car["range"]) + " 0" for car in ambient_cars)
+        if len(ambient_cars) > 0:
+            ambient_cars[-1]["range"] = 1 # the last must be 1, this is to avoid rounding issues
+        ambient_cars_str = "\n".join(Path(state_val(car, "carModel", "none")).stem + " " + str(car["range"]) + " 0" for car in ambient_cars)
 
         peds = state_val(data, "pedModels", [])
-        peds_str = "\n".join(ped["goodWeatherPedName"] + " " + ped["badWeatherPedName"] for ped in peds)
+        peds_str = "\n".join(state_val(ped, "goodWeatherPedName", "none") + " " + state_val(ped, "badWeatherPedName", "none") for ped in peds)
         trafl1 = Path(state_val(data, "trafficLight1", "geometry/sp_traflitsingle_f.pkg")).stem
         trafl2 = Path(state_val(data, "trafficLight2", "geometry/sp_traflitdual_f.pkg")).stem
         traf_lights_str = trafl1 + " " + trafl2
