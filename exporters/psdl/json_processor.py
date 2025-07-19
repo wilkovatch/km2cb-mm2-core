@@ -1142,6 +1142,7 @@ class JsonProcessor:
         #obj: (ExportedCityElement elem, RoadGenerator road, State instanceState, int id, int[] blocks)
         road = obj[1]
         r_state = road['data']['fields']['state']
+        r_rt_state = road['data']['fields']['runtimeState']
         r_inst_state = road['data']['fields']['instanceState']
         start_int = road['startIntersectionId']
         end_int = road['endIntersectionId']
@@ -1186,6 +1187,7 @@ class JsonProcessor:
         traffic_elem.properties['right_lanes'] = str(f_lanes)
         traffic_elem.properties['left_lanes'] = str(b_lanes)
         traffic_elem.properties['has_sidewalks'] = right_ped + ':' + left_ped
+        traffic_elem.properties['has_geo_sidewalks'] = str(int(self.road_has_sidewalks(r_state, r_rt_state)))
         traffic_elem.properties['traffic_type'] = traffic_type
         traffic_elem.properties['speed'] = str(int(state_int(r_state, 'speedLimit')))
         traffic_elem.properties['vertices_per_section'] = vps
