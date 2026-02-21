@@ -402,6 +402,8 @@ class JsonProcessor:
                  cur_block,
                  manual_blocks,
                  parent_intersection = None):
+        if state_bool(instance_state, 'doNotExport'):
+            return
         state = road['data']['fields']['state']
         runtime_state = road['data']['fields']['runtimeState']
         block_perimeters = self.block_perimeters

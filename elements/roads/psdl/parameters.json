@@ -526,6 +526,13 @@
 			"label": "RD_TRAFFIC_LIGHT_SWAP",
 			"tooltip": "RD_TRAFFIC_LIGHT_SWAP_TOOLTIP",
 			"type": "bool"
+		},
+		{
+			"name": "doNotExport",
+			"label": "DO_NOT_EXPORT",
+			"tooltip": "DO_NOT_EXPORT_TOOLTIP",
+			"type": "bool",
+			"instanceSpecific": true
 		}
 	],
 	"internalParametersSettings": [

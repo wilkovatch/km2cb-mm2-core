@@ -15,6 +15,7 @@
 	"EXPORT_BIN": "Export BIN only",
 	"EXPORT_VERBOSE": "Verbose",
 	"EXPORT_CINFO_AND_AIMAP": "Export CINFO and AIMAP",
+	"DO_NOT_EXPORT": "Do not export",
 	"PSDL_COMPATIBLE": "PSDL compatible",
 	"CUSTOM": "Custom",
 	"EXPORT_TO_PKG": "Export to PKG",
@@ -229,5 +230,6 @@
 	"RD_TRAFFIC_LIGHT_SWAP_TOOLTIP": "For use in cities with left-hand traffic",
 	"RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_IN_OFFSET_TOOLTIP": "Only used when the traffic light is on the opposite road",
 	"TRAFFIC_CAR_FREQUENCY_TOOLTIP": "e.g. 20 for car A, 60 for car B (unset is considered as 1), it will become 25% for car A and 75% for car B",
-	"PROFESSIONAL_TOOLTIP": "If left empty the amateur value(s) will be used for both difficulties"
+	"PROFESSIONAL_TOOLTIP": "If left empty the amateur value(s) will be used for both difficulties",
+	"DO_NOT_EXPORT_TOOLTIP": "If checked, this object will not be exported to BIN/PSDL"
 }

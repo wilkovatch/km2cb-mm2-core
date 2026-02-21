@@ -11,11 +11,15 @@
 				},
 				{
 					"name": "echo",
-					"width": 0.75
+					"width": 0.5
 				},
 				{
 					"name": "warp",
-					"width": 0.75
+					"width": 0.5
+				},
+				{
+					"name": "doNotExport",
+					"width": 0.5
 				},
 				{
 					"name": "totalWidth",
