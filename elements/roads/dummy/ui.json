@@ -1,0 +1,190 @@
+{
+	"label": "DUMMY",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "RD_TAB_MAIN",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "echo",
+					"width": 0.75
+				},
+				{
+					"name": "warp",
+					"width": 0.75
+				},
+				{
+					"name": "totalWidth",
+					"width": 0.75
+				},
+				{
+					"name": "roadWidth",
+					"width": 0.75
+				},
+				{
+					"name": "hasSidewalks",
+					"width": 0.5
+				},
+				{
+					"name": "flatSidewalk",
+					"width": 0.5
+				},
+				{
+					"name": "applyHeightAnyway",
+					"width": 0.75
+				},
+				{
+					"name": "blockNumber",
+					"width": 0.75
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_INTERS",
+			"elements": [
+				{
+					"name": "intersectionGroup",
+					"width": 1.5
+				},
+				{
+					"name": "textureCW0",
+					"width": 1.5
+				},
+				{
+					"name": "textureCW1",
+					"width": 1.5
+				},
+				{
+					"name": "forceStraightLeftStartSidewalk",
+					"width": 0.75
+				},
+				{
+					"name": "forceStraightRightStartSidewalk",
+					"width": 0.75
+				},
+				{
+					"name": "forceStraightLeftEndSidewalk",
+					"width": 0.75
+				},
+				{
+					"name": "forceStraightRightEndSidewalk",
+					"width": 0.75
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_TRAFFIC",
+			"elements": [
+				{
+					"name": "forwardLanes",
+					"width": 0.75
+				},
+				{
+					"name": "backwardLanes",
+					"width": 0.75
+				},
+				{
+					"name": "forwardLanesSpace",
+					"width": 0.75
+				},
+				{
+					"name": "backwardLanesSpace",
+					"width": 0.75
+				},
+				{
+					"name": "forwardPark",
+					"width": 0.75
+				},
+				{
+					"name": "backwardPark",
+					"width": 0.75
+				},
+				{
+					"name": "forwardParkWidth",
+					"width": 0.75
+				},
+				{
+					"name": "backwardParkWidth",
+					"width": 0.75
+				},
+				{
+					"name": "pedestrianStreet",
+					"width": 0.75
+				},
+				{
+					"name": "disableTraffic",
+					"width": 0.75
+				},
+				{
+					"name": "disableRightPedestrians",
+					"width": 0.75
+				},
+				{
+					"name": "disableLeftPedestrians",
+					"width": 0.75
+				},
+				{
+					"name": "start_rule",
+					"width": 1.5
+				},
+				{
+					"name": "end_rule",
+					"width": 1.5
+				},
+				{
+					"name": "startTrafficLight",
+					"width": 1.5
+				},
+				{
+					"name": "endTrafficLight",
+					"width": 1.5
+				},
+				{
+					"name": "swapTrafficLights",
+					"width": 1.5
+				},
+				{
+					"name": "trafficLightOnOppositeRoad",
+					"width": 1.5
+				},
+				{
+					"name": "endTrafficLightInOffset",
+					"width": 0.75
+				},
+				{
+					"name": "startTrafficLightInOffset",
+					"width": 0.75
+				},
+				{
+					"name": "endTrafficLightOppInv",
+					"width": 0.75
+				},
+				{
+					"name": "startTrafficLightOppInv",
+					"width": 0.75
+				},
+				{
+					"name": "endTrafficLightRoadIdxAdj",
+					"width": 0.75
+				},
+				{
+					"name": "startTrafficLightRoadIdxAdj",
+					"width": 0.75
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_PROPS",
+			"elements": [
+				{
+					"name": "propsGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

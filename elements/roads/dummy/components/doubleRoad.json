@@ -1,0 +1,65 @@
+{
+	"localDefinitions": [
+		{
+			"name": "totLanes",
+			"type": "float",
+			"value": "forwardLanes+backwardLanes"
+		},
+		{
+			"name": "trafV0",
+			"type": "vec3",
+			"value": "v1-h+localRight*(realBwParkW+backwardLanesSpace)"
+		},
+		{
+			"name": "trafV1",
+			"type": "vec3",
+			"value": "v5-h-localRight*(realFwParkW+forwardLanesSpace)"
+		}
+	],
+	"mainMesh": {
+		"vertices": [
+			"v1-h",
+			"v3-h",
+			"v5-h"
+		],
+		"uvs": [
+			"vec2(zRd, 0)",
+			"vec2(zRd, 1)",
+			"vec2(zRd, 0)"
+		],
+		"faces": [
+			0,
+			1
+		],
+		"facesTextures": [
+			0,
+			0
+		]
+	},
+	"trafficLanes": [
+		{
+			"type": "if(pedestrianStreet, 0, 1)",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"trafV0",
+				"trafV1"
+			],
+			"lanes": {
+				"for": "i; 0; forwardLanes",
+				"value": "(i+0.5)/totLanes"
+			}
+		},
+		{
+			"type": "if(pedestrianStreet, 0, 2)",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"trafV1",
+				"trafV0"
+			],
+			"lanes": {
+				"for": "i; 0; backwardLanes",
+				"value": "(i+0.5)/totLanes"
+			}
+		}
+	]
+}

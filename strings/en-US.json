@@ -17,6 +17,7 @@
 	"EXPORT_CINFO_AND_AIMAP": "Export CINFO and AIMAP",
 	"DO_NOT_EXPORT": "Do not export",
 	"PSDL_COMPATIBLE": "PSDL compatible",
+	"DUMMY": "Dummy",
 	"CUSTOM": "Custom",
 	"EXPORT_TO_PKG": "Export to PKG",
 	"TP_PERIMETER_ONLY": "Perimeter-only block",

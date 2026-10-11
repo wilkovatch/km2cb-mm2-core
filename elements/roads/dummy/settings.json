@@ -1,0 +1,141 @@
+{
+	"variableSections": false,
+	"sectionVertices": [
+		"-0.5*totalWidthI",
+		"-0.5*roadWidthT",
+		"-0",
+		"0",
+		"0",
+		"0.5*roadWidthT",
+		"0.5*totalWidthI"
+	],
+	"anchors": [
+		"v6-anchorH",
+		"v0-anchorH"
+	],
+	"intersectionRoadVertices": [
+		"v1",
+		"v5"
+	],
+	"intersectionLeftSideVertices": [
+		"v1",
+		"v0"
+	],
+	"intersectionRightSideVertices": [
+		"v5",
+		"v6"
+	],
+	"propsContainers": [
+		"right",
+		"left",
+		"middle",
+		"middleRight",
+		"middleLeft",
+		"rightParking",
+		"leftParking"
+	],
+	"propsLines": [
+		{
+			"containerName": "rightParking",
+			"condition": "forwardPark and forwardParkWidth > 0",
+			"bounds": [
+				"v1-h+localRight*realFwParkW",
+				"v1-h"
+			]
+		},
+		{
+			"containerName": "leftParking",
+			"condition": "backwardPark and backwardParkWidth > 0",
+			"bounds": [
+				"v5-h-localRight*realBwParkW",
+				"v5-h"
+			]
+		}
+	],
+	"trafficTypes": [
+		{
+			"name": "pedestrian",
+			"color": [
+				224,
+				32,
+				224
+			]
+		},
+		{
+			"name": "forward",
+			"color": [
+				0,
+				128,
+				255
+			]
+		},
+		{
+			"name": "backward",
+			"color": [
+				224,
+				32,
+				0
+			]
+		}
+	],
+	"textures": [
+		"_TRANSPARENT_"
+	],
+	"texturesMapping": {
+		"doubleRoad": [
+			0
+		],
+		"shoulder_left": [
+			0
+		],
+		"shoulder_right": [
+			0
+		],
+		"sidewalk_left": [
+			0
+		],
+		"sidewalk_right": [
+			0
+		]
+	},
+	"widths": [
+		"totalWidth",
+		"roadWidth",
+		"backwardParkWidth",
+		"forwardParkWidth",
+		"backwardLanesSpace",
+		"forwardLanesSpace"
+	],
+	"getters": {
+		"totalWidth": "totalWidthI",
+		"roadWidth": "roadWidthT",
+		"height": "hVal",
+		"mainTex": "texture1",
+		"canBeSimplified": "canBeSimplified",
+		"startCrosswalkTex": "textureCW0",
+		"endCrosswalkTex": "textureCW1",
+		"hasSidewalks": "hasSidewalksOrShoulders"
+	},
+	"components": [
+		{
+			"name": "sidewalk_right",
+			"condition": "hasRealSidewalks"
+		},
+		{
+			"name": "shoulder_right",
+			"condition": "hasShoulders"
+		},
+		{
+			"name": "doubleRoad",
+			"condition": "true"
+		},
+		{
+			"name": "shoulder_left",
+			"condition": "hasShoulders"
+		},
+		{
+			"name": "sidewalk_left",
+			"condition": "hasRealSidewalks"
+		}
+	]
+}
