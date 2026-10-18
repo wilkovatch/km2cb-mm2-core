@@ -845,7 +845,7 @@
 				{
 					"name": "stlp_e",
 					"type": "vec3",
-					"value": "if(tl01c, endTrafficLightPosition invertedEndTrafficLightPosition"
+					"value": "if(tl01c, endTrafficLightPosition, invertedEndTrafficLightPosition)"
 				},
 				{
 					"name": "startTrafficLightPosition_start",
@@ -910,7 +910,7 @@
 				{
 					"name": "tl10c",
 					"type": "bool",
-					"value": "(etloi_i and tl10Ad>tl10Bd) or ((not etloi_i) and tl10Ad<tl10Bd))"
+					"value": "(etloi_i and tl10Ad>tl10Bd) or ((not etloi_i) and tl10Ad<tl10Bd)"
 				},
 				{
 					"name": "tl11c",
@@ -925,7 +925,7 @@
 				{
 					"name": "etlp_e",
 					"type": "vec3",
-					"value": "if(tl11c, endTrafficLightPosition invertedEndTrafficLightPosition"
+					"value": "if(tl11c, endTrafficLightPosition, invertedEndTrafficLightPosition)"
 				},
 				{
 					"name": "endTrafficLightPosition_start",
