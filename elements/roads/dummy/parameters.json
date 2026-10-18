@@ -194,21 +194,9 @@
 					],
 					"index": "startTrafficLight_meshIndex"
 				},
-				"intersection": 0,
 				"condition": "startTrafficLightCondition",
-				"basePosition": "startTrafficLightPosition",
-				"basePositionRoadChoice": {
-					"lateDefinitions": "startTrafficLight",
-					"condition": "startTrafficLightPositionOnOtherRoad",
-					"index": "startTrafficLightRoadIndex",
-					"score": "startTrafficLightRoadScore",
-					"inputData": [
-						"startTrafficLightOppInv",
-						"startTrafficLightInOffset",
-						"projTrafficLightStart"
-					]
-				},
-				"baseRotation": "startTrafficLightRotation",
+				"basePosition": "startTrafficLightBasePosition",
+				"baseRotation": "startTrafficLightBaseRotation",
 				"allowPosition": [
 					true,
 					true,
@@ -241,21 +229,9 @@
 					],
 					"index": "endTrafficLight_meshIndex"
 				},
-				"intersection": 1,
 				"condition": "endTrafficLightCondition",
-				"basePosition": "endTrafficLightPosition",
-				"basePositionRoadChoice": {
-					"lateDefinitions": "endTrafficLight",
-					"condition": "endTrafficLightPositionOnOtherRoad",
-					"index": "endTrafficLightRoadIndex",
-					"score": "endTrafficLightRoadScore",
-					"inputData": [
-						"endTrafficLightOppInv",
-						"endTrafficLightInOffset",
-						"projTrafficLightEnd"
-					]
-				},
-				"baseRotation": "endTrafficLightRotation",
+				"basePosition": "endTrafficLightBasePosition",
+				"baseRotation": "endTrafficLightBaseRotation",
 				"allowPosition": [
 					true,
 					true,
@@ -424,62 +400,22 @@
 		{
 			"name": "startTrafficLightCondition",
 			"type": "bool",
-			"value": "hasStartIntersection and backwardLanes > 0 and start_rule = 1"
+			"script": "trafficLight.startCondition"
 		},
 		{
 			"name": "endTrafficLightCondition",
 			"type": "bool",
-			"value": "hasEndIntersection and forwardLanes > 0 and end_rule = 1"
-		},
-		{
-			"name": "startTrafficLightPositionOnOtherRoad",
-			"type": "bool",
-			"value": "trafficLightOnOppositeRoad or startTrafficLightRoadIdxAdj != 0"
-		},
-		{
-			"name": "endTrafficLightPositionOnOtherRoad",
-			"type": "bool",
-			"value": "trafficLightOnOppositeRoad or endTrafficLightRoadIdxAdj != 0"
-		},
-		{
-			"name": "endTrafficLightOppInv_input",
-			"type": "bool",
-			"value": "false"
-		},
-		{
-			"name": "startTrafficLightOppInv_input",
-			"type": "bool",
-			"value": "false"
-		},
-		{
-			"name": "startTrafficLightInOffset_input",
-			"type": "float",
-			"value": "1"
-		},
-		{
-			"name": "endTrafficLightInOffset_input",
-			"type": "float",
-			"value": "1"
-		},
-		{
-			"name": "projTrafficLightStart_input",
-			"type": "vec3",
-			"value": "vec3(0, 0, 0)"
-		},
-		{
-			"name": "projTrafficLightEnd_input",
-			"type": "vec3",
-			"value": "vec3(0, 0, 0)"
+			"script": "trafficLight.endCondition"
 		},
 		{
 			"name": "startTrafficLight_meshIndex",
 			"type": "int",
-			"value": "if(backwardLanes <= 1, 0, 1)"
+			"script": "trafficLight.startMeshIndex"
 		},
 		{
 			"name": "endTrafficLight_meshIndex",
 			"type": "int",
-			"value": "if(forwardLanes <= 1, 0, 1)"
+			"script": "trafficLight.endMeshIndex"
 		}
 	],
 	"dynamicDefinitions": [
@@ -527,176 +463,31 @@
 					"name": "invertedEndTrafficLightPosition",
 					"type": "vec3",
 					"value": "if(swapTrafficLights, v0_1, v6_1)"
-				},
-				{
-					"name": "startTrafficLightRotation",
-					"type": "vec3",
-					"value": "vec3(0, signedAngle(startDir, worldForward, -worldUp), 0)"
-				},
-				{
-					"name": "endTrafficLightRotation",
-					"type": "vec3",
-					"value": "vec3(0, signedAngle(endDir, -worldForward, -worldUp), 0)"
 				}
 			]
 		},
 		{
-			"category": "startTrafficLight",
+			"category": "trafficLights",
 			"definitions": [
 				{
-					"name": "projTrafficLightStart",
+					"name": "startTrafficLightBasePosition",
 					"type": "vec3",
-					"value": "startTrafficLightPosition - startDir * distance(startTrafficLightPosition, startIntersectionPosition) * 2"
+					"script": "trafficLight.startPosition"
 				},
 				{
-					"name": "startTrafficLightRoadIndex",
-					"type": "int",
-					"value": "if(trafficLightOnOppositeRoad, maxScoreRoadIndex, 0) + startTrafficLightRoadIdxAdj"
-				},
-				{
-					"name": "tl00Ad",
-					"type": "float",
-					"value": "distance(projTrafficLightStart_input, startTrafficLightPosition)"
-				},
-				{
-					"name": "tl00Bd",
-					"type": "float",
-					"value": "distance(projTrafficLightStart_input, invertedStartTrafficLightPosition)"
-				},
-				{
-					"name": "tl01Ad",
-					"type": "float",
-					"value": "distance(projTrafficLightStart_input, endTrafficLightPosition)"
-				},
-				{
-					"name": "tl01Bd",
-					"type": "float",
-					"value": "distance(projTrafficLightStart_input, invertedEndTrafficLightPosition)"
-				},
-				{
-					"name": "stloi_i",
-					"type": "bool",
-					"value": "startTrafficLightOppInv_input"
-				},
-				{
-					"name": "tl00c",
-					"type": "bool",
-					"value": "(stloi_i and tl00Ad>tl00Bd) or ((not stloi_i) and tl00Ad<tl00Bd)"
-				},
-				{
-					"name": "tl01c",
-					"type": "bool",
-					"value": "(stloi_i and tl01Ad>tl01Bd) or ((not stloi_i) and tl01Ad<tl01Bd)"
-				},
-				{
-					"name": "stlp_s",
+					"name": "endTrafficLightBasePosition",
 					"type": "vec3",
-					"value": "if(tl00c, startTrafficLightPosition, invertedStartTrafficLightPosition)"
+					"script": "trafficLight.endPosition"
 				},
 				{
-					"name": "stlp_e",
+					"name": "startTrafficLightBaseRotation",
 					"type": "vec3",
-					"value": "if(tl01c, endTrafficLightPosition, invertedEndTrafficLightPosition)"
+					"script": "trafficLight.startRotation"
 				},
 				{
-					"name": "startTrafficLightPosition_start",
+					"name": "endTrafficLightBaseRotation",
 					"type": "vec3",
-					"value": "stlp_s + normalize(startIntersectionPosition - stlp_s) * startTrafficLightInOffset_input"
-				},
-				{
-					"name": "startTrafficLightPosition_end",
-					"type": "vec3",
-					"value": "stlp_e + normalize(endIntersectionPosition - stlp_e)* startTrafficLightInOffset_input"
-				},
-				{
-					"name": "startTrafficLightRoadScore_start",
-					"type": "float",
-					"value": "if(tl00Ad<tl00Bd, 1/tl00Ad, 1/tl00Bd)"
-				},
-				{
-					"name": "startTrafficLightRoadScore_end",
-					"type": "float",
-					"value": "if(tl01Ad<tl01Bd, 1/tl01Ad 1/tl01Bd)"
-				}
-			]
-		},
-		{
-			"category": "endTrafficLight",
-			"definitions": [
-				{
-					"name": "projTrafficLightEnd",
-					"type": "vec3",
-					"value": "endTrafficLightPosition + endDir * distance(endTrafficLightPosition, endIntersectionPosition) * 2"
-				},
-				{
-					"name": "endTrafficLightRoadIndex",
-					"type": "int",
-					"value": "if(trafficLightOnOppositeRoad, maxScoreRoadIndex, 0) + endTrafficLightRoadIdxAdj"
-				},
-				{
-					"name": "tl10Ad",
-					"type": "float",
-					"value": "distance(projTrafficLightEnd_input, startTrafficLightPosition)"
-				},
-				{
-					"name": "tl10Bd",
-					"type": "float",
-					"value": "distance(projTrafficLightEnd_input, invertedStartTrafficLightPosition)"
-				},
-				{
-					"name": "tl11Ad",
-					"type": "float",
-					"value": "distance(projTrafficLightEnd_input, endTrafficLightPosition)"
-				},
-				{
-					"name": "tl11Bd",
-					"type": "float",
-					"value": "distance(projTrafficLightEnd_input, invertedEndTrafficLightPosition)"
-				},
-				{
-					"name": "etloi_i",
-					"type": "bool",
-					"value": "endTrafficLightOppInv_input"
-				},
-				{
-					"name": "tl10c",
-					"type": "bool",
-					"value": "(etloi_i and tl10Ad>tl10Bd) or ((not etloi_i) and tl10Ad<tl10Bd)"
-				},
-				{
-					"name": "tl11c",
-					"type": "bool",
-					"value": "(etloi_i and tl11Ad>tl11Bd) or ((not etloi_i) and tl11Ad<tl11Bd)"
-				},
-				{
-					"name": "etlp_s",
-					"type": "vec3",
-					"value": "if(tl10c, startTrafficLightPosition, invertedStartTrafficLightPosition)"
-				},
-				{
-					"name": "etlp_e",
-					"type": "vec3",
-					"value": "if(tl11c, endTrafficLightPosition, invertedEndTrafficLightPosition)"
-				},
-				{
-					"name": "endTrafficLightPosition_start",
-					"type": "vec3",
-					"value": "etlp_s + normalize(startIntersectionPosition - etlp_s)* endTrafficLightInOffset_input"
-				},
-				{
-					"name": "endTrafficLightPosition_end",
-					"type": "vec3",
-					"value": "etlp_e + normalize(endIntersectionPosition - etlp_e)* endTrafficLightInOffset_input"
-				},
-				{
-					"name": "endTrafficLightRoadScore_start",
-					"type": "float",
-					"value": "if(tl10Ad<tl10Bd, 1/tl10Ad, 1/tl10Bd)"
-				},
-				{
-					"name": "endTrafficLightRoadScore_end",
-					"type": "float",
-					"value": "if(tl11Ad<tl11Bd, 1/tl11Ad 1/tl11Bd)"
+					"script": "trafficLight.endRotation"
 				}
 			]
 		}
