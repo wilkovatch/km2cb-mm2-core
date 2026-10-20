@@ -1,6 +1,5 @@
 {
 	"variableSections": false,
-	"allowRoll": false,
 	"sectionVertices": [
 		"-0.5*totalWidthI",
 		"-0.5*roadWidthT",
