@@ -39,6 +39,7 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
+				"drawLine": true,
 				"elementProperties": [
 					{
 						"name": "waypoint",

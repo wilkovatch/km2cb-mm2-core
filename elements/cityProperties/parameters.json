@@ -105,6 +105,16 @@
 				"maxElements": -1,
 				"customElementType": "blitzRace"
 			}
+		},
+		{
+			"name": "trainLines",
+			"label": "CP_TRAIN_LINES",
+			"tooltip": "CP_TRAIN_LINES_TOOLTIP",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "trainLine"
+			}
 		}
 	]
 }

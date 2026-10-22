@@ -148,6 +148,18 @@
 					"width": 0.75
 				},
 				{
+					"name": "freeway",
+					"width": 0.75
+				},
+				{
+					"name": "cableCarLine",
+					"width": 0.75
+				},
+				{
+					"name": "cableCarOffset",
+					"width": 0.75
+				},
+				{
 					"name": "start_rule",
 					"width": 1.5
 				},

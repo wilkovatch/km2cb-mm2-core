@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
 from utils import state_val, state_bool, state_vector, state_vector_scale, clean_city_path, create_folder_if_not_exists
+from train_export import export_trains
 
 
 class CinfoAimapExporter:
@@ -351,6 +352,8 @@ class CinfoAimapExporter:
         self.export_city_aimap(filename, p)
 
         self.export_roam_aimap(racesubfolder, p)
+
+        export_trains(p, racesubfolder, cityname)
 
         blitzdata = []
         for i in range(len(blitz_races)):

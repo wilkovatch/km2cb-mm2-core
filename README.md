@@ -10,7 +10,7 @@ To import the output in Blender you can use these two plugins:
 
 Exporters supported (accessible by selecting the PSDL format when exporting):
  - PSDL
- - BAI (still incomplete and broken)
+ - BAI
  - INST
  - PATHSET
  - Prop rules
@@ -30,6 +30,20 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
   - For terrain patches, go to the Railing tab, click Add railing, set the properties, and select the perimeter points over which the railing has to be placed.  
   To do so: click Switch to railing placement, then click on the terrain patch perimeter points.  
   Make sure the perimeter points will be the actual block perimeter points, otherwise it will not work properly ingame. (as railings are placed on the perimeter points of the block, not of the terrain patch)
+
+- AI paths (BAI)
+  - Ambient vehicles follow the traffic lanes shown in the editor, so the lane spaces, the parking spaces and different numbers of lanes per side are kept ingame. The BAI fields are computed as in the stock San Francisco and London files (route points 15 m from each end, lane boundaries, sidewalk distances, flags, etc.).
+  - At most 4 lanes per side are supported by MM2, extra lanes are dropped with a warning in the export log.
+  - The road flags come from the Traffic tab of the road: Divided road, Pedestrians only (alley) and Freeway (ambient vehicles go faster). Level roads get the flat flag automatically.
+  - `exporters/psdl/tools/bai_check.py` checks a BAI file (stock or exported) against the stock conventions: `python bai_check.py --lint <file.bai>` reports problems, `--derive` recomputes the derived fields from the paths of the file and reports the maximum error.
+- Cable cars
+  - Check Cable car line in the Traffic tab of the roads of the line: they get a rail in each direction, shown in the editor as orange traffic lanes. As in San Francisco, the rails are 2.5 m from the center of the road by default (Cable car rails dist.).
+  - Connect the roads of a line through intersections. The game puts one cable car (va_cablecar_f) at each end of a line, meaning each intersection where exactly one cable car road arrives, like the 4 ends of the San Francisco lines. A line that is only a closed loop has no ends, so it gets no cable cars: leave it open, or add a short cable car road from the loop to a dead end. The export log warns about lines without ends.
+  - The rails are only AI paths, add the visible rails to the road texture or as props.
+- Trains
+  - Add the lines in the Trains tab of the city properties. Each line is a train (va_ug_l, the London underground train) going back and forth between its first and last point, through the other points. Add the points with Switch click placement mode (then click on the terrain or on roads, Esc to stop) and move them like the other objects; they are joined by a line in the editor.
+  - The lines are exported to `race/<city>/<city>_train.pathset`, as in London.
+  - The tunnels and stations are not generated: place them as mesh instances, for example with the stock London meshes (`bl_subway*`, `cl_subway*`, `kl_subway*`, `ol_subway*`, `wl_subway*`) on invisible terrain patches (empty blocks), and put the points of the line inside them (the London trains run about 13 m below the streets).
 
 Some things to consider when creating cities:
 - Changing of mesh instances scale in unsupported in MM2

@@ -134,20 +134,8 @@ class JsonProcessor:
             self.cur_mesh_idx += 1
         return elem
 
-    def get_psdl_road(self,
-                      mesh,
-                      num_segments,
-                      parent_intersection,
-                      runtime_state,
-                      state,
-                      vps,
-                      cur_block,
-                      og_name,
-                      prop_rule,
-                      instance_state,
-                      has_start_intersection,
-                      has_end_intersection,
-                      res):
+    def get_road_sections_layout(self, state, runtime_state):
+        # the vertices of each mesh section used by the psdl road (and by the BAI), and the psdl road kind
         section_verts = []
         shoulder_1_section_verts = []
         shoulder_2_section_verts = []
@@ -208,6 +196,40 @@ class JsonProcessor:
             section_verts.append(cur_v + 1)
             cur_v += 2
         section_verts.reverse() #they're reversed compared to the psdl requirements
+        return {
+            'section_verts': section_verts,
+            'shoulder_1_section_verts': shoulder_1_section_verts,
+            'shoulder_2_section_verts': shoulder_2_section_verts,
+            'elem_name': elem_name,
+            'num_tex': num_tex,
+            'div_type': div_type,
+            'div_caps': div_caps,
+            'div_param': div_param
+        }
+
+    def get_psdl_road(self,
+                      mesh,
+                      num_segments,
+                      parent_intersection,
+                      runtime_state,
+                      state,
+                      vps,
+                      cur_block,
+                      og_name,
+                      prop_rule,
+                      instance_state,
+                      has_start_intersection,
+                      has_end_intersection,
+                      res):
+        layout = self.get_road_sections_layout(state, runtime_state)
+        section_verts = layout['section_verts']
+        shoulder_1_section_verts = layout['shoulder_1_section_verts']
+        shoulder_2_section_verts = layout['shoulder_2_section_verts']
+        elem_name = layout['elem_name']
+        num_tex = layout['num_tex']
+        div_type = layout['div_type']
+        div_caps = layout['div_caps']
+        div_param = layout['div_param']
         textures = ''
         if num_tex == 1:
             textures = self.get_tex(state['texture1'])
@@ -250,7 +272,6 @@ class JsonProcessor:
         elem.vertices = vertices
         elem.name = str(cur_block) + '_' + elem_name
         elem.properties['original_name'] = og_name
-        elem.properties['bai_vps'] = str(len(section_verts))
 
         # psdl prop rules
         if parent_intersection is None and type(prop_rule) is dict and self.road_has_sidewalks(state, runtime_state):
@@ -346,21 +367,19 @@ class JsonProcessor:
         # empty block to contain the pkg
         psdl_block = []
         indices = []
-        bai_vps = 0
         if vps <= 2:
             for i in range(num_segments):
                 psdl_block.append(mesh['vertices'][i * vps])
                 psdl_block.append(mesh['vertices'][(i + 1) * vps - 1])
-                bai_vps = 2
             for i in range(num_segments - 1):
                 # triangle 1
-                indices.append(i)
-                indices.append(i + 1)
-                indices.append(i + 2)
+                indices.append(2 * i)
+                indices.append(2 * i + 1)
+                indices.append(2 * i + 2)
                 # triangle 2
-                indices.append(i + 1)
-                indices.append(i + 3)
-                indices.append(i + 2)
+                indices.append(2 * i + 1)
+                indices.append(2 * i + 3)
+                indices.append(2 * i + 2)
         else:
             sw_skip = (2 if self.road_has_shoulders(state, runtime_state) else 3) if self.road_has_sidewalks(state, runtime_state) else 0
             for i in range(num_segments):
@@ -368,17 +387,16 @@ class JsonProcessor:
                 psdl_block.append(mesh['vertices'][i * vps + sw_skip])
                 psdl_block.append(mesh['vertices'][(i + 1) * vps - 1 - sw_skip])
                 psdl_block.append(mesh['vertices'][(i + 1) * vps - 1])
-                bai_vps = 4
             for i in range(num_segments - 1):
                 for j in range(3):
                     # triangle 1
-                    indices.append(i + j)
-                    indices.append(i + j + 1)
-                    indices.append(i + j + 4)
+                    indices.append(4 * i + j)
+                    indices.append(4 * i + j + 1)
+                    indices.append(4 * i + j + 4)
                     # triangle 2
-                    indices.append(i + j + 1)
-                    indices.append(i + j + 5)
-                    indices.append(i + j + 4)
+                    indices.append(4 * i + j + 1)
+                    indices.append(4 * i + j + 5)
+                    indices.append(4 * i + j + 4)
         elem_pkg = self.get_mesh(road['data']['mesh'], cur_block, 'VL', og_name)
         if res is not None:
             elem = ExportedCityElement()
@@ -386,7 +404,6 @@ class JsonProcessor:
             elem.vertices = psdl_block
             elem.name = str(cur_block) + '_NUL'
             elem.properties['original_name'] = og_name
-            elem.properties['bai_vps'] = str(bai_vps)
             res.append(elem)
             res.append(elem_pkg)
             return elem
@@ -485,7 +502,10 @@ class JsonProcessor:
                             break
 
         if parent_intersection is None:
-            self.exported_roads[road['id']] = {'elem': elem, 'road': road, 'block': cur_block}
+            # the BAI uses the vertices of the psdl road sections (also for the roads exported to pkg)
+            bai_verts = self.get_road_sections_layout(state, runtime_state)['section_verts']
+            bai_sections = [[mesh['vertices'][i * vps + j] for j in bai_verts] for i in range(num_segments)]
+            self.exported_roads[road['id']] = {'elem': elem, 'road': road, 'block': cur_block, 'bai_sections': bai_sections}
 
         if in_block is None:
             if cur_block == len(block_perimeters) + 1:
@@ -1155,16 +1175,89 @@ class JsonProcessor:
     def get_road_name(self, road_id):
         return self.data['roads'][road_id]['data']['name']
 
+    def get_bai_lane_counts(self, r_state):
+        f_lanes = state_int(r_state, 'forwardLanes')
+        b_lanes = state_int(r_state, 'backwardLanes')
+        if state_bool(r_state, 'disableTraffic'):
+            return 0, 0
+        return f_lanes, b_lanes
+
+    def get_editor_lanes(self, rec, num_sections):
+        # the traffic lanes drawn in the editor (forward, backward), None if they don't match the lanes of the road
+        road = rec['road']
+        fields = road['data']['fields']
+        f_lanes, b_lanes = self.get_bai_lane_counts(fields['state'])
+        forward = []
+        backward = []
+        for lane in fields.get('lanes', []):
+            name = lane['name']
+            if name.startswith('traffic_1_') or name.startswith('traffic_2_'):
+                points = [np.subtract(p, (0, 0.01, 0)) for p in lane['points']]  # they're drawn 1 cm above the road
+                if len(points) != num_sections:
+                    return None
+                (forward if name.startswith('traffic_1_') else backward).append(points)
+        if len(forward) != f_lanes or len(backward) != b_lanes:
+            return None
+        return forward, backward
+
+    def get_bai_cross_sections(self, rec):
+        # the BAI sections of an exported road, from its start: the right outer edge, the right curb, the lanes from the
+        # right to the left (the right side has the backward lanes), the left curb, the left outer edge (the curbs are
+        # the outer edges without sidewalks)
+        if 'bai_cross_sections' in rec:
+            return rec['bai_cross_sections']
+        road = rec['road']
+        r_state = road['data']['fields']['state']
+        r_rt_state = road['data']['fields']['runtimeState']
+        base = rec['bai_sections']
+        res = []
+        if len(base) >= 2:
+            has_geo_sidewalks = self.road_has_sidewalks(r_state, r_rt_state)
+            curbs = []
+            for s in base:
+                curbs.append((s[1] if has_geo_sidewalks else s[0], s[-2] if has_geo_sidewalks else s[-1]))
+            f_lanes, b_lanes = self.get_bai_lane_counts(r_state)
+            lanes = self.get_editor_lanes(rec, len(base))
+            if lanes is not None:
+                forward, backward = lanes
+            else:
+                if f_lanes + b_lanes > 0 and not state_bool(r_state, 'pedestrianStreet'):
+                    print('Warning: the traffic lanes of ' + road['data']['name'] + ' are not as in the editor in the BAI')
+                # lanes spread evenly between the curbs (or the curbs and the divider)
+                divided = self.road_has_divider(r_state) and len(base[0]) >= (6 if has_geo_sidewalks else 4)
+                forward = [[] for _ in range(f_lanes)]
+                backward = [[] for _ in range(b_lanes)]
+                for s, (rc, lc) in zip(base, curbs):
+                    if divided:
+                        r_inner = s[2] if has_geo_sidewalks else s[1]
+                        l_inner = s[3] if has_geo_sidewalks else s[2]
+                    else:
+                        mid = np.divide(np.add(rc, lc), 2)
+                        r_inner = mid if f_lanes > 0 else lc
+                        l_inner = mid if b_lanes > 0 else rc
+                    for k in range(b_lanes):
+                        backward[k].append(np.add(r_inner, np.multiply(np.subtract(rc, r_inner), (k + 0.5) / b_lanes)))
+                    for k in range(f_lanes):
+                        forward[k].append(np.add(l_inner, np.multiply(np.subtract(lc, l_inner), (k + 0.5) / f_lanes)))
+            # from the right to the left
+            right_dir = np.subtract(base[0][-1], base[0][0])
+            def lateral(lane):
+                return float(np.dot(np.subtract(lane[0], base[0][0]), right_dir))
+            lanes_rl = sorted(backward, key=lateral) + sorted(forward, key=lateral)
+            for i in range(len(base)):
+                s = base[i]
+                rc, lc = curbs[i]
+                res.append([s[0], rc] + [lane[i] for lane in lanes_rl] + [lc, s[-1]])
+        rec['bai_cross_sections'] = res
+        return res
+
     def get_bai_vps(self, rec):
-        return int(rec['elem'].properties.get('bai_vps', '0'))
+        sections = self.get_bai_cross_sections(rec)
+        return len(sections[0]) if len(sections) > 0 else 0
 
     def get_bai_sections(self, rec, reverse):
-        # the sections of the BAI vertices of an exported road, from its end to its start if reversed
-        vps = self.get_bai_vps(rec)
-        if vps <= 0:
-            return []
-        verts = rec['elem'].vertices
-        sections = [list(verts[i:i + vps]) for i in range(0, len(verts) - vps + 1, vps)]
+        # the BAI sections of an exported road (see get_bai_cross_sections), from its end to its start if reversed
+        sections = self.get_bai_cross_sections(rec)
         if reverse:
             sections = [list(reversed(s)) for s in reversed(sections)]
         return sections
@@ -1176,11 +1269,7 @@ class JsonProcessor:
         r_rt_state = road['data']['fields']['runtimeState']
         left_ped = not state_bool(r_state, 'disableLeftPedestrians')
         right_ped = not state_bool(r_state, 'disableRightPedestrians')
-        f_lanes = state_int(r_state, 'forwardLanes')
-        b_lanes = state_int(r_state, 'backwardLanes')
-        if state_bool(r_state, 'disableTraffic'):
-            f_lanes = 0
-            b_lanes = 0
+        f_lanes, b_lanes = self.get_bai_lane_counts(r_state)
         with_peds = left_ped or right_ped
         with_traffic = (b_lanes > 0 or f_lanes > 0) and not state_bool(r_state, 'pedestrianStreet')
         with_both = with_peds and with_traffic
@@ -1195,8 +1284,15 @@ class JsonProcessor:
             'right_ped': right_ped,
             'traffic_type': traffic_type,
             'has_geo_sidewalks': int(self.road_has_sidewalks(r_state, r_rt_state)),
-            'vps': self.get_bai_vps(rec)
+            'vps': self.get_bai_vps(rec),
+            'cable_car': state_bool(r_state, 'cableCarLine'),
+            'cable_car_offset': self.get_cable_car_offset(r_state)
         }
+
+    def get_cable_car_offset(self, r_state):
+        # as cableCarOffsetI in the road parameters
+        offset = float(state_val(r_state, 'cableCarOffset', 0) or 0)
+        return offset if offset > 0 else 2.5
 
     def has_bai_geometry(self, road_id):
         rec = self.exported_roads.get(road_id)
@@ -1333,8 +1429,14 @@ class JsonProcessor:
         traffic_elem.properties['has_sidewalks'] = ('1' if layout['right_ped'] else '0') + ':' + ('1' if layout['left_ped'] else '0')
         traffic_elem.properties['has_geo_sidewalks'] = str(layout['has_geo_sidewalks'])
         traffic_elem.properties['traffic_type'] = layout['traffic_type']
-        traffic_elem.properties['speed'] = str(int(state_int(r_state, 'speedLimit')))
+        traffic_elem.properties['bai_layout'] = '2'  # see get_bai_cross_sections
         traffic_elem.properties['vertices_per_section'] = str(layout['vps'])
+        traffic_elem.properties['divided'] = '1' if self.road_has_divider(r_state) else '0'
+        traffic_elem.properties['freeway'] = '1' if state_bool(r_state, 'freeway') else '0'
+        traffic_elem.properties['alley'] = '1' if state_bool(r_state, 'pedestrianStreet') else '0'
+        if layout['cable_car']:
+            traffic_elem.properties['cable_car'] = '1'
+            traffic_elem.properties['cable_car_offset'] = str(layout['cable_car_offset'])
         traffic_elem.properties['start_rule'] = start_rule
         traffic_elem.properties['end_rule'] = end_rule
         traffic_elem.properties['start_intersection'] = str(ti[imap[start_int]][2])
@@ -1346,8 +1448,12 @@ class JsonProcessor:
     def get_traffic_intersection(self, res, obj):
         #obj: (ExportedCityElement elem, Intersection intersection, int block)
         traffic_elem = ExportedCityElement()
-        traffic_elem.indices = obj[0].indices
-        traffic_elem.vertices = obj[0].vertices
+        if 'center' in obj[1]:
+            # the BAI writer uses the mean of the vertices as the center
+            traffic_elem.vertices = [obj[1]['center']]
+        else:
+            traffic_elem.indices = obj[0].indices
+            traffic_elem.vertices = obj[0].vertices
         road_numbers = []
         order = obj[1]['data']['fields']['sortOrder']
         for i in range(len(obj[1]['roads'])):

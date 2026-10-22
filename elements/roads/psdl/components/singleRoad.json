@@ -14,6 +14,31 @@
 			"name": "trafV1",
 			"type": "vec3",
 			"value": "v5-h-localRight*(realFwParkW+forwardLanesSpace)"
+		},
+		{
+			"name": "ccSplit",
+			"type": "bool",
+			"value": "cableCarLine and forwardLanes > 0 and backwardLanes > 0"
+		},
+		{
+			"name": "fwTrafV1",
+			"type": "vec3",
+			"value": "if(ccSplit, v3-h-localRight*cableCarGap, trafV1)"
+		},
+		{
+			"name": "bwTrafV1",
+			"type": "vec3",
+			"value": "if(ccSplit, v3-h+localRight*cableCarGap, trafV0)"
+		},
+		{
+			"name": "fwLanesDiv",
+			"type": "float",
+			"value": "if(ccSplit, forwardLanes, totLanes)"
+		},
+		{
+			"name": "bwLanesDiv",
+			"type": "float",
+			"value": "if(ccSplit, backwardLanes, totLanes)"
 		}
 	],
 	"mainMesh": {
@@ -38,11 +63,11 @@
 			"condition": "not disableTraffic",
 			"bounds": [
 				"trafV0",
-				"trafV1"
+				"fwTrafV1"
 			],
 			"lanes": {
 				"for": "i; 0; forwardLanes",
-				"value": "(i+0.5)/totLanes"
+				"value": "(i+0.5)/fwLanesDiv"
 			}
 		},
 		{
@@ -50,12 +75,34 @@
 			"condition": "not disableTraffic",
 			"bounds": [
 				"trafV1",
-				"trafV0"
+				"bwTrafV1"
 			],
 			"lanes": {
 				"for": "i; 0; backwardLanes",
-				"value": "(i+0.5)/totLanes"
+				"value": "(i+0.5)/bwLanesDiv"
 			}
+		},
+		{
+			"type": "3",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				0.0
+			]
+		},
+		{
+			"type": "4",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				1.0
+			]
 		}
 	]
 }

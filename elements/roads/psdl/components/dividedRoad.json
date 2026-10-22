@@ -4,6 +4,11 @@
 			"name": "divHeight",
 			"type": "vec3",
 			"value": "if(divider=1, -h, -h+localUp*dividerParam)"
+		},
+		{
+			"name": "ccDivGap",
+			"type": "float",
+			"value": "max(0, cableCarGap - 0.5*trueDivWidth)"
 		}
 	],
 	"mainMesh": {
@@ -60,7 +65,7 @@
 			"condition": "not disableTraffic",
 			"bounds": [
 				"v1-h+localRight*(realBwParkW+backwardLanesSpace)",
-				"v2-h"
+				"v2-h-localRight*ccDivGap"
 			],
 			"lanes": {
 				"for": "i; 0; forwardLanes",
@@ -72,12 +77,34 @@
 			"condition": "not disableTraffic",
 			"bounds": [
 				"v5-h-localRight*(realFwParkW+forwardLanesSpace)",
-				"v4-h"
+				"v4-h+localRight*ccDivGap"
 			],
 			"lanes": {
 				"for": "i; 0; backwardLanes",
 				"value": "(i+0.5)/backwardLanes"
 			}
+		},
+		{
+			"type": "3",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				0.0
+			]
+		},
+		{
+			"type": "4",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				1.0
+			]
 		}
 	]
 }

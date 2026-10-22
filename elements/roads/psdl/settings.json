@@ -76,6 +76,22 @@
 				32,
 				0
 			]
+		},
+		{
+			"name": "cableCarForward",
+			"color": [
+				255,
+				192,
+				0
+			]
+		},
+		{
+			"name": "cableCarBackward",
+			"color": [
+				255,
+				128,
+				0
+			]
 		}
 	],
 	"textures": [

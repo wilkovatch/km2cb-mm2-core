@@ -148,6 +148,25 @@
 			"type": "bool"
 		},
 		{
+			"name": "freeway",
+			"label": "RD_FREEWAY",
+			"tooltip": "RD_FREEWAY_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarLine",
+			"label": "RD_CABLE_CAR",
+			"tooltip": "RD_CABLE_CAR_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarOffset",
+			"label": "RD_CABLE_CAR_OFFSET",
+			"placeholder": "RD_CABLE_CAR_OFFSET_PH",
+			"tooltip": "RD_CABLE_CAR_OFFSET_TOOLTIP",
+			"type": "float"
+		},
+		{
 			"name": "start_rule",
 			"label": "RD_START_RULE",
 			"type": "enum",
@@ -600,6 +619,16 @@
 			"name": "realFwParkW",
 			"type": "float",
 			"value": "if(forwardPark, forwardParkWidth, 0)"
+		},
+		{
+			"name": "cableCarOffsetI",
+			"type": "float",
+			"value": "if(cableCarOffset > 0, cableCarOffset, 2.5)"
+		},
+		{
+			"name": "cableCarGap",
+			"type": "float",
+			"value": "if(cableCarLine, cableCarOffsetI * 2, 0)"
 		},
 		{
 			"name": "singleSwWidth",
