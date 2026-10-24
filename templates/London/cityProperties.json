@@ -1,0 +1,70 @@
+{
+  "speedLimit": 15.0,
+  "driveOnLeft": true,
+  "trafficCars": [
+    {
+      "carModel": "geometry/va_compact_s.pkg",
+      "frequency": 7.0
+    },
+    {
+      "carModel": "geometry/va_diesels_s.pkg",
+      "frequency": 6.0
+    },
+    {
+      "carModel": "geometry/va_largesuv_s.pkg",
+      "frequency": 10.0
+    },
+    {
+      "carModel": "geometry/va_sedans_s.pkg",
+      "frequency": 10.0
+    },
+    {
+      "carModel": "geometry/va_smallsuv_s.pkg",
+      "frequency": 7.0
+    },
+    {
+      "carModel": "geometry/va_2sitersport_l.pkg",
+      "frequency": 6.0
+    },
+    {
+      "carModel": "geometry/va_cooper_l.pkg",
+      "frequency": 7.0
+    },
+    {
+      "carModel": "geometry/va_eurocargo_l.pkg",
+      "frequency": 7.0
+    },
+    {
+      "carModel": "geometry/va_ultrasport_l.pkg",
+      "frequency": 2.0
+    },
+    {
+      "carModel": "geometry/va_euro_l.pkg",
+      "frequency": 11.0
+    },
+    {
+      "carModel": "geometry/va_cab_l.pkg",
+      "frequency": 9.0
+    },
+    {
+      "carModel": "geometry/va_compact_s.pkg",
+      "frequency": 16.0
+    },
+    {
+      "carModel": "geometry/va_ddbus_l.pkg",
+      "frequency": 2.0
+    }
+  ],
+  "pedModels": [
+    {
+      "goodWeatherPedName": "pedmodel_man",
+      "badWeatherPedName": "pedmodel_manw"
+    },
+    {
+      "goodWeatherPedName": "pedmodel_woman",
+      "badWeatherPedName": "pedmodel_womanw"
+    }
+  ],
+  "trafficLight1": "geometry/sp_traflitsingle_ped_l.pkg",
+  "trafficLight2": "geometry/sp_traflitsingle_ped_l.pkg"
+}

@@ -3314,8 +3314,8 @@
         "segmentsPer100m": false,
         "project": true,
         "projectAll": false,
-        "totalWidth": 40.0,
-        "roadWidth": 30.0,
+        "totalWidth": 32.0,
+        "roadWidth": 24.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3335,14 +3335,14 @@
         "startIntersectionAdd": 0.0,
         "endIntersectionAdd": 0.0,
         "texture0": "texture/swalk_stone_l.tex",
-        "texture1": "texture/r6_nopark_l.tex",
+        "texture1": "texture/r6_l.tex",
         "texture2": null,
         "texture3": null,
         "texture4": null,
         "texture5": null,
         "texture6": null,
         "texture7": null,
-        "textureLOD": "texture/r6_nopark_lo_l.tex",
+        "textureLOD": "texture/r6_lo_l.tex",
         "forwardLanes": 3,
         "backwardLanes": 3,
         "forwardLanesSpace": 0.0,
@@ -3373,15 +3373,195 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
         "segmentsPer100m": false,
         "project": true,
         "projectAll": false,
-        "totalWidth": 15.0,
-        "roadWidth": 5.0,
+        "totalWidth": 7.0,
+        "roadWidth": 7.0,
+        "height": 0.15,
+        "isDouble": false,
+        "hasSidewalks": false,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_f.tex",
+        "texture1": "texture/r_alley_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r_alley_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 0,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": true,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "1-lane alley",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": true,
+        "disableLeftPedestrians": true,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 10.0,
+        "roadWidth": 4.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r1_stone256_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r1_stone128_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 0,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "1-lane cobbled one-way street",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 14.0,
+        "roadWidth": 8.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3421,8 +3601,103 @@
         "pedestrianStreet": false,
         "echo": false,
         "adjustLowPolyWidth": false,
-        "propRule": null,
-        "name": "1 lane road",
+        "propRule": {
+          "name": "n04",
+          "type": "psdl",
+          "left": {
+            "name": "n04left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n04right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlightb",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 11.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_benchwood_f.pkg"
+                ],
+                "random": true,
+                "name": "bench",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
+        "name": "1-lane one-way road",
         "rail_type": 0,
         "rail_hasRight": false,
         "rail_hasLeft": false,
@@ -3439,7 +3714,105 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 10.0,
+        "roadWidth": 10.0,
+        "height": 0.15,
+        "isDouble": false,
+        "hasSidewalks": false,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_f.tex",
+        "texture1": "texture/r1_stone256_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r1_stone256_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 1,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": null,
+        "name": "2-lane cobbled street",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
@@ -3447,7 +3820,7 @@
         "project": true,
         "projectAll": false,
         "totalWidth": 20.0,
-        "roadWidth": 10.0,
+        "roadWidth": 12.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3467,14 +3840,14 @@
         "startIntersectionAdd": 0.0,
         "endIntersectionAdd": 0.0,
         "texture0": "texture/swalk_stone_l.tex",
-        "texture1": "texture/r2_nopark_l.tex",
+        "texture1": "texture/r2_l.tex",
         "texture2": null,
         "texture3": null,
         "texture4": null,
         "texture5": null,
         "texture6": null,
         "texture7": null,
-        "textureLOD": "texture/r2_nopark_lo_l.tex",
+        "textureLOD": "texture/r2_lo_l.tex",
         "forwardLanes": 2,
         "backwardLanes": 0,
         "forwardLanesSpace": 0.0,
@@ -3487,7 +3860,102 @@
         "pedestrianStreet": false,
         "echo": false,
         "adjustLowPolyWidth": false,
-        "propRule": null,
+        "propRule": {
+          "name": "n03",
+          "type": "psdl",
+          "left": {
+            "name": "n03left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n03right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          }
+        },
         "name": "2-lane one-way road",
         "rail_type": 0,
         "rail_hasRight": false,
@@ -3505,7 +3973,23 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
@@ -3513,7 +3997,385 @@
         "project": true,
         "projectAll": false,
         "totalWidth": 20.0,
-        "roadWidth": 10.0,
+        "roadWidth": 12.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r2_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r2_lo_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 1,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n01",
+          "type": "psdl",
+          "left": {
+            "name": "n01left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightpark_f.pkg"
+                ],
+                "random": true,
+                "name": "streetlight02",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n01right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightpark_f.pkg"
+                ],
+                "random": true,
+                "name": "streetlight02b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 11.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_benchwood_f.pkg"
+                ],
+                "random": true,
+                "name": "bench",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
+        "name": "2-lane road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 21.0,
+        "roadWidth": 13.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 1,
+        "dividerWidth": 5.0,
+        "dividerParam": 5.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r2_nopark_l.tex",
+        "texture2": "texture/swalk_f.tex",
+        "texture3": "texture/s_grass.tex",
+        "texture4": "texture/s_grass.tex",
+        "texture5": "texture/swalk_f.tex",
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r2_nopark_lo_l.tex",
+        "forwardLanes": 1,
+        "backwardLanes": 1,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n05",
+          "type": "psdl",
+          "left": {
+            "name": "n05left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 13.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_parkmtr_f.pkg"
+                ],
+                "random": true,
+                "name": "meter",
+                "type": "psdl",
+                "elemDistance": 17.0
+              },
+              {
+                "start": 2.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.2,
+                "maxHorizPos": 0.2,
+                "meshes": [
+                  "geometry/sp_mailbox_l.pkg"
+                ],
+                "random": true,
+                "name": "mailbox",
+                "type": "psdl",
+                "elemDistance": 1.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n05right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlightb",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 13.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_parkmtr_f.pkg"
+                ],
+                "random": true,
+                "name": "meter",
+                "type": "psdl",
+                "elemDistance": 17.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 7.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_newsgroup01_l.pkg"
+                ],
+                "random": true,
+                "name": "newsboxs",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
+        "name": "2-lane road, flat median",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 18.0,
+        "roadWidth": 8.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3553,8 +4415,89 @@
         "pedestrianStreet": false,
         "echo": false,
         "adjustLowPolyWidth": false,
-        "propRule": null,
-        "name": "2-lane road",
+        "propRule": {
+          "name": "n06",
+          "type": "psdl",
+          "left": {
+            "name": "n06left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 2.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.2,
+                "maxHorizPos": 0.2,
+                "meshes": [
+                  "geometry/sp_mailbox_l.pkg"
+                ],
+                "random": true,
+                "name": "mailbox",
+                "type": "psdl",
+                "elemDistance": 1.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n06right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlightb",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          }
+        },
+        "name": "2-lane road, no parking",
         "rail_type": 0,
         "rail_hasRight": false,
         "rail_hasLeft": false,
@@ -3571,15 +4514,208 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
         "segmentsPer100m": false,
         "project": true,
         "projectAll": false,
-        "totalWidth": 30.0,
-        "roadWidth": 20.0,
+        "totalWidth": 26.0,
+        "roadWidth": 18.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r3_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r3_lo_l.tex",
+        "forwardLanes": 3,
+        "backwardLanes": 0,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n03",
+          "type": "psdl",
+          "left": {
+            "name": "n03left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n03right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          }
+        },
+        "name": "3-lane one-way road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 24.0,
+        "roadWidth": 16.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3619,7 +4755,100 @@
         "pedestrianStreet": false,
         "echo": false,
         "adjustLowPolyWidth": false,
-        "propRule": null,
+        "propRule": {
+          "name": "n02",
+          "type": "psdl",
+          "left": {
+            "name": "n02left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightpark_f.pkg"
+                ],
+                "random": true,
+                "name": "streetlight02",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n02right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightpark_f.pkg"
+                ],
+                "random": true,
+                "name": "streetlight02b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 2.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.2,
+                "maxHorizPos": 0.2,
+                "meshes": [
+                  "geometry/sp_mailbox_l.pkg"
+                ],
+                "random": true,
+                "name": "mailbox",
+                "type": "psdl",
+                "elemDistance": 1.0
+              },
+              {
+                "start": 7.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_newsgroup01_l.pkg"
+                ],
+                "random": true,
+                "name": "newsboxs",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
         "name": "4-lane one-way road",
         "rail_type": 0,
         "rail_hasRight": false,
@@ -3637,15 +4866,385 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
         "segmentsPer100m": false,
         "project": true,
         "projectAll": false,
-        "totalWidth": 30.0,
+        "totalWidth": 28.0,
         "roadWidth": 20.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r4_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r4_lo_l.tex",
+        "forwardLanes": 2,
+        "backwardLanes": 2,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n03",
+          "type": "psdl",
+          "left": {
+            "name": "n03left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n03right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          }
+        },
+        "name": "4-lane road",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 29.0,
+        "roadWidth": 21.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 2,
+        "dividerWidth": 5.0,
+        "dividerParam": 0.1484375,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r4_nopark_l.tex",
+        "texture2": "texture/swalk_f.tex",
+        "texture3": "texture/s_grass.tex",
+        "texture4": "texture/s_grass.tex",
+        "texture5": "texture/swalk_f.tex",
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r4_nopark_lo_l.tex",
+        "forwardLanes": 2,
+        "backwardLanes": 2,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n03",
+          "type": "psdl",
+          "left": {
+            "name": "n03left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n03right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          }
+        },
+        "name": "4-lane road, grass median",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 24.0,
+        "roadWidth": 16.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3685,8 +5284,127 @@
         "pedestrianStreet": false,
         "echo": false,
         "adjustLowPolyWidth": false,
-        "propRule": null,
-        "name": "4-lane road",
+        "propRule": {
+          "name": "n16",
+          "type": "psdl",
+          "left": {
+            "name": "n16left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 7.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_newsgroup01_l.pkg"
+                ],
+                "random": true,
+                "name": "newsboxs",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n16right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlightb",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 2.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.2,
+                "maxHorizPos": 0.2,
+                "meshes": [
+                  "geometry/sp_mailbox_l.pkg"
+                ],
+                "random": true,
+                "name": "mailbox",
+                "type": "psdl",
+                "elemDistance": 1.0
+              },
+              {
+                "start": 13.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_parkmtr_f.pkg"
+                ],
+                "random": true,
+                "name": "meter",
+                "type": "psdl",
+                "elemDistance": 17.0
+              },
+              {
+                "start": 11.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_benchwood_f.pkg"
+                ],
+                "random": true,
+                "name": "bench",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
+        "name": "4-lane road, no parking",
         "rail_type": 0,
         "rail_hasRight": false,
         "rail_hasLeft": false,
@@ -3703,15 +5421,31 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
         "segmentsPer100m": false,
         "project": true,
         "projectAll": false,
-        "totalWidth": 40.0,
-        "roadWidth": 30.0,
+        "totalWidth": 32.0,
+        "roadWidth": 24.0,
         "height": 0.15,
         "isDouble": true,
         "hasSidewalks": true,
@@ -3731,14 +5465,14 @@
         "startIntersectionAdd": 0.0,
         "endIntersectionAdd": 0.0,
         "texture0": "texture/swalk_stone_l.tex",
-        "texture1": "texture/r6_nopark_l.tex",
+        "texture1": "texture/r6_l.tex",
         "texture2": null,
         "texture3": null,
         "texture4": null,
         "texture5": null,
         "texture6": null,
         "texture7": null,
-        "textureLOD": "texture/r6_nopark_lo_l.tex",
+        "textureLOD": "texture/r6_lo_l.tex",
         "forwardLanes": 3,
         "backwardLanes": 3,
         "forwardLanesSpace": 0.0,
@@ -3751,7 +5485,102 @@
         "pedestrianStreet": false,
         "echo": false,
         "adjustLowPolyWidth": false,
-        "propRule": null,
+        "propRule": {
+          "name": "n03",
+          "type": "psdl",
+          "left": {
+            "name": "n03left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n03right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_light_tall_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight04b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 14.0,
+                "maxNumber": 2,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_tree1_s.pkg",
+                  "geometry/sp_tree1_s.pkg"
+                ],
+                "random": true,
+                "name": "streetree",
+                "type": "psdl",
+                "elemDistance": 50.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          }
+        },
         "name": "6-lane road",
         "rail_type": 0,
         "rail_hasRight": false,
@@ -3769,7 +5598,425 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 37.0,
+        "roadWidth": 29.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 2,
+        "dividerWidth": 5.0,
+        "dividerParam": 0.1484375,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r6_l.tex",
+        "texture2": "texture/swalk_f.tex",
+        "texture3": "texture/s_grass.tex",
+        "texture4": "texture/s_grass.tex",
+        "texture5": "texture/swalk_f.tex",
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r6_lo_l.tex",
+        "forwardLanes": 3,
+        "backwardLanes": 3,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n08",
+          "type": "psdl",
+          "left": {
+            "name": "n08left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlight",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 13.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_parkmtr_f.pkg"
+                ],
+                "random": true,
+                "name": "meter",
+                "type": "psdl",
+                "elemDistance": 17.0
+              },
+              {
+                "start": 2.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.2,
+                "maxHorizPos": 0.2,
+                "meshes": [
+                  "geometry/sp_mailbox_l.pkg"
+                ],
+                "random": true,
+                "name": "mailbox",
+                "type": "psdl",
+                "elemDistance": 1.0
+              },
+              {
+                "start": 11.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_benchwood_f.pkg"
+                ],
+                "random": true,
+                "name": "bench",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n08right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightstreet_l.pkg"
+                ],
+                "random": true,
+                "name": "streetlightb",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 13.0,
+                "maxNumber": 9999,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_parkmtr_f.pkg"
+                ],
+                "random": true,
+                "name": "meter",
+                "type": "psdl",
+                "elemDistance": 17.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              },
+              {
+                "start": 7.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_newsgroup01_l.pkg"
+                ],
+                "random": true,
+                "name": "newsboxs",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
+        "name": "6-lane road, grass median",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
+      },
+      {
+        "segments": 10,
+        "segmentsPer100m": false,
+        "project": true,
+        "projectAll": false,
+        "totalWidth": 32.0,
+        "roadWidth": 24.0,
+        "height": 0.15,
+        "isDouble": true,
+        "hasSidewalks": true,
+        "applyHeightAnyway": false,
+        "fixSwVerticalUV": false,
+        "divider": 0,
+        "dividerWidth": 1.0,
+        "dividerParam": 1.0,
+        "lpf": 0,
+        "makeCoplanar": true,
+        "pointPlaneTreshold": 0.02,
+        "curveType": 0,
+        "subdivideEqually": false,
+        "hermiteTension": 0.5,
+        "startCrosswalkSize": 3.0,
+        "endCrosswalkSize": 3.0,
+        "startIntersectionAdd": 0.0,
+        "endIntersectionAdd": 0.0,
+        "texture0": "texture/swalk_stone_l.tex",
+        "texture1": "texture/r6_royalred_l.tex",
+        "texture2": null,
+        "texture3": null,
+        "texture4": null,
+        "texture5": null,
+        "texture6": null,
+        "texture7": null,
+        "textureLOD": "texture/r6_royalred_lo_l.tex",
+        "forwardLanes": 3,
+        "backwardLanes": 3,
+        "forwardLanesSpace": 0.0,
+        "backwardLanesSpace": 0.0,
+        "forwardPark": false,
+        "backwardPark": false,
+        "forwardParkWidth": 0.0,
+        "backwardParkWidth": 0.0,
+        "flatSidewalk": false,
+        "pedestrianStreet": false,
+        "echo": false,
+        "adjustLowPolyWidth": false,
+        "propRule": {
+          "name": "n02",
+          "type": "psdl",
+          "left": {
+            "name": "n02left",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 9.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightpark_f.pkg"
+                ],
+                "random": true,
+                "name": "streetlight02",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 4.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_can_royal_l.pkg"
+                ],
+                "random": true,
+                "name": "trashcan",
+                "type": "psdl",
+                "elemDistance": 10.0
+              },
+              {
+                "start": 16.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_phonebooth_l.pkg"
+                ],
+                "random": true,
+                "name": "phone",
+                "type": "psdl",
+                "elemDistance": 29.0
+              }
+            ]
+          },
+          "right": {
+            "name": "n02right",
+            "type": "psdl",
+            "elements": [
+              {
+                "start": 18.0,
+                "maxNumber": 6,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_lightpark_f.pkg"
+                ],
+                "random": true,
+                "name": "streetlight02b",
+                "type": "psdl",
+                "elemDistance": 40.0
+              },
+              {
+                "start": 2.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.2,
+                "maxHorizPos": 0.2,
+                "meshes": [
+                  "geometry/sp_mailbox_l.pkg"
+                ],
+                "random": true,
+                "name": "mailbox",
+                "type": "psdl",
+                "elemDistance": 1.0
+              },
+              {
+                "start": 7.0,
+                "maxNumber": 1,
+                "minHorizPos": 0.1,
+                "maxHorizPos": 0.1,
+                "meshes": [
+                  "geometry/sp_newsgroup01_l.pkg"
+                ],
+                "random": true,
+                "name": "newsboxs",
+                "type": "psdl",
+                "elemDistance": 10.0
+              }
+            ]
+          }
+        },
+        "name": "6-lane road, red",
+        "rail_type": 0,
+        "rail_hasRight": false,
+        "rail_hasLeft": false,
+        "rail_height": 0.0,
+        "rail_texture0": null,
+        "rail_texture1": null,
+        "rail_texture2": null,
+        "rail_texture3": null,
+        "rail_texture4": null,
+        "rail_texture5": null,
+        "rail_offsetStartLeft": false,
+        "rail_offsetEndLeft": false,
+        "rail_offsetStartRight": false,
+        "rail_offsetEndRight": false,
+        "rail_Name": null,
+        "rail_name": null,
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       },
       {
         "segments": 10,
@@ -3835,7 +6082,23 @@
         "rail_offsetEndRight": false,
         "rail_Name": null,
         "rail_name": null,
-        "type": "psdl"
+        "type": "psdl",
+        "warp": false,
+        "textureCW0": null,
+        "textureCW1": null,
+        "startIntersectionTexture": null,
+        "endIntersectionTexture": null,
+        "disableTraffic": false,
+        "disableRightPedestrians": false,
+        "disableLeftPedestrians": false,
+        "freeway": false,
+        "cableCarLine": false,
+        "cableCarOffset": 0.0,
+        "trafficLightsOnOppositeRoad": false,
+        "trafficLightOnOppositeRoad": false,
+        "startTrafficLightInOffset": 0.0,
+        "endTrafficLightInOffset": 0.0,
+        "swapTrafficLights": false
       }
     ],
     "intersection": [
@@ -3854,7 +6117,9 @@
         "vMultSW": 1.0,
         "Name": "Default",
         "name": "Default",
-        "type": "psdl"
+        "type": "psdl",
+        "fixSidewalksUV": false,
+        "warp": false
       }
     ],
     "rail": [
@@ -3911,6 +6176,40 @@
         "offsetEndRight": false,
         "Name": "Wall",
         "name": "Wall"
+      },
+      {
+        "type": 1,
+        "hasRight": true,
+        "hasLeft": true,
+        "height": 1.5,
+        "texture0": "texture/tl_bridgerail_l.tex",
+        "texture1": "texture/tl_bridgerail_l.tex",
+        "texture2": "texture/tl_bridgerail_l.tex",
+        "texture3": "texture/swalk_f.tex",
+        "texture4": "texture/swalk_f.tex",
+        "texture5": "texture/swalk_f.tex",
+        "offsetStartLeft": false,
+        "offsetEndLeft": false,
+        "offsetStartRight": false,
+        "offsetEndRight": false,
+        "name": "Bridge railing"
+      },
+      {
+        "type": 4,
+        "hasRight": true,
+        "hasLeft": true,
+        "height": 5.5,
+        "texture0": "texture/sub_tunnel.tex",
+        "texture1": "texture/sub_tunnel.tex",
+        "texture2": "texture/s_tun_top.tex",
+        "texture3": "texture/swalk_f.tex",
+        "texture4": "texture/swalk_f.tex",
+        "texture5": "texture/swalk_f.tex",
+        "offsetStartLeft": false,
+        "offsetEndLeft": false,
+        "offsetStartRight": false,
+        "offsetEndRight": false,
+        "name": "Underground tunnel"
       }
     ],
     "buildingSide": [
@@ -4195,7 +6494,9 @@
         "uMult": -0.25,
         "vMult": -0.25,
         "Name": "Default",
-        "name": "Default"
+        "name": "Default",
+        "fixBound": false,
+        "hudmapCategory": 0
       }
     ],
     "buildingLine": [
@@ -4210,7 +6511,9 @@
         "uMult": -0.25,
         "vMult": -0.25,
         "Name": "Default",
-        "name": "Default"
+        "name": "Default",
+        "fixBound": false,
+        "hudmapCategory": 0
       }
     ],
     "terrainPatchBorderMesh": [
