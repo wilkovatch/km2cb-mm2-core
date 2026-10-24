@@ -83,6 +83,27 @@
 					"width": 1.5
 				}
 			]
+		},
+		{
+			"label": "CP_DECALS",
+			"elements": [
+				{
+					"name": "decals",
+					"width": 1.5
+				},
+				{
+					"name": "cableCarRailDecals",
+					"width": 1.5
+				},
+				{
+					"name": "cableCarRailTexture",
+					"width": 1.5
+				},
+				{
+					"name": "cableCarRailWidth",
+					"width": 1.5
+				}
+			]
 		}
 	]
 }

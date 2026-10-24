@@ -115,6 +115,36 @@
 				"maxElements": -1,
 				"customElementType": "trainLine"
 			}
+		},
+		{
+			"name": "decals",
+			"label": "CP_DECALS",
+			"tooltip": "CP_DECALS_TOOLTIP",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "decal"
+			}
+		},
+		{
+			"name": "cableCarRailDecals",
+			"label": "CP_CABLE_CAR_RAIL_DECALS",
+			"tooltip": "CP_CABLE_CAR_RAIL_DECALS_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarRailTexture",
+			"label": "CP_CABLE_CAR_RAIL_TEXTURE",
+			"placeholder": "CP_CABLE_CAR_RAIL_TEXTURE_PH",
+			"tooltip": "CP_CABLE_CAR_RAIL_TEXTURE_TOOLTIP",
+			"type": "texture"
+		},
+		{
+			"name": "cableCarRailWidth",
+			"label": "CP_CABLE_CAR_RAIL_WIDTH",
+			"placeholder": "CP_CABLE_CAR_RAIL_WIDTH_PH",
+			"tooltip": "CP_CABLE_CAR_RAIL_WIDTH_TOOLTIP",
+			"type": "float"
 		}
 	]
 }

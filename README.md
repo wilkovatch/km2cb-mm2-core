@@ -12,7 +12,7 @@ Exporters supported (accessible by selecting the PSDL format when exporting):
  - PSDL
  - BAI
  - INST
- - PATHSET
+ - PATHSET (props and decals)
  - Prop rules
  - PKG and bounds (BND, BBND, TER) of the elements exported to PKG
  - BIN (select "BIN only" to save only the BIN file and use it in Blender)
@@ -40,7 +40,7 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
 - Cable cars
   - Check Cable car line in the Traffic tab of the roads of the line: they get a rail in each direction, shown in the editor as orange traffic lanes. As in San Francisco, the rails are 2.5 m from the center of the road by default (Cable car rails dist.).
   - Connect the roads of a line through intersections. The game puts one cable car (va_cablecar_f) at each end of a line, meaning each intersection where exactly one cable car road arrives, like the 4 ends of the San Francisco lines. A line that is only a closed loop has no ends, so it gets no cable cars: leave it open, or add a short cable car road from the loop to a dead end. The export log warns about lines without ends.
-  - The rails are only AI paths, add the visible rails to the road texture or as props.
+  - The rails are AI paths. To see them, check Cable car rail decals in the Decals tab of the city properties: each rail gets a decal (`r4i_rails_f`, 2 m wide, as in San Francisco, or the texture and width set there), going on through the intersections from a road of the line into the next one (the roads whose directions are more than 60 degrees apart; crossings of two lines get no crossing pieces). They are made by the exporter: the editor shows only the orange traffic lanes of the rails. Otherwise add them to the road texture or as props.
 - Export to PKG
   - Check Export to PKG on a road, intersection, terrain patch or building line to export it as a mesh instead of PSDL geometry. It saves PSDL vertices and allows shapes that the PSDL can't have.
   - Roads, intersections and terrain patches still become blocks, but empty ones (with the perimeter of the element and no surface), and the element is placed in its block through the INST file. Building lines are placed in the block they are on, as usual.
@@ -51,6 +51,12 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
   - Add the lines in the Trains tab of the city properties. Each line is a train (va_ug_l, the London underground train) going back and forth between its first and last point, through the other points. Add the points with Switch click placement mode (then click on the terrain or on roads, Esc to stop) and move them like the other objects; they are joined by a line in the editor.
   - The lines are exported to `race/<city>/<city>_train.pathset`, as in London.
   - The tunnels and stations are not generated: place them as mesh instances, for example with the stock London meshes (`bl_subway*`, `cl_subway*`, `kl_subway*`, `ol_subway*`, `wl_subway*`) on invisible terrain patches (empty blocks), and put the points of the line inside them (the London trains run about 13 m below the streets).
+
+- Decals
+  - Textured strips lying on the roads or the ground, like the London zebra zigzags (`decal_zigzag_l`), yellow boxes (`decal_x_inter_l`) and the San Francisco cable car rails (`r4i_rails_f`). Add them in the Decals tab of the city properties: each decal has a texture, a width and a centre line; add its points with Switch click placement mode (then click on roads or the ground, Esc to stop) and move them like the other objects: they stay on the surface under them. The editor shows the decal as the game will; its points only show while it is being edited (opening it from the list selects it, the menu bar deselects it).
+  - They are exported with the PATHSET, to `<city>/decals.pathset` (next to `props.pathset`), as the game reads it: each decal is a strip of the texture tiled along it in square tiles as wide as the strip, with a whole number of tiles in each piece. The texture must be in the game (it's not exported), its transparent parts show what's under the decal. Texture names can have at most 31 characters.
+  - The game draws each piece of a decal (every segment, split every 25 m at most) only when the room (block) where it starts is visible: keep decals on the blocks, the export log warns about points outside of them.
+  - `exporters/psdl/tools/decal_check.py` checks a decals.pathset file (stock or exported): the faces, the tiles and the names.
 
 Some things to consider when creating cities:
 - Changing of mesh instances scale in unsupported in MM2
