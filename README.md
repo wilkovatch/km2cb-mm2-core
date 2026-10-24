@@ -14,6 +14,7 @@ Exporters supported (accessible by selecting the PSDL format when exporting):
  - INST
  - PATHSET
  - Prop rules
+ - PKG and bounds (BND, BBND, TER) of the elements exported to PKG
  - BIN (select "BIN only" to save only the BIN file and use it in Blender)
 
 Additional texture formats supported:
@@ -40,6 +41,12 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
   - Check Cable car line in the Traffic tab of the roads of the line: they get a rail in each direction, shown in the editor as orange traffic lanes. As in San Francisco, the rails are 2.5 m from the center of the road by default (Cable car rails dist.).
   - Connect the roads of a line through intersections. The game puts one cable car (va_cablecar_f) at each end of a line, meaning each intersection where exactly one cable car road arrives, like the 4 ends of the San Francisco lines. A line that is only a closed loop has no ends, so it gets no cable cars: leave it open, or add a short cable car road from the loop to a dead end. The export log warns about lines without ends.
   - The rails are only AI paths, add the visible rails to the road texture or as props.
+- Export to PKG
+  - Check Export to PKG on a road, intersection, terrain patch or building line to export it as a mesh instead of PSDL geometry. It saves PSDL vertices and allows shapes that the PSDL can't have.
+  - Roads, intersections and terrain patches still become blocks, but empty ones (with the perimeter of the element and no surface), and the element is placed in its block through the INST file. Building lines are placed in the block they are on, as usual.
+  - The meshes are written to `<city>_geometry/<city>_mesh<n>.pkg` (low LOD only, used by the game at every distance) and their colliders to `<city>_bound/<city>_mesh<n>_BOUND.bnd/.bbnd/.ter`, next to the PSDL file: copy them into the `geometry` and `bound` folders of the game. The meshes are relative to the bottom center of their bounding box.
+  - The materials of the colliders (the ground type, e.g. cobblestone or grass) come from the textures of the polygons, as in the PSDL, through the `city/materials.csv` file of the game: copy it to `Files/common/MidtownMadness2/city/materials.csv` (next to the `geometry` and `texture` folders of the game files), and add the custom textures to both copies. Without it, or for textures not in it, the colliders use the `default` material.
+  - Uncheck Export PKG and bound files in the export dialog to write only the INST entries and the empty blocks (e.g. when the meshes didn't change). A collider can have at most 65535 vertices and polygons; the TER file at most 65535 polygon references (about 10 m cells), bigger ones are skipped with a warning.
 - Trains
   - Add the lines in the Trains tab of the city properties. Each line is a train (va_ug_l, the London underground train) going back and forth between its first and last point, through the other points. Add the points with Switch click placement mode (then click on the terrain or on roads, Esc to stop) and move them like the other objects; they are joined by a line in the editor.
   - The lines are exported to `race/<city>/<city>_train.pathset`, as in London.

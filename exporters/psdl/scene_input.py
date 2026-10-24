@@ -160,6 +160,20 @@ class StandaloneSceneInput(SceneInput):
     def get_polygon(self, obj, i):
         return obj["indices"][(i * 3) : ((i + 1) * 3)]
 
+    def get_mesh_data(self, obj):
+        prop = obj["properties"]
+        num_verts = len(obj["vertices"])
+        submeshes = []
+        for i in range(len(obj["indices"])):
+            tex = prop.get("texture" + str(i), "NONE")
+            submeshes.append((obj["indices"][i], tex))
+        return {
+            "vertices": [self.get_vertex(obj, i) for i in range(num_verts)],
+            "normals": obj["normals"] if obj["normals"] is not None else [(0, 0, 1)] * num_verts,
+            "uvs": obj["uvs"] if obj["uvs"] is not None else [(0, 0)] * num_verts,
+            "submeshes": submeshes
+        }
+
     def get_position(self, obj):
         return obj["location"]
 

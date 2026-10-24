@@ -15,9 +15,24 @@ from common.main_writer import MainWriter
 def parse_flag(i):
     return int(sys.argv[i]) > 0
 
+def read_physics_map():
+    # texture -> bound material, from the city/materials.csv of the game,
+    # provided by the user in the common folder of the core (Files/common/MidtownMadness2/city)
+    res = {}
+    path = os.path.join(os.path.dirname(os.path.normpath(os.path.abspath(sys.argv[1]))), 'common', 'MidtownMadness2', 'city', 'materials.csv')
+    if os.path.exists(path):
+        with open(path, 'r') as f:
+            for line in f.readlines()[1:]:
+                parts = line.strip().split(',')
+                if len(parts) >= 2:
+                    res[parts[0].lower()] = parts[1].strip()
+    else:
+        print("Warning: " + path + " not found (copy it from the city folder of the game), the PKG bounds will use the default material")
+    return res
+
 try:
-    if len(sys.argv) != 15:
-        raise Exception("Wrong number of arguments, must be 14 (modules path, input json file, output psdl file, and 12 flags), got " + str(len(sys.argv) - 1))
+    if len(sys.argv) != 16:
+        raise Exception("Wrong number of arguments, must be 15 (modules path, input json file, output psdl file, and 12 flags), got " + str(len(sys.argv) - 1))
     # flag order (values are 0 or 1, first index is 4):
     # - write prop rules
     # - write bin only (will ignore the subsequent flags if set)
@@ -26,7 +41,7 @@ try:
     # - write bai
     # - write pathset
     # - write cinfo and aimap
-    # - //write pkgs (disabled, not working yet)
+    # - write pkgs (and bounds)
     # - split non coplanar roads
     # - accurate bai culling
     # - cap materials to 511
@@ -39,11 +54,11 @@ try:
     write_bai = parse_flag(8)
     write_pathset = parse_flag(9)
     write_cinfo_aimap = parse_flag(10)
-    #write_pkgs = parse_flag(11)
-    split_non_coplanar_roads = parse_flag(11)
-    accurate_bai_culling = parse_flag(12)
-    cap_materials = parse_flag(13)
-    verbose = parse_flag(14)
+    write_pkgs = parse_flag(11)
+    split_non_coplanar_roads = parse_flag(12)
+    accurate_bai_culling = parse_flag(13)
+    cap_materials = parse_flag(14)
+    verbose = parse_flag(15)
 
     psdl_file = sys.argv[3]
     bin_file = psdl_file.replace(".psdl", ".bin")
@@ -61,8 +76,8 @@ try:
         scene_input = StandaloneSceneInput(bin_file)
         writer = MainWriter(
             psdl_file, scene_input, write_psdl, write_inst, write_bai,
-            write_pathset, 0, split_non_coplanar_roads,
-            accurate_bai_culling, cap_materials
+            write_pathset, write_pkgs, split_non_coplanar_roads,
+            accurate_bai_culling, cap_materials, read_physics_map()
         )
         writer.write()
         os.remove(bin_file)

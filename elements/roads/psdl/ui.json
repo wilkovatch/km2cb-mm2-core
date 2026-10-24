@@ -22,6 +22,10 @@
 					"width": 0.5
 				},
 				{
+					"name": "exportToPKG",
+					"width": 1.5
+				},
+				{
 					"name": "totalWidth",
 					"width": 0.75
 				},

@@ -1008,6 +1008,9 @@ class JsonProcessor:
         to_pkg = state_bool(instance_state, "exportToPKG")
         if state['type'] != 'psdl' or to_pkg:
             block = self.get_block_from_line_points(line) + 1
+            if block <= 0:
+                print('Warning: building line ' + line['data']['name'] + ' is outside of every block, skipped')
+                return
             elem = self.get_mesh(line['data']['mesh'], block, 'VL', line['data']['name'])
             bnd = self.get_mesh(line['data']['collider'], block, 'BND', line['data']['name'], self.cur_mesh_idx - 1)
             res.append(elem)

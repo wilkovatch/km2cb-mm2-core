@@ -26,6 +26,10 @@
 					"width": 1.5
 				},
 				{
+					"name": "exportToPKG",
+					"width": 1.5
+				},
+				{
 					"name": "texture0",
 					"width": 1.5
 				},
