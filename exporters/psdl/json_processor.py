@@ -1,6 +1,19 @@
 import copy
+import math
 import numpy as np
 from utils import state_val, state_bool, state_int
+from common.bai_writer import MAX_INTERSECTION_ROADS
+
+# the ring of BAI intersections replacing an intersection with too many roads (see get_split_intersection): roads per
+# intersection of the ring (with the two ring roads, at most 5 as in the stock cities), ring radius (fraction of the mean
+# distance of the road ends from the centre), lanes per side and lane width of the ring roads, distance of the ring roads
+# from the intersections, distance between their sections
+SPLIT_GROUP_ROADS = 3
+SPLIT_RING_RADIUS = 0.65
+SPLIT_RING_LANES = 2
+SPLIT_RING_LANE_WIDTH = 3.5
+SPLIT_RING_END_DISTANCE = 8.0
+SPLIT_RING_STEP = 5.0
 
 
 class ExportedCityElement:
@@ -1419,8 +1432,6 @@ class JsonProcessor:
             end_rule = "3"
 
         r_state = first_rec['road']['data']['fields']['state']
-        ti = self.traffic_intersections
-        imap = self.intersection_map
         traffic_elem = ExportedCityElement()
         traffic_elem.properties['original_name'] = names + ' [BAI]'
         traffic_elem.vertices = vertices
@@ -1442,8 +1453,8 @@ class JsonProcessor:
             traffic_elem.properties['cable_car_offset'] = str(layout['cable_car_offset'])
         traffic_elem.properties['start_rule'] = start_rule
         traffic_elem.properties['end_rule'] = end_rule
-        traffic_elem.properties['start_intersection'] = str(ti[imap[start_int]][2])
-        traffic_elem.properties['end_intersection'] = str(ti[imap[end_int]][2])
+        traffic_elem.properties['start_intersection'] = self.get_bai_intersection_key(start_int, chain[0][0], not first_rev)
+        traffic_elem.properties['end_intersection'] = self.get_bai_intersection_key(end_int, chain[-1][0], last_rev)
         traffic_elem.properties['blocks'] = ';'.join(str(b) for b in blocks)
         traffic_elem.mat = 'NONE'
         res.append(traffic_elem)
@@ -1471,6 +1482,181 @@ class JsonProcessor:
         traffic_elem.properties['roads'] = ';'.join(road_numbers)
         traffic_elem.mat = 'NONE'
         res.append(traffic_elem)
+
+    # Intersections with more BAI roads than MM2 can handle (see MAX_INTERSECTION_ROADS in the BAI writer) become a ring
+    # of smaller BAI intersections in the same room, each with a few of the roads, joined by two-way roads only for the
+    # cars (along an arc around the centre, where they never stop). All of them are in the room of the intersection, so
+    # the game finds the first one there, as it looks up the intersections of a room before its roads.
+
+    def get_bai_intersection_key(self, intersection_id, road_id, at_road_start):
+        # the intersection a BAI road end refers to (see intersection_key in the BAI writer)
+        split = self.bai_splits.get(intersection_id)
+        if split is not None:
+            return split['ends'][(road_id, at_road_start)]
+        return str(self.traffic_intersections[self.intersection_map[intersection_id]][2])
+
+    def get_bai_entries(self, intersection):
+        # the BAI road ends on an intersection, in the order of get_traffic_intersection, as (road id, at road start)
+        order = intersection['data']['fields']['sortOrder']
+        res = []
+        for i in range(len(intersection['roads'])):
+            road_id = intersection['roads'][order[-1 - i]]
+            if road_id not in self.road_map:
+                continue
+            road = self.exported_roads[road_id]['road']
+            at_start = road['startIntersectionId'] == intersection['id']
+            if at_start and road['endIntersectionId'] == intersection['id'] and (road_id, True) in res:
+                at_start = False  # a road with both ends here: the start is the first one
+            res.append((road_id, at_start))
+        return res
+
+    def get_surface_height(self, elem, x, z, default):
+        # the height of the highest triangle of a mesh at (x, z), default if there is none
+        if len(elem.indices) < 3:
+            return default
+        v = np.array(elem.vertices, dtype=float)
+        tri = np.array(elem.indices).reshape(-1, 3)
+        a, b, c = v[tri[:, 0]], v[tri[:, 1]], v[tri[:, 2]]
+        d = (b[:, 2] - c[:, 2]) * (a[:, 0] - c[:, 0]) + (c[:, 0] - b[:, 0]) * (a[:, 2] - c[:, 2])
+        ok = np.abs(d) > 1e-9
+        d = np.where(ok, d, 1.0)
+        l1 = ((b[:, 2] - c[:, 2]) * (x - c[:, 0]) + (c[:, 0] - b[:, 0]) * (z - c[:, 2])) / d
+        l2 = ((c[:, 2] - a[:, 2]) * (x - c[:, 0]) + (a[:, 0] - c[:, 0]) * (z - c[:, 2])) / d
+        l3 = 1 - l1 - l2
+        inside = ok & (l1 >= -1e-6) & (l2 >= -1e-6) & (l3 >= -1e-6)
+        if not np.any(inside):
+            return default
+        return float(np.max((l1 * a[:, 1] + l2 * b[:, 1] + l3 * c[:, 1])[inside]))
+
+    def get_split_ring_road(self, road_id, name, block, keys, points, directions):
+        # a two-way BAI road through the points, without sidewalks (see get_bai_cross_sections for the sections)
+        lanes = SPLIT_RING_LANES
+        width = SPLIT_RING_LANE_WIDTH
+        offsets = [lanes * width] * 2 + [lanes * width - (k + 0.5) * width for k in range(lanes)]
+        offsets += [-(k + 0.5) * width for k in range(lanes)] + [-lanes * width] * 2
+        vertices = []
+        for p, d in zip(points, directions):
+            right = np.array((-d[2], 0.0, d[0])) / np.linalg.norm((d[0], d[2]))  # as the roads, see get_bai_cross_sections
+            vertices.extend(np.add(p, np.multiply(right, o)) for o in offsets)
+        elem = ExportedCityElement()
+        elem.properties['original_name'] = name
+        elem.vertices = vertices
+        elem.name = '0_BAI'
+        elem.properties['is_road'] = '1'
+        elem.properties['id'] = str(road_id)
+        elem.properties['right_lanes'] = str(lanes)
+        elem.properties['left_lanes'] = str(lanes)
+        elem.properties['has_sidewalks'] = '0:0'
+        elem.properties['has_geo_sidewalks'] = '0'
+        elem.properties['traffic_type'] = '2'
+        elem.properties['bai_layout'] = '2'
+        elem.properties['vertices_per_section'] = str(len(offsets))
+        elem.properties['divided'] = '0'
+        elem.properties['freeway'] = '0'
+        elem.properties['alley'] = '0'
+        elem.properties['start_rule'] = '3'  # never stop
+        elem.properties['end_rule'] = '3'
+        elem.properties['start_intersection'] = keys[0]
+        elem.properties['end_intersection'] = keys[1]
+        elem.properties['blocks'] = str(block)
+        elem.mat = 'NONE'
+        return elem
+
+    def get_split_intersection(self, obj, first_road_id):
+        # the ring of BAI intersections replacing an intersection with too many roads (None if it isn't needed): the
+        # intersection keys of the road ends, the intersections and the roads of the ring (with ids from first_road_id)
+        surface, intersection, block = obj
+        entries = self.get_bai_entries(intersection)
+        n = len(entries)
+        if n <= MAX_INTERSECTION_ROADS:
+            return None
+        name = intersection['data']['name']
+        centre = np.array(intersection['center'], dtype=float)
+        ends = []
+        for road_id, at_start in entries:
+            sections = self.get_bai_sections(self.exported_roads[road_id], False)
+            section = sections[0] if at_start else sections[-1]
+            ends.append(np.divide(np.add(section[0], section[-1]), 2))
+        angles = [math.atan2(p[2] - centre[2], p[0] - centre[0]) for p in ends]
+
+        # the direction of the order around the centre, and the angle after each road end
+        def wrap(a):
+            return (a + math.pi) % (2 * math.pi) - math.pi
+        sign = 1 if sum(wrap(angles[(i + 1) % n] - angles[i]) for i in range(n)) > 0 else -1
+        gaps = [((angles[(i + 1) % n] - angles[i]) * sign) % (2 * math.pi) for i in range(n)]
+
+        # groups of consecutive roads, cut at the widest gaps
+        k = int(math.ceil(n / SPLIT_GROUP_ROADS))
+        sizes = [n // k + (1 if g < n % k else 0) for g in range(k)]
+        best = None
+        for first in range(n):
+            last = first - 1
+            cuts = []
+            for size in sizes:
+                last += size
+                cuts.append(gaps[last % n])
+            if best is None or min(cuts) > best[0]:
+                best = (min(cuts), first)
+        groups = []
+        first = best[1]
+        for size in sizes:
+            groups.append([(first + m) % n for m in range(size)])
+            first += size
+
+        # the intersections of the ring, near their roads
+        radius = SPLIT_RING_RADIUS * float(np.mean([math.hypot(p[0] - centre[0], p[2] - centre[2]) for p in ends]))
+        keys = [str(block) + '.' + str(g) for g in range(k)]
+        node_angles = []
+        node_points = []
+        for group in groups:
+            a = math.atan2(sum(math.sin(angles[i]) for i in group), sum(math.cos(angles[i]) for i in group))
+            x = centre[0] + radius * math.cos(a)
+            z = centre[2] + radius * math.sin(a)
+            y = self.get_surface_height(surface, x, z, float(np.mean([ends[i][1] for i in group])))
+            node_angles.append(a)
+            node_points.append(np.array((x, y, z)))
+
+        # the roads of the ring, from each intersection to the next one
+        connectors = []
+        for g in range(k):
+            g1 = (g + 1) % k
+            delta = ((node_angles[g1] - node_angles[g]) * sign) % (2 * math.pi)
+            margin = min(SPLIT_RING_END_DISTANCE, radius * delta / 4) / radius
+            steps = max(2, int(math.ceil(radius * (delta - 2 * margin) / SPLIT_RING_STEP)))
+            points = []
+            directions = []
+            for t in range(steps + 1):
+                u = t / steps
+                a = node_angles[g] + sign * (margin + (delta - 2 * margin) * u)
+                x = centre[0] + radius * math.cos(a)
+                z = centre[2] + radius * math.sin(a)
+                y0 = node_points[g][1] + (node_points[g1][1] - node_points[g][1]) * u
+                points.append(np.array((x, self.get_surface_height(surface, x, z, y0), z)))
+                directions.append(np.multiply((-math.sin(a), 0.0, math.cos(a)), sign))
+            ring_name = name + ' [BAI ring ' + str(g + 1) + '-' + str(g1 + 1) + ']'
+            connectors.append(self.get_split_ring_road(first_road_id + g, ring_name, block, (keys[g], keys[g1]), points, directions))
+
+        # each intersection: its roads in the same order, then the ring road to the next one and the one from the previous one
+        nodes = []
+        end_keys = {}
+        for g in range(k):
+            road_numbers = [str(self.road_map[entries[i][0]]) for i in groups[g]]
+            road_numbers += [str(first_road_id + g), str(first_road_id + (g - 1) % k)]
+            for i in groups[g]:
+                end_keys[entries[i]] = keys[g]
+            elem = ExportedCityElement()
+            elem.vertices = [node_points[g]]
+            elem.name = '0_BAI'
+            elem.properties['original_name'] = name + ' [BAI ' + str(g + 1) + '/' + str(k) + ']'
+            elem.properties['is_road'] = '0'
+            elem.properties['block'] = str(block)
+            elem.properties['key'] = keys[g]
+            elem.properties['roads'] = ';'.join(road_numbers)
+            elem.mat = 'NONE'
+            nodes.append(elem)
+        print('The BAI intersection of ' + name + ' has ' + str(n) + ' roads (MM2 crashes with more than '
+              + str(MAX_INTERSECTION_ROADS) + '), split into a ring of ' + str(k))
+        return {'ends': end_keys, 'nodes': nodes, 'connectors': connectors}
 
     def get_traffic(self, res):
         # the roads joined by seamless intersections
@@ -1531,11 +1717,25 @@ class JsonProcessor:
         for i in range(len(self.traffic_intersections)):
             self.intersection_map[self.traffic_intersections[i][1]['id']] = i
 
+        # the intersections with too many roads, split into rings of smaller ones
+        self.bai_splits = {}
+        next_road_id = len(self.bai_chains)
+        for obj in self.traffic_intersections:
+            split = self.get_split_intersection(obj, next_road_id)
+            if split is not None:
+                self.bai_splits[obj[1]['id']] = split
+                next_road_id += len(split['connectors'])
+
         for i in range(len(self.bai_chains)):
             self.get_traffic_road(res, i, self.bai_chains[i])
 
         for obj in self.traffic_intersections:
-            self.get_traffic_intersection(res, obj)
+            split = self.bai_splits.get(obj[1]['id'])
+            if split is None:
+                self.get_traffic_intersection(res, obj)
+            else:
+                res.extend(split['nodes'])
+                res.extend(split['connectors'])
 
     def get_objects(self):
         if self.out_res is not None:

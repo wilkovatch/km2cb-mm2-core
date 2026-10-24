@@ -9,7 +9,8 @@
 #           sidewalk for the pedestrians.
 # --lint:   checks the conventions of the stock files (the right side lanes and rails from the end to the start,
 #           the sidewalks from the start to the end, at least 4 sections, unit vectors, 1 m traffic light axes,
-#           flat flag, road ends and intersections consistent), exits with 1 if something is wrong.
+#           flat flag, road ends and intersections consistent, at most 11 roads per intersection), exits with 1 if
+#           something is wrong.
 # Without options both are done.
 
 import math
@@ -21,8 +22,8 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-from common.bai_writer import (CDCD_FLOAT, FLAG_FLAT, MIN_SECTIONS, cumulative_lengths, lane_boundaries,  # noqa: E402
-                               lateral_offsets, section_frames)
+from common.bai_writer import (CDCD_FLOAT, FLAG_FLAT, MAX_INTERSECTION_ROADS, MIN_SECTIONS,  # noqa: E402
+                               cumulative_lengths, lane_boundaries, lateral_offsets, section_frames)
 
 FILE_UP = np.array([0.0, 1.0, 0.0])  # the file is y-up
 CDCDCDCD = 0xcdcdcdcd
@@ -224,6 +225,9 @@ def lint(roads, intersections, verbose):
                 if abs(np.linalg.norm(e['axis'] - e['origin']) - 1) > 1e-3:
                     problem(name + ' ' + end_name + ': traffic light axis %.2f m long' % np.linalg.norm(e['axis'] - e['origin']))
     for it in intersections:
+        if len(it['roads']) > MAX_INTERSECTION_ROADS:
+            problem('intersection ' + str(it['id']) + ': more than ' + str(MAX_INTERSECTION_ROADS)
+                    + ' roads (the ambient cars crash the game)')
         if len(it['roads']) < 3:
             continue
         angles = []
