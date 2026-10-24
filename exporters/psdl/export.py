@@ -10,16 +10,21 @@ from bin_export import BINExporter
 from prop_rules_export import PropRulesExporter
 from cinfo_aimap_export import CinfoAimapExporter
 from scene_input import StandaloneSceneInput
+from output_layout import OutputLayout
 from common.main_writer import MainWriter
 
 def parse_flag(i):
     return int(sys.argv[i]) > 0
 
+def get_common_dir():
+    # the folder of the files of the game provided by the user (Files/common/MidtownMadness2)
+    return os.path.join(os.path.dirname(os.path.normpath(os.path.abspath(sys.argv[1]))), 'common', 'MidtownMadness2')
+
 def read_physics_map():
     # texture -> bound material, from the city/materials.csv of the game,
     # provided by the user in the common folder of the core (Files/common/MidtownMadness2/city)
     res = {}
-    path = os.path.join(os.path.dirname(os.path.normpath(os.path.abspath(sys.argv[1]))), 'common', 'MidtownMadness2', 'city', 'materials.csv')
+    path = os.path.join(get_common_dir(), 'city', 'materials.csv')
     if os.path.exists(path):
         with open(path, 'r') as f:
             for line in f.readlines()[1:]:
@@ -31,8 +36,8 @@ def read_physics_map():
     return res
 
 try:
-    if len(sys.argv) != 16:
-        raise Exception("Wrong number of arguments, must be 15 (modules path, input json file, output psdl file, and 12 flags), got " + str(len(sys.argv) - 1))
+    if len(sys.argv) != 17:
+        raise Exception("Wrong number of arguments, must be 16 (modules path, input json file, output psdl file, and 13 flags), got " + str(len(sys.argv) - 1))
     # flag order (values are 0 or 1, first index is 4):
     # - write prop rules
     # - write bin only (will ignore the subsequent flags if set)
@@ -41,6 +46,7 @@ try:
     # - write bai
     # - write pathset
     # - write cinfo and aimap
+    # - write hudmap and race map images
     # - write pkgs (and bounds)
     # - split non coplanar roads
     # - accurate bai culling
@@ -54,14 +60,19 @@ try:
     write_bai = parse_flag(8)
     write_pathset = parse_flag(9)
     write_cinfo_aimap = parse_flag(10)
-    write_pkgs = parse_flag(11)
-    split_non_coplanar_roads = parse_flag(12)
-    accurate_bai_culling = parse_flag(13)
-    cap_materials = parse_flag(14)
-    verbose = parse_flag(15)
+    write_hudmap = parse_flag(11)
+    write_pkgs = parse_flag(12)
+    split_non_coplanar_roads = parse_flag(13)
+    accurate_bai_culling = parse_flag(14)
+    cap_materials = parse_flag(15)
+    verbose = parse_flag(16)
 
-    psdl_file = sys.argv[3]
+    # the files are written as in the game folder (the PSDL in a city folder, see output_layout.py)
+    layout = OutputLayout(sys.argv[3])
+    layout.dir('city')
+    psdl_file = layout.psdl
     bin_file = psdl_file.replace(".psdl", ".bin")
+    physics_map = read_physics_map()
 
     # export BIN
     dj = DecodeExportedJson.DecodeExportedJson()
@@ -77,7 +88,8 @@ try:
         writer = MainWriter(
             psdl_file, scene_input, write_psdl, write_inst, write_bai,
             write_pathset, write_pkgs, split_non_coplanar_roads,
-            accurate_bai_culling, cap_materials, read_physics_map()
+            accurate_bai_culling, cap_materials, physics_map,
+            layout.path('geometry'), layout.path('bound')
         )
         writer.write()
         os.remove(bin_file)
@@ -88,7 +100,19 @@ try:
 
     if write_cinfo_aimap:
         cinfo_aimap_exp = CinfoAimapExporter(jp, verbose)
-        cinfo_aimap_exp.export_cinfo_aimap(bin_file)
+        cinfo_aimap_exp.export_cinfo_aimap(layout)
+
+    if write_hudmap:
+        try:
+            import PIL
+        except ImportError:
+            PIL = None
+            print("Warning: the hudmap and the race maps need the Python module Pillow (PIL), install the requirements of the core to export them")
+        if PIL is not None:
+            from hudmap_export import HudmapExporter
+            HudmapExporter(jp, layout, physics_map, get_common_dir(), verbose).export()
+
+    print("Exported to " + layout.root)
 
     input("Press any key to continue...")
 

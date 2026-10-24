@@ -104,6 +104,67 @@
 					"width": 1.5
 				}
 			]
+		},
+		{
+			"label": "CP_HUDMAP",
+			"elements": [
+				{
+					"name": "mapLabels",
+					"width": 1.5
+				},
+				{
+					"name": "hudmapMetersPerPixel",
+					"width": 1.5
+				},
+				{
+					"name": "hudmapTileSize",
+					"width": 1.5
+				},
+				{
+					"name": "hudmapMargin",
+					"width": 1.5
+				},
+				{
+					"name": "hudmapOutlineWidth",
+					"width": 1.5
+				},
+				{
+					"name": "hudmapColorRoad",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorOutline",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorGround",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorBuilding",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorGrass",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorWater",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorLandmark",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapColorLabel",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapLabelFont",
+					"width": 1.5
+				}
+			]
 		}
 	]
 }

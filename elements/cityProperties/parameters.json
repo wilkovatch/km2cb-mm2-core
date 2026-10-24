@@ -145,6 +145,110 @@
 			"placeholder": "CP_CABLE_CAR_RAIL_WIDTH_PH",
 			"tooltip": "CP_CABLE_CAR_RAIL_WIDTH_TOOLTIP",
 			"type": "float"
+		},
+		{
+			"name": "mapLabels",
+			"label": "CP_MAP_LABELS",
+			"tooltip": "CP_MAP_LABELS_TOOLTIP",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customElementType": "mapLabel"
+			}
+		},
+		{
+			"name": "hudmapMetersPerPixel",
+			"label": "CP_HUDMAP_METERS_PER_PIXEL",
+			"placeholder": "CP_HUDMAP_METERS_PER_PIXEL_PH",
+			"tooltip": "CP_HUDMAP_METERS_PER_PIXEL_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "hudmapTileSize",
+			"label": "CP_HUDMAP_TILE_SIZE",
+			"tooltip": "CP_HUDMAP_TILE_SIZE_TOOLTIP",
+			"type": "enum",
+			"enumLabels": [
+				"CP_HUDMAP_TILE_SIZE_256",
+				"CP_HUDMAP_TILE_SIZE_512"
+			]
+		},
+		{
+			"name": "hudmapMargin",
+			"label": "CP_HUDMAP_MARGIN",
+			"placeholder": "CP_HUDMAP_MARGIN_PH",
+			"tooltip": "CP_HUDMAP_MARGIN_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "hudmapOutlineWidth",
+			"label": "CP_HUDMAP_OUTLINE_WIDTH",
+			"placeholder": "CP_HUDMAP_OUTLINE_WIDTH_PH",
+			"tooltip": "CP_HUDMAP_OUTLINE_WIDTH_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "hudmapColorRoad",
+			"label": "CP_HUDMAP_COLOR_ROAD",
+			"placeholder": "CP_HUDMAP_COLOR_ROAD_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorOutline",
+			"label": "CP_HUDMAP_COLOR_OUTLINE",
+			"placeholder": "CP_HUDMAP_COLOR_OUTLINE_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorGround",
+			"label": "CP_HUDMAP_COLOR_GROUND",
+			"placeholder": "CP_HUDMAP_COLOR_GROUND_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorBuilding",
+			"label": "CP_HUDMAP_COLOR_BUILDING",
+			"placeholder": "CP_HUDMAP_COLOR_BUILDING_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorGrass",
+			"label": "CP_HUDMAP_COLOR_GRASS",
+			"placeholder": "CP_HUDMAP_COLOR_GRASS_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorWater",
+			"label": "CP_HUDMAP_COLOR_WATER",
+			"placeholder": "CP_HUDMAP_COLOR_WATER_PH",
+			"tooltip": "CP_HUDMAP_COLOR_WATER_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorLandmark",
+			"label": "CP_HUDMAP_COLOR_LANDMARK",
+			"placeholder": "CP_HUDMAP_COLOR_LANDMARK_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapColorLabel",
+			"label": "CP_HUDMAP_COLOR_LABEL",
+			"placeholder": "CP_HUDMAP_COLOR_LABEL_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapLabelFont",
+			"label": "CP_HUDMAP_LABEL_FONT",
+			"placeholder": "CP_HUDMAP_LABEL_FONT_PH",
+			"tooltip": "CP_HUDMAP_LABEL_FONT_TOOLTIP",
+			"type": "string"
 		}
 	]
 }

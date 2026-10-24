@@ -1,6 +1,6 @@
 import shutil
 from pathlib import Path
-from utils import state_val, state_bool, state_vector, state_vector_scale, clean_city_path, create_folder_if_not_exists
+from utils import state_val, state_bool, state_vector, state_vector_scale
 from train_export import export_trains
 
 
@@ -302,14 +302,14 @@ class CinfoAimapExporter:
         csvfile.writelines(line + '\n' for line in lines)
         csvfile.close()
 
-    def export_cinfo_aimap(self, filename):
-        self.filename = filename
+    def export_cinfo_aimap(self, layout):
+        # layout: the OutputLayout of the export (see output_layout.py)
+        self.filename = layout.psdl
         if "cityProperties" not in self.json_processor.data:
             print("cityProperties not found, skipping cinfo and aimap")
             return
         p = self.json_processor.data['cityProperties']
-        citypath = clean_city_path(filename)
-        cityname = Path(filename).stem
+        cityname = layout.city_name
 
         # parse the data
         localized_name = state_val(p, "cityName", "noname")
@@ -324,8 +324,7 @@ class CinfoAimapExporter:
         checkpoint_names = self.parse_race_names(checkpoint_races)
 
         # write the cinfo
-        tunefolder = citypath + '_tune/'
-        create_folder_if_not_exists(tunefolder)
+        tunefolder = layout.dir('tune')
         cinfo = open(tunefolder + cityname + '.cinfo', 'w', newline='')
         cinfo_lines = [
             "LocalizedName=" + localized_name,
@@ -344,12 +343,9 @@ class CinfoAimapExporter:
         cinfo.close()
 
         # write the aimaps
-        racefolder = citypath + '_race/'
-        create_folder_if_not_exists(racefolder)
-        racesubfolder = racefolder + cityname + '/'
-        create_folder_if_not_exists(racesubfolder)
+        racesubfolder = layout.dir('race')
 
-        self.export_city_aimap(filename, p)
+        self.export_city_aimap(layout.psdl, p)
 
         self.export_roam_aimap(racesubfolder, p)
 

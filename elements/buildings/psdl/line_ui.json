@@ -25,6 +25,10 @@
 				{
 					"name": "exportToPKG",
 					"width": 1.5
+				},
+				{
+					"name": "hudmapCategory",
+					"width": 1.5
 				}
 			]
 		},

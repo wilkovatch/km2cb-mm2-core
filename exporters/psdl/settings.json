@@ -55,6 +55,12 @@
 			"defaultValue": true
 		},
 		{
+			"id": "hudmap",
+			"label": "EXPORT_HUDMAP",
+			"tooltip": "EXPORT_HUDMAP_TOOLTIP",
+			"defaultValue": true
+		},
+		{
 			"id": "pkgs",
 			"label": "EXPORT_PKGS",
 			"tooltip": "EXPORT_PKGS_TOOLTIP",

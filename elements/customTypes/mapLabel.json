@@ -1,0 +1,66 @@
+{
+	"label": "text",
+	"parameters": [
+		{
+			"name": "text",
+			"label": "MAP_LABEL_TEXT",
+			"tooltip": "MAP_LABEL_TEXT_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "size",
+			"label": "MAP_LABEL_SIZE",
+			"placeholder": "MAP_LABEL_SIZE_PH",
+			"tooltip": "MAP_LABEL_SIZE_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "angle",
+			"label": "MAP_LABEL_ANGLE",
+			"placeholder": "VALUE_PH",
+			"tooltip": "MAP_LABEL_ANGLE_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "maps",
+			"label": "MAP_LABEL_MAPS",
+			"type": "enum",
+			"enumLabels": [
+				"MAP_LABEL_MAPS_ALL",
+				"MAP_LABEL_MAPS_ROAM",
+				"MAP_LABEL_MAPS_RACES"
+			]
+		},
+		{
+			"name": "point",
+			"label": "MAP_LABEL_POINT",
+			"tooltip": "MAP_LABEL_POINT_TOOLTIP",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "mapLabelPoint",
+				"defaultModel": {
+					"model": "@handle"
+				},
+				"defaultScale": [
+					0.1, 0.1, 0.1
+				],
+				"allowCustomModel": false,
+				"allowPosition": [
+					true,
+					false,
+					true
+				],
+				"allowRotation": [
+					false,
+					false,
+					false
+				],
+				"allowScale": [
+					false,
+					false,
+					false
+				]
+			}
+		}
+	]
+}

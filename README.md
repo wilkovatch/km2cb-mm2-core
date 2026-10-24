@@ -15,7 +15,22 @@ Exporters supported (accessible by selecting the PSDL format when exporting):
  - PATHSET (props and decals)
  - Prop rules
  - PKG and bounds (BND, BBND, TER) of the elements exported to PKG
+ - CINFO and AIMAP (races, opponents, police, ambient traffic)
+ - Hudmap (the map of the HUD) and race maps (the maps of the race menus)
  - BIN (select "BIN only" to save only the BIN file and use it in Blender)
+
+The files are written as in the folder of the game, ready to be copied there (or packed in an .ar file). The PSDL goes in a `city` folder: if the chosen .psdl file is in a folder named `city`, it is used as it is, otherwise a `city` folder is created in the chosen folder. The other folders are next to the `city` folder:
+```
+city/<city>.psdl, .inst, .bai, .aimap
+city/<city>/        props.pathset, decals.pathset, proprules.csv, propdefs.csv
+tune/               <city>.cinfo, <city>.mmHudMap
+race/<city>/        roam.aimap, the race aimaps, opponents and waypoints, mm*data.csv, <city>_train.pathset
+geometry/           <city>_mesh<n>.pkg, hudmap_<city>.pkg
+bound/              <city>_mesh<n>_BOUND.bnd/.bbnd/.ter
+texture/            <city>_hudmap<n>.tex, <city>_hudmap<n>_ni.tex
+jpg/                <city>_maproam.jpg, <city>_map<race>.jpg
+<city>_hudmap_preview.png (a preview of the hudmap, not used by the game)
+```
 
 Additional texture formats supported:
  - .tex
@@ -44,7 +59,7 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
 - Export to PKG
   - Check Export to PKG on a road, intersection, terrain patch or building line to export it as a mesh instead of PSDL geometry. It saves PSDL vertices and allows shapes that the PSDL can't have.
   - Roads, intersections and terrain patches still become blocks, but empty ones (with the perimeter of the element and no surface), and the element is placed in its block through the INST file. Building lines are placed in the block they are on, as usual.
-  - The meshes are written to `<city>_geometry/<city>_mesh<n>.pkg` (low LOD only, used by the game at every distance) and their colliders to `<city>_bound/<city>_mesh<n>_BOUND.bnd/.bbnd/.ter`, next to the PSDL file: copy them into the `geometry` and `bound` folders of the game. The meshes are relative to the bottom center of their bounding box.
+  - The meshes are written to `geometry/<city>_mesh<n>.pkg` (low LOD only, used by the game at every distance) and their colliders to `bound/<city>_mesh<n>_BOUND.bnd/.bbnd/.ter`. The meshes are relative to the bottom center of their bounding box.
   - The materials of the colliders (the ground type, e.g. cobblestone or grass) come from the textures of the polygons, as in the PSDL, through the `city/materials.csv` file of the game: copy it to `Files/common/MidtownMadness2/city/materials.csv` (next to the `geometry` and `texture` folders of the game files), and add the custom textures to both copies. Without it, or for textures not in it, the colliders use the `default` material.
   - Uncheck Export PKG and bound files in the export dialog to write only the INST entries and the empty blocks (e.g. when the meshes didn't change). A collider can have at most 65535 vertices and polygons; the TER file at most 65535 polygon references (about 10 m cells), bigger ones are skipped with a warning.
 - Trains
@@ -54,9 +69,16 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
 
 - Decals
   - Textured strips lying on the roads or the ground, like the London zebra zigzags (`decal_zigzag_l`), yellow boxes (`decal_x_inter_l`) and the San Francisco cable car rails (`r4i_rails_f`). Add them in the Decals tab of the city properties: each decal has a texture, a width and a centre line; add its points with Switch click placement mode (then click on roads or the ground, Esc to stop) and move them like the other objects: they stay on the surface under them. The editor shows the decal as the game will; its points only show while it is being edited (opening it from the list selects it, the menu bar deselects it).
-  - They are exported with the PATHSET, to `<city>/decals.pathset` (next to `props.pathset`), as the game reads it: each decal is a strip of the texture tiled along it in square tiles as wide as the strip, with a whole number of tiles in each piece. The texture must be in the game (it's not exported), its transparent parts show what's under the decal. Texture names can have at most 31 characters.
+  - They are exported with the PATHSET, to `city/<city>/decals.pathset` (next to `props.pathset`), as the game reads it: each decal is a strip of the texture tiled along it in square tiles as wide as the strip, with a whole number of tiles in each piece. The texture must be in the game (it's not exported), its transparent parts show what's under the decal. Texture names can have at most 31 characters.
   - The game draws each piece of a decal (every segment, split every 25 m at most) only when the room (block) where it starts is visible: keep decals on the blocks, the export log warns about points outside of them.
   - `exporters/psdl/tools/decal_check.py` checks a decals.pathset file (stock or exported): the faces, the tiles and the names.
+
+- Hudmap and race maps
+  - Exported with Export hudmap and race maps (it needs the Python module Pillow, installed with the requirements of the core). The map is drawn from the geometry of the city, seen from above with the north (-z in the game) up, with the colors set in the Hudmap tab of the city properties (by default the ones of the stock San Francisco map: white roads with a grey outline, beige ground and buildings, green grass, red landmarks, blue water).
+  - The hudmap is the map of the HUD in the game: tiles of 256 pixels (or 512) at 5.5 m per pixel (as the stock maps) in `texture/<city>_hudmap<n>.tex` (with a `_ni` copy for the night), placed in the city by `geometry/hudmap_<city>.pkg`, and `tune/<city>.mmHudMap` (the size and zoom of the map, as in San Francisco, and the color around it, the water color). Tiles with only water are left out. Keep the map within 16 tiles (change the meters per pixel or the tile size otherwise). `<city>_hudmap_preview.png` shows the whole map.
+  - The race maps are the images of the race menus (242x184, with the frame of the menu): `jpg/<city>_maproam.jpg` (the whole city) and `jpg/<city>_map<race>.jpg` for each race (blitz0, circuit0, race0, ...: the area of its checkpoints, the start in red and the checkpoints in green). The frame is a plain color, unless a stock map image is copied to `Files/common/MidtownMadness2/jpg/mapframe.jpg`: its frame is used instead.
+  - Map labels (district names, etc.) are added in the Hudmap tab of the city properties: each has a text, a size (in pixels of the race maps), an angle and a position (a point placed like the decal points). They are only drawn on the race maps, not on the hudmap.
+  - Roads and intersections are drawn as roads. Terrain patches are ground, or grass or water by the physics material of their texture in `city/materials.csv` (grass, mud, water, deepwater) or by its name (grass, park, lawn, water, pond, river, sea); perimeter-only patches are not drawn. The roofs of the building lines are drawn as buildings, mesh instances are not drawn. Change it with the Hudmap category of terrain patches, building lines, buildings and mesh instances (e.g. Landmark for the buildings in red, or Hidden); a mesh instance is drawn as its bounding box.
 
 Some things to consider when creating cities:
 - Changing of mesh instances scale in unsupported in MM2
