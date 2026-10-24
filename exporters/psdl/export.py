@@ -1,5 +1,7 @@
 import sys
 import os
+import shutil
+import tempfile
 import traceback
 
 sys.path.append(sys.argv[1])
@@ -11,6 +13,7 @@ from prop_rules_export import PropRulesExporter
 from cinfo_aimap_export import CinfoAimapExporter
 from scene_input import StandaloneSceneInput
 from output_layout import OutputLayout
+from ar_packer import ArPacker
 from common.main_writer import MainWriter
 
 def parse_flag(i):
@@ -35,9 +38,10 @@ def read_physics_map():
         print("Warning: " + path + " not found (copy it from the city folder of the game), the PKG bounds will use the default material")
     return res
 
+staging = None
 try:
-    if len(sys.argv) != 17:
-        raise Exception("Wrong number of arguments, must be 16 (modules path, input json file, output psdl file, and 13 flags), got " + str(len(sys.argv) - 1))
+    if len(sys.argv) != 18:
+        raise Exception("Wrong number of arguments, must be 17 (modules path, input json file, output psdl or ar file, and 14 flags), got " + str(len(sys.argv) - 1))
     # flag order (values are 0 or 1, first index is 4):
     # - write prop rules
     # - write bin only (will ignore the subsequent flags if set)
@@ -52,6 +56,7 @@ try:
     # - accurate bai culling
     # - cap materials to 511
     # - verbose
+    # - pack to .ar (set when the chosen file is an .ar)
 
     write_prop_rules = parse_flag(4)
     write_bin_only = parse_flag(5)
@@ -66,12 +71,20 @@ try:
     accurate_bai_culling = parse_flag(14)
     cap_materials = parse_flag(15)
     verbose = parse_flag(16)
+    pack_ar = parse_flag(17) and not write_bin_only
 
-    # the files are written as in the game folder (the PSDL in a city folder, see output_layout.py)
-    layout = OutputLayout(sys.argv[3])
+    # the files are written as in the game folder (the PSDL in a city folder, see output_layout.py),
+    # in a temporary folder when they are packed in an .ar file
+    chosen = os.path.abspath(sys.argv[3])
+    if pack_ar:
+        ar_file = os.path.splitext(chosen)[0] + ".ar"
+        staging = tempfile.mkdtemp(prefix='km2_ar_')
+        layout = OutputLayout(os.path.join(staging, os.path.splitext(os.path.basename(chosen))[0] + ".psdl"))
+    else:
+        layout = OutputLayout(chosen)
     layout.dir('city')
     psdl_file = layout.psdl
-    bin_file = psdl_file.replace(".psdl", ".bin")
+    bin_file = os.path.splitext(psdl_file)[0] + ".bin"
     physics_map = read_physics_map()
 
     # export BIN
@@ -112,10 +125,23 @@ try:
             from hudmap_export import HudmapExporter
             HudmapExporter(jp, layout, physics_map, get_common_dir(), verbose).export()
 
-    print("Exported to " + layout.root)
+    if pack_ar:
+        ArPacker(layout, data.get('cityFolder'), verbose).pack(ar_file)
+        # the files in the root are not packed (the hudmap preview): they go next to the archive
+        for name in os.listdir(layout.root):
+            path = os.path.join(layout.root, name)
+            if os.path.isfile(path):
+                shutil.move(path, os.path.join(os.path.dirname(ar_file), name))
+        print("Exported to " + ar_file)
+    else:
+        print("Exported to " + layout.root)
 
     input("Press any key to continue...")
 
 except Exception:
     traceback.print_exc()
     input("Press any key to continue...")
+
+finally:
+    if staging is not None:
+        shutil.rmtree(staging, ignore_errors=True)

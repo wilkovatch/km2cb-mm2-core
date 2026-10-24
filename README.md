@@ -32,6 +32,8 @@ jpg/                <city>_maproam.jpg, <city>_map<race>.jpg
 <city>_hudmap_preview.png (a preview of the hudmap, not used by the game)
 ```
 
+To get a single file instead, choose the "MM2 archive (.ar)" file type when exporting (the "Pack to .ar archive" flag is then set). The same files are written to a temporary folder and packed, with the same layout, in `<city>.ar` (a zip archive, which the game reads like its own archives), together with the `geometry` and `texture` folders of the city (the custom meshes and textures). Exported files override custom files with the same name. Only the `.ar` and `<city>_hudmap_preview.png` are written next to the chosen file. Put the `.ar` in the folder of the game.
+
 Additional texture formats supported:
  - .tex
 

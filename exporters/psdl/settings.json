@@ -87,6 +87,17 @@
 			"id": "verbose",
 			"label": "EXPORT_VERBOSE",
 			"defaultValue": false
+		},
+		{
+			"id": "packAr",
+			"label": "EXPORT_PACK_AR",
+			"tooltip": "EXPORT_PACK_AR_TOOLTIP",
+			"format": "ar",
+			"formatLabel": "EXPORTER_AR",
+			"disables": [
+				"bin"
+			],
+			"defaultValue": false
 		}
 	]
 }
