@@ -2,7 +2,7 @@ import math
 import os
 import re
 
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 from common.file_io import BinaryFileHelper
 from common.tex_writer import write_image
@@ -20,11 +20,13 @@ from utils import state_val, state_vector
 CATEGORIES = ['auto', 'ground', 'grass', 'water', 'building', 'landmark', 'road', 'hidden']
 # drawing order of the categories (road includes its outline, hidden is never drawn)
 DRAW_ORDER = ['ground', 'grass', 'water', 'building', 'landmark', 'road']
+# the categories the road outline is drawn over (as in the stock San Francisco hudmap, none against grass)
+OUTLINED = ['ground', 'building']
 
 # the colors of the stock San Francisco hudmap
 DEFAULT_COLORS = {
     'road': (255, 255, 255),
-    'outline': (140, 140, 140),
+    'outline': (197, 191, 181),
     'ground': (231, 219, 195),
     'building': (231, 219, 195),
     'grass': (162, 219, 138),
@@ -90,12 +92,12 @@ def parse_color(value, default, name):
     return tuple(int(v[i:i + 2], 16) for i in (0, 2, 4))
 
 
-def positive(value, default):
+def positive(value, default, allow_zero=False):
     try:
         value = float(value)
     except (TypeError, ValueError):
         return default
-    return value if value > 0 else default
+    return value if value > 0 or (allow_zero and value == 0) else default
 
 
 def enum_index(state, key):
@@ -172,7 +174,7 @@ class HudmapExporter:
                        for k, v in DEFAULT_COLORS.items()}
         self.meters_per_pixel = positive(state_val(p, 'hudmapMetersPerPixel'), DEFAULT_METERS_PER_PIXEL)
         self.margin = positive(state_val(p, 'hudmapMargin'), DEFAULT_MARGIN)
-        self.outline_width = positive(state_val(p, 'hudmapOutlineWidth'), DEFAULT_OUTLINE_WIDTH)
+        self.outline_width = positive(state_val(p, 'hudmapOutlineWidth'), DEFAULT_OUTLINE_WIDTH, True)
         tile_index = enum_index(p, 'hudmapTileSize')
         self.tile_size = TILE_SIZES[tile_index] if 0 <= tile_index < len(TILE_SIZES) else TILE_SIZES[0]
         self.fonts = {}
@@ -249,13 +251,14 @@ class HudmapExporter:
 
     # Rendering
 
-    def render(self, shapes, rect, size, markers=None):
-        # the image (size in pixels) of the area rect (x0, z0, x1, z1), with the markers ([(x, z, color)])
+    def render(self, shapes, rect, size, markers=None, outline=True):
+        # the image (size in pixels) of the area rect (x0, z0, x1, z1), with the markers ([(x, z, color)]),
+        # the roads with an outline if requested (only the hudmap, the stock race maps have none)
         w, h = size
         ss = SUPERSAMPLING
         sx = w * ss / (rect[2] - rect[0])
         sz = h * ss / (rect[3] - rect[1])
-        outline = max(1, int(round(self.outline_width * ss)))
+        outline = int(round(self.outline_width * ss)) if outline else 0
         pad = outline / min(sx, sz)
         cull = (rect[0] - pad, rect[1] - pad, rect[2] + pad, rect[3] + pad)
 
@@ -264,23 +267,28 @@ class HudmapExporter:
 
         image = Image.new('RGB', (w * ss, h * ss), self.colors['water'])
         draw = ImageDraw.Draw(image)
+        # where the outline can be drawn (the pixels of the OUTLINED categories)
+        outlined = Image.new('L', image.size, 0) if outline > 0 else None
+        outlined_draw = ImageDraw.Draw(outlined) if outline > 0 else None
         for category in DRAW_ORDER:
             triangles = shapes.in_rect(category, cull)
             if len(triangles) == 0:
                 continue
-            if category == 'road':
+            if category == 'road' and outline > 0:
                 # the outline: the roads grown by its width, under them
                 mask = Image.new('L', image.size, 0)
                 mask_draw = ImageDraw.Draw(mask)
                 for tri in triangles:
                     mask_draw.polygon([to_px(p) for p in tri], fill=255)
-                grown = mask.filter(ImageFilter.MaxFilter(2 * outline + 1))
+                grown = ImageChops.multiply(mask.filter(ImageFilter.MaxFilter(2 * outline + 1)), outlined)
                 image.paste(self.colors['outline'], (0, 0) + image.size, grown)
                 image.paste(self.colors['road'], (0, 0) + image.size, mask)
             else:
                 color = self.colors[category]
                 for tri in triangles:
                     draw.polygon([to_px(p) for p in tri], fill=color)
+                    if outlined_draw is not None:
+                        outlined_draw.polygon([to_px(p) for p in tri], fill=255 if category in OUTLINED else 0)
         for x, z, color in markers or []:
             cx, cy = to_px((x, z))
             r = MARKER_RADIUS * ss
@@ -469,7 +477,7 @@ class HudmapExporter:
 
     def write_race_map(self, shapes, rect, name, labels, markers=None):
         size = (RACE_MAP_RECT[2] - RACE_MAP_RECT[0], RACE_MAP_RECT[3] - RACE_MAP_RECT[1])
-        image = self.render(shapes, rect, size, markers)
+        image = self.render(shapes, rect, size, markers, outline=False)
         self.draw_labels(image, rect, labels)
         res = self.get_frame()
         res.paste(image, RACE_MAP_RECT[:2])
