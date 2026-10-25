@@ -100,3 +100,7 @@ Be careful if you add railings, as they can only be placed on the block perimete
 - Road prop rules will be exported as PSDL-compatible rules if possible. (propdefs.csv and proprules.csv) This is possible for left and right rules, if the container type is PSDL-compatible. Other rules (middle, etc., and left and right if the container type is not PSDL-compatible) will have their props exported as individual props in the PATHSET file.  
 Note: lines of props in the PATHSET file are not supported yet, they will be exported as individual props.
 
+Third-party software:
+- The Python packages used by this core (`pythonInfo/requirements.txt`) are installed with pip from PyPI, their licenses are in `pythonInfo/licenses.txt`.
+- The hudmap and race maps are drawn with Pillow, which uses the FreeType library to render the map labels. Portions of this software are copyright © The FreeType Project (https://freetype.org). All rights reserved.
+

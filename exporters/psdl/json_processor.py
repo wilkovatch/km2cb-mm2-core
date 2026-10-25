@@ -930,7 +930,7 @@ class JsonProcessor:
                                         v = mesh['vertices'][vi]
                                         v = np.reshape((v[0], v[1], v[2], 1), (1,4))
                                         m = np.reshape(batch[j], (4, 4))
-                                        vertices_t.append(np.dot(v, m).reshape(4,1)[:3])
+                                        vertices_t.append(np.dot(v, m).reshape(4)[:3])
                                     elem = ExportedCityElement()
                                     elem.vertices = vertices_t
                                     elem.indices = sm['indices']
@@ -1051,7 +1051,7 @@ class JsonProcessor:
         dot = np.dot(v2, v3)
         if abs(dot) < 0.0001:
             return False
-        t1 = np.cross(v2, v1) / np.dot(v2, v3)
+        t1 = (v2[0] * v1[1] - v2[1] * v1[0]) / np.dot(v2, v3) # 2D cross product (np.cross only takes 3D vectors)
         t2 = np.dot(v1, v3) / np.dot(v2, v3)
         return t1 >= 0 and t2 >= 0 and t2 < 1 # exclude ==1 because we are testing consecutive segments
 

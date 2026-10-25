@@ -1,4 +1,3 @@
-from re import T
 import numpy as np
 from common.scene_input import SceneInput
 from common.file_io import BinaryFileHelper
