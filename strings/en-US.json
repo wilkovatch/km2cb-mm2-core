@@ -325,7 +325,7 @@
 	"MAP_LABEL_POINT": "Position",
 	"MAP_LABEL_POINT_TOOLTIP": "The centre of the label",
 	"HUDMAP_CATEGORY": "Hudmap category",
-	"HUDMAP_CATEGORY_TOOLTIP": "How the element is drawn on the maps of the HUD and of the race menus.\nAuto: terrain patches by their texture (grass and water by the physics materials of city/materials.csv, or by name), ground otherwise; buildings as buildings; mesh instances are not drawn",
+	"HUDMAP_CATEGORY_TOOLTIP": "How the element is drawn on the maps of the HUD and of the race menus.\nAuto: terrain patches by their texture (grass and water by the physics materials of city/materials.csv, or by name), ground otherwise; roads and intersections by their texture too, road otherwise; buildings as buildings; mesh instances are not drawn",
 	"HUDMAP_CATEGORY_AUTO": "Auto",
 	"HUDMAP_CATEGORY_GROUND": "Ground",
 	"HUDMAP_CATEGORY_GRASS": "Grass",

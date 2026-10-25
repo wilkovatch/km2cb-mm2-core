@@ -230,11 +230,13 @@ class HudmapExporter:
     def get_shapes(self):
         shapes = Shapes()
         for road in self.data.get('roads') or []:
-            self.add_mesh(shapes, road['data'].get('mesh'), 'auto', 'road')
+            self.add_mesh(shapes, road['data'].get('mesh'), element_category(road['data']['fields']['state']), 'road')
         for intersection in self.data.get('intersections') or []:
-            self.add_mesh(shapes, intersection['data'].get('mesh'), 'auto', 'road')
+            intersection_category = element_category(intersection['data']['fields']['state'])
+            self.add_mesh(shapes, intersection['data'].get('mesh'), intersection_category, 'road')
             for road in intersection.get('roadsThrough') or []:
-                self.add_mesh(shapes, road['data'].get('mesh'), 'auto', 'road')
+                category = element_category(road['data']['fields']['state'])
+                self.add_mesh(shapes, road['data'].get('mesh'), intersection_category if category == 'auto' else category, 'road')
         for patch in self.data.get('terrainPatches') or []:
             state = patch['data']['fields']['state']
             if not state_val(state, 'invisible', False):

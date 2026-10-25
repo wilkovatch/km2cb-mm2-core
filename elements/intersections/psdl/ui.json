@@ -30,6 +30,10 @@
 					"width": 1.5
 				},
 				{
+					"name": "hudmapCategory",
+					"width": 1.5
+				},
+				{
 					"name": "texture0",
 					"width": 1.5
 				},

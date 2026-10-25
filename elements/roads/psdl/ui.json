@@ -26,6 +26,10 @@
 					"width": 1.5
 				},
 				{
+					"name": "hudmapCategory",
+					"width": 1.5
+				},
+				{
 					"name": "totalWidth",
 					"width": 0.75
 				},

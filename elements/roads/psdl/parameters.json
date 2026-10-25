@@ -70,6 +70,22 @@
 			"instanceSpecific": true
 		},
 		{
+			"name": "hudmapCategory",
+			"label": "HUDMAP_CATEGORY",
+			"tooltip": "HUDMAP_CATEGORY_TOOLTIP",
+			"type": "enum",
+			"enumLabels": [
+				"HUDMAP_CATEGORY_AUTO",
+				"HUDMAP_CATEGORY_GROUND",
+				"HUDMAP_CATEGORY_GRASS",
+				"HUDMAP_CATEGORY_WATER",
+				"HUDMAP_CATEGORY_BUILDING",
+				"HUDMAP_CATEGORY_LANDMARK",
+				"HUDMAP_CATEGORY_ROAD",
+				"HUDMAP_CATEGORY_HIDDEN"
+			]
+		},
+		{
 			"name": "textureCW0",
 			"label": "RD_CW_TEX_0",
 			"placeholder": "TEXTURE_PH",
