@@ -10,6 +10,11 @@
 #   in london.psdl (rooms 173 and 1013).
 # - slits out of the city: an edge that leads to room 0 with its own room on both sides.
 # - vertices and neighbours out of range.
+# It also checks the rooms of the prop paths (the roads with a prop rule): their texture references must have an index
+# < 255. The game reads the others wrongly while placing the props (lvlSDL::Enumerate, 0x45be50, does not skip the data
+# word of a texture reference with subtype > 0) and quits with "Invalid command", or crashes with MM2Hook (whose
+# handler of that error calls a wrong address, mm2.log: exception at EIP=0045da58 after "Placing props along road
+# segments"). The stock files have none.
 # Exits with 1 if something is wrong.
 # --verbose: lists each problem.
 
@@ -44,8 +49,9 @@ class Reader:
 
 
 def read_psdl(path):
-    # only the parts up to the perimeters: vertices (y up) and, for each room, its perimeter as (vertex, neighbour)
-    # pairs; the neighbour of a pair is the room across the edge to the next pair (0 = none, rooms count from 1)
+    # vertices (y up); for each room, its perimeter as (vertex, neighbour) pairs (the neighbour of a pair is the room
+    # across the edge to the next pair, 0 = none, rooms count from 1) and its attribute words; the rooms of the prop
+    # paths
     r = Reader(path)
     if r.b[:4] != b'PSD0':
         raise Exception(path + ' is not a PSDL file')
@@ -59,13 +65,55 @@ def read_psdl(path):
     n_rooms = r.u32() - 1
     r.u32()
     rooms = []
+    attributes = []
     for _ in range(n_rooms):
         n_points, n_attributes = r.unpack('2I')
         pairs = np.frombuffer(r.b, dtype='<u2', count=2 * n_points, offset=r.o).tolist()
         r.skip(4 * n_points)
         rooms.append(list(zip(pairs[0::2], pairs[1::2])))
-        r.skip(2 * n_attributes)
-    return vertices, rooms
+        attributes.append(list(r.unpack(str(n_attributes) + 'H')))
+    r.skip(2 * (n_rooms + 1))  # room flags and prop rules (with those of room 0)
+    r.skip(40)  # bounds
+    path_rooms = set()
+    for _ in range(r.u32()):
+        r.skip(4)
+        n_forward, n_backward = r.unpack('2B')
+        r.skip(4 * (n_forward + n_backward) + 2 + 16)
+        n = r.unpack('B')[0]
+        path_rooms.update(abs(room) for room in r.unpack(str(n) + 'h'))  # sometimes negative
+    return vertices, rooms, attributes, path_rooms
+
+
+def texture_references(words):
+    # the (subtype, index) of the texture references in the attribute words of a room
+    # (word: bit 7 = last attribute, bits 3-6 = type, bits 0-2 = subtype)
+    res = []
+    i = 0
+    while i < len(words):
+        word = words[i]
+        i += 1
+        typ = (word >> 3) & 15
+        subtype = word & 7
+        if typ == 10:  # texture reference, index = data + 256 * subtype - 1
+            res.append((subtype, words[i] + 256 * subtype - 1))
+            i += 1
+        elif typ in (0, 1, 2, 4, 5, 6, 8, 9, 12):  # count = subtype, or the next word if 0
+            n = subtype
+            if subtype == 0:
+                n = words[i]
+                i += 1
+            # strips: n sections; fans: n + 2 vertices; divided road: 2 words and n sections; roof: the height and
+            # n + 1 vertices; crosswalk: n vertices; tunnel: n words
+            i += {0: 4 * n, 1: 2 * n, 2: 2 * n, 5: n + 2, 6: n + 2, 8: 2 + 6 * n, 12: n + 2}.get(typ, n)
+        elif typ in (3, 7):  # sliver, facade bound
+            i += 4
+        elif typ == 11:  # facade
+            i += 6
+        else:
+            break
+        if word & 0x80:
+            break
+    return res
 
 
 def edges(perimeter):
@@ -116,7 +164,7 @@ def inside(poly, p):
     return res
 
 
-def lint(vertices, rooms, verbose):
+def lint(vertices, rooms, attributes, path_rooms, verbose):
     problems = []
 
     def problem(text):
@@ -156,6 +204,13 @@ def lint(vertices, rooms, verbose):
             mid = (flat[v0] + flat[v1]) / 2
             if inside(poly, mid + SIDE_OFFSET * normal) and inside(poly, mid - SIDE_OFFSET * normal):
                 problem(name + ': slit out of the city from ' + pos(v0) + ' to ' + pos(v1))
+    for room in sorted(path_rooms):
+        if room < 1 or room > len(rooms):
+            problem('prop path: room ' + str(room) + ' out of range')
+            continue
+        for subtype, index in texture_references(attributes[room - 1]):
+            if subtype != 0:
+                problem('room ' + str(room) + ': texture index >= 255 in a room with props (' + str(index) + ')')
     return problems
 
 
@@ -167,9 +222,9 @@ def main(args):
         return 2
     failed = False
     for path in files:
-        vertices, rooms = read_psdl(path)
-        print('== %s: %d rooms, %d vertices' % (path, len(rooms), len(vertices)))
-        problems = lint(vertices, rooms, verbose)
+        vertices, rooms, attributes, path_rooms = read_psdl(path)
+        print('== %s: %d rooms, %d vertices, %d rooms with props' % (path, len(rooms), len(vertices), len(path_rooms)))
+        problems = lint(vertices, rooms, attributes, path_rooms, verbose)
         kinds = {}
         for p in problems:
             key = p.split(': ', 1)[1] if ': ' in p else p

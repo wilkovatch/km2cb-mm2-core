@@ -1016,6 +1016,8 @@ class JsonProcessor:
                 self.get_roof(res, building['roof'], block, state['topTexture'], obj_name)
 
     def get_block_from_line_points(self, line):
+        if len(line['linePoints']) == 0:
+            return -1
         point_sum = (0.0, 0.0, 0.0)
         for point in line['linePoints']:
             point_sum = np.add(point_sum, point)
@@ -1027,6 +1029,10 @@ class JsonProcessor:
         instance_state = line['data']['fields']['instanceState']
         to_pkg = state_bool(instance_state, "exportToPKG")
         if state['type'] != 'psdl' or to_pkg:
+            if line['data']['mesh'] is None or line['data']['collider'] is None:
+                # no geometry generated (e.g. a line without points), so no collider either
+                print('Warning: building line ' + line['data']['name'] + ' has no mesh, skipped')
+                return
             block = self.get_block_from_line_points(line) + 1
             if block <= 0:
                 print('Warning: building line ' + line['data']['name'] + ' is outside of every block, skipped')
