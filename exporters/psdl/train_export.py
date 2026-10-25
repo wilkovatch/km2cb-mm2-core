@@ -1,5 +1,6 @@
 from common.file_io import BinaryFileHelper
 from utils import state_val, state_vector
+from common import report
 
 # the stock lines (race/london/london_train.pathset) are line strips with a spacing of 20 (5 m)
 PATH_TYPE_LINE_STRIP = 2
@@ -18,7 +19,7 @@ def get_train_lines(city_properties):
                 points.append((-pos["x"], pos["y"], pos["z"]))
         name = state_val(line, "name", "") or ("line " + str(i + 1))
         if len(points) < 2:
-            print("Warning: the train line " + name + " has less than two points, it is not exported")
+            report.warning("the train line " + name + " has less than two points, it is not exported")
         else:
             res.append(points)
     return res

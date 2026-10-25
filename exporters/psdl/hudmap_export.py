@@ -7,6 +7,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 from common.file_io import BinaryFileHelper
 from common.tex_writer import write_image
 from utils import state_val, state_vector
+from common import report
 
 # The map of the city drawn from its geometry, seen from above with the north (-z in the game) up:
 # - the hudmap, the map of the HUD in the game (no labels): tiles in texture/<city>_hudmap<n>.tex (and the _ni
@@ -87,7 +88,7 @@ def parse_color(value, default, name):
         return default
     v = value.strip().lstrip('#')
     if re.fullmatch('[0-9a-fA-F]{6}', v) is None:
-        print("Warning: the hudmap color " + name + " (" + value + ") is not a #RRGGBB color, the default is used")
+        report.warning("the hudmap color " + name + " (" + value + ") is not a #RRGGBB color, the default is used")
         return default
     return tuple(int(v[i:i + 2], 16) for i in (0, 2, 4))
 
@@ -313,7 +314,7 @@ class HudmapExporter:
                 try:
                     font = ImageFont.truetype(path, size)
                 except OSError:
-                    print("Warning: the label font " + path + " could not be loaded, the default one is used")
+                    report.warning("the label font " + path + " could not be loaded, the default one is used")
             self.fonts[size] = font or ImageFont.load_default(size)
         return self.fonts[size]
 
@@ -415,7 +416,7 @@ class HudmapExporter:
     def export_hudmap(self, shapes):
         bounds = shapes.bounds()
         if bounds is None:
-            print("Warning: the city has nothing to draw, no hudmap exported")
+            report.warning("the city has nothing to draw, no hudmap exported")
             return False
         city = self.layout.city_name
         span = self.tile_size * self.meters_per_pixel
@@ -423,7 +424,7 @@ class HudmapExporter:
         nx = max(1, math.ceil((bounds[2] - bounds[0] + 2 * self.margin) / span))
         nz = max(1, math.ceil((bounds[3] - bounds[1] + 2 * self.margin) / span))
         if nx * nz > MAX_TILES:
-            print("Warning: the hudmap has " + str(nx) + "x" + str(nz) + " tiles of " + str(self.tile_size)
+            report.warning("the hudmap has " + str(nx) + "x" + str(nz) + " tiles of " + str(self.tile_size)
                   + " pixels, increase its meters per pixel or the tile size to have at most " + str(MAX_TILES))
         x0, z0 = cx - nx * span / 2, cz - nz * span / 2
 
@@ -474,7 +475,7 @@ class HudmapExporter:
             try:
                 return Image.open(path).convert('RGB').resize(RACE_MAP_SIZE)
             except OSError:
-                print("Warning: " + path + " could not be read, the race maps have a plain frame")
+                report.warning(path + " could not be read, the race maps have a plain frame")
         return Image.new('RGB', RACE_MAP_SIZE, FRAME_COLOR)
 
     def write_race_map(self, shapes, rect, name, labels, markers=None):
@@ -506,7 +507,7 @@ class HudmapExporter:
         labels = self.get_labels(False)
         for race_id, points in races:
             if len(points) == 0:
-                print("Warning: the race " + race_id + " has no checkpoints, its map shows the whole city")
+                report.warning("the race " + race_id + " has no checkpoints, its map shows the whole city")
                 rect = self.fit_rect(bounds, 0.02, 0)
             else:
                 xs, zs = [p[0] for p in points], [p[1] for p in points]

@@ -4,6 +4,7 @@ import os
 import numpy as np
 from utils import state_val, state_bool, state_int, state_vector
 from common.bai_writer import MAX_INTERSECTION_ROADS
+from common import report
 
 # the ring of BAI intersections replacing an intersection with too many roads (see get_split_intersection): roads per
 # intersection of the ring (with the two ring roads, at most 5 as in the stock cities), ring radius (fraction of the mean
@@ -880,7 +881,7 @@ class JsonProcessor:
             elem.mat = self.get_tex(tex)
             res.append(elem)
         else:
-            print('Warning: roof on object ' + obj_name + ' has invalid geometry')
+            report.warning('roof on object ' + obj_name + ' has invalid geometry', element=report.element_name(obj_name))
 
     def get_building_side(self, res, block, both_sides, side, obj_name):
         mat_dict = self.data['materialDict']
@@ -1031,11 +1032,11 @@ class JsonProcessor:
         if state['type'] != 'psdl' or to_pkg:
             if line['data']['mesh'] is None or line['data']['collider'] is None:
                 # no geometry generated (e.g. a line without points), so no collider either
-                print('Warning: building line ' + line['data']['name'] + ' has no mesh, skipped')
+                report.warning('building line ' + line['data']['name'] + ' has no mesh, skipped', element=line['data']['name'], kind='buildingLine')
                 return
             block = self.get_block_from_line_points(line) + 1
             if block <= 0:
-                print('Warning: building line ' + line['data']['name'] + ' is outside of every block, skipped')
+                report.warning('building line ' + line['data']['name'] + ' is outside of every block, skipped', element=line['data']['name'], kind='buildingLine')
                 return
             elem = self.get_mesh(line['data']['mesh'], block, 'VL', line['data']['name'])
             bnd = self.get_mesh(line['data']['collider'], block, 'BND', line['data']['name'], self.cur_mesh_idx - 1)
@@ -1251,7 +1252,7 @@ class JsonProcessor:
                 forward, backward = lanes
             else:
                 if f_lanes + b_lanes > 0 and not state_bool(r_state, 'pedestrianStreet'):
-                    print('Warning: the traffic lanes of ' + road['data']['name'] + ' are not as in the editor in the BAI')
+                    report.warning('the traffic lanes of ' + road['data']['name'] + ' are not as in the editor in the BAI', element=road['data']['name'], kind='road')
                 # lanes spread evenly between the curbs (or the curbs and the divider)
                 divided = self.road_has_divider(r_state) and len(base[0]) >= (6 if has_geo_sidewalks else 4)
                 forward = [[] for _ in range(f_lanes)]
@@ -1347,17 +1348,17 @@ class JsonProcessor:
             texture = self.get_decal_texture(state_val(decal, 'texture', ''))
             width = float(state_val(decal, 'width', 0) or 0)
             if len(points) < 2:
-                print("Warning: the decal " + name + " has less than two points, it is not exported")
+                report.warning("the decal " + name + " has less than two points, it is not exported")
                 continue
             if texture is None:
-                print("Warning: the decal " + name + " has no texture, it is not exported")
+                report.warning("the decal " + name + " has no texture, it is not exported")
                 continue
             if len(texture) > DECAL_MAX_TEXTURE_NAME:
-                print("Warning: the texture of the decal " + name + " has a name longer than " + str(DECAL_MAX_TEXTURE_NAME)
+                report.warning("the texture of the decal " + name + " has a name longer than " + str(DECAL_MAX_TEXTURE_NAME)
                       + " characters, the decal is not exported")
                 continue
             if any(self.find_block(point) < 0 for point in points):
-                print("Warning: the decal " + name + " has points outside of the blocks, the game draws each piece of it"
+                report.warning("the decal " + name + " has points outside of the blocks, the game draws each piece of it"
                       + " only with the room of its start")
             elem = ExportedCityElement()
             elem.name = '0_DECAL'
@@ -1429,7 +1430,7 @@ class JsonProcessor:
         looped = [road_id for road_id in self.exported_roads if road_id not in visited]
         if len(looped) > 0:
             names = ', '.join(self.get_road_name(r) for r in looped)
-            print('Warning: the roads ' + names + ' form a loop of seamless intersections without other intersections, no BAI road for them')
+            report.warning('the roads ' + names + ' form a loop of seamless intersections without other intersections, no BAI road for them')
         return chains
 
     def get_seamless_joint_intersection(self, intersection, used_blocks):
@@ -1761,8 +1762,9 @@ class JsonProcessor:
                     if end in failed_joints:
                         names = ', '.join(self.get_road_name(road_id) for road_id, _ in chain)
                         (joint, reason) = failed_joints[end]
-                        print('Warning: no BAI road for ' + names + ': it ends on the seamless intersection ' + joint['data']['name']
-                              + ', which can\'t be a BAI intersection (' + reason + ')')
+                        report.warning('no BAI road for ' + names + ': it ends on the seamless intersection ' + joint['data']['name']
+                              + ', which can\'t be a BAI intersection (' + reason + ')',
+                              element=joint['data']['name'], kind='intersection')
 
         # the two-road intersections without roads are left out
         used_joints = set()
@@ -1804,6 +1806,23 @@ class JsonProcessor:
                 res.extend(split['nodes'])
                 res.extend(split['connectors'])
 
+    # exports an element (function adds its parts to res); with the errors collected (see report.collecting), a failure is
+    # reported and what the element added is removed, so that the other elements are still exported
+    def guarded_element(self, res, name, kind, function):
+        n_res = len(res)
+        roads = set(self.exported_roads)
+        n_traffic = len(self.traffic_intersections)
+        try:
+            function()
+        except Exception:
+            if not report.collecting():
+                raise
+            del res[n_res:]
+            for road_id in set(self.exported_roads) - roads:
+                del self.exported_roads[road_id]
+            del self.traffic_intersections[n_traffic:]
+            report.exception(name + " not exported", element=name, kind=kind)
+
     def get_objects(self):
         if self.out_res is not None:
             return self.out_res
@@ -1823,42 +1842,46 @@ class JsonProcessor:
         self.traffic_intersections = []
         # traffic_intersections:  (ExportedCityElement elem, Intersection intersection, int block)[]
 
-        # process the elements
+        # process the elements (with the errors collected, an element failing is left out, see guarded_element)
         print("processing roads...")
         for road in data['roads']:
             if self.verbose: print("exporting " + road['data']['name'])
             instance_state = road['data']['fields']['instanceState']
             has_start_int = road['startIntersectionId'] != -1
             has_end_int = road['endIntersectionId'] != -1
-            self.get_road(res, road, instance_state, has_start_int, has_end_int, None, -1, manual_blocks)
+            self.guarded_element(res, road['data']['name'], 'road',
+                                 lambda: self.get_road(res, road, instance_state, has_start_int, has_end_int, None, -1, manual_blocks))
 
         print("processing intersections...")
         for intersection in data['intersections']:
             if self.verbose: print("exporting " + intersection['data']['name'])
-            self.get_intersection(res, intersection, manual_blocks)
+            self.guarded_element(res, intersection['data']['name'], 'intersection',
+                                 lambda: self.get_intersection(res, intersection, manual_blocks))
 
         print("processing terrain patches...")
         for patch in data['terrainPatches']:
             if self.verbose: print("exporting " + patch['data']['name'])
-            self.get_patch(res, patch, manual_blocks)
+            self.guarded_element(res, patch['data']['name'], 'terrainPatch', lambda: self.get_patch(res, patch, manual_blocks))
 
         print("processing building lines...")
         for line in data['buildingLines']:
             if self.verbose: print("exporting " + line['data']['name'])
-            self.get_building_line(res, line)
+            self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line))
 
         print("processing traffic...")
-        self.get_traffic(res)
+        with report.guarded("the traffic was not exported"):
+            self.get_traffic(res)
 
         print("processing decals...")
-        self.get_decals(res)
+        with report.guarded("the decals were not exported"):
+            self.get_decals(res)
 
         # Sort order of INST meshes can matter for rendering when transparent objects are involved, here the current order gets preserved
         sorted_meshes = sorted(data['meshInstances'], key=lambda mesh: mesh['name'])
         print("processing meshes...") #done at the end to access traffic info (for traffic lights)
         for i in range(len(sorted_meshes)):
             if self.verbose: print("exporting " + sorted_meshes[i]['name'])
-            self.get_mesh_instance(res, sorted_meshes[i], i)
+            self.guarded_element(res, sorted_meshes[i]['name'], 'meshInstance', lambda: self.get_mesh_instance(res, sorted_meshes[i], i))
 
         self.out_res = res
 

@@ -99,5 +99,23 @@
 			],
 			"defaultValue": false
 		}
-	]
+	],
+	"validation": {
+		"flags": {
+			"propRules": true,
+			"bin": false,
+			"psdl": true,
+			"inst": true,
+			"bai": true,
+			"pathset": true,
+			"cinfo_aimap": true,
+			"hudmap": false,
+			"pkgs": true,
+			"psdl_splitNonCoplanarRoads": false,
+			"bai_accurateCulling": false,
+			"psdl_capMaterials": false,
+			"verbose": false,
+			"packAr": false
+		}
+	}
 }

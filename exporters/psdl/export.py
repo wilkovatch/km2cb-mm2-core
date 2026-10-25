@@ -15,6 +15,13 @@ from scene_input import StandaloneSceneInput
 from output_layout import OutputLayout
 from ar_packer import ArPacker
 from common.main_writer import MainWriter
+from common import report
+
+try:
+    # the warnings and errors read back by the program (Files/python/ExportReport.py), missing in older versions
+    import ExportReport
+except ImportError:
+    ExportReport = None
 
 def parse_flag(i):
     return int(sys.argv[i]) > 0
@@ -35,7 +42,7 @@ def read_physics_map():
                 if len(parts) >= 2:
                     res[parts[0].lower()] = parts[1].strip()
     else:
-        print("Warning: " + path + " not found (copy it from the city folder of the game), the PKG bounds will use the default material")
+        report.warning(path + " not found (copy it from the city folder of the game), the PKG bounds will use the default material")
     return res
 
 staging = None
@@ -85,11 +92,13 @@ try:
     layout.dir('city')
     psdl_file = layout.psdl
     bin_file = os.path.splitext(psdl_file)[0] + ".bin"
-    physics_map = read_physics_map()
 
     # export BIN
     dj = DecodeExportedJson.DecodeExportedJson()
     data = dj.decode_json(sys.argv[2])
+    if ExportReport is not None:
+        ExportReport.init(data)
+    physics_map = read_physics_map()
     jp = JsonProcessor(data, verbose)
     jp.get_objects()
     bin_exp = BINExporter(jp, verbose)
@@ -107,23 +116,27 @@ try:
         writer.write()
         os.remove(bin_file)
 
+    # the other files are written even if one fails, when the errors are collected (see common/report.py)
     if write_prop_rules:
-        prop_exp = PropRulesExporter(jp, verbose)
-        prop_exp.export_props_rules(bin_file)
+        with report.guarded("the prop rules were not written"):
+            prop_exp = PropRulesExporter(jp, verbose)
+            prop_exp.export_props_rules(bin_file)
 
     if write_cinfo_aimap:
-        cinfo_aimap_exp = CinfoAimapExporter(jp, verbose)
-        cinfo_aimap_exp.export_cinfo_aimap(layout)
+        with report.guarded("the CINFO and AIMAP files were not written"):
+            cinfo_aimap_exp = CinfoAimapExporter(jp, verbose)
+            cinfo_aimap_exp.export_cinfo_aimap(layout)
 
     if write_hudmap:
         try:
             import PIL
         except ImportError:
             PIL = None
-            print("Warning: the hudmap and the race maps need the Python module Pillow (PIL), install the requirements of the core to export them")
+            report.warning("the hudmap and the race maps need the Python module Pillow (PIL), install the requirements of the core to export them")
         if PIL is not None:
-            from hudmap_export import HudmapExporter
-            HudmapExporter(jp, layout, physics_map, get_common_dir(), verbose).export()
+            with report.guarded("the hudmap was not written"):
+                from hudmap_export import HudmapExporter
+                HudmapExporter(jp, layout, physics_map, get_common_dir(), verbose).export()
 
     if pack_ar:
         ArPacker(layout, data.get('cityFolder'), verbose).pack(ar_file)
@@ -140,8 +153,15 @@ try:
 
 except Exception:
     traceback.print_exc()
+    if ExportReport is not None:
+        ExportReport.exception("the export failed")
     input("Press any key to continue...")
+    sys.exit(1)
 
 finally:
     if staging is not None:
         shutil.rmtree(staging, ignore_errors=True)
+
+# the errors collected along the way (see common/report.py) fail the export
+if report.has_errors():
+    sys.exit(1)

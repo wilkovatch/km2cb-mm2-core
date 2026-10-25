@@ -1,5 +1,6 @@
 import os
 import zipfile
+from common import report
 
 
 class ArPacker:
@@ -32,7 +33,7 @@ class ArPacker:
     def get_entries(self):
         entries = {}  # lower case name -> (name in the archive, source file)
         if self.city_folder is None or self.city_folder == '' or not os.path.isdir(self.city_folder):
-            print("Warning: the folder of the city is not known, its geometry and texture folders are not packed")
+            report.warning("the folder of the city is not known, its geometry and texture folders are not packed")
         else:
             for name in self.CITY_FOLDERS:
                 self.add_folder(entries, os.path.join(self.city_folder, name), name)
