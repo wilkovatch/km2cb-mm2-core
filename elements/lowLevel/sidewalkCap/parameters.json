@@ -1,0 +1,20 @@
+{
+	"parameters": [
+		{
+			"name": "which",
+			"label": "LL_CAP_WHICH",
+			"type": "enum",
+			"enumLabels": [
+				"LL_CAP_BOTH",
+				"LL_CAP_START",
+				"LL_CAP_END"
+			]
+		},
+		{
+			"name": "texture",
+			"label": "LL_SIDEWALK_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		}
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"parameters": [
+		{
+			"name": "bothSides",
+			"label": "LL_BOTH_SIDES",
+			"type": "bool",
+			"tooltip": "LL_BOTH_SIDES_TOOLTIP"
+		}
+	]
+}

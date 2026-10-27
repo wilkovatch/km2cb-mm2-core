@@ -1,0 +1,10 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		}
+	]
+}

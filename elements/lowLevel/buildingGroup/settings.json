@@ -1,0 +1,31 @@
+{
+	"container": {
+		"contains": [
+			"facade",
+			"facadeBound",
+			"sliver",
+			"roofTriangleFan"
+		]
+	},
+	"controlPoints": [
+		{
+			"name": "location",
+			"label": "LL_GROUP_LOCATION",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "frontLocation",
+			"label": "LL_GROUP_FRONT_LOCATION",
+			"defaultPosition": [
+				0,
+				0,
+				-2
+			]
+		}
+	],
+	"geometry": "psdl.buildingGroup"
+}

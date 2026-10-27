@@ -1,0 +1,10 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "LL_SIDEWALK_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		}
+	]
+}

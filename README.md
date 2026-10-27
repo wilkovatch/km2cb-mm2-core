@@ -81,6 +81,38 @@ The Continue checkboxes at the bottom of the tab control how they are placed on 
   - The race maps are the images of the race menus (242x184, with the frame of the menu): `jpg/<city>_maproam.jpg` (the whole city) and `jpg/<city>_map<race>.jpg` for each race (blitz0, circuit0, race0, ...: the area of its checkpoints, the start in red and the checkpoints in green). The frame is a plain color, unless a stock map image is copied to `Files/common/MidtownMadness2/jpg/mapframe.jpg`: its frame is used instead.
   - Map labels (district names, etc.) are added in the Hudmap tab of the city properties: each has a text, a size (in pixels of the race maps), an angle and a position (a point placed like the decal points). They are only drawn on the race maps, not on the hudmap.
   - Roads and intersections are drawn as roads, terrain patches as ground; both are grass or water instead by the physics material of their texture in `city/materials.csv` (grass, mud, water, deepwater) or by its name (grass, park, lawn, water, pond, river, sea); perimeter-only patches are not drawn. The roofs of the building lines are drawn as buildings, mesh instances are not drawn. Change it with the Hudmap category of roads, intersections, terrain patches, building lines, buildings and mesh instances (e.g. Landmark for the buildings in red, Ground for a walkway inside a block, or Hidden); a mesh instance is drawn as its bounding box. The parts of the roads passing through an intersection take the category of the intersection unless they have their own.
+- PSDL attributes (low-level elements)
+  - Roads, intersections, terrain patches and building lines of type `psdl` (not exported to PKG) can be converted to the PSDL attributes they are exported to (the "Convert to PSDL attributes" button of their panel, converter `toPsdl`), to edit them one by one: each vertex of the PSDL is a control point. Converting doesn't change the export: the converter runs the exporter on the element and turns the parts it would write into the attributes.
+  - The attributes are in rooms (one per room of the element), each room a block of the PSDL; the parts of a building are in a group placed in the room where the building is when exported (Scripts > Assign building parts to rooms merges them into their rooms). The roads and intersections also get their BAI road or intersection, which can be edited too (lanes, rules, connections).
+  - A converted room gets its perimeter as the exporter follows it (with `simplifyPerimeter`). Since it is set, changing the shape of its contents (e.g. adding sections to a road) needs the perimeter to be computed again (Compute the perimeter from the contents, in the panel of the room) or removed.
+  - The BAI road of a converted road is Auto-calculated: when the road attributes converted with it are edited, its edges and curbs follow theirs (chained from room to room) and its lanes (as many as there are) are spread evenly between each curb and the middle of the road (or the dividers), as the exporter does when the lanes drawn in the editor can't be used. Its points can't be edited while it's on: uncheck Auto-calculated to edit them (the road attributes are then edited alone).
+  - The points of a converted building follow each other: the points above another one are on its vertical line, and the lowest points inside the top or bottom edge of a sliver or facade bound (the corners of the facades between the ends of a side) are on that edge, so moving a corner keeps the building together.
+  - A converted road gets the psdl props containers of its prop rule (the ghost keeps exporting the others).
+  - The converted roads and intersections stay as hidden ghosts, so that the other elements keep their shape; the panel of an attribute can bring the original element back.
+  - Triangle fans, road triangle fans and roof triangle fans can be converted to each other. Road and roof fans keep all their vertices at the same height, facades stay vertical rectangles, the tops of facade bounds and slivers stay horizontal.
+  - The texture references are not elements: the exporter makes them from the textures of the attributes.
+  - The types are the attributes of the rooms of the PSDL (see the [file format](https://github.com/Dummiesman/angel-file-formats/blob/master/Midtown%20Madness%202/Room_attributes.md)) and the BAI elements; the control points are the vertices of the PSDL, the heights of the PSDL (facades, roofs, slivers) come from the positions of the points when exported:
+
+    | Type | Attribute | Points |
+    |---|---|---|
+    | `room` | A room (block) of the PSDL: contains the attributes and the BAI elements. Echo, warp, hudmap category. Its `perimeter` (a closed array, drawn as a magenta line that can be clicked to select the room) is written as it is, in the order of its points, the neighbours being the rooms sharing its points (their attributes or perimeter); with `simplifyPerimeter` the points in a straight line that lead to no other room are left out, and the spikes, as for the perimeter the exporter finds when it has none (fewer than 3 points). The button *Compute the perimeter from the contents* (converter `roomPerimeter`) sets it to the one the exporter would find, with `simplifyPerimeter`. | `perimeter` |
+    | `buildingGroup` | The parts of a building outside of a room: they go in the room found at `location` (or at `frontLocation` if there is none there), as the procedural buildings. The core script Assign building parts to rooms merges every group into its room. | `location`, `frontLocation` |
+    | `roadWithSidewalks` | 0x00; props containers `right` and `left` (along the sidewalks) | `sections`: `leftSidewalk`, `leftRoad`, `rightRoad`, `rightSidewalk` |
+    | `roadWithoutSidewalks` | 0x02 (or 0x00 without sidewalks) | `sections`: `left`, `right` |
+    | `dividedRoad` | 0x08: the divider drawn as the procedural roads (flat: a strip whose texture repeats `dividerValue` times across it; elevated: `dividerValue` high, its top edges beveled by as much; wedged: 1 m high, 0.5 m narrower on each side at the top), the closed ends with the cap texture; props containers `right`, `left` and `middle` (on the flat and elevated dividers) | `sections`: `leftSidewalk`, `leftRoad`, `leftDivider`, `rightDivider`, `rightRoad`, `rightSidewalk` |
+    | `roadTunnel` | 0x09 (subtype 3), before the road attribute of its `road` parameter | - |
+    | `junctionTunnel` | 0x09 (subtype 0): walls on the edges of the perimeter of the room between consecutive points | `walls`: `points` |
+    | `sidewalkStrip` | 0x01 | `sections`: `inner`, `outer` |
+    | `sidewalkCap` | 0x01 end piece | `a`, `b` |
+    | `crosswalk` | 0x04 | `p1` to `p4` (in the order of the PSDL) |
+    | `triangleFan`, `roadTriangleFan`, `roofTriangleFan` | 0x06, 0x05 (written as 0x06 if not flat), 0x0c: the whole mesh, split in fans when exported. The road and roof fans keep all their vertices at the same height. | mesh |
+    | `facade` | 0x0b, after its facade bound (`bound` parameter); a vertical rectangle | `bottomLeft`, `bottomRight`, `topLeft`, `topRight` |
+    | `facadeBound` | 0x07 (`bothSides`: also in the room in front of it); the top edge horizontal, the bottom one can be slanted | the same |
+    | `sliver` | 0x03; as the facade bounds | the same |
+    | `baiRoad` | A road of the BAI: its lanes (the arrays are uniform), its intersections (a BAI intersection, or a procedural intersection: the BAI intersection replacing it if it is a ghost, otherwise the procedural intersection lists it among its roads, in their order around it), rules, pedestrians... `autoCalculated`: see above (`psdl.baiRoadPoints`). | `sections`: `rightEdge`, `rightCurb`, `backwardLanes`, `forwardLanes`, `leftCurb`, `leftEdge` |
+    | `baiIntersection` | An intersection of the BAI, in its room: its roads are the BAI roads ending on it (and the procedural roads ending on the intersection it replaces), counterclockwise | `center` |
+
+  - See the Core Low-Level Elements page of the wiki of the city builder for how the low-level types, their scripts and the converters are defined.
 
 Some things to consider when creating cities:
 - Changing of mesh instances scale in unsupported in MM2
@@ -105,4 +137,3 @@ Note: lines of props in the PATHSET file are not supported yet, they will be exp
 Third-party software:
 - The Python packages used by this core (`pythonInfo/requirements.txt`) are installed with pip from PyPI, their licenses are in `pythonInfo/licenses.txt`.
 - The hudmap and race maps are drawn with Pillow, which uses the FreeType library to render the map labels. Portions of this software are copyright © The FreeType Project (https://freetype.org). All rights reserved.
-

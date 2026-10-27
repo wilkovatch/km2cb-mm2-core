@@ -1,0 +1,14 @@
+{
+	"controlPoints": [
+		{
+			"name": "center",
+			"label": "LL_CENTER",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		}
+	],
+	"geometry": "psdl.baiIntersection"
+}

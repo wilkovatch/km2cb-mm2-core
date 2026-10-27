@@ -1,0 +1,113 @@
+{
+	"parameters": [
+		{
+			"name": "wall",
+			"label": "LL_TUNNEL_WALL",
+			"type": "bool",
+			"tooltip": "LL_TUNNEL_WALL_TOOLTIP"
+		},
+		{
+			"name": "flatCeiling",
+			"label": "LL_TUNNEL_FLAT_CEILING",
+			"type": "bool"
+		},
+		{
+			"name": "curvedCeiling",
+			"label": "LL_TUNNEL_CURVED_CEILING",
+			"type": "bool"
+		},
+		{
+			"name": "curvedSides",
+			"label": "LL_TUNNEL_CURVED_SIDES",
+			"type": "bool"
+		},
+		{
+			"name": "culled",
+			"label": "LL_TUNNEL_CULLED",
+			"type": "bool",
+			"tooltip": "LL_TUNNEL_CULLED_TOOLTIP"
+		},
+		{
+			"name": "closedStartLeft",
+			"label": "LL_TUNNEL_CLOSED_START_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "closedEndLeft",
+			"label": "LL_TUNNEL_CLOSED_END_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "closedStartRight",
+			"label": "LL_TUNNEL_CLOSED_START_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "closedEndRight",
+			"label": "LL_TUNNEL_CLOSED_END_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetStartLeft",
+			"label": "LL_TUNNEL_OFFSET_START_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetEndLeft",
+			"label": "LL_TUNNEL_OFFSET_END_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetStartRight",
+			"label": "LL_TUNNEL_OFFSET_START_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetEndRight",
+			"label": "LL_TUNNEL_OFFSET_END_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "height",
+			"label": "LL_TUNNEL_HEIGHT",
+			"type": "float",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "texture0",
+			"label": "LL_TUNNEL_TEXTURE_0",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture1",
+			"label": "LL_TUNNEL_TEXTURE_1",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture2",
+			"label": "LL_TUNNEL_TEXTURE_2",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture3",
+			"label": "LL_TUNNEL_TEXTURE_3",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture4",
+			"label": "LL_TUNNEL_TEXTURE_4",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture5",
+			"label": "LL_TUNNEL_TEXTURE_5",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		}
+	]
+}

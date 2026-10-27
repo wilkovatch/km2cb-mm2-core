@@ -1,0 +1,31 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "uRepeat",
+			"label": "LL_U_REPEAT",
+			"type": "int",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "vRepeat",
+			"label": "LL_V_REPEAT",
+			"type": "int",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "bound",
+			"label": "LL_FACADE_BOUND",
+			"type": "reference",
+			"tooltip": "LL_FACADE_BOUND_TOOLTIP",
+			"referenceTypes": [
+				"lowLevel/facadeBound"
+			]
+		}
+	]
+}

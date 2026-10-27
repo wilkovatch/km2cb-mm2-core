@@ -165,6 +165,7 @@ class Shapes:
 class HudmapExporter:
     def __init__(self, json_processor, layout, physics_map, common_dir, verbose):
         self.data = json_processor.data
+        self.jp = json_processor
         self.layout = layout
         self.physics_map = physics_map or {}
         self.common_dir = common_dir
@@ -230,9 +231,14 @@ class HudmapExporter:
 
     def get_shapes(self):
         shapes = Shapes()
+        # the ghosts (replaced by low-level elements) are not drawn, the elements replacing them are
         for road in self.data.get('roads') or []:
+            if road.get('ghost', False):
+                continue
             self.add_mesh(shapes, road['data'].get('mesh'), element_category(road['data']['fields']['state']), 'road')
         for intersection in self.data.get('intersections') or []:
+            if intersection.get('ghost', False):
+                continue
             intersection_category = element_category(intersection['data']['fields']['state'])
             self.add_mesh(shapes, intersection['data'].get('mesh'), intersection_category, 'road')
             for road in intersection.get('roadsThrough') or []:
@@ -248,6 +254,8 @@ class HudmapExporter:
             for building in line.get('buildings') or []:
                 category = element_category(building['data']['fields']['state'])
                 self.add_mesh(shapes, building.get('roof'), line_category if category == 'auto' else category, 'building', False)
+        for mesh, room_state, default in self.jp.low_level.hudmap_meshes():
+            self.add_mesh(shapes, mesh, element_category(room_state), default, default != 'building')
         for instance in self.data.get('meshInstances') or []:
             self.add_mesh_instance(shapes, instance)
         return shapes

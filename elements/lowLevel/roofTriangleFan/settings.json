@@ -1,0 +1,37 @@
+{
+	"mesh": {
+		"uvs": "script",
+		"defaultVertices": [
+			[
+				0,
+				10,
+				0
+			],
+			[
+				0,
+				10,
+				10
+			],
+			[
+				10,
+				10,
+				10
+			],
+			[
+				10,
+				10,
+				0
+			]
+		],
+		"defaultTriangles": [
+			0,
+			1,
+			2,
+			0,
+			2,
+			3
+		]
+	},
+	"geometry": "psdl.fan",
+	"constraints": "psdl.flatMesh"
+}

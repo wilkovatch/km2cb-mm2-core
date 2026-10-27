@@ -1,10 +1,13 @@
 import copy
 import math
 import os
+from collections import Counter
 import numpy as np
 from utils import state_val, state_bool, state_int, state_vector
 from common.bai_writer import MAX_INTERSECTION_ROADS
 from common import report
+from psdl_parts import ExportedCityElement, get_tex
+from low_level import LowLevelExporter
 
 # the ring of BAI intersections replacing an intersection with too many roads (see get_split_intersection): roads per
 # intersection of the ring (with the two ring roads, at most 5 as in the stock cities), ring radius (fraction of the mean
@@ -24,23 +27,12 @@ CABLE_CAR_RAIL_DECAL_WIDTH = 2.0
 DECAL_MAX_TEXTURE_NAME = 31
 
 
-class ExportedCityElement:
-    def __init__(self):
-        self.is_mesh = False
-        self.name = ''
-        self.mat = ''
-        self.properties = {}
-        self.vertices = []
-        self.indices = []
-        self.normals = []
-        self.uvs = []
-        self.translation = (0,0,0)
-        self.rotation = (0,0,0,1)
-        self.scale = (1,1,1)
-
 class JsonProcessor:
-    def __init__(self, data, verbose):
+    # ignore_blocks: the parts outside of every block go in block 1 instead of being skipped (the converters, which
+    # process elements without the city around them)
+    def __init__(self, data, verbose, ignore_blocks=False):
         self.data = data
+        self.ignore_blocks = ignore_blocks
         self.cur_facade_index = 0
         self.prop_rules = []
         self.verbose = verbose
@@ -101,9 +93,7 @@ class JsonProcessor:
         self.update_perimeter_bounds(perimeter_index)
 
     def get_tex(self, tex):
-        if tex is None or tex == '': return 'NONE'
-        parts = tex.split('/')
-        return parts[-1]
+        return get_tex(tex)
 
     def road_has_divider(self, state):
         return state_bool(state, 'isDouble') and state_int(state, 'divider') > 0
@@ -228,6 +218,23 @@ class JsonProcessor:
             'div_param': div_param
         }
 
+    def get_psdl_prop_rule(self, prop_rule):
+        # the number of the psdl prop rule of a road (its psdl props containers), None if it has none
+        if type(prop_rule) is not dict:
+            return None
+        left_rule = state_val(prop_rule, 'left')
+        if state_val(left_rule, 'type') != 'psdl':
+            left_rule = None
+        right_rule = state_val(prop_rule, 'right')
+        if state_val(right_rule, 'type') != 'psdl':
+            right_rule = None
+        if left_rule is None and right_rule is None:
+            return None
+        rule = (left_rule, right_rule)
+        if rule not in self.prop_rules:
+            self.prop_rules.append(rule)
+        return str(self.prop_rules.index(rule) + 1)
+
     def get_psdl_road(self,
                       mesh,
                       num_segments,
@@ -295,19 +302,10 @@ class JsonProcessor:
         elem.properties['original_name'] = og_name
 
         # psdl prop rules
-        if parent_intersection is None and type(prop_rule) is dict and self.road_has_sidewalks(state, runtime_state):
-            left_rule = state_val(prop_rule, 'left')
-            if state_val(left_rule, 'type') != 'psdl':
-                left_rule = None
-            right_rule = state_val(prop_rule, 'right')
-            if state_val(right_rule, 'type') != 'psdl':
-                right_rule = None
-            if left_rule is not None or right_rule is not None:
-                rule = (left_rule, right_rule)
-                if rule not in self.prop_rules:
-                    self.prop_rules.append(rule)
-                index = self.prop_rules.index(rule)
-                elem.properties['prop_rule'] = str(index + 1)
+        if parent_intersection is None and self.road_has_sidewalks(state, runtime_state):
+            rule = self.get_psdl_prop_rule(prop_rule)
+            if rule is not None:
+                elem.properties['prop_rule'] = rule
 
         if state['echo']: elem.properties['echo'] = '1'
         if state.get('warp', False): elem.properties['warp'] = '1'
@@ -315,6 +313,8 @@ class JsonProcessor:
         if div_caps is not None: elem.properties['caps'] = str(div_caps)
         if div_param is not None: elem.properties['divider_param'] = str(div_param)
         elem.mat = textures
+        self.cur_road_key += 1
+        elem.properties['original_id'] = 'r' + str(self.cur_road_key)
         res.append(elem)
 
         if len(shoulder_1_vertices) > 0:
@@ -368,6 +368,7 @@ class JsonProcessor:
             rl_elem.properties['is_rail'] = rail_equals(state, 'type', 1)
             rl_elem.properties['height'] = str(int(rail_val(state, 'height', 0.0) * 256.0))
             rl_elem.properties['original_name'] = og_name + ' [rail]'
+            rl_elem.properties['road_name'] = elem.properties['original_id']
             rl_elem.mat = ''
             for i in range(6):
                 comma = ',' if i < 5 else ''
@@ -445,6 +446,9 @@ class JsonProcessor:
             return
         state = road['data']['fields']['state']
         runtime_state = road['data']['fields']['runtimeState']
+        if road.get('ghost', False) and parent_intersection is None:
+            self.get_road_props(res, road, state_val(state, 'propRule'), road['data']['name'])
+            return
         block_perimeters = self.block_perimeters
         mesh = road['data']['mesh']
         og_name = road['data']['name'] if parent_intersection == None else parent_intersection['data']['name']
@@ -493,6 +497,24 @@ class JsonProcessor:
                                      res)
 
         # non-psdl props
+        self.get_road_props(res, road, prop_rule, og_name)
+
+        if parent_intersection is None:
+            # the BAI uses the vertices of the psdl road sections (also for the roads exported to pkg)
+            bai_verts = self.get_road_sections_layout(state, runtime_state)['section_verts']
+            bai_sections = [[mesh['vertices'][i * vps + j] for j in bai_verts] for i in range(num_segments)]
+            self.exported_roads[road['id']] = {'elem': elem, 'road': road, 'block': cur_block, 'bai_sections': bai_sections}
+
+        if in_block is None:
+            if cur_block == len(block_perimeters) + 1:
+                self.add_block_perimeter(block, 0)
+            else:
+                self.extend_block_perimeter(cur_block - 1, block)
+        else:
+            in_block.append(block)
+
+    def get_road_props(self, res, road, prop_rule, og_name):
+        # the props of the containers of the prop rule that are not psdl (instances along the road)
         prop_lines = road['data']['propLines'] if 'propLines' in road['data'] else None
         if prop_lines is not None and type(prop_rule) is dict:
             for key in prop_rule:
@@ -521,20 +543,6 @@ class JsonProcessor:
                                 prop_elem.mat = 'NONE'
                                 res.append(prop_elem)
                             break
-
-        if parent_intersection is None:
-            # the BAI uses the vertices of the psdl road sections (also for the roads exported to pkg)
-            bai_verts = self.get_road_sections_layout(state, runtime_state)['section_verts']
-            bai_sections = [[mesh['vertices'][i * vps + j] for j in bai_verts] for i in range(num_segments)]
-            self.exported_roads[road['id']] = {'elem': elem, 'road': road, 'block': cur_block, 'bai_sections': bai_sections}
-
-        if in_block is None:
-            if cur_block == len(block_perimeters) + 1:
-                self.add_block_perimeter(block, 0)
-            else:
-                self.extend_block_perimeter(cur_block - 1, block)
-        else:
-            in_block.append(block)
 
     def get_split_submeshes(self, mesh):
         res = []
@@ -685,13 +693,15 @@ class JsonProcessor:
                 else:
                     elem.name = str(cur_block) + '_SW'
                     elem.mat = ''
-                    for i in ['1', '0', '2']:
+                    # the sidewalk texture first: the writer takes it as the sidewalk texture of the intersection
+                    # (the one after its road texture, used by the sidewalk strips), the others are unused
+                    for i in ['0', '1', '2']:
                         comma = ',' if i != '2' else ''
-                        elem.mat += self.get_tex(state_val(state, 'texture' + i)) + comma #unused actually
+                        elem.mat += self.get_tex(state_val(state, 'texture' + i)) + comma
                 res.append(elem)
                 block.append(sw_vertices)
             elif typ == 'terrain' or typ == 'crosswalk':
-                name = '_CW' if typ == 'crosswalk' else '_BLOCK'
+                name = '_CW' if typ == 'crosswalk' else '_IS'
                 elem = ExportedCityElement()
                 elem.indices = p['indices']
                 elem.vertices = p['vertices']
@@ -774,7 +784,7 @@ class JsonProcessor:
     def get_intersection(self, res, intersection, manual_blocks):
         state = intersection['data']['fields']['state']
         instance_state = intersection['data']['fields']['instanceState']
-        if state['type'] != 'psdl' or self.is_seamless(intersection):
+        if state['type'] != 'psdl' or self.is_seamless(intersection) or intersection.get('ghost', False):
             return
         block_perimeters = self.block_perimeters
         mesh = intersection['data']['mesh']
@@ -951,12 +961,22 @@ class JsonProcessor:
             elem.vertices = sliver['vertices']
             elem.indices = sliver['submeshes'][0]['indices']
             elem.name = str(block) + '_SLIVER'
-            elem.properties['tiling'] = str(int(sliver['uvs'][0][0] * 100))
+            elem.properties['tiling'] = str(int(round(self.get_sliver_texture_scale(sliver) * 100)))
             elem.properties['original_name'] = obj_name + ' [sliver]'
             mat_id = sliver['submeshes'][0]['materialId']
             mat_tex = mat_dict[mat_id]['data']['texture']
             elem.mat = self.get_tex(mat_tex)
             res.append(elem)
+
+    def get_sliver_texture_scale(self, sliver):
+        # the texture scale of a sliver (repeats per meter, MM2 uses it across the sliver and down from its top
+        # edge): v at the bottom over the height, on the taller side (vertices: bottom left, bottom right, top left,
+        # top right)
+        v = sliver['vertices']
+        uvs = sliver['uvs']
+        side = max((0, 1), key=lambda i: v[i + 2][1] - v[i][1])
+        height = v[side + 2][1] - v[side][1]
+        return abs(uvs[side][1] - uvs[side + 2][1]) / height if height > 1e-4 else 1.0
 
     def closest_point(self, point, line_start, line_end):
         p_m_s = np.subtract(point, line_start)
@@ -988,6 +1008,8 @@ class JsonProcessor:
 
         #find the block(s)
         both_sides = (front_only and both_sides_parent) or state_bool(state, 'fixBound')
+        primary_both_sides = both_sides
+        fallback_point = None
         depth = 1 if front_only else state['depth']
         if front_only and len(curve) > 2:
             center_point = [0,0,0]
@@ -1004,20 +1026,35 @@ class JsonProcessor:
             mid_dir /= np.linalg.norm(mid_dir)
             center_point = mid_front + 0.5 * depth * mid_dir
             block = self.find_block(center_point)
+            # for the converters: where the block is looked for first, and from where the front one (see below)
+            fallback_point = mid_front - mid_dir
             if block < 0: # try front instead of back (e.g. on road without terrain behind)
                 both_sides = False
                 center_point = mid_front - mid_dir
                 block = self.find_block(center_point)
+        if block < 0 and self.ignore_blocks:
+            block = 0
+        primary_point = center_point if fallback_point is None else mid_front + 0.5 * depth * mid_dir
         if block >= 0:
             block += 1
+            n_res = len(res)
             for side in ['front', 'left', 'right', 'back']:
                 if building[side] is not None:
                     self.get_building_side(res, block, both_sides, building[side], obj_name)
             if building['roof'] is not None:
                 self.get_roof(res, building['roof'], block, state['topTexture'], obj_name)
+            # where the block of the building is found (for the converters, as without the fallback, which depends on
+            # the blocks around it)
+            for part in res[n_res:]:
+                part.properties['locate'] = ','.join(str(float(c)) for c in primary_point)
+                if fallback_point is not None:
+                    part.properties['locate_front'] = ','.join(str(float(c)) for c in fallback_point)
+                if primary_both_sides and part.part_type() == 'FACB':
+                    part.properties['both_sides'] = '1'
+
 
     def get_block_from_line_points(self, line):
-        if len(line['linePoints']) == 0:
+        if len(line['linePoints']) == 0 and not self.ignore_blocks:
             return -1
         point_sum = (0.0, 0.0, 0.0)
         for point in line['linePoints']:
@@ -1035,6 +1072,8 @@ class JsonProcessor:
                 report.warning('building line ' + line['data']['name'] + ' has no mesh, skipped', element=line['data']['name'], kind='buildingLine')
                 return
             block = self.get_block_from_line_points(line) + 1
+            if block <= 0 and self.ignore_blocks:
+                block = 1
             if block <= 0:
                 report.warning('building line ' + line['data']['name'] + ' is outside of every block, skipped', element=line['data']['name'], kind='buildingLine')
                 return
@@ -1045,9 +1084,16 @@ class JsonProcessor:
         else:
             if line['roof'] is not None:
                 block = self.get_block_from_line_points(line)
+                if block < 0 and self.ignore_blocks:
+                    block = 0
                 if block >= 0 and 'roof' in line:
                     roof_tex = state_val(state, 'roofTex', '')
+                    n_res = len(res)
                     self.get_roof(res, line['roof'], block + 1, roof_tex, line['data']['name'])
+                    if len(line['linePoints']) > 0:
+                        center = np.mean(np.array(line['linePoints'], dtype=float), axis=0)
+                        for part in res[n_res:]:
+                            part.properties['locate'] = ','.join(str(float(c)) for c in center)
             for building in line['buildings']:
                 self.get_building(res, building, line['data']['name'], state_bool(state, 'frontOnly'), state_bool(state, 'fixBound'))
 
@@ -1452,6 +1498,10 @@ class JsonProcessor:
         if road_id not in self.road_map:
             return None
         chain = self.bai_chains[self.road_map[road_id]]
+        rec = self.exported_roads.get(chain[0][0])
+        if rec is not None and 'lowLevel' in rec:
+            # a BAI road replacing the road (in the same direction)
+            return 0 if at_road_start else 1
         first_id, first_rev = chain[0]
         last_id, last_rev = chain[-1]
         if road_id == first_id and at_road_start != first_rev:
@@ -1536,13 +1586,7 @@ class JsonProcessor:
         else:
             traffic_elem.indices = obj[0].indices
             traffic_elem.vertices = obj[0].vertices
-        road_numbers = []
-        order = obj[1]['data']['fields']['sortOrder']
-        for i in range(len(obj[1]['roads'])):
-            j = order[-1 -i] # in the generator the roads are in clockwise order, but here must be counterclockwise
-            r = obj[1]['roads'][j]
-            if r in self.road_map:
-                road_numbers.append(str(self.road_map[r]))
+        road_numbers = [str(self.road_map[key]) for key, _ in self.get_bai_entries(obj[1])]
         traffic_elem.name = '0_BAI'
         traffic_elem.properties['original_name'] = obj[0].properties['original_name'] + ' [BAI]'
         traffic_elem.properties['is_road'] = '0'
@@ -1563,20 +1607,43 @@ class JsonProcessor:
             return split['ends'][(road_id, at_road_start)]
         return str(self.traffic_intersections[self.intersection_map[intersection_id]][2])
 
+    def get_bai_end_section(self, key, at_start):
+        # the BAI section at the start or end of an exported road (or low-level BAI road)
+        rec = self.exported_roads[key]
+        sections = rec['bai_cross_sections'] if 'lowLevel' in rec else self.get_bai_sections(rec, False)
+        return sections[0] if at_start else sections[-1]
+
     def get_bai_entries(self, intersection):
-        # the BAI road ends on an intersection, in the order of get_traffic_intersection, as (road id, at road start)
+        # the BAI road ends on an intersection, counterclockwise, as (road key in exported_roads, at road start): its
+        # roads in their order (the low-level BAI roads replacing them in their place), unless low-level BAI roads end on
+        # it otherwise (connected to it by hand, or a converted road connected elsewhere): then all of them by angle
         order = intersection['data']['fields']['sortOrder']
         res = []
+        replacing = []
         for i in range(len(intersection['roads'])):
-            road_id = intersection['roads'][order[-1 - i]]
+            road_id = intersection['roads'][order[-1 - i]]  # in the generator the roads are clockwise
             if road_id not in self.road_map:
                 continue
-            road = self.exported_roads[road_id]['road']
+            key = road_id if road_id in self.exported_roads else self.bai_chains[self.road_map[road_id]][0][0]
+            road = self.data['roads'][road_id]
             at_start = road['startIntersectionId'] == intersection['id']
-            if at_start and road['endIntersectionId'] == intersection['id'] and (road_id, True) in res:
+            if at_start and road['endIntersectionId'] == intersection['id'] and (key, True) in res:
                 at_start = False  # a road with both ends here: the start is the first one
-            res.append((road_id, at_start))
-        return res
+            res.append((key, at_start))
+            if key != road_id:
+                replacing.append((key, at_start))
+        low_level = self.low_level.procedural_intersection_ends(intersection['id'])
+        if Counter(replacing) == Counter(low_level):
+            return res
+        ends = [(key, at_start) for key, at_start in res if 'lowLevel' not in self.exported_roads[key]] + low_level
+        mids = [np.mean(np.array(self.get_bai_end_section(key, at_start), dtype=float), axis=0) for key, at_start in ends]
+        c = intersection['center'] if 'center' in intersection else np.mean(mids, axis=0)
+        ends = [end for _, end in sorted(zip([math.atan2(m[2] - c[2], m[0] - c[0]) for m in mids], ends), key=lambda x: x[0])]
+        # the last road of the order last, as above
+        if len(res) > 0 and res[-1] in ends:
+            k = ends.index(res[-1])
+            ends = ends[k + 1:] + ends[:k + 1]
+        return ends
 
     def get_surface_height(self, elem, x, z, default):
         # the height of the highest triangle of a mesh at (x, z), default if there is none
@@ -1641,9 +1708,8 @@ class JsonProcessor:
         name = intersection['data']['name']
         centre = np.array(intersection['center'], dtype=float)
         ends = []
-        for road_id, at_start in entries:
-            sections = self.get_bai_sections(self.exported_roads[road_id], False)
-            section = sections[0] if at_start else sections[-1]
+        for key, at_start in entries:
+            section = self.get_bai_end_section(key, at_start)
             ends.append(np.divide(np.add(section[0], section[-1]), 2))
         angles = [math.atan2(p[2] - centre[2], p[0] - centre[0]) for p in ends]
 
@@ -1727,6 +1793,9 @@ class JsonProcessor:
         return {'ends': end_keys, 'nodes': nodes, 'connectors': connectors}
 
     def get_traffic(self, res):
+        # the BAI intersections of the low-level elements (with the ids of the ghost intersections they replace)
+        self.traffic_intersections.extend(self.low_level.traffic_intersections())
+
         # the roads joined by seamless intersections
         compatible_joints = {}
         incompatible_joints = []
@@ -1776,11 +1845,22 @@ class JsonProcessor:
                 self.traffic_intersections.append(obj)
         self.seamless_joint_ids &= used_joints
 
+        # the BAI roads of the low-level elements, each one a chain of its own (the road it replaces, if any, is
+        # mapped to it: its traffic lights and the intersections listing it use it)
+        replaced_roads = {}
+        for key, rec in self.low_level.traffic_roads():
+            self.exported_roads[key] = rec
+            self.bai_chains.append([(key, False)])
+            if rec['source_road'] is not None:
+                replaced_roads[rec['source_road']] = len(self.bai_chains) - 1
+
         # lookup tables
         self.road_map = {}
         for i in range(len(self.bai_chains)):
             for road_id, _ in self.bai_chains[i]:
                 self.road_map[road_id] = i
+        for road_id, i in replaced_roads.items():
+            self.road_map[road_id] = i
 
         self.intersection_map = {}
         for i in range(len(self.traffic_intersections)):
@@ -1790,15 +1870,24 @@ class JsonProcessor:
         self.bai_splits = {}
         next_road_id = len(self.bai_chains)
         for obj in self.traffic_intersections:
+            if 'lowLevel' in obj[1]:
+                continue
             split = self.get_split_intersection(obj, next_road_id)
             if split is not None:
                 self.bai_splits[obj[1]['id']] = split
                 next_road_id += len(split['connectors'])
 
         for i in range(len(self.bai_chains)):
-            self.get_traffic_road(res, i, self.bai_chains[i])
+            rec = self.exported_roads[self.bai_chains[i][0][0]]
+            if 'lowLevel' in rec:
+                self.low_level.traffic_road(res, i, rec)
+            else:
+                self.get_traffic_road(res, i, self.bai_chains[i])
 
         for obj in self.traffic_intersections:
+            if 'lowLevel' in obj[1]:
+                self.low_level.traffic_intersection(res, obj)
+                continue
             split = self.bai_splits.get(obj[1]['id'])
             if split is None:
                 self.get_traffic_intersection(res, obj)
@@ -1808,12 +1897,14 @@ class JsonProcessor:
 
     # exports an element (function adds its parts to res); with the errors collected (see report.collecting), a failure is
     # reported and what the element added is removed, so that the other elements are still exported
-    def guarded_element(self, res, name, kind, function):
+    def guarded_element(self, res, name, kind, function, element_id=None):
         n_res = len(res)
         roads = set(self.exported_roads)
         n_traffic = len(self.traffic_intersections)
         try:
             function()
+            for part in res[n_res:]:
+                part.source = (kind, element_id)
         except Exception:
             if not report.collecting():
                 raise
@@ -1823,13 +1914,8 @@ class JsonProcessor:
             del self.traffic_intersections[n_traffic:]
             report.exception(name + " not exported", element=name, kind=kind)
 
-    def get_objects(self):
-        if self.out_res is not None:
-            return self.out_res
-
-        res = []
-        data = self.data
-
+    def reset(self):
+        # the state before processing the elements (the blocks given by the user come first), returns the manual blocks
         manual_blocks = self.get_manual_blocks()
         self.block_perimeters = []
         self.block_perimeters_bounds = []
@@ -1837,10 +1923,37 @@ class JsonProcessor:
             self.block_perimeters.append([[], 0])
             self.block_perimeters_bounds.append([[float('-inf'), float('-inf')], [float('inf'), float('inf')]])
 
+        self.cur_road_key = 0
+        self.low_level = LowLevelExporter(self)
         self.exported_roads = {}
         # exported_roads: {road id: {'elem': ExportedCityElement, 'road': Road, 'block': int}}
         self.traffic_intersections = []
         # traffic_intersections:  (ExportedCityElement elem, Intersection intersection, int block)[]
+        return manual_blocks
+
+    def get_element_parts(self, kind, element, manual_blocks):
+        # the parts of a single element (without the traffic), used by the converters
+        res = []
+        if kind == 'road':
+            self.get_road(res, element, element['data']['fields']['instanceState'], element['startIntersectionId'] != -1,
+                          element['endIntersectionId'] != -1, None, -1, manual_blocks)
+        elif kind == 'intersection':
+            self.get_intersection(res, element, manual_blocks)
+        elif kind == 'terrainPatch':
+            self.get_patch(res, element, manual_blocks)
+        elif kind == 'buildingLine':
+            self.get_building_line(res, element)
+        for part in res:
+            part.source = (kind, element['id'])
+        return res
+
+    def get_objects(self):
+        if self.out_res is not None:
+            return self.out_res
+
+        res = []
+        data = self.data
+        manual_blocks = self.reset()
 
         # process the elements (with the errors collected, an element failing is left out, see guarded_element)
         print("processing roads...")
@@ -1850,23 +1963,29 @@ class JsonProcessor:
             has_start_int = road['startIntersectionId'] != -1
             has_end_int = road['endIntersectionId'] != -1
             self.guarded_element(res, road['data']['name'], 'road',
-                                 lambda: self.get_road(res, road, instance_state, has_start_int, has_end_int, None, -1, manual_blocks))
+                                 lambda: self.get_road(res, road, instance_state, has_start_int, has_end_int, None, -1, manual_blocks), road['id'])
 
         print("processing intersections...")
         for intersection in data['intersections']:
             if self.verbose: print("exporting " + intersection['data']['name'])
             self.guarded_element(res, intersection['data']['name'], 'intersection',
-                                 lambda: self.get_intersection(res, intersection, manual_blocks))
+                                 lambda: self.get_intersection(res, intersection, manual_blocks), intersection['id'])
 
         print("processing terrain patches...")
         for patch in data['terrainPatches']:
             if self.verbose: print("exporting " + patch['data']['name'])
-            self.guarded_element(res, patch['data']['name'], 'terrainPatch', lambda: self.get_patch(res, patch, manual_blocks))
+            self.guarded_element(res, patch['data']['name'], 'terrainPatch', lambda: self.get_patch(res, patch, manual_blocks), patch['id'])
+
+        print("processing low-level rooms...")
+        self.low_level.process_rooms(res)
 
         print("processing building lines...")
         for line in data['buildingLines']:
             if self.verbose: print("exporting " + line['data']['name'])
-            self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line))
+            self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line), line['id'])
+
+        print("processing low-level elements outside of rooms...")
+        self.low_level.process_unassigned(res)
 
         print("processing traffic...")
         with report.guarded("the traffic was not exported"):
@@ -1881,7 +2000,7 @@ class JsonProcessor:
         print("processing meshes...") #done at the end to access traffic info (for traffic lights)
         for i in range(len(sorted_meshes)):
             if self.verbose: print("exporting " + sorted_meshes[i]['name'])
-            self.guarded_element(res, sorted_meshes[i]['name'], 'meshInstance', lambda: self.get_mesh_instance(res, sorted_meshes[i], i))
+            self.guarded_element(res, sorted_meshes[i]['name'], 'meshInstance', lambda: self.get_mesh_instance(res, sorted_meshes[i], i), sorted_meshes[i]['id'])
 
         self.out_res = res
 

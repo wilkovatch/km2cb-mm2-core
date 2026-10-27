@@ -2,13 +2,20 @@
     "program": "km2CityBuilder",
     "version": "0.1.3",
 	"coreVersion": 2,
-	"coreFeatureVersion": 7,
+	"coreFeatureVersion": 8,
 	"programVersion": 3,
-	"featureVersion": 1,
+	"featureVersion": 2,
 	"customTextureFormats": [
 		"tex"
 	],
 	"customMeshFormats": [
 		"pkg"
+	],
+	"viewToggles": [
+		{
+			"name": "roomOutlines",
+			"label": "VIEW_ROOM_OUTLINES",
+			"default": true
+		}
 	]
 }

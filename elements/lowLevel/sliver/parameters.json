@@ -1,0 +1,17 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "textureScale",
+			"label": "LL_TEXTURE_SCALE",
+			"type": "float",
+			"placeholder": "VALUE_PH",
+			"tooltip": "LL_TEXTURE_SCALE_TOOLTIP"
+		}
+	]
+}

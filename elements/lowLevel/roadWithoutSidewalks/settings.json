@@ -1,0 +1,38 @@
+{
+	"controlPoints": [
+		{
+			"name": "sections",
+			"label": "LL_SECTIONS",
+			"array": {
+				"min": 2,
+				"defaultCount": 2,
+				"defaultStep": [
+					0,
+					0,
+					10
+				]
+			},
+			"children": [
+				{
+					"name": "left",
+					"label": "LL_LEFT_EDGE",
+					"defaultPosition": [
+						-4,
+						0,
+						0
+					]
+				},
+				{
+					"name": "right",
+					"label": "LL_RIGHT_EDGE",
+					"defaultPosition": [
+						4,
+						0,
+						0
+					]
+				}
+			]
+		}
+	],
+	"geometry": "psdl.roadWithoutSidewalks"
+}

@@ -1,0 +1,42 @@
+{
+	"controlPoints": [
+		{
+			"name": "bottomLeft",
+			"label": "LL_BOTTOM_LEFT",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "bottomRight",
+			"label": "LL_BOTTOM_RIGHT",
+			"defaultPosition": [
+				10,
+				0,
+				0
+			]
+		},
+		{
+			"name": "topLeft",
+			"label": "LL_TOP_LEFT",
+			"defaultPosition": [
+				0,
+				1,
+				0
+			]
+		},
+		{
+			"name": "topRight",
+			"label": "LL_TOP_RIGHT",
+			"defaultPosition": [
+				10,
+				1,
+				0
+			]
+		}
+	],
+	"geometry": "psdl.sliver",
+	"constraints": "psdl.slantedConstraints"
+}

@@ -1,0 +1,7 @@
+{
+	"label": "CONVERT_TO_PSDL",
+	"tooltip": "CONVERT_TO_PSDL_TOOLTIP",
+	"sources": ["road", "intersection", "terrainPatch", "buildingLine"],
+	"types": ["psdl"],
+	"script": "convert.py"
+}

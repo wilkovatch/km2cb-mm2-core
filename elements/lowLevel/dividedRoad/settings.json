@@ -1,0 +1,80 @@
+{
+	"controlPoints": [
+		{
+			"name": "sections",
+			"label": "LL_SECTIONS",
+			"array": {
+				"min": 2,
+				"defaultCount": 2,
+				"defaultStep": [
+					0,
+					0,
+					10
+				]
+			},
+			"children": [
+				{
+					"name": "leftSidewalk",
+					"label": "LL_LEFT_SIDEWALK",
+					"defaultPosition": [
+						-9,
+						0.15,
+						0
+					]
+				},
+				{
+					"name": "leftRoad",
+					"label": "LL_LEFT_ROAD",
+					"defaultPosition": [
+						-7,
+						0,
+						0
+					]
+				},
+				{
+					"name": "leftDivider",
+					"label": "LL_LEFT_DIVIDER",
+					"defaultPosition": [
+						-1,
+						0,
+						0
+					]
+				},
+				{
+					"name": "rightDivider",
+					"label": "LL_RIGHT_DIVIDER",
+					"defaultPosition": [
+						1,
+						0,
+						0
+					]
+				},
+				{
+					"name": "rightRoad",
+					"label": "LL_RIGHT_ROAD",
+					"defaultPosition": [
+						7,
+						0,
+						0
+					]
+				},
+				{
+					"name": "rightSidewalk",
+					"label": "LL_RIGHT_SIDEWALK",
+					"defaultPosition": [
+						9,
+						0.15,
+						0
+					]
+				}
+			]
+		}
+	],
+	"geometry": "psdl.dividedRoad",
+	"propsContainers": [
+		"right",
+		"left",
+		"middle"
+	],
+	"propsPresetType": "psdl"
+}

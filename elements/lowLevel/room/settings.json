@@ -1,0 +1,34 @@
+{
+	"controlPoints": [
+		{
+			"name": "perimeter",
+			"label": "LL_PERIMETER",
+			"array": {
+				"min": 0,
+				"defaultCount": 0,
+				"closed": true
+			}
+		}
+	],
+	"geometry": "psdl.room",
+	"container": {
+		"contains": [
+			"roadWithSidewalks",
+			"roadWithoutSidewalks",
+			"dividedRoad",
+			"roadTunnel",
+			"junctionTunnel",
+			"sidewalkStrip",
+			"sidewalkCap",
+			"crosswalk",
+			"roadTriangleFan",
+			"triangleFan",
+			"roofTriangleFan",
+			"facade",
+			"facadeBound",
+			"sliver",
+			"baiRoad",
+			"baiIntersection"
+		]
+	}
+}

@@ -1,0 +1,27 @@
+{
+	"label": "LL_CROSSWALK",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "texture",
+					"width": 1.5
+				},
+				{
+					"name": "pointsGroup",
+					"width": 1.5
+				},
+				{
+					"name": "containerGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

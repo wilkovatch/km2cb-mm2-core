@@ -1,0 +1,16 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "perimeterOnly",
+			"label": "TP_PERIMETER_ONLY",
+			"type": "bool",
+			"tooltip": "LL_PERIMETER_ONLY_TOOLTIP"
+		}
+	]
+}

@@ -8,9 +8,9 @@
 			"vec3(1, 1, 0)"
 		],
 		"uvs": [
-			"vec2(xMult * uMult, (1 - y0) * v3y(scale) * vMult)",
+			"vec2(-(max(1, floor(v3x(scale) * vMult + 0.5))), (1 - y0) * v3y(scale) * vMult)",
 			"vec2(0, (1 - y1) * v3y(scale) * vMult)",
-			"vec2(xMult * uMult, 0)",
+			"vec2(-(max(1, floor(v3x(scale) * vMult + 0.5))), 0)",
 			"vec2(0, 0)"
 		],
 		"faces": [

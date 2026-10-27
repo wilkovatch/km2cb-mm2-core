@@ -1,0 +1,104 @@
+{
+	"parameters": [
+		{
+			"name": "startIntersection",
+			"label": "LL_BAI_START",
+			"type": "reference",
+			"tooltip": "LL_BAI_INTERSECTION_TOOLTIP",
+			"referenceTypes": [
+				"lowLevel/baiIntersection",
+				"intersection"
+			]
+		},
+		{
+			"name": "endIntersection",
+			"label": "LL_BAI_END",
+			"type": "reference",
+			"tooltip": "LL_BAI_INTERSECTION_TOOLTIP",
+			"referenceTypes": [
+				"lowLevel/baiIntersection",
+				"intersection"
+			]
+		},
+		{
+			"name": "startRule",
+			"label": "RD_START_RULE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_START_RULE_FIFO",
+				"RD_START_RULE_LIGHTS",
+				"RD_START_RULE_ALWAYS_STOP",
+				"RD_START_RULE_NEVER_STOP"
+			]
+		},
+		{
+			"name": "endRule",
+			"label": "RD_END_RULE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_START_RULE_FIFO",
+				"RD_START_RULE_LIGHTS",
+				"RD_START_RULE_ALWAYS_STOP",
+				"RD_START_RULE_NEVER_STOP"
+			]
+		},
+		{
+			"name": "noLeftPedestrians",
+			"label": "RD_NO_LEFT_PED",
+			"type": "bool"
+		},
+		{
+			"name": "noRightPedestrians",
+			"label": "RD_NO_RIGHT_PED",
+			"type": "bool"
+		},
+		{
+			"name": "geoSidewalks",
+			"label": "LL_BAI_GEO_SIDEWALKS",
+			"type": "bool",
+			"tooltip": "LL_BAI_GEO_SIDEWALKS_TOOLTIP"
+		},
+		{
+			"name": "noTraffic",
+			"label": "LL_BAI_NO_TRAFFIC",
+			"type": "bool"
+		},
+		{
+			"name": "divided",
+			"label": "LL_BAI_DIVIDED",
+			"type": "bool"
+		},
+		{
+			"name": "freeway",
+			"label": "RD_FREEWAY",
+			"type": "bool"
+		},
+		{
+			"name": "alley",
+			"label": "LL_BAI_ALLEY",
+			"type": "bool"
+		},
+		{
+			"name": "cableCar",
+			"label": "RD_CABLE_CAR",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarOffset",
+			"label": "RD_CABLE_CAR_OFFSET",
+			"type": "float",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "autoCalculated",
+			"label": "LL_BAI_AUTO",
+			"type": "bool",
+			"tooltip": "LL_BAI_AUTO_TOOLTIP"
+		},
+		{
+			"name": "alwaysShown",
+			"label": "LL_ALWAYS_SHOWN",
+			"type": "bool"
+		}
+	]
+}

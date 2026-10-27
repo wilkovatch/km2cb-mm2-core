@@ -1,0 +1,9 @@
+{
+	"parameters": [
+		{
+			"name": "alwaysShown",
+			"label": "LL_ALWAYS_SHOWN",
+			"type": "bool"
+		}
+	]
+}
