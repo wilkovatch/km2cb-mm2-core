@@ -1,0 +1,10 @@
+{
+    "label": "MM2_IMPORT_TITLE",
+    "description": "MM2_IMPORT_DESCRIPTION",
+    "entry": "main.py",
+    "transaction": false,
+    "parameters": [
+        { "name": "gameFolder", "type": "folder", "label": "MM2_IMPORT_GAME_FOLDER", "tooltip": "MM2_IMPORT_GAME_FOLDER_TOOLTIP", "defaultValue": "" },
+        { "name": "overwriteExisting", "type": "bool", "label": "MM2_IMPORT_OVERWRITE", "tooltip": "MM2_IMPORT_OVERWRITE_TOOLTIP", "defaultValue": false }
+    ]
+}

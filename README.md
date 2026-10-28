@@ -4,6 +4,14 @@ The main repository for the city builder is here: https://github.com/wilkovatch/
 
 This core uses code from this repository: https://github.com/wilkovatch/psdl-exporter-common, it's included as a submodule, so make sure to use `--recurse-submodules` when cloning this repository.
 
+## Importing the stock game assets
+
+Open or create a city using the Midtown Madness 2 core, then choose **Scripts → Import MM2 game assets...**. Select the folder of your own MM2 installation (the folder containing `MM2CORE.AR` and `MM2TEX.AR`) and click **Run**. The script extracts the stock meshes and their MTX files, TEX and TGA textures, prop tuning (`tune/banger/*.dgBangerData`) and `city/materials.csv` to the city builder's `Files/common/MidtownMadness2` folder. The city templates already search this folder for shared assets.
+
+Existing files are skipped by default, including names with different capitalization. Enable **Overwrite existing files** to replace matching assets with the stock versions. Unrelated files and the placeholder files are preserved. The importer reads only the two stock DAVE archives: mods, loose overrides, audio, collision bounds, city/race files and JPG images (including the optional map frame) are not imported. No extracted game data is included with the core.
+
+The progress bar has a **Cancel** button. Completed files remain after cancellation or an error, and importing cannot be undone. Rerun with overwrite disabled to fill in the missing files. Each completed file is published only after its data has been validated; forcibly stopping the script can leave a `.km2-mm2-import-*.tmp` file, which is harmless and can be deleted. When the import finishes, it reports the destination, imported/replaced/skipped counts and bytes written. **Save and reopen the city** to refresh cached meshes, textures and prop transforms.
+
 The SF and London city templates include building presets based on the facades of the original cities: 69 named styles for SF and 62 for London, in addition to their Default presets. They include matching building-side and building-block presets, using the original texture combinations, facade tile sizes and roof textures. Choose them in the building editor or in Whole city buildings. The stock textures must be provided in `Files/common/MidtownMadness2/texture` as usual. These are reusable procedural styles: each repeats its facade on all sides, and ground-floor slivers are adapted to editable texture blocks. The source rooms, dimensions and textures are listed in [Building presets](BUILDING_PRESETS.md). Existing cities keep their own presets; the template presets are copied when creating a new city.
 
 To import the output in Blender you can use these two plugins:
