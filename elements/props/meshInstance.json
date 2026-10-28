@@ -38,6 +38,7 @@
 	"placementRules": {
 		"layer": "if(prop, 13, 11)",
 		"placerLayerMask": "-1-2^if(prop, 13, 7)",
-		"autoYOffset": "prop"
+		"autoYOffset": "prop",
+		"meshTransform": "prop"
 	}
 }

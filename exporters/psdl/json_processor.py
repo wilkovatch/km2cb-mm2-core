@@ -537,7 +537,7 @@ class JsonProcessor:
                                 prop_elem.properties['original_name'] = og_name + ' [prop]'
                                 prop_elem.properties['object'] = mesh_name
                                 prop_elem.properties['flags'] = flags
-                                prop_elem.translation = list(np.add(prop['position'], (0, dict_mesh['boundsMin'][1], 0)))
+                                prop_elem.translation = prop['position']
                                 prop_elem.rotation = prop['rotation']
                                 prop_elem.scale = prop['scale']
                                 prop_elem.mat = 'NONE'

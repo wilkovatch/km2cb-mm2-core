@@ -9,7 +9,7 @@ Guidance for AI coding agents (and humans) working on the **Midtown Madness 2 co
 
 ## Game data
 
-Never commit original game data (`city/materials.csv`, stock `.pkg`/`.tex`/bounds, ...) to this repo. The user provides these files in the builder's gitignored `Files/common/MidtownMadness2/` folder, which mirrors the game layout (`geometry/`, `texture/`, `city/`, `jpg/`) and is created from this core's `baseCommon/`, where only `_put ... here` placeholder files are tracked. When such a file is missing, warn and fall back to a default.
+Never commit original game data (`city/materials.csv`, stock `.pkg`/`.tex`/bounds, ...) to this repo. The user provides these files in the builder's gitignored `Files/common/MidtownMadness2/` folder, which mirrors the game layout (`geometry/`, `texture/`, `city/`, `jpg/`, `tune/banger/`) and is created from this core's `baseCommon/`, where only `_put ... here` placeholder files are tracked. When such a file is missing, warn and fall back to a default.
 
 ## Coordinates
 
@@ -62,6 +62,8 @@ Other limits: 511 unique textures per city. PSDL has no per-vertex UVs and max 6
 **Decals (`city/<city>/decals.pathset`, PTH1):** one path per decal, named after its texture (≤ 31 chars). It is drawn as one triangle strip of point pairs, lifted +0.01 m. U is 0/1 alternating, and V of pair k = round(|p[2k]-p[0]| / |p[0]-p[1]|), so pairs must sit at about whole tile distances. The decal is attached to the room containing midpoint(p0, p2) and drawn only when that room is visible, so split long strips. Winding: ((p1-p0)×(p2-p0)).y > 0 in MM2 coordinates. Paths with fewer than 3 points are skipped.
 
 **Hudmap and menu maps:** `geometry/hudmap_<city>.pkg` uses chunk `H` with FVF 0x102 and one quad per tile at y=0. **`.tex` rows are stored bottom-up**, so flip a north-up image before writing. `tune/<city>.mmHudMap` holds the `Ocean Color` as RGB 0..1. Menu maps are `jpg/<city>_map*.jpg`, 242x184, with the map in about (8,5)-(236,179). An optional frame goes in `Files/common/MidtownMadness2/jpg/mapframe.jpg`. Map labels appear only on the jpgs.
+
+**Props (bangers):** the game draws a banger at `position + rotation * CG` (`CG` of `tune/banger/<pkg>.dgBangerData`, MM2 coordinates, x mirrored in the builder), for the pathset props, the prop rules and the traffic lights; without banger data at the position. The editor does the same through `server/mesh_transforms.py` (the builder's `meshTransform` placement rule), so the exported position is the placement point. The CG is usually `-minY` of the mesh, but not always (fences are drawn from one end, `sp_cenotaph_gen_l` 4 m forward, `sp_chinagate_f` has CG 0 and sinks 7 m). Same rule as the psdl-viewer's `BangerTransform`.
 
 **Textures and slivers:** facade/sliver V runs from the top (v=0 = texture top in the editor; the psdl-viewer uses the flipped convention). Game sliver rule: u = floor(len·s + 0.5), v = (top - y)·s. Stock sliver scales are always positive. Stock city PKGs use byte shaders `0x81` with colours 229/229/0 and shininess 0.25.
 

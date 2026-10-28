@@ -61,6 +61,7 @@
 		"whileCondition": "elemDistance > 0 and i < maxNumber and z <= (totalLength-end)",
 		"xPos": "xPos",
 		"zPos": "if(i=0, start, lastZ+elemDistance)",
-		"forward": "localForward"
+		"forward": "localForward",
+		"meshTransform": "true"
 	}
 }

@@ -6,6 +6,7 @@
 	"placementRules": {
 		"layer": "13",
 		"placerLayerMask": "-1-2^13",
-		"autoYOffset": "true"
+		"autoYOffset": "true",
+		"meshTransform": "true"
 	}
 }

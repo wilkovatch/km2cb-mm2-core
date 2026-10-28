@@ -60,6 +60,7 @@
 		"meshIndex": "rnd(0, meshNum, 0)",
 		"whileCondition": "elemDistance > 0 and i < maxNumber and z <= totalLength",
 		"xPos": "rnd(minHorizPos, maxHorizPos, 0)",
-		"zPos": "if(i=0, start, lastZ+elemDistance)"
+		"zPos": "if(i=0, start, lastZ+elemDistance)",
+		"meshTransform": "true"
 	}
 }
