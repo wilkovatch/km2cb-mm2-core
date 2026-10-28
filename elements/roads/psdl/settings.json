@@ -13,6 +13,29 @@
 		"v6-anchorH",
 		"v0-anchorH"
 	],
+	"endAnchors": [
+		{
+			"if": "true",
+			"append": [
+				"v0-anchorH",
+				"v1-h"
+			]
+		},
+		{
+			"if": "isDouble and divider > 0",
+			"append": [
+				"v2-h",
+				"v4-h"
+			]
+		},
+		{
+			"if": "true",
+			"append": [
+				"v5-h",
+				"v6-anchorH"
+			]
+		}
+	],
 	"intersectionRoadVertices": [
 		"v1",
 		"v5"
