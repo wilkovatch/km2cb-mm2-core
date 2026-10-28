@@ -1,0 +1,11 @@
+{
+    "label": "PROP_TYPE_PATHSET_STRIP",
+    "parameters": [
+        {
+            "name": "elements",
+            "allowedTypes": [
+                "pathsetStrip"
+            ]
+        }
+    ]
+}

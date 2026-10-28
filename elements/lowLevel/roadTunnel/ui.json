@@ -104,6 +104,10 @@
 				{
 					"name": "containerGroup",
 					"width": 1.5
+				},
+				{
+					"name": "invisible",
+					"width": 1.5
 				}
 			]
 		}

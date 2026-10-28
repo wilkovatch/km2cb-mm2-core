@@ -99,7 +99,7 @@ class StandaloneSceneInput(SceneInput):
     def get_rotation(self, obj):
         q = obj["rotation"]
         rx = np.arctan2(2 * (q[0] * q[1] + q[2] * q[3]), 1 - 2 * (q[1] * q[1] + q[2] * q[2]))
-        ry = np.arcsin(2 * (q[0] * q[2] - q[3] * q[1]))
+        ry = np.arcsin(np.clip(2 * (q[0] * q[2] - q[3] * q[1]), -1, 1))
         rz = np.arctan2(2 * (q[0] * q[3] + q[1] * q[2]), 1 - 2 * (q[2] * q[2] + q[3] * q[3]))
         return [rx, ry, rz]
 
@@ -135,6 +135,12 @@ class StandaloneSceneInput(SceneInput):
                 [e10, e11, e12, 0],
                 [e20, e21, e22, 0],
                 [0,   0,   0,   1]]
+
+    def get_instance_axes(self, obj):
+        # BIN geometry is builder x,z,y. Native models and worlds mirror X and exchange Y/Z.
+        basis = np.array(self.get_rotation_matrix(obj["rotation"]), dtype=float)[:3, :3] @ np.diag(obj["scale"])
+        conversion = np.array([[-1, 0, 0], [0, 0, 1], [0, 1, 0]], dtype=float)
+        return (conversion @ basis @ conversion.T).T.tolist()
 
     def get_transform_matrix(self, obj):
         t = self.get_translation_matrix(obj["location"])

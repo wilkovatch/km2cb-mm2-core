@@ -1229,7 +1229,7 @@ class JsonProcessor:
                     elem.name = str(index) + ',' + '0_PTH'
                 else:
                     elem.name = str(index) + ',' + str(cur_block) + '_INST'
-                    flags = '256' # 256 is for inst objects visible from every angle (0 is for front only)
+                    flags = str(int(state_val(state, 'instModifiers', 256))) # 256 is for inst objects visible from every angle (0 is for front only)
                 elem.properties['original_name'] = mesh['name']
                 elem.properties['object'] = get_instance_mesh_name(dict_mesh)
                 elem.properties['flags'] = flags
@@ -2001,6 +2001,9 @@ class JsonProcessor:
         for i in range(len(sorted_meshes)):
             if self.verbose: print("exporting " + sorted_meshes[i]['name'])
             self.guarded_element(res, sorted_meshes[i]['name'], 'meshInstance', lambda: self.get_mesh_instance(res, sorted_meshes[i], i), sorted_meshes[i]['id'])
+
+        from prop_paths import export_prop_paths
+        export_prop_paths(self, res)
 
         self.out_res = res
 

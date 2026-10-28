@@ -33,6 +33,11 @@
 			"label": "LL_NO_COPLANAR_FIX",
 			"type": "bool",
 			"tooltip": "LL_NO_COPLANAR_FIX_TOOLTIP"
+		},
+		{
+			"name": "invisible",
+			"label": "LL_INVISIBLE",
+			"type": "bool"
 		}
 	]
 }

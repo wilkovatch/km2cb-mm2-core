@@ -5,6 +5,11 @@
 			"label": "LL_BOTH_SIDES",
 			"type": "bool",
 			"tooltip": "LL_BOTH_SIDES_TOOLTIP"
+		},
+		{
+			"name": "invisible",
+			"label": "LL_INVISIBLE",
+			"type": "bool"
 		}
 	]
 }

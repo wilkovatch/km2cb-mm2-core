@@ -1,0 +1,19 @@
+{
+    "IMPORT_CITY_TITLE": "Import MM2 city",
+    "IMPORT_CITY_DESCRIPTION": "Append a loose MM2 city. Geometry and AI become editable low-level elements; prop strips remain procedural. Source assets are referenced. Source search paths remain after undo.",
+    "IMPORT_CITY_PSDL": "PSDL file",
+    "IMPORT_CITY_ROOT": "Source root (optional)",
+    "IMPORT_CITY_BAI": "Import AI roads",
+    "IMPORT_CITY_INST": "Import objects",
+    "IMPORT_CITY_PROPS": "Import prop rules and props",
+    "IMPORT_CITY_PATHS": "Import decals and trains",
+    "IMPORT_CITY_SETTINGS": "Import city and race settings",
+    "IMPORT_CITY_APPLY_SETTINGS": "Apply source city settings",
+    "IMPORT_CITY_WRONG_CORE": "Open a Midtown Madness 2 city first.",
+    "IMPORT_CITY_CHECKING": "Reading and checking city files",
+    "IMPORT_CITY_GEOMETRY": "Importing geometry and prop rules",
+    "IMPORT_CITY_OBJECTS": "Importing objects",
+    "IMPORT_CITY_DONE": "Import complete",
+    "IMPORT_CITY_SUMMARY": "Imported {elements} elements and {objects} objects. {warnings} diagnostics were written to the debug console.",
+    "IMPORT_CITY_FAILED": "Could not import the city: {detail}"
+}

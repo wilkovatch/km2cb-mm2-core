@@ -76,3 +76,11 @@ Other limits: 511 unique textures per city. PSDL has no per-vertex UVs and max 6
 **Stock data:** SF cable cars are BAI `nTrams` = 1 on both sides, with the rail 2.5 m from the centre line. London's visible trains are `gizTrain` gizmos from `race/london/london_train.pathset`. Stock cities are compressed about 0.3-0.5x relative to real scale.
 
 Reverse-engineering setup: install capstone + pefile with `pip install --target <scratch dir>`. Don't name a script `dis.py`, because it shadows the stdlib module capstone imports.
+
+## City importer and standalone prop rules
+
+`Scripts → Import MM2 city` lives in `scripts/importCity`. `_formats.py` is bounded binary reading, `_mapping.py` creates converter-shaped low-level payloads, `_companions.py` handles CSV/settings/transforms, and `main.py` is the transactional API adapter. Unknown attribute sizes fail rather than guessing. The viewer-derived readers retain `LICENSE-viewer.txt`.
+
+The base builder's reserved `__propPath` type uses low-level point/history/editor infrastructure, but has API kind `propPath` and separate `propPaths` save/export arrays. Its `data.propLines` are evaluated placements. Never apply native-road `psdl` suppression to these records. `exporters/psdl/prop_paths.py` compares native strip candidates with preview placements before choosing type 2; mismatches fall back to type 0/1. The common writer keeps separate strip records even for identical models/spacing. Changes to it still span the shared exporter submodule.
+
+BAI remains approximate: report lost room memberships and train splines; do not advertise complete stock round-trip equivalence from close lane geometry. `_roundtrip_check.py` reports pedestrian displacement separately. Keep stock checks bounded (five fixed-seed routes per city) and assets/output in scratch folders. The importer adds asset search paths outside undo and references source files without copying them.

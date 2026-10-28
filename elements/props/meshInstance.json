@@ -22,6 +22,11 @@
 					"HUDMAP_CATEGORY_ROAD",
 					"HUDMAP_CATEGORY_HIDDEN"
 				]
+			},
+			{
+				"name": "instModifiers",
+				"label": "INST_MODIFIERS",
+				"type": "int"
 			}
 		]
 	},
@@ -32,6 +37,10 @@
 		},
 		{
 			"name": "hudmapCategory",
+			"width": 1.5
+		},
+		{
+			"name": "instModifiers",
 			"width": 1.5
 		}
 	],

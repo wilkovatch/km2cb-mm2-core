@@ -752,4 +752,16 @@ function M.baiIntersection(v, ctx)
     } }
 end
 
+-- A null PSDL texture reference disables drawing and collision, while the editor can still pick the shape.
+for _, name in ipairs({"crosswalk", "dividedRoad", "facade", "facadeBound", "fan", "junctionTunnel", "roadTunnel", "roadWithSidewalks", "roadWithoutSidewalks", "sidewalkCap", "sidewalkStrip", "sliver"}) do
+    local build = M[name]
+    M[name] = function(v, ctx)
+        local result = build(v, ctx)
+        if v.invisible then
+            for _, mesh in ipairs(result.meshes or {}) do mesh.pickOnly = true end
+        end
+        return result
+    end
+end
+
 return M

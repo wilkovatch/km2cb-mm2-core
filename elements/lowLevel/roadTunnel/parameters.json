@@ -129,6 +129,11 @@
 			"label": "LL_TUNNEL_TEXTURE_5",
 			"type": "texture",
 			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "invisible",
+			"label": "LL_INVISIBLE",
+			"type": "bool"
 		}
 	]
 }

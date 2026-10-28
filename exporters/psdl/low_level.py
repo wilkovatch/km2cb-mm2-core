@@ -184,6 +184,8 @@ class LowLevelExporter:
             p.indices = indices
             p.mat = mat
             p.properties['original_name'] = name
+            if state_bool(state, 'invisible'):
+                p.properties['disable'] = '1'
             p.source = ('lowLevel', e['id'])
             res.append(p)
             return p

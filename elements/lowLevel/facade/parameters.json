@@ -26,6 +26,11 @@
 			"referenceTypes": [
 				"lowLevel/facadeBound"
 			]
+		},
+		{
+			"name": "invisible",
+			"label": "LL_INVISIBLE",
+			"type": "bool"
 		}
 	]
 }

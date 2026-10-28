@@ -11,6 +11,11 @@
 			"label": "TP_PERIMETER_ONLY",
 			"type": "bool",
 			"tooltip": "LL_PERIMETER_ONLY_TOOLTIP"
+		},
+		{
+			"name": "invisible",
+			"label": "LL_INVISIBLE",
+			"type": "bool"
 		}
 	]
 }

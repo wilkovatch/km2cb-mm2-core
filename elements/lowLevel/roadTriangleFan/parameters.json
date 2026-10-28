@@ -5,6 +5,11 @@
 			"label": "LL_ROAD_TEXTURE",
 			"type": "texture",
 			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "invisible",
+			"label": "LL_INVISIBLE",
+			"type": "bool"
 		}
 	]
 }

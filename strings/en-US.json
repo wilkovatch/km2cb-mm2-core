@@ -476,5 +476,9 @@
 	"LL_GROUP_LOCATION": "Location",
 	"LL_GROUP_FRONT_LOCATION": "Front location",
 	"LL_BOTH_SIDES": "Both sides",
-	"LL_BOTH_SIDES_TOOLTIP": "Also in the room in front of the facade (if different), as the procedural buildings with \"Fix bound\""
+	"LL_BOTH_SIDES_TOOLTIP": "Also in the room in front of the facade (if different), as the procedural buildings with \"Fix bound\"",
+	"PROP_TYPE_PATHSET_STRIP": "Pathset prop line strip",
+	"PROP_STRIP_RAW_SPACING": "Spacing (quarter meters; 0 = 5 m)",
+	"INST_MODIFIERS": "INST modifiers",
+	"LL_INVISIBLE": "Invisible (no game collision)"
 }

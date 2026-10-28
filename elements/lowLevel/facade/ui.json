@@ -26,6 +26,10 @@
 					"width": 0.75
 				},
 				{
+					"name": "invisible",
+					"width": 1.5
+				},
+				{
 					"name": "pointsGroup",
 					"width": 1.5
 				},

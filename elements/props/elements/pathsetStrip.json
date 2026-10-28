@@ -1,0 +1,28 @@
+{
+    "label": "PROP_TYPE_PATHSET_STRIP",
+    "maxMeshes": 1,
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "rawSpacing",
+                "label": "PROP_STRIP_RAW_SPACING",
+                "type": "int"
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "rawSpacing",
+            "width": 1.5
+        }
+    ],
+    "placementRules": {
+        "iterationScope": "edge",
+        "whileCondition": "i < max(1, floor(totalLength / if(rawSpacing > 0, rawSpacing / 4, 5)))",
+        "xPos": "0.5",
+        "zPos": "if(i=0, 0, lastZ + if(rawSpacing > 0, rawSpacing / 4, 5))",
+        "forward": "cross(worldUp, pathForward)",
+        "meshTransform": "true",
+        "autoYOffset": "false"
+    }
+}
