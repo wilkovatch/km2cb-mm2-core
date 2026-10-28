@@ -4,6 +4,8 @@ The main repository for the city builder is here: https://github.com/wilkovatch/
 
 This core uses code from this repository: https://github.com/wilkovatch/psdl-exporter-common, it's included as a submodule, so make sure to use `--recurse-submodules` when cloning this repository.
 
+The SF and London city templates include building presets based on the facades of the original cities: 69 named styles for SF and 62 for London, in addition to their Default presets. They include matching building-side and building-block presets, using the original texture combinations, facade tile sizes and roof textures. Choose them in the building editor or in Whole city buildings. The stock textures must be provided in `Files/common/MidtownMadness2/texture` as usual. These are reusable procedural styles: each repeats its facade on all sides, and ground-floor slivers are adapted to editable texture blocks. The source rooms, dimensions and textures are listed in [Building presets](BUILDING_PRESETS.md). Existing cities keep their own presets; the template presets are copied when creating a new city.
+
 To import the output in Blender you can use these two plugins:
 - https://github.com/wilkovatch/km2cb-to-blender-mm2-plugin (to import the resulting .bin file in Blender)
 - https://github.com/wilkovatch/mm2-blender-psdl-plugin (to export the PSDL and other files)
