@@ -52,7 +52,7 @@ assert len(cb.api.elements.list(kind='lowLevel'))==2
 settings=cb.api.state.get(ref=0)['state']
 assert settings['cityName']=='Synthetic city' and settings['driveOnLeft']
 assert settings['roamPoliceCars']['policeCars'][0]['carModel']['localPosition']['x']==1
-assert settings['blitzRaces'][-1]['timeOfDay']==3 and settings['blitzRaces'][-1]['checkpoints'][0]['checkpoint']['localScale']['x']==5
+assert settings['blitzRaces'][-1]['timeOfDay']==3 and settings['blitzRaces'][-1]['checkpoints'][0]['checkpoint']['localScale']==dict(x=5,y=7.5,z=15)
 cb.api.history.undo()
 assert not cb.api.elements.list(kind='propPath')
 assert not cb.api.elements.list(kind='lowLevel')

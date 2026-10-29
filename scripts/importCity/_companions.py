@@ -1,12 +1,13 @@
 """Loose companion discovery, prop definitions, race data and object transforms."""
 import csv
 from functools import lru_cache
+import json
 import math
 import re
 from pathlib import Path
 import numpy as np
 from _formats import FormatError
-from _mapping import position
+from _mapping import CORE, position
 
 
 @lru_cache(maxsize=512)
@@ -183,6 +184,8 @@ def import_settings(city, root, name):
     if roam_path:
         roam=aimap(roam_path)
         if roam.get('policeCars'):city.properties['roamPoliceCars']=roam['policeCars']
+    # Only the width is stored in the waypoints; height and depth stay at the editor's defaults.
+    checkpoint_scale=json.loads((CORE/'elements/customTypes/checkpoint.json').read_text(encoding='utf-8'))['parameters'][0]['objectInstanceSettings']['defaultScale']
     for prefix,key,ckey in (('blitz','blitzRaces','blitznames'),('circuit','circuitRaces','circuitnames'),('race','checkpointRaces','checkpointnames')):
         names=cinfo.get(ckey,'').split('|');races=[]
         for i,row in enumerate(rows(find(root,'race/'+race_dir+'/mm'+prefix+'data.csv'))):
@@ -194,7 +197,7 @@ def import_settings(city, root, name):
             a=aimap(find(root,'race/'+race_dir+'/'+race_id+'.aimap'));race.update(a)
             professional=aimap(find(root,'race/'+race_dir+'/'+race_id+'.aimap_p'))
             for k,v in professional.items():race[k+'_professional']=v
-            race['checkpoints']=[dict(checkpoint=obj(list(map(float,c[:3])),float(c[3]),scale=[float(c[4]),1,1])) for c in rows(find(root,'race/'+race_dir+'/'+race_id+'waypoints.csv')) if len(c)>=5]
+            race['checkpoints']=[dict(checkpoint=obj(list(map(float,c[:3])),float(c[3]),scale=[float(c[4])]+checkpoint_scale[1:])) for c in rows(find(root,'race/'+race_dir+'/'+race_id+'waypoints.csv')) if len(c)>=5]
             races.append(race)
         if races:city.properties[key]=races
     hud=find(root,'tune/'+name+'.mmHudMap')
