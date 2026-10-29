@@ -26,6 +26,14 @@ except ImportError:
 def parse_flag(i):
     return int(sys.argv[i]) > 0
 
+def wait_for_exit():
+    # Linux may inherit closed or redirected stdin even when the editor runs in a console.
+    if sys.stdin is not None and sys.stdin.isatty():
+        try:
+            input("Press any key to continue...")
+        except EOFError:
+            pass
+
 def get_common_dir():
     # the folder of the files of the game provided by the user (Files/common/MidtownMadness2)
     return os.path.join(os.path.dirname(os.path.normpath(os.path.abspath(sys.argv[1]))), 'common', 'MidtownMadness2')
@@ -149,13 +157,13 @@ try:
     else:
         print("Exported to " + layout.root)
 
-    input("Press any key to continue...")
+    wait_for_exit()
 
 except Exception:
     traceback.print_exc()
     if ExportReport is not None:
         ExportReport.exception("the export failed")
-    input("Press any key to continue...")
+    wait_for_exit()
     sys.exit(1)
 
 finally:

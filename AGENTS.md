@@ -34,7 +34,7 @@ Useful tools: `exporters/psdl/tools/psdl_check.py` (perimeter spikes/slits, prop
 Fast exporter loop without the game (from the builder folder): `-- export-json <city> --out x.json`, then run this core's `exporters/psdl/export.py <Files/python> x.json x.psdl <flags...>` directly with the builder's `python/python.exe`. A BAI-only export of a large city takes about 3 s.
 
 Exporter gotchas:
-- The exporters end with `input()`. Without a console, the builder's `PythonManager.RunScriptTask` feeds newlines on stdin.
+- The PSDL exporter waits for Enter only when stdin is a terminal, and tolerates EOF at that prompt. Linux console launches can inherit closed or redirected stdin; an optional pause must not turn a completed export into an error or mask a real failure. Without a console, the builder's `PythonManager.RunScriptTask` also feeds newlines on stdin for older exporters.
 - A finished export deletes its `.bin`, so "no `.bin` left" is the reliable success test (a Python traceback goes to stderr, which neither `pythonLog.txt` nor the API `output` captures).
 - Exports land in `<path dir>/city/<name>.psdl` (game folder layout from `output_layout.py`; tune, race, geometry, bound, texture, jpg go next to `city`).
 - The bundled Python needs `pythonInfo/requirements.txt` (e.g. Pillow for the hudmap). CLI sessions skip the builder's Python check, so install them by hand.
