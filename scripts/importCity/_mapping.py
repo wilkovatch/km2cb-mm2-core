@@ -65,8 +65,12 @@ class ImportCity:
                 state = dict(texture=self.texture(tex))
                 if tex<0:state['invisible']=True
                 e = None
-                if typ in (0, 1, 2, 8):
-                    names = {0: ['leftSidewalk','leftRoad','rightRoad','rightSidewalk'], 1: ['outer','inner'],
+                if typ == 1 and len(vs) == 4 and vs[0] == vs[1] and vs[0] in (0,1):
+                    # The first pair selects an end cap, not vertices 0/1 of the city.
+                    state.update(texture=self.texture(tex+1) if tex>=0 else '', which=vs[0]+1)
+                    e = self.element('sidewalkCap',name,state,dict(a=self.vertex(vs[2]),b=self.vertex(vs[3])),r['id'])
+                elif typ in (0, 1, 2, 8):
+                    names = {0: ['leftSidewalk','leftRoad','rightRoad','rightSidewalk'], 1: ['inner','outer'],
                              2: ['left','right'], 8: ['leftSidewalk','leftRoad','leftDivider','rightDivider','rightRoad','rightSidewalk']}[typ]
                     if len(vs) < 2*len(names):
                         self.warn(name, 'degenerate strip omitted'); continue

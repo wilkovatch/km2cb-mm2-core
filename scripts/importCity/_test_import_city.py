@@ -99,6 +99,34 @@ class Readers(unittest.TestCase):
             self.assertEqual(city.elements[-1]['state']['propRule']['main']['elements'][0]['rawSpacing'],7)
             self.assertFalse(city.meshes)
 
+    def test_sidewalk_vertex_order(self):
+        source=fixture_psdl()
+        source['rooms'][0]['attributes']=[dict(type=10,texture=0),dict(type=1,vertices=[2,3,6,7])]
+        city=ImportCity(source).geometry();strip=city.elements[1]
+        self.assertEqual(strip['type'],'sidewalkStrip')
+        self.assertEqual(strip['state']['texture'],'texture/sidewalk.tex')
+        for section,inner,outer in zip(strip['points']['sections'],(2,6),(3,7)):
+            self.assertEqual(section,dict(inner=city.point_ids[('v',inner,None)],outer=city.point_ids[('v',outer,None)]))
+
+    def test_sidewalk_cap_markers(self):
+        for marker in (0,1):
+            for texture in (-1,0):
+                with self.subTest(marker=marker,texture=texture):
+                    source=fixture_psdl()
+                    source['rooms'][0]['attributes']=[dict(type=10,texture=texture),dict(type=1,vertices=[marker,marker,2,3])]
+                    city=ImportCity(source).geometry();cap=city.elements[1]
+                    self.assertEqual(cap['type'],'sidewalkCap')
+                    self.assertEqual(cap['state']['which'],marker+1)
+                    self.assertEqual(cap['state']['texture'],'texture/sidewalk.tex' if texture>=0 else '')
+                    self.assertEqual(cap['state'].get('invisible',False),texture<0)
+                    self.assertEqual(cap['points'],dict(a=city.point_ids[('v',2,None)],b=city.point_ids[('v',3,None)]))
+
+    def test_sidewalk_cap_requires_exact_marker_pair(self):
+        for vertices in ([0,1,2,3],[2,2,6,7],[0,0,2,3,6,7]):
+            with self.subTest(vertices=vertices):
+                source=fixture_psdl();source['rooms'][0]['attributes']=[dict(type=1,vertices=vertices)]
+                self.assertEqual(ImportCity(source).geometry().elements[1]['type'],'sidewalkStrip')
+
     def test_unknown_bounded_path_is_omitted(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'props.pathset';write_pathset(p,[dict(type=7,points=[[0,0,0]])])
