@@ -1,3 +1,4 @@
 AGENTS.local.md
 CLAUDE.local.md
-scripts/importCity/__pycache__
+__pycache__/
+*.py[cod]
