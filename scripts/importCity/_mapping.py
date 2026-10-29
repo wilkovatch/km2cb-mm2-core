@@ -1,11 +1,36 @@
 """Pure file-to-editable-city mapping; no builder process or filesystem writes."""
+import functools
 import itertools
+import json
 import math
+from pathlib import Path
 import numpy as np
 from _formats import FormatError
 
+CORE=Path(__file__).resolve().parents[2]
+
 
 def position(v): return [-float(v[0]), float(v[1]), float(v[2])]
+
+
+@functools.lru_cache(maxsize=None)
+def core_strings():
+    result={}
+    try:
+        result.update(json.loads((CORE/'strings/en-US.json').read_text(encoding='utf-8')))
+        language=json.loads((CORE.parents[2]/'settings.json').read_text(encoding='utf-8-sig')).get('Language','en-US')
+        if Path(language).name==language and (CORE/'strings'/f'{language}.json').exists():
+            result.update(json.loads((CORE/'strings'/f'{language}.json').read_text(encoding='utf-8')))
+    except (OSError,ValueError):pass
+    return result
+
+
+@functools.lru_cache(maxsize=None)
+def type_label(typ):
+    """The editor label of a low-level type (its ui.json label), or the type name if unavailable."""
+    try:key=json.loads((CORE/'elements/lowLevel'/typ/'ui.json').read_text(encoding='utf-8')).get('label',typ)
+    except (OSError,ValueError):return typ
+    return core_strings().get(key,typ)
 
 
 class ImportCity:
@@ -60,6 +85,7 @@ class ImportCity:
             for ai, a in enumerate(room['attributes']):
                 typ, vs = a['type'], a.get('vertices', [])
                 name = f'Imported room {i} attribute {ai}'
+                labeled = lambda target: f'{name} [{type_label(target)}]'
                 if typ == 10:
                     tex = a['texture']; continue
                 state = dict(texture=self.texture(tex))
@@ -68,7 +94,7 @@ class ImportCity:
                 if typ == 1 and len(vs) == 4 and vs[0] == vs[1] and vs[0] in (0,1):
                     # The first pair selects an end cap, not vertices 0/1 of the city.
                     state.update(texture=self.texture(tex+1) if tex>=0 else '', which=vs[0]+1)
-                    e = self.element('sidewalkCap',name,state,dict(a=self.vertex(vs[2]),b=self.vertex(vs[3])),r['id'])
+                    e = self.element('sidewalkCap',labeled('sidewalkCap'),state,dict(a=self.vertex(vs[2]),b=self.vertex(vs[3])),r['id'])
                 elif typ in (0, 1, 2, 8):
                     names = {0: ['leftSidewalk','leftRoad','rightRoad','rightSidewalk'], 1: ['inner','outer'],
                              2: ['left','right'], 8: ['leftSidewalk','leftRoad','leftDivider','rightDivider','rightRoad','rightSidewalk']}[typ]
@@ -83,7 +109,8 @@ class ImportCity:
                         for offset,key in enumerate(('dividerSideTexture','dividerFlatTexture','dividerTopTexture','dividerCapTexture')):
                             state[key] = self.texture(dt+offset) if dt >= 0 else ''
                     if typ == 1: state['texture'] = self.texture(tex+1) if tex>=0 else ''
-                    e = self.element({0:'roadWithSidewalks',1:'sidewalkStrip',2:'roadWithoutSidewalks',8:'dividedRoad'}[typ],name,state,dict(sections=sections),r['id'])
+                    target = {0:'roadWithSidewalks',1:'sidewalkStrip',2:'roadWithoutSidewalks',8:'dividedRoad'}[typ]
+                    e = self.element(target,labeled(target),state,dict(sections=sections),r['id'])
                     if typ in (0,2,8):
                         self.roads[(i,ai)] = e
                         for tunnel in pending: tunnel['state']['road'] = dict(kind='lowLevel',id=e['id'])
@@ -109,11 +136,11 @@ class ImportCity:
                     flat = max(v[1] for v in vertices)-min(v[1] for v in vertices) < 0.05
                     target = 'roofTriangleFan' if typ == 12 else 'roadTriangleFan' if typ == 5 and flat else 'triangleFan'
                     if typ == 5 and not flat: self.warn(name,'non-flat culled fan retains geometry but loses camera culling')
-                    e = self.element(target,name,state,container=r['id'],mesh=dict(vertices=ids,triangles=triangles))
+                    e = self.element(target,labeled(target),state,container=r['id'],mesh=dict(vertices=ids,triangles=triangles))
                 elif typ == 4:
                     if len(vs) != 4: raise FormatError(f'{name}: crosswalk needs four vertices')
                     state['texture'] = self.texture(tex+2) if tex>=0 else ''
-                    e = self.element('crosswalk',name,state,{'p'+str(j+1):self.vertex(v) for j,v in enumerate(vs)},r['id'])
+                    e = self.element('crosswalk',labeled('crosswalk'),state,{'p'+str(j+1):self.vertex(v) for j,v in enumerate(vs)},r['id'])
                 elif typ in (3,7,11):
                     vals = a['values']; top = vals[1] if typ in (7,11) else vals[0]
                     corners = dict(bottomLeft=self.vertex(vs[0],vals[0] if typ == 11 else None),
@@ -127,7 +154,8 @@ class ImportCity:
                     if typ == 11:
                         state.update(uRepeat=vals[2],vRepeat=vals[3])
                         if last_bound: state['bound'] = dict(kind='lowLevel',id=last_bound)
-                    e = self.element({3:'sliver',7:'facadeBound',11:'facade'}[typ],name,state,corners,r['id'])
+                    target = {3:'sliver',7:'facadeBound',11:'facade'}[typ]
+                    e = self.element(target,labeled(target),state,corners,r['id'])
                     if typ == 7: last_bound=e['id']
                 elif typ == 9:
                     vals = a['values']
@@ -139,7 +167,7 @@ class ImportCity:
                     if tex<0:state['invisible']=True
                     for j in range(6): state['texture'+str(j)]=self.texture(tex+j) if tex>=0 else ''
                     if len(vals)<9:
-                        e=self.element('roadTunnel',name,state,container=r['id']);pending.append(e)
+                        e=self.element('roadTunnel',labeled('roadTunnel'),state,container=r['id']);pending.append(e)
                     else:
                         base=2 if len(vals)==9 else 3
                         bits=vals[base+1] | (vals[base+2]<<16)
@@ -147,7 +175,7 @@ class ImportCity:
                         for j in range(len(per)):
                             if bits & (1 << ((j+1)%len(per))): walls.append(dict(points=[self.vertex(per[j][0]),self.vertex(per[(j+1)%len(per)][0])]))
                         for key in ('leftSide','rightSide'):state.pop(key,None)
-                        e=self.element('junctionTunnel',name,state,dict(walls=walls),r['id'])
+                        e=self.element('junctionTunnel',labeled('junctionTunnel'),state,dict(walls=walls),r['id'])
                         self.warn(name,'junction tunnel fan origin and per-edge offsets are regenerated')
             if pending: self.warn(f'room {i}','road tunnel without following road')
         return self
