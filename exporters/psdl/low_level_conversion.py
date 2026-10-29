@@ -393,6 +393,12 @@ class Converter:
                     for s in secs:
                         s["leftSidewalk"] = s["leftRoad"]
                         s["rightSidewalk"] = s["rightRoad"]
+                # the dividers at the ends follow the road edges there (shared with the intersections, which have no
+                # points where the dividers are), keeping their places across the road
+                for s in (secs[0], secs[-1]) if len(secs) > 0 else ():
+                    for d in ("leftDivider", "rightDivider"):
+                        if s[d] not in (s["leftRoad"], s["rightRoad"]):
+                            out.anchor(s[d], line=(s["leftRoad"], s["rightRoad"]))
                 caps = int(p.properties.get('caps', '0'))
                 e = out.element("dividedRoad", name, {
                     "noSidewalks": no_sidewalks,

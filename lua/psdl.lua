@@ -264,8 +264,11 @@ function M.dividedRoad(v, ctx)
     }
     local leftRoad, rightRoad = column(s, "leftRoad"), column(s, "rightRoad")
     local leftDivider, rightDivider = column(s, "leftDivider"), column(s, "rightDivider")
-    roadSurface(road, leftRoad, leftDivider)
-    roadSurface(road, rightDivider, rightRoad)
+    -- the road surface on each side of the divider, from the curb to the divider: half of the texture mirrored on the
+    -- center line each (as the procedural roads, repeating twice every half width of the whole road along it)
+    local uScale = width(leftRoad, rightRoad) * 0.25
+    strip(road, leftRoad, leftDivider, 0, 1, uScale)
+    strip(road, rightDivider, rightRoad, 1, 0, uScale)
     if not v.noSidewalks then
         sidewalk(sidewalks, column(s, "leftSidewalk"), leftRoad)
         sidewalk(sidewalks, column(s, "rightSidewalk"), rightRoad)
@@ -730,7 +733,8 @@ function M.baiRoadPoints(v, ctx)
     local sections = {}
     for i, s in ipairs(chain) do
         local rInner, lInner = s.rd, s.ld
-        if rInner == nil then
+        -- not "== nil": Lua-CSharp calls the __eq of the vectors with nil, which fails
+        if not rInner then
             local mid = s.rc:lerp(s.lc, 0.5)
             rInner = f > 0 and mid or s.lc
             lInner = b > 0 and mid or s.rc
