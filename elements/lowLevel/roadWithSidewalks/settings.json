@@ -57,5 +57,8 @@
 		"right",
 		"left"
 	],
-	"propsPresetType": "psdl"
+	"propsPresetType": "psdl",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

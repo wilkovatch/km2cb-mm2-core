@@ -480,5 +480,9 @@
 	"PROP_TYPE_PATHSET_STRIP": "Pathset prop line strip",
 	"PROP_STRIP_RAW_SPACING": "Spacing (quarter meters; 0 = 5 m)",
 	"INST_MODIFIERS": "INST modifiers",
-	"LL_INVISIBLE": "Invisible (no game collision)"
+	"LL_INVISIBLE": "Invisible (no game collision)",
+	"CREATE_DECAL": "Decal",
+	"CREATE_PSDL_ELEMENT": "PSDL element",
+	"GENERATE_RAIL_DECALS": "Generate rail decals",
+	"GENERATE_RAIL_DECALS_TOOLTIP": "Create editable tram rail connections across this intersection. Delete previous decals manually before regenerating."
 }

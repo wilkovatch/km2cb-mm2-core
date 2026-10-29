@@ -1,0 +1,13 @@
+{
+	"label": "GENERATE_RAIL_DECALS",
+	"tooltip": "GENERATE_RAIL_DECALS_TOOLTIP",
+	"sources": [
+		"intersection"
+	],
+	"types": [
+		"psdl"
+	],
+	"script": "convert.py",
+	"replace": false,
+	"enabledWhen": "decals.canGenerateRails"
+}

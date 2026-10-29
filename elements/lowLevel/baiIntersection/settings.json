@@ -10,5 +10,8 @@
 			]
 		}
 	],
-	"geometry": "psdl.baiIntersection"
+	"geometry": "psdl.baiIntersection",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

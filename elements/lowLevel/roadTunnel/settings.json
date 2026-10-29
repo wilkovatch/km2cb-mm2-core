@@ -1,3 +1,6 @@
 {
-	"geometry": "psdl.roadTunnel"
+	"geometry": "psdl.roadTunnel",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

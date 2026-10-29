@@ -1,0 +1,18 @@
+{
+	"mainMesh": {
+		"vertices": [
+			"v0+worldUp*0.01",
+			"v1+worldUp*0.01"
+		],
+		"uvs": [
+			"vec2(1,z/max(totalLength,0.0001)*floor(distance(v1_0,v1_1)/max(0.0001,distance(v0_0,v1_0))+0.5))",
+			"vec2(0,z/max(totalLength,0.0001)*floor(distance(v1_0,v1_1)/max(0.0001,distance(v0_0,v1_0))+0.5))"
+		],
+		"faces": [
+			0
+		],
+		"facesTextures": [
+			0
+		]
+	}
+}

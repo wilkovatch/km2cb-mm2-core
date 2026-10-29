@@ -14,6 +14,10 @@
 					"width": 1.5
 				},
 				{
+					"name": "convert:generateRailDecals",
+					"width": 1.5
+				},
+				{
 					"name": "echo",
 					"width": 0.75
 				},

@@ -19,5 +19,8 @@
 			]
 		}
 	],
-	"geometry": "psdl.sidewalkCap"
+	"geometry": "psdl.sidewalkCap",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

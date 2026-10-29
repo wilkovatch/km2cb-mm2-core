@@ -37,5 +37,8 @@
 			]
 		}
 	],
-	"geometry": "psdl.crosswalk"
+	"geometry": "psdl.crosswalk",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

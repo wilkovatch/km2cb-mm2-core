@@ -32,5 +32,8 @@
 			3
 		]
 	},
-	"geometry": "psdl.fan"
+	"geometry": "psdl.fan",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

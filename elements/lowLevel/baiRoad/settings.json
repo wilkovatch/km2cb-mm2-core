@@ -94,5 +94,8 @@
 	"derivedPoints": {
 		"flag": "autoCalculated",
 		"function": "psdl.baiRoadPoints"
+	},
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
 	}
 }

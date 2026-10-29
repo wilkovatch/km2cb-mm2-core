@@ -1,0 +1,40 @@
+{
+	"geometryLayer": 13,
+	"createMenu": {
+		"direct": true
+	},
+	"spline": {
+		"curveTypes": [
+			0,
+			1,
+			2
+		],
+		"defaultCurveType": 2,
+		"segments": 20,
+		"projectPoints": true,
+		"projectSections": true,
+		"projectionMask": 136,
+		"maxSectionLength": 25,
+		"maxMiter": 2,
+		"independentSegments": true,
+		"splitCondition": "abs(distance(v1_0,v1_1)/max(0.0001,distance(v0_0,v1_0))-max(1,floor(distance(v1_0,v1_1)/max(0.0001,distance(v0_0,v1_0))+0.5))) > 0.45",
+		"sectionVertices": [
+			"-0.5*realWidth",
+			"0.5*realWidth"
+		],
+		"components": [
+			{
+				"name": "strip"
+			}
+		],
+		"textures": [
+			"texture"
+		],
+		"texturesMapping": {
+			"strip": [
+				0
+			]
+		},
+		"widths": []
+	}
+}

@@ -614,10 +614,6 @@ class LowLevelExporter:
             elem.properties['cable_car'] = '1'
             offset = float(state_val(state, 'cableCarOffset', 0) or 0)
             elem.properties['cable_car_offset'] = str(offset if offset > 0 else 2.5)
-            rail_decal = self.jp.get_cable_car_rail_decal()
-            if rail_decal is not None:
-                elem.properties['cable_car_rail_decal'] = rail_decal[0]
-                elem.properties['cable_car_rail_width'] = str(rail_decal[1])
         elem.properties['start_rule'] = str(state_int(state, 'startRule')) if b_lanes > 0 else "0"
         elem.properties['end_rule'] = str(state_int(state, 'endRule')) if f_lanes > 0 else "0"
         elem.properties['start_intersection'] = self.end_intersection_key(rec, True)

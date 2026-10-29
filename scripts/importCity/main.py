@@ -2,13 +2,12 @@
 import json
 import math
 from pathlib import Path
-import citybuilder as cb
 from _formats import read_psdl, read_bai, read_inst, read_pathset, FormatError
 from _mapping import ImportCity, position
 from _companions import find, import_rules, import_settings, instance_transform, obj, properties, directory_entries
 
 SCRIPT=Path(__file__).resolve().parent
-APPEND=('blitzRaces','circuitRaces','checkpointRaces','decals','trainLines')
+APPEND=('blitzRaces','circuitRaces','checkpointRaces','trainLines')
 
 
 def strings():
@@ -63,8 +62,8 @@ def prepare(values):
             pairs=list(zip(points[::2],points[1::2]));widths=[float(np.linalg.norm(np.subtract(a,b))) for a,b in pairs]
             width=sum(widths)/len(widths)
             if max(widths)-min(widths)>0.01:city.warn(f'decal {i}','variable width approximated by average')
-            city.properties.setdefault('decals',[]).append(dict(name=f'Imported decal {i}',texture='texture/'+path['name']+'.tex',width=width,
-                points=[dict(point=obj([(a[j]+b[j])/2 for j in range(3)])) for a,b in pairs]))
+            ids=[city.point(('decal',i,k),position([(a[j]+b[j])/2 for j in range(3)])) for k,(a,b) in enumerate(pairs)]
+            city.element('decal',f'Imported decal {i}',dict(texture='texture/'+path['name']+'.tex',width=width,curveType=2),dict(spline=ids))
         trains=companion('race/'+race_dir+'/'+name+'_train.pathset',True,read_pathset)
         for i,path in enumerate(trains or []):
             if path['type']!=2 or len(path['points'])<2:city.warn(f'train path {i}','unsupported train path omitted');continue
@@ -81,6 +80,7 @@ def prepare(values):
 
 
 def main():
+    import citybuilder as cb
     text=strings()
     info=cb.api.city.info()
     if not info.get('loaded') or info.get('core')!='MidtownMadness2':raise SystemExit(text['IMPORT_CITY_WRONG_CORE'])

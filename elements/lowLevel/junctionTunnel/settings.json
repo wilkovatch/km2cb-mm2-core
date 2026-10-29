@@ -29,5 +29,8 @@
 			]
 		}
 	],
-	"geometry": "psdl.junctionTunnel"
+	"geometry": "psdl.junctionTunnel",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

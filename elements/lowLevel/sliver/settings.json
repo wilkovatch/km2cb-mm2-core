@@ -38,5 +38,8 @@
 		}
 	],
 	"geometry": "psdl.sliver",
-	"constraints": "psdl.slantedConstraints"
+	"constraints": "psdl.slantedConstraints",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

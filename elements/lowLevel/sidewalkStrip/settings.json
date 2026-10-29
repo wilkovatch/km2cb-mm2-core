@@ -34,5 +34,8 @@
 			]
 		}
 	],
-	"geometry": "psdl.sidewalkStrip"
+	"geometry": "psdl.sidewalkStrip",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

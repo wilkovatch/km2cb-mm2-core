@@ -58,6 +58,5 @@
     }
   ],
   "trafficLight1": "geometry/sp_traflitsingle_f.pkg",
-  "trafficLight2": "geometry/sp_traflitdual_f.pkg",
-  "cableCarRailDecals": true
+  "trafficLight2": "geometry/sp_traflitdual_f.pkg"
 }

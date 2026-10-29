@@ -1371,49 +1371,33 @@ class JsonProcessor:
             return None
         return os.path.splitext(self.get_tex(tex))[0].lower()
 
-    def get_cable_car_rail_decal(self):
-        # (texture, width) of the decals of the cable car rails, if the city has them
-        p = self.data.get('cityProperties')
-        if not state_bool(p, 'cableCarRailDecals'):
-            return None
-        texture = self.get_decal_texture(state_val(p, 'cableCarRailTexture', '')) or CABLE_CAR_RAIL_DECAL_TEXTURE
-        width = float(state_val(p, 'cableCarRailWidth', 0) or 0)
-        return texture, width if width > 0 else CABLE_CAR_RAIL_DECAL_WIDTH
-
     def get_decals(self, res):
-        # the decals of the city properties: their centre line, texture and width (the strips are made by the writer)
-        p = self.data.get('cityProperties')
-        for i, decal in enumerate(state_val(p, 'decals', []) or []):
-            name = state_val(decal, 'name', '') or ('decal ' + str(i + 1))
-            points = []
-            for point in state_val(decal, 'points', []) or []:
-                pdata = state_val(point, 'point', None)
-                if isinstance(pdata, dict):
-                    pos = state_vector(pdata, 'localPosition')
-                    points.append((pos['x'], pos['y'], pos['z']))
-            texture = self.get_decal_texture(state_val(decal, 'texture', ''))
-            width = float(state_val(decal, 'width', 0) or 0)
-            if len(points) < 2:
-                report.warning("the decal " + name + " has less than two points, it is not exported")
+        # Strip edges are evaluated by the core's JSON components in the editor, not resampled here.
+        for decal in self.data.get('lowLevelElements') or []:
+            if decal.get('type') != 'decal':
                 continue
-            if texture is None:
-                report.warning("the decal " + name + " has no texture, it is not exported")
+            state = decal.get('data', {}).get('fields', {}).get('state', {})
+            name = decal.get('data', {}).get('name', 'decal')
+            texture = self.get_decal_texture(state_val(state, 'texture', ''))
+            pieces = (decal.get('spline') or {}).get('pieces', [])
+            if not pieces:
+                report.warning('the decal ' + name + ' has less than two distinct usable points, it is not exported')
                 continue
-            if len(texture) > DECAL_MAX_TEXTURE_NAME:
-                report.warning("the texture of the decal " + name + " has a name longer than " + str(DECAL_MAX_TEXTURE_NAME)
-                      + " characters, the decal is not exported")
+            if not texture or len(texture) > DECAL_MAX_TEXTURE_NAME:
+                report.warning('the decal ' + name + ' has a missing or overlong texture name, it is not exported')
                 continue
-            if any(self.find_block(point) < 0 for point in points):
-                report.warning("the decal " + name + " has points outside of the blocks, the game draws each piece of it"
-                      + " only with the room of its start")
-            elem = ExportedCityElement()
-            elem.name = '0_DECAL'
-            elem.vertices = points
-            elem.properties['original_name'] = name
-            elem.properties['texture'] = texture
-            elem.properties['width'] = str(width if width > 0 else DECAL_DEFAULT_WIDTH)
-            elem.mat = 'NONE'
-            res.append(elem)
+            if any(self.find_block(tuple(section['center'])) < 0 for piece in pieces for section in piece):
+                report.warning('the decal ' + name + ' has points outside of the blocks; each piece is visible only with its starting room')
+            for piece in pieces:
+                if len(piece) != 2 or any(len(section['vertices']) != 2 for section in piece):
+                    report.warning('the decal ' + name + ' has an invalid strip cross-section, it is not exported')
+                    continue
+                elem = ExportedCityElement()
+                elem.name = '0_DECAL'
+                elem.vertices = [tuple(v) for section in piece for v in section['vertices']]
+                elem.properties.update(original_name=name, texture=texture, strip_pairs='1')
+                elem.mat = 'NONE'
+                res.append(elem)
 
     def get_cable_car_offset(self, r_state):
         # as cableCarOffsetI in the road parameters
@@ -1565,10 +1549,6 @@ class JsonProcessor:
         if layout['cable_car']:
             traffic_elem.properties['cable_car'] = '1'
             traffic_elem.properties['cable_car_offset'] = str(layout['cable_car_offset'])
-            rail_decal = self.get_cable_car_rail_decal()
-            if rail_decal is not None:
-                traffic_elem.properties['cable_car_rail_decal'] = rail_decal[0]
-                traffic_elem.properties['cable_car_rail_width'] = str(rail_decal[1])
         traffic_elem.properties['start_rule'] = start_rule
         traffic_elem.properties['end_rule'] = end_rule
         traffic_elem.properties['start_intersection'] = self.get_bai_intersection_key(start_int, chain[0][0], not first_rev)

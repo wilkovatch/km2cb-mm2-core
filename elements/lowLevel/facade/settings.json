@@ -38,5 +38,8 @@
 		}
 	],
 	"geometry": "psdl.facade",
-	"constraints": "psdl.facadeConstraints"
+	"constraints": "psdl.facadeConstraints",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
 }

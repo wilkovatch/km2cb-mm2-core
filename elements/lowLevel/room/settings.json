@@ -30,5 +30,8 @@
 			"baiRoad",
 			"baiIntersection"
 		]
+	},
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
 	}
 }
