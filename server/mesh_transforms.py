@@ -1,6 +1,7 @@
 # Transforms of the meshes from their placement point (used where the placement rules have meshTransform): the game draws
 # a banger (prop) with the origin of its meshes at its centre of gravity, the CG of tune/banger/<pkg>.dgBangerData (as the
-# props of the pathsets, of the prop rules and the traffic lights), a banger without banger data at its position.
+# props of the pathsets, of the prop rules and the traffic lights), a banger without banger data at its position. The
+# editor puts a mesh without banger data on its lowest point instead (no transform, so autoYOffset applies).
 import os
 
 BANGER_FOLDER = os.path.join('tune', 'banger')
@@ -65,4 +66,4 @@ def read_transform(path):
         if file is not None:
             cg = read_cg(file) or [0.0, 0.0, 0.0]  # the CG of default.dgBangerData (0)
             return {'position': [-cg[0], cg[1], cg[2]]}  # the x axis is mirrored, as in mesh_formats
-    return {'position': [0.0, 0.0, 0.0]}
+    return None  # no banger data (e.g. a custom prop): put on its lowest point (autoYOffset)
