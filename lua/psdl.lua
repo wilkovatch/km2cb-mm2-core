@@ -633,9 +633,9 @@ function M.baiRoad(v, ctx)
         { points = column(s, "leftEdge"), color = "white", heightOffset = 0.15 }
     }
     -- thin lines slightly above the points, as the lanes of the procedural roads (shown also while anything in the room
-    -- is edited)
+    -- is edited, and with the lanes of the roads by View > Show all traffic lanes)
     local function lane(points, color)
-        lines[#lines + 1] = { points = points, color = color, heightOffset = 0.01, always = v.alwaysShown, withContainer = true }
+        lines[#lines + 1] = { points = points, color = color, heightOffset = 0.01, always = v.alwaysShown, withContainer = true, traffic = true }
     end
     local function lanes(name, color)
         local n = #s[1][name]
@@ -748,7 +748,7 @@ function M.baiIntersection(v, ctx)
     local c = ctx.points.center
     local d = 1.5
     return { lines = {
-        { points = { c + vec3(-d, 0, -d), c + vec3(d, 0, -d), c + vec3(d, 0, d), c + vec3(-d, 0, d) }, closed = true, color = "magenta", heightOffset = 0.2, width = 0.3, always = v.alwaysShown, withContainer = true },
+        { points = { c + vec3(-d, 0, -d), c + vec3(d, 0, -d), c + vec3(d, 0, d), c + vec3(-d, 0, d) }, closed = true, color = "magenta", heightOffset = 0.2, width = 0.3, always = v.alwaysShown, withContainer = true, traffic = true },
     } }
 end
 
