@@ -6,7 +6,7 @@
 		"projectionSurface": true,
 		"placementRules": {
 			"layer": "11",
-			"placerLayerMask": "-1-2^7",
+			"placerLayerMask": "-1-2^11-2^13",
 			"autoYOffset": "false",
 			"meshTransform": "false"
 		},
