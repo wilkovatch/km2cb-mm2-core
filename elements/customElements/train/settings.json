@@ -3,8 +3,7 @@
     "spline": {
         "curveTypes": [3],
         "defaultCurveType": 3,
-        "line": { "color": "yellow", "always": true },
-        "controlLine": { "color": "cyan", "always": false },
+        "line": { "color": "yellow", "always": true, "trimStart": 1, "trimEnd": 1 },
         "previewTolerance": 0.05,
         "previewMaxDepth": 8,
         "sectionVertices": [],
