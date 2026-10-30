@@ -1,5 +1,17 @@
 {
   "presets": {
+    "lowLevel/decal": [
+      {
+        "name": "Default",
+        "type": "decal",
+        "texture": "texture/r4i_rails_f.tex",
+        "width": 2.0,
+        "curveType": 0,
+        "segments": 20,
+        "segmentsPer100m": false,
+        "hermiteTension": 0.5
+      }
+    ],
     "propElem": [
       {
         "start": 9.0,

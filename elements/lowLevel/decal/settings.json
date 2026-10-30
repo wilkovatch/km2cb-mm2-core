@@ -1,4 +1,10 @@
 {
+	"presets": true,
+	"defaultPreset": {
+		"texture": "texture/r4i_rails_f.tex",
+		"width": 2.0,
+		"curveType": 0
+	},
 	"geometryLayer": 13,
 	"createMenu": {
 		"direct": true
