@@ -3,6 +3,7 @@
 		"direct": true
 	},
 	"meshInstance": {
+		"projectionSurface": true,
 		"placementRules": {
 			"layer": "11",
 			"placerLayerMask": "-1-2^7",

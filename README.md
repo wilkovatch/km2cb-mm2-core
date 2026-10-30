@@ -4,6 +4,12 @@ The main repository for the city builder is here: https://github.com/wilkovatch/
 
 This core uses code from this repository: https://github.com/wilkovatch/psdl-exporter-common, it's included as a submodule, so make sure to use `--recurse-submodules` when cloning this repository.
 
+## Surface projection
+
+The terrain grid is a placement guide in MM2. Elements that automatically project onto city surfaces, such as decals, first search roads, intersections, terrain patches, supported custom geometry and INST meshes. They use the grid only if no supported city surface is found, even when that surface is several metres below it. Roads and other elements that explicitly follow the heightmap keep doing so.
+
+The core enables `surfaceProjectionTerrainFallbackOnly` in its settings and `meshInstance.projectionSurface` for the INST mesh type. Props are not additional projection targets. Projected spline sections follow edits to INST meshes, including transforms, replacement, deletion and undo/redo; the saved control points retain their placement and move rules.
+
 ## Importing the stock game assets
 
 Open or create a city using the Midtown Madness 2 core, then choose **Scripts → Import MM2 game assets...**. Select the folder of your own MM2 installation (the folder containing `MM2CORE.AR` and `MM2TEX.AR`) and click **Run**. The script extracts the stock meshes and their MTX files, TEX and TGA textures, prop tuning (`tune/banger/*.dgBangerData`) and `city/materials.csv` to the city builder's `Files/common/MidtownMadness2` folder. The city templates already search this folder for shared assets.
