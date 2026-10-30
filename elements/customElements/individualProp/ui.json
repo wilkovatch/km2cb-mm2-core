@@ -1,0 +1,27 @@
+{
+	"label": "CREATE_INDIVIDUAL_PROP",
+	"menuWidth": 1.8,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.8
+				},
+				{
+					"name": "placementGroup",
+					"width": 1.8
+				},
+				{
+					"name": "transformGroup",
+					"width": 1.8
+				},
+				{
+					"name": "hudmapCategory",
+					"width": 1.8
+				}
+			]
+		}
+	]
+}

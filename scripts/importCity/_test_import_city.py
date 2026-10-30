@@ -160,7 +160,7 @@ class Readers(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp)/'a.inst';p.write_bytes(struct.pack('<HHB',1,513,0x85)+b'test\0'+struct.pack('<5f',0,-1,2,3,4))
             record=read_inst(p)[0];mapped=instance_transform(record,lambda *args:None)
-            self.assertEqual(mapped['position'],[-2,3,4]);self.assertEqual(mapped['settings']['instModifiers'],513)
+            self.assertEqual(mapped['position'],[-2,3,4]);self.assertEqual(mapped['settings']['instModifiers'],513);self.assertEqual(mapped['type'],'instMesh')
             self.assertAlmostEqual(mapped['rotation'][1]%360,270)
 
 

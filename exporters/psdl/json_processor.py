@@ -1214,7 +1214,7 @@ class JsonProcessor:
                 res.append(elem)
         else:
             block = 0
-            is_prop = state_bool(state, 'prop')
+            is_prop = mesh.get('type') == 'individualProp' # the other mesh instances (and the parametric objects) are INST meshes
             if not is_prop:
                 block = self.find_block(np.add(mref['position'], (0.0, dict_mesh['boundsMin'][1], 0.0)))
             if block >= 0 or is_prop:

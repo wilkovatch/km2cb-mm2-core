@@ -118,7 +118,7 @@ def instance_transform(record, warn):
     # GameEngine.SetRotation negates X and Y when converting to Godot.
     return dict(mesh='geometry/'+record['name']+'.pkg',position=position(record['position']),
                 rotation=[-math.degrees(x),-math.degrees(y),math.degrees(roll)],scale=scale.tolist(),
-                settings=dict(prop=False,instModifiers=record['modifiers']))
+                type='instMesh',settings=dict(instModifiers=record['modifiers']))
 
 
 def obj(pos, yaw=0, model=None, scale=None):

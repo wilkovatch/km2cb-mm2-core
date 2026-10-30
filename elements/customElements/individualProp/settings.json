@@ -1,0 +1,16 @@
+{
+	"createMenu": {
+		"direct": true
+	},
+	"meshInstance": {
+		"placementRules": {
+			"layer": "13",
+			"placerLayerMask": "-1-2^13",
+			"autoYOffset": "true",
+			"meshTransform": "true"
+		},
+		"massPlacement": true,
+		"randomRotation": true,
+		"namePrefix": "Prop"
+	}
+}

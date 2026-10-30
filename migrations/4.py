@@ -1,4 +1,5 @@
-"""Move city-property train lines to native MM2 train spline elements, preserving authored controls."""
+"""Move city-property train lines to native MM2 train spline elements, preserving authored controls, and give the mesh
+instances their type (individualProp or instMesh) from their former prop flag."""
 import copy
 import math
 import sys
@@ -31,7 +32,19 @@ def migrate_city(data):
         element_id += 1
     properties.pop('trainLines', None)
     data['cityProperties'] = properties
+    migrate_meshes(data)
     return data
+
+
+def migrate_meshes(data):
+    for mesh in data.get('meshes') or []:
+        settings = mesh.get('settings') or {}
+        if 'type' not in settings:
+            settings['type'] = 'individualProp' if settings.get('prop') else 'instMesh'
+        settings.pop('prop', None)
+        if settings['type'] == 'individualProp':
+            settings.pop('instModifiers', None)  # props are pathset entries, the INST flags don't apply
+        mesh['settings'] = settings
 
 
 def process_folder(helper):

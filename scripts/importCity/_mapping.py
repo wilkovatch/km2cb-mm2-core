@@ -256,6 +256,6 @@ class ImportCity:
                     if step==2:
                         d=np.subtract(position(path['points'][j+1]),pos)
                         yaw=math.degrees(math.atan2(d[2],-d[0]))
-                    self.meshes.append(dict(mesh=model,position=pos,rotation=[0,yaw,0],settings=dict(prop=True)))
+                    self.meshes.append(dict(mesh=model,position=pos,rotation=[0,yaw,0],type='individualProp'))
 
     def payload(self): return dict(points=self.points,elements=self.elements)
