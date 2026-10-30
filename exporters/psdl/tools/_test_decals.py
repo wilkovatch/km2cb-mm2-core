@@ -60,6 +60,20 @@ def audit_preview(export_json, pathset):
 
 
 class DecalTests(unittest.TestCase):
+    def test_migration_accepts_null_city_collections(self):
+        decal = dict(name='Legacy decal',texture='texture/rails.tex',width=2,
+                     points=[dict(point=dict(localPosition=p)) for p in ([1,2,3],[4,5,6])])
+        for values in ({}, dict(terrainPoints=None), dict(lowLevelElements=None), dict(terrainPoints=None,lowLevelElements=None)):
+            with self.subTest(values=values):
+                data = dict(values,cityProperties=dict(decals=[decal]))
+                before = copy.deepcopy(data)
+                out = migration.migrate_city(data)
+                self.assertEqual(data,before)
+                self.assertEqual([p['id'] for p in out['terrainPoints']],[0,1])
+                self.assertEqual(out['lowLevelElements'][0]['id'],0)
+                self.assertEqual(out['lowLevelElements'][0]['points']['spline'],[0,1])
+                self.assertEqual(migration.migrate_city(out),out)
+
     def test_migration_preserves_data_and_is_idempotent(self):
         data = dict(cityProperties=dict(decals=[dict(name='Zebra', texture='texture/zebra.tex', width=3,
             points=[dict(point=dict(localPosition=dict(x=4,y=2,z=10))), dict(point=dict(localPosition=dict(x=7,y=3,z=15)))]),

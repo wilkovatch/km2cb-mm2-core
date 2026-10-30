@@ -1,0 +1,9 @@
+[
+    {
+        "id": 3,
+        "name": "mm2Train",
+        "label": "TRAIN_SPLINE",
+        "evaluate": "trains.evaluate",
+        "controlParameters": "trains.controlParameters"
+    }
+]

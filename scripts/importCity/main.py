@@ -7,7 +7,7 @@ from _mapping import ImportCity, position
 from _companions import find, import_rules, import_settings, instance_transform, obj, properties, directory_entries
 
 SCRIPT=Path(__file__).resolve().parent
-APPEND=('blitzRaces','circuitRaces','checkpointRaces','trainLines')
+APPEND=('blitzRaces','circuitRaces','checkpointRaces')
 
 
 def strings():
@@ -66,9 +66,11 @@ def prepare(values):
             city.element('decal',f'Imported decal {i}',dict(texture='texture/'+path['name']+'.tex',width=width,curveType=2),dict(spline=ids))
         trains=companion('race/'+race_dir+'/'+name+'_train.pathset',True,read_pathset)
         for i,path in enumerate(trains or []):
-            if path['type']!=2 or len(path['points'])<2:city.warn(f'train path {i}','unsupported train path omitted');continue
+            if path['type']!=2:city.warn(f'train path {i}','unsupported train path omitted');continue
+            if len(path['points'])<3:city.warn(f'train path {i}','incomplete train path retained for editing; at least three points are needed to export')
             if path['spacing'] not in (0,20):city.warn(f'train path {i}','train spacing is regenerated as 5 m')
-            city.properties.setdefault('trainLines',[]).append(dict(name=path['name'],points=[dict(point=obj(p)) for p in path['points']]))
+            ids=[city.point(('train',i,k),position(p)) for k,p in enumerate(path['points'])]
+            city.element('train',path['name'] or f'Imported train {i}',dict(curveType=3),dict(spline=ids))
     def finite(value):
         if isinstance(value,float) and not math.isfinite(value):raise FormatError('non-finite numeric value in companion data')
         if isinstance(value,dict):

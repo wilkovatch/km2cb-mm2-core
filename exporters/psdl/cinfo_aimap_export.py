@@ -349,7 +349,7 @@ class CinfoAimapExporter:
 
         self.export_roam_aimap(racesubfolder, p)
 
-        export_trains(p, racesubfolder, cityname)
+        export_trains(self.json_processor.data, racesubfolder, cityname)
 
         blitzdata = []
         for i in range(len(blitz_races)):

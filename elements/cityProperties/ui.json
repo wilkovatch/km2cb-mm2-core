@@ -76,15 +76,6 @@
 			]
 		},
 		{
-			"label": "CP_TRAINS",
-			"elements": [
-				{
-					"name": "trainLines",
-					"width": 1.5
-				}
-			]
-		},
-		{
 			"label": "CP_HUDMAP",
 			"elements": [
 				{

@@ -248,7 +248,6 @@
 	"TP_MERGE_TOOLTIP": "If checked, when exporting for MM2, this patch will be assigned to the same block of other connected patches which have this flag set too (note: connected means: at least one edge in common)\nNote: be careful if you add railings, as they can only be placed on the block perimeter",
 	"PROP_ELEM_RND_TOOLTIP": "If unchecked, meshes are chosen sequentially, if checked, randomly.\nEven if checked the result won't be exactly the same as in MM2, since there props are placed according to an apparently random pattern (which is always the same though)",
 	"UV_MULT_SW_TOOLTIP": "Multiplies the U coordinate for road-style sidewalks by this amount. Not supported in MM2 (equivalent is 1)",
-	"RD_ECHO_TOOLTIP": "For galleries and underground roads, adds an echo to the sound when on it",
 	"RD_FIX_SIDEWALKS_UV_TOOLTIP": "Uses road-style UV coordinates for the sidewalks. Use sparingly, as it may look bad (or even break in MM2) when the sidewalk does not have 4 distinct sides (e.g. when going from a road with sidewalks to another without them)",
 	"RD_COPLANAR_TOOLTIP": "In Midtown Madness 2 the road colliders are quads, this means that the 4 corner vertices must be coplanar to make the mesh the same as the collider.\nRoads that bend only on one axis (Y (left-right) or Z (up-down)) are not a problem.\nThe problem arises when a road bends on both the Y and Z axes (e.g. a curved slope).\nThis option tries to make the segments of such roads coplanar by rearranging the vertices.\nThis does not always work, if the curve is not slight the result will be horrible.",
 	"FIX_BOUND_TOOLTIP": "If checked, it will duplicate the facade bound and assign it to the block in front of it in addition to the block behind it.\nThis can help make the bound work consistently. (in case it doesn't always work)\nUse sparingly.\nOn building lines it is only used if 'front only' is checked",
@@ -484,5 +483,7 @@
 	"CREATE_DECAL": "Decal",
 	"CREATE_PSDL_ELEMENT": "PSDL element",
 	"GENERATE_RAIL_DECALS": "Generate rail decals",
-	"GENERATE_RAIL_DECALS_TOOLTIP": "Create editable tram rail connections across this intersection. Delete previous decals manually before regenerating."
+	"GENERATE_RAIL_DECALS_TOOLTIP": "Create editable tram rail connections across this intersection. Delete previous decals manually before regenerating.",
+	"CREATE_TRAIN": "Train",
+	"TRAIN_SPLINE": "MM2 train Hermite"
 }

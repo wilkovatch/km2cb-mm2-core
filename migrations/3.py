@@ -8,8 +8,8 @@ import MigrationHelper
 def migrate_city(data):
     data = copy.deepcopy(data)
     properties = data.get('cityProperties') or {}
-    points = data.setdefault('terrainPoints', [])
-    elements = data.setdefault('lowLevelElements', [])
+    points = data['terrainPoints'] = data.get('terrainPoints') or []
+    elements = data['lowLevelElements'] = data.get('lowLevelElements') or []
     point_id = max((p['id'] for p in points), default=-1) + 1
     element_id = max((e['id'] for e in elements), default=-1) + 1
     for i, decal in enumerate(properties.get('decals') or []):

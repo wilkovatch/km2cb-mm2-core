@@ -107,16 +107,6 @@
 			}
 		},
 		{
-			"name": "trainLines",
-			"label": "CP_TRAIN_LINES",
-			"tooltip": "CP_TRAIN_LINES_TOOLTIP",
-			"type": "array",
-			"arrayProperties": {
-				"maxElements": -1,
-				"customElementType": "trainLine"
-			}
-		},
-		{
 			"name": "mapLabels",
 			"label": "CP_MAP_LABELS",
 			"tooltip": "CP_MAP_LABELS_TOOLTIP",

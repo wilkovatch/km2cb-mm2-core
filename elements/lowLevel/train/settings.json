@@ -1,0 +1,15 @@
+{
+    "createMenu": { "direct": true },
+    "spline": {
+        "curveTypes": [3],
+        "defaultCurveType": 3,
+        "line": { "color": "yellow", "always": true },
+        "controlLine": { "color": "cyan", "always": false },
+        "previewTolerance": 0.05,
+        "previewMaxDepth": 8,
+        "sectionVertices": [],
+        "components": [],
+        "textures": [],
+        "widths": []
+    }
+}

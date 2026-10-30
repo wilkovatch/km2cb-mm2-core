@@ -1,0 +1,8 @@
+{
+    "label": "CREATE_TRAIN",
+    "menuWidth": 1.5,
+    "tabs": [{ "label": "", "elements": [
+        { "name": "mainGroup", "width": 1.5 },
+        { "name": "pointsGroup", "width": 1.5 }
+    ] }]
+}
