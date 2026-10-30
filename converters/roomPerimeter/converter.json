@@ -1,7 +1,7 @@
 {
 	"label": "CONVERT_ROOM_PERIMETER",
 	"tooltip": "CONVERT_ROOM_PERIMETER_TOOLTIP",
-	"sources": ["lowLevel/room"],
+	"sources": ["customElement/room"],
 	"replace": false,
 	"script": "convert.py"
 }

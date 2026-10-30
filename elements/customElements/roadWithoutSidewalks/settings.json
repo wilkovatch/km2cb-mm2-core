@@ -1,0 +1,41 @@
+{
+	"controlPoints": [
+		{
+			"name": "sections",
+			"label": "CE_SECTIONS",
+			"array": {
+				"min": 2,
+				"defaultCount": 2,
+				"defaultStep": [
+					0,
+					0,
+					10
+				]
+			},
+			"children": [
+				{
+					"name": "left",
+					"label": "CE_LEFT_EDGE",
+					"defaultPosition": [
+						-4,
+						0,
+						0
+					]
+				},
+				{
+					"name": "right",
+					"label": "CE_RIGHT_EDGE",
+					"defaultPosition": [
+						4,
+						0,
+						0
+					]
+				}
+			]
+		}
+	],
+	"geometry": "psdl.roadWithoutSidewalks",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

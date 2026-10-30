@@ -48,14 +48,14 @@ with cb.transaction('test city import'):main()
 cb.inputs=original_inputs
 paths=cb.api.elements.list(kind='propPath')
 assert len(paths)==3,paths
-assert len(cb.api.elements.list(kind='lowLevel'))==2
+assert len(cb.api.elements.list(kind='customElement'))==2
 settings=cb.api.state.get(ref=0)['state']
 assert settings['cityName']=='Synthetic city' and settings['driveOnLeft']
 assert settings['roamPoliceCars']['policeCars'][0]['carModel']['localPosition']['x']==1
 assert settings['blitzRaces'][-1]['timeOfDay']==3 and settings['blitzRaces'][-1]['checkpoints'][0]['checkpoint']['localScale']==dict(x=5,y=7.5,z=15)
 cb.api.history.undo()
 assert not cb.api.elements.list(kind='propPath')
-assert not cb.api.elements.list(kind='lowLevel')
+assert not cb.api.elements.list(kind='customElement')
 cb.api.history.redo()
 paths=cb.api.elements.list(kind='propPath')
 assert len(paths)==3
@@ -112,7 +112,7 @@ cb.api.propPaths.delete(element=prop)
 # Preflight rejection leaves existing city data intact.
 before=len(cb.api.elements.list())
 bad=dict(points=[dict(id='a',position=[0,0,0],anchor=dict(column='b')),dict(id='b',position=[0,1,0],anchor=dict(column='a'))],elements=[])
-try:cb.call('lowLevel.import',data=bad);raise AssertionError('accepted cyclic anchors')
+try:cb.call('customElement.import',data=bad);raise AssertionError('accepted cyclic anchors')
 except cb.ApiError:pass
 assert len(cb.api.elements.list())==before
 
@@ -121,7 +121,7 @@ cb.api.city.reload()
 assert len(cb.api.elements.list(kind='propPath'))==3
 cb.api.city.exportJson(path=str(folder/'export.json'))
 exported=json.loads((folder/'export.json').read_text())
-assert len(exported['propPaths'])==3 and len(exported['lowLevelElements'])==2
+assert len(exported['propPaths'])==3 and len(exported['customElements'])==2
 assert cb.api.state.get(ref=0)['state']['blitzRaces'][-1]['timeOfDay']==3
 cb.api.city.export(path=str(folder/'export/synthetic.psdl'),exporter='psdl',flags=dict(bai=False,cinfo_aimap=False,hudmap=False,pkgs=False))
 strips=read_pathset(folder/'export/city/synthetic/props.pathset')

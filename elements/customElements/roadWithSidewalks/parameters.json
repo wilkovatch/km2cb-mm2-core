@@ -1,0 +1,33 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "CE_ROAD_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "sidewalkTexture",
+			"label": "CE_SIDEWALK_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "lodTexture",
+			"label": "CE_LOD_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "noCoplanarFix",
+			"label": "CE_NO_COPLANAR_FIX",
+			"type": "bool",
+			"tooltip": "CE_NO_COPLANAR_FIX_TOOLTIP"
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

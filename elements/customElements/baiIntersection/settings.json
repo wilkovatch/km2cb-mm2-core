@@ -1,0 +1,17 @@
+{
+	"controlPoints": [
+		{
+			"name": "center",
+			"label": "CE_CENTER",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		}
+	],
+	"geometry": "psdl.baiIntersection",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

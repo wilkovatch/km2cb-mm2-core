@@ -1,6 +1,6 @@
 {
     "IMPORT_CITY_TITLE": "Import MM2 city",
-    "IMPORT_CITY_DESCRIPTION": "Append a loose MM2 city. Geometry and AI become editable low-level elements; prop strips remain procedural. Source assets are referenced. Source search paths remain after undo.",
+    "IMPORT_CITY_DESCRIPTION": "Append a loose MM2 city. Geometry and AI become editable custom elements; prop strips remain procedural. Source assets are referenced. Source search paths remain after undo.",
     "IMPORT_CITY_PSDL": "PSDL file",
     "IMPORT_CITY_ROOT": "Source root (optional)",
     "IMPORT_CITY_BAI": "Import AI roads",

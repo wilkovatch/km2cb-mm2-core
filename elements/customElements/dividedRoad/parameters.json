@@ -1,0 +1,85 @@
+{
+	"parameters": [
+		{
+			"name": "noSidewalks",
+			"label": "CE_NO_SIDEWALKS",
+			"type": "bool",
+			"tooltip": "CE_NO_SIDEWALKS_TOOLTIP"
+		},
+		{
+			"name": "dividerType",
+			"label": "CE_DIVIDER_TYPE",
+			"type": "enum",
+			"enumLabels": [
+				"CE_DIVIDER_INVISIBLE",
+				"CE_DIVIDER_FLAT",
+				"CE_DIVIDER_ELEVATED",
+				"CE_DIVIDER_WEDGED"
+			]
+		},
+		{
+			"name": "dividerValue",
+			"label": "CE_DIVIDER_VALUE",
+			"type": "float",
+			"placeholder": "VALUE_PH",
+			"tooltip": "CE_DIVIDER_VALUE_TOOLTIP"
+		},
+		{
+			"name": "closeStart",
+			"label": "CE_DIVIDER_CLOSE_START",
+			"type": "bool"
+		},
+		{
+			"name": "closeEnd",
+			"label": "CE_DIVIDER_CLOSE_END",
+			"type": "bool"
+		},
+		{
+			"name": "texture",
+			"label": "CE_ROAD_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "sidewalkTexture",
+			"label": "CE_SIDEWALK_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "lodTexture",
+			"label": "CE_LOD_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "dividerSideTexture",
+			"label": "CE_DIVIDER_SIDE_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "dividerFlatTexture",
+			"label": "CE_DIVIDER_FLAT_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "dividerTopTexture",
+			"label": "CE_DIVIDER_TOP_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "dividerCapTexture",
+			"label": "CE_DIVIDER_CAP_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

@@ -66,8 +66,8 @@
 		{
 			"name": "roamPoliceCars",
 			"label": "EDIT_POLICE_CARS",
-			"type": "customElement",
-			"customElementType": "roamPoliceCars"
+			"type": "customCityProperties",
+			"customCityPropertiesType": "roamPoliceCars"
 		},
 		{
 			"name": "trafficLight1",
@@ -85,7 +85,7 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customElementType": "circuitRace"
+				"customCityPropertiesType": "circuitRace"
 			}
 		},
 		{
@@ -94,7 +94,7 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customElementType": "checkpointRace"
+				"customCityPropertiesType": "checkpointRace"
 			}
 		},
 		{
@@ -103,7 +103,7 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customElementType": "blitzRace"
+				"customCityPropertiesType": "blitzRace"
 			}
 		},
 		{
@@ -113,7 +113,7 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customElementType": "mapLabel"
+				"customCityPropertiesType": "mapLabel"
 			}
 		},
 		{

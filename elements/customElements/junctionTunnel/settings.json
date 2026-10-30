@@ -1,0 +1,36 @@
+{
+	"controlPoints": [
+		{
+			"name": "walls",
+			"label": "CE_WALLS",
+			"array": {
+				"min": 1,
+				"defaultCount": 1,
+				"defaultStep": [
+					0,
+					0,
+					5
+				]
+			},
+			"children": [
+				{
+					"name": "points",
+					"label": "CE_WALL_POINTS",
+					"array": {
+						"min": 2,
+						"defaultCount": 2,
+						"defaultStep": [
+							5,
+							0,
+							0
+						]
+					}
+				}
+			]
+		}
+	],
+	"geometry": "psdl.junctionTunnel",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

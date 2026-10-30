@@ -1,0 +1,118 @@
+{
+	"parameters": [
+		{
+			"name": "wall",
+			"label": "CE_TUNNEL_WALL",
+			"type": "bool",
+			"tooltip": "CE_TUNNEL_WALL_TOOLTIP"
+		},
+		{
+			"name": "flatCeiling",
+			"label": "CE_TUNNEL_FLAT_CEILING",
+			"type": "bool"
+		},
+		{
+			"name": "curvedCeiling",
+			"label": "CE_TUNNEL_CURVED_CEILING",
+			"type": "bool"
+		},
+		{
+			"name": "curvedSides",
+			"label": "CE_TUNNEL_CURVED_SIDES",
+			"type": "bool"
+		},
+		{
+			"name": "culled",
+			"label": "CE_TUNNEL_CULLED",
+			"type": "bool",
+			"tooltip": "CE_TUNNEL_CULLED_TOOLTIP"
+		},
+		{
+			"name": "closedStartLeft",
+			"label": "CE_TUNNEL_CLOSED_START_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "closedEndLeft",
+			"label": "CE_TUNNEL_CLOSED_END_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "closedStartRight",
+			"label": "CE_TUNNEL_CLOSED_START_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "closedEndRight",
+			"label": "CE_TUNNEL_CLOSED_END_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetStartLeft",
+			"label": "CE_TUNNEL_OFFSET_START_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetEndLeft",
+			"label": "CE_TUNNEL_OFFSET_END_LEFT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetStartRight",
+			"label": "CE_TUNNEL_OFFSET_START_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "offsetEndRight",
+			"label": "CE_TUNNEL_OFFSET_END_RIGHT",
+			"type": "bool"
+		},
+		{
+			"name": "height",
+			"label": "CE_TUNNEL_HEIGHT",
+			"type": "float",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "texture0",
+			"label": "CE_TUNNEL_TEXTURE_0",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture1",
+			"label": "CE_TUNNEL_TEXTURE_1",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture2",
+			"label": "CE_TUNNEL_TEXTURE_2",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture3",
+			"label": "CE_TUNNEL_TEXTURE_3",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture4",
+			"label": "CE_TUNNEL_TEXTURE_4",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "texture5",
+			"label": "CE_TUNNEL_TEXTURE_5",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

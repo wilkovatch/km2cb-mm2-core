@@ -3,8 +3,8 @@
 	"version": "0.2.1",
 	"coreVersion": 4,
 	"coreFeatureVersion": 8,
-	"programVersion": 3,
-	"featureVersion": 3,
+	"programVersion": 4,
+	"featureVersion": 1,
 	"customTextureFormats": [
 		"tex"
 	],

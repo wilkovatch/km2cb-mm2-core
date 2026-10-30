@@ -34,7 +34,7 @@ def audit_preview(export_json, pathset):
     data = DecodeExportedJson().decode_json(export_json)
     paths = read_pathset(pathset)
     index = 0
-    for element in data.get('lowLevelElements') or []:
+    for element in data.get('customElements') or []:
         if element['type'] != 'decal':
             continue
         mesh = element['data']['mesh']
@@ -63,30 +63,30 @@ class DecalTests(unittest.TestCase):
     def test_migration_accepts_null_city_collections(self):
         decal = dict(name='Legacy decal',texture='texture/rails.tex',width=2,
                      points=[dict(point=dict(localPosition=p)) for p in ([1,2,3],[4,5,6])])
-        for values in ({}, dict(terrainPoints=None), dict(lowLevelElements=None), dict(terrainPoints=None,lowLevelElements=None)):
+        for values in ({}, dict(terrainPoints=None), dict(customElements=None), dict(terrainPoints=None,customElements=None)):
             with self.subTest(values=values):
                 data = dict(values,cityProperties=dict(decals=[decal]))
                 before = copy.deepcopy(data)
                 out = migration.migrate_city(data)
                 self.assertEqual(data,before)
                 self.assertEqual([p['id'] for p in out['terrainPoints']],[0,1])
-                self.assertEqual(out['lowLevelElements'][0]['id'],0)
-                self.assertEqual(out['lowLevelElements'][0]['points']['spline'],[0,1])
+                self.assertEqual(out['customElements'][0]['id'],0)
+                self.assertEqual(out['customElements'][0]['points']['spline'],[0,1])
                 self.assertEqual(migration.migrate_city(out),out)
 
     def test_migration_preserves_data_and_is_idempotent(self):
         data = dict(cityProperties=dict(decals=[dict(name='Zebra', texture='texture/zebra.tex', width=3,
             points=[dict(point=dict(localPosition=dict(x=4,y=2,z=10))), dict(point=dict(localPosition=dict(x=7,y=3,z=15)))]),
             dict(name='Incomplete',points=[])], cableCarRailDecals=True, cableCarRailWidth=2),
-            terrainPoints=[dict(id=9,position=dict(x=0,y=0,z=0))], lowLevelElements=[dict(id=5,name='Existing',state=dict(type='room'))])
+            terrainPoints=[dict(id=9,position=dict(x=0,y=0,z=0))], customElements=[dict(id=5,name='Existing',state=dict(type='room'))])
         before = copy.deepcopy(data)
         out = migration.migrate_city(data)
         self.assertEqual(data, before)
-        self.assertEqual(out['lowLevelElements'][0], before['lowLevelElements'][0])
-        self.assertEqual([e['id'] for e in out['lowLevelElements']], [5,6,7])
-        self.assertEqual(out['lowLevelElements'][1]['points']['spline'], [10,11])
+        self.assertEqual(out['customElements'][0], before['customElements'][0])
+        self.assertEqual([e['id'] for e in out['customElements']], [5,6,7])
+        self.assertEqual(out['customElements'][1]['points']['spline'], [10,11])
         self.assertEqual(out['terrainPoints'][1]['position'], dict(x=4,y=2,z=10))
-        self.assertEqual(out['lowLevelElements'][1]['state']['texture'], 'texture/zebra.tex')
+        self.assertEqual(out['customElements'][1]['state']['texture'], 'texture/zebra.tex')
         self.assertEqual(out['cityProperties'], {})
         self.assertEqual(migration.migrate_city(out), out)
 

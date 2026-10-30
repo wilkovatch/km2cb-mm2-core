@@ -1,5 +1,5 @@
 {
 	"label": "CONVERT_TO_TRIANGLE_FAN",
-	"sources": ["lowLevel/roadTriangleFan", "lowLevel/roofTriangleFan"],
+	"sources": ["customElement/roadTriangleFan", "customElement/roofTriangleFan"],
 	"script": "convert.py"
 }

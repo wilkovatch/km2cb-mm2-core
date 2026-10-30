@@ -1,0 +1,34 @@
+{
+	"container": {
+		"contains": [
+			"facade",
+			"facadeBound",
+			"sliver",
+			"roofTriangleFan"
+		]
+	},
+	"controlPoints": [
+		{
+			"name": "location",
+			"label": "CE_GROUP_LOCATION",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "frontLocation",
+			"label": "CE_GROUP_FRONT_LOCATION",
+			"defaultPosition": [
+				0,
+				0,
+				-2
+			]
+		}
+	],
+	"geometry": "psdl.buildingGroup",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

@@ -1,0 +1,45 @@
+{
+	"controlPoints": [
+		{
+			"name": "bottomLeft",
+			"label": "CE_BOTTOM_LEFT",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "bottomRight",
+			"label": "CE_BOTTOM_RIGHT",
+			"defaultPosition": [
+				10,
+				0,
+				0
+			]
+		},
+		{
+			"name": "topLeft",
+			"label": "CE_TOP_LEFT",
+			"defaultPosition": [
+				0,
+				10,
+				0
+			]
+		},
+		{
+			"name": "topRight",
+			"label": "CE_TOP_RIGHT",
+			"defaultPosition": [
+				10,
+				10,
+				0
+			]
+		}
+	],
+	"geometry": "psdl.facadeBound",
+	"constraints": "psdl.slantedConstraints",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

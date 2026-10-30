@@ -1,0 +1,26 @@
+{
+	"controlPoints": [
+		{
+			"name": "a",
+			"label": "CE_CAP_A",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "b",
+			"label": "CE_CAP_B",
+			"defaultPosition": [
+				2,
+				0,
+				0
+			]
+		}
+	],
+	"geometry": "psdl.sidewalkCap",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

@@ -1,0 +1,64 @@
+{
+	"controlPoints": [
+		{
+			"name": "sections",
+			"label": "CE_SECTIONS",
+			"array": {
+				"min": 2,
+				"defaultCount": 2,
+				"defaultStep": [
+					0,
+					0,
+					10
+				]
+			},
+			"children": [
+				{
+					"name": "leftSidewalk",
+					"label": "CE_LEFT_SIDEWALK",
+					"defaultPosition": [
+						-6,
+						0.15,
+						0
+					]
+				},
+				{
+					"name": "leftRoad",
+					"label": "CE_LEFT_ROAD",
+					"defaultPosition": [
+						-4,
+						0,
+						0
+					]
+				},
+				{
+					"name": "rightRoad",
+					"label": "CE_RIGHT_ROAD",
+					"defaultPosition": [
+						4,
+						0,
+						0
+					]
+				},
+				{
+					"name": "rightSidewalk",
+					"label": "CE_RIGHT_SIDEWALK",
+					"defaultPosition": [
+						6,
+						0.15,
+						0
+					]
+				}
+			]
+		}
+	],
+	"geometry": "psdl.roadWithSidewalks",
+	"propsContainers": [
+		"right",
+		"left"
+	],
+	"propsPresetType": "psdl",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

@@ -1,0 +1,38 @@
+{
+	"parameters": [
+		{
+			"name": "echo",
+			"label": "RD_ECHO",
+			"type": "bool",
+			"tooltip": "RD_ECHO_TOOLTIP"
+		},
+		{
+			"name": "warp",
+			"label": "RD_WARP",
+			"type": "bool",
+			"tooltip": "RD_WARP_TOOLTIP"
+		},
+		{
+			"name": "simplifyPerimeter",
+			"label": "CE_SIMPLIFY_PERIMETER",
+			"type": "bool",
+			"tooltip": "CE_SIMPLIFY_PERIMETER_TOOLTIP"
+		},
+		{
+			"name": "hudmapCategory",
+			"label": "HUDMAP_CATEGORY",
+			"type": "enum",
+			"tooltip": "HUDMAP_CATEGORY_TOOLTIP",
+			"enumLabels": [
+				"HUDMAP_CATEGORY_AUTO",
+				"HUDMAP_CATEGORY_GROUND",
+				"HUDMAP_CATEGORY_GRASS",
+				"HUDMAP_CATEGORY_WATER",
+				"HUDMAP_CATEGORY_BUILDING",
+				"HUDMAP_CATEGORY_LANDMARK",
+				"HUDMAP_CATEGORY_ROAD",
+				"HUDMAP_CATEGORY_HIDDEN"
+			]
+		}
+	]
+}

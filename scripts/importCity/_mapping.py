@@ -27,8 +27,8 @@ def core_strings():
 
 @functools.lru_cache(maxsize=None)
 def type_label(typ):
-    """The editor label of a low-level type (its ui.json label), or the type name if unavailable."""
-    try:key=json.loads((CORE/'elements/lowLevel'/typ/'ui.json').read_text(encoding='utf-8')).get('label',typ)
+    """The editor label of a custom element type (its ui.json label), or the type name if unavailable."""
+    try:key=json.loads((CORE/'elements/customElements'/typ/'ui.json').read_text(encoding='utf-8')).get('label',typ)
     except (OSError,ValueError):return typ
     return core_strings().get(key,typ)
 
@@ -113,7 +113,7 @@ class ImportCity:
                     e = self.element(target,labeled(target),state,dict(sections=sections),r['id'])
                     if typ in (0,2,8):
                         self.roads[(i,ai)] = e
-                        for tunnel in pending: tunnel['state']['road'] = dict(kind='lowLevel',id=e['id'])
+                        for tunnel in pending: tunnel['state']['road'] = dict(kind='customElement',id=e['id'])
                         pending.clear()
                 elif typ in (5,6,12):
                     ids = [self.vertex(v,a['height'] if typ == 12 else None) for v in vs]
@@ -153,7 +153,7 @@ class ImportCity:
                     if typ == 3: state['textureScale'] = self.height(vals[1])
                     if typ == 11:
                         state.update(uRepeat=vals[2],vRepeat=vals[3])
-                        if last_bound: state['bound'] = dict(kind='lowLevel',id=last_bound)
+                        if last_bound: state['bound'] = dict(kind='customElement',id=last_bound)
                     target = {3:'sliver',7:'facadeBound',11:'facade'}[typ]
                     e = self.element(target,labeled(target),state,corners,r['id'])
                     if typ == 7: last_bound=e['id']
@@ -213,7 +213,7 @@ class ImportCity:
                 iid=rd[end]['intersection']
                 if iid != 0xcdcdcdcd:
                     if iid not in intersections: raise FormatError('invalid BAI intersection reference')
-                    state[end+'Intersection']=dict(kind='lowLevel',id=intersections[iid])
+                    state[end+'Intersection']=dict(kind='customElement',id=intersections[iid])
             sections=[]
             for j in range(rd['n']):
                 def p(key,v):return self.point(('bai',rd['id'],j,key),position(v))

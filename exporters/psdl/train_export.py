@@ -10,7 +10,7 @@ def get_train_lines(data):
     # Control points are the native input to MM2's own interpolation, never the editor's sampled preview.
     import math
     res = []
-    for i, element in enumerate(data.get('lowLevelElements') or []):
+    for i, element in enumerate(data.get('customElements') or []):
         if element.get('type') != 'train':
             continue
         name = (element.get('data') or {}).get('name') or ('line ' + str(i + 1))

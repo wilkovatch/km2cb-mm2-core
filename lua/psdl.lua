@@ -1,4 +1,4 @@
--- The low-level elements of the PSDL (the room attributes, see elements/lowLevel): the geometry shown in the editor,
+-- The custom elements of the PSDL (the room attributes, see elements/customElements): the geometry shown in the editor,
 -- close to what MM2 draws from each attribute, and the constraints keeping their points where the attribute needs them.
 -- The heights of the PSDL (facades, roofs...) come from the points, they are computed by the exporter.
 

@@ -1,6 +1,6 @@
 {
   "presets": {
-    "lowLevel/decal": [
+    "customElement/decal": [
       {
         "name": "Default",
         "type": "decal",

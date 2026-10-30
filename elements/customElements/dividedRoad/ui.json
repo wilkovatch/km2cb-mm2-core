@@ -1,0 +1,79 @@
+{
+	"label": "CE_DIVIDED_ROAD",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "noSidewalks",
+					"width": 1.5
+				},
+				{
+					"name": "dividerType",
+					"width": 1.5
+				},
+				{
+					"name": "dividerValue",
+					"width": 1.5
+				},
+				{
+					"name": "closeStart",
+					"width": 0.75
+				},
+				{
+					"name": "closeEnd",
+					"width": 0.75
+				},
+				{
+					"name": "texture",
+					"width": 1.5
+				},
+				{
+					"name": "sidewalkTexture",
+					"width": 1.5
+				},
+				{
+					"name": "lodTexture",
+					"width": 1.5
+				},
+				{
+					"name": "dividerSideTexture",
+					"width": 1.5
+				},
+				{
+					"name": "dividerFlatTexture",
+					"width": 1.5
+				},
+				{
+					"name": "dividerTopTexture",
+					"width": 1.5
+				},
+				{
+					"name": "dividerCapTexture",
+					"width": 1.5
+				},
+				{
+					"name": "invisible",
+					"width": 1.5
+				},
+				{
+					"name": "pointsGroup",
+					"width": 1.5
+				},
+				{
+					"name": "propsGroup",
+					"width": 1.5
+				},
+				{
+					"name": "containerGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

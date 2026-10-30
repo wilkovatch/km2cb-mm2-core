@@ -22,13 +22,13 @@ def check(name, source):
     expected={e['name']:e for e in city.elements if e['type']!='room'}
     points={p['id']:p['position'] for p in city.points}
     cb.api.city.new(folder=str(scratch/name),core='MidtownMadness2',template='SF',terrainSize=512,heightmapResolution=512)
-    cb.call('lowLevel.import',data=city.payload())
+    cb.call('customElement.import',data=city.payload())
     cb.api.history.undo()
-    assert not cb.api.elements.list(kind='lowLevel')
+    assert not cb.api.elements.list(kind='customElement')
     cb.api.history.redo()
 
     def verify():
-        elements=cb.api.elements.list(kind='lowLevel')
+        elements=cb.api.elements.list(kind='customElement')
         assert len(elements)==len(city.elements)
         for element in elements:
             if element['name'] not in expected:continue

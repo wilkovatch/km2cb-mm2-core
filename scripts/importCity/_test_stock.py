@@ -25,7 +25,7 @@ for name in ('sf','london'):
     city=ImportCity(psdl).geometry(room_ids);city.bai(dict(roads=roads,intersections=intersections))
     cb.api.city.new(folder=str(scratch/name),core='MidtownMadness2',template='SF',terrainSize=8192,heightmapResolution=512)
     cb.api.project.settings.set(extraFolders=[str(root)])
-    cb.call('lowLevel.import',data=city.payload())
+    cb.call('customElement.import',data=city.payload())
     path=scratch/name/'export'/f'{name}.psdl'
     cb.api.city.exportJson(path=str(scratch/name/'input.json'))
     try:

@@ -1,0 +1,25 @@
+{
+	"parameters": [
+		{
+			"name": "which",
+			"label": "CE_CAP_WHICH",
+			"type": "enum",
+			"enumLabels": [
+				"CE_CAP_BOTH",
+				"CE_CAP_START",
+				"CE_CAP_END"
+			]
+		},
+		{
+			"name": "texture",
+			"label": "CE_SIDEWALK_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

@@ -39,9 +39,9 @@ Exporter gotchas:
 - Exports land in `<path dir>/city/<name>.psdl` (game folder layout from `output_layout.py`; tune, race, geometry, bound, texture, jpg go next to `city`).
 - The bundled Python needs `pythonInfo/requirements.txt` (e.g. Pillow for the hudmap). CLI sessions skip the builder's Python check, so install them by hand.
 
-## Low-level elements
+## Custom elements
 
-The MM2 low-level elements are the PSDL attributes (the generic mechanism is in the builder's `wiki/Core-Low-Level-Elements.md`, the MM2 specifics in the README). Equivalence check: export, convert everything, export again, compare PSDL room by room and BAI. The expected result is 0 differences.
+Most MM2 custom elements are the PSDL attributes, the others are the decals and trains (the generic mechanism is in the builder's `wiki/Core-Custom-Elements.md`, the MM2 specifics in the README). Equivalence check: export, convert everything, export again, compare PSDL room by room and BAI. The expected result is 0 differences.
 
 ## Midtown Madness 2 reference
 
@@ -79,17 +79,17 @@ Reverse-engineering setup: install capstone + pefile with `pip install --target 
 
 ## City importer and standalone prop rules
 
-`Scripts → Import MM2 city` lives in `scripts/importCity`. `_formats.py` is bounded binary reading, `_mapping.py` creates converter-shaped low-level payloads, `_companions.py` handles CSV/settings/transforms, and `main.py` is the transactional API adapter. Unknown attribute sizes fail rather than guessing. The viewer-derived readers retain `LICENSE-viewer.txt`.
+`Scripts → Import MM2 city` lives in `scripts/importCity`. `_formats.py` is bounded binary reading, `_mapping.py` creates converter-shaped custom element payloads, `_companions.py` handles CSV/settings/transforms, and `main.py` is the transactional API adapter. Unknown attribute sizes fail rather than guessing. The viewer-derived readers retain `LICENSE-viewer.txt`.
 
 PSDL type 1 stores regular sidewalk pairs as **inner, outer**. Exactly four references beginning with `0,0` or `1,1` describe an end cap: the first pair is a marker (start/end), not city vertices, and the last pair maps to `sidewalkCap.a/b`, with `which` 1/2. Treating these as regular strips pulls geometry toward vertices 0/1. `_test_sidewalks.py` runs through the builder script CLI with `KM2_IMPORT_TEST_FOLDER`; optional `KM2_MM2_SOURCE_ROOT` adds ten fixed-seed SF/London sidewalk attributes. It checks generated geometry, undo/redo, save/reload and native PSDL re-export without loading a whole stock city.
 
-The base builder's reserved `__propPath` type uses low-level point/history/editor infrastructure, but has API kind `propPath` and separate `propPaths` save/export arrays. Its `data.propLines` are evaluated placements. Never apply native-road `psdl` suppression to these records. `exporters/psdl/prop_paths.py` compares native strip candidates with preview placements before choosing type 2; mismatches fall back to type 0/1. The common writer keeps separate strip records even for identical models/spacing. Changes to it still span the shared exporter submodule.
+The base builder's reserved `__propPath` type uses custom element point/history/editor infrastructure, but has API kind `propPath` and separate `propPaths` save/export arrays. Its `data.propLines` are evaluated placements. Never apply native-road `psdl` suppression to these records. `exporters/psdl/prop_paths.py` compares native strip candidates with preview placements before choosing type 2; mismatches fall back to type 0/1. The common writer keeps separate strip records even for identical models/spacing. Changes to it still span the shared exporter submodule.
 
 BAI remains approximate: report lost room memberships and train splines; do not advertise complete stock round-trip equivalence from close lane geometry. `_roundtrip_check.py` reports pedestrian displacement separately. Keep stock checks bounded (five fixed-seed routes per city) and assets/output in scratch folders. The importer adds asset search paths outside undo and references source files without copying them.
 
 ## Spline decals
 
-`elements/lowLevel/decal` uses the generic spline evaluator and road JSON components, API kind `lowLevel`, points `spline`. `spline.pieces` in exported elements supplies unlifted strip edge pairs; `json_processor.get_decals` passes these as DECAL parts with `strip_pairs=1`. The shared writer retains its old centerline/width path for Blender. Core component UVs follow the game winding and rounded distance of the first pair; height offset is 0.01 m. Keep projection away from overlay layer 13 to avoid accumulating height on overlapping decals.
+`elements/customElements/decal` uses the generic spline evaluator and road JSON components, API kind `customElement`, points `spline`. `spline.pieces` in exported elements supplies unlifted strip edge pairs; `json_processor.get_decals` passes these as DECAL parts with `strip_pairs=1`. The shared writer retains its old centerline/width path for Blender. Core component UVs follow the game winding and rounded distance of the first pair; height offset is 0.01 m. Keep projection away from overlay layer 13 to avoid accumulating height on overlapping decals.
 
 `converters/generateRailDecals` is non-replacing and creates independent low-poly decal splines across the selected intersection only. `lua/decals.canGenerateRails` controls button availability. Pairing uses the existing BAI `join_rails` rules. Repeated generation deliberately appends; users delete old decals manually. Migration 3 converts manual city-property decals and removes automatic rail settings without baking them. Update new-city template coreVersion with the core migration version. Focused synthetic checks: `python exporters/psdl/tools/_test_decals.py`; keep stock assets out of fixtures.
 
@@ -97,7 +97,7 @@ The focused builder integration uses `KM2_SELFTEST_FOCUS=splines` with `selftest
 
 ## Train splines
 
-`elements/lowLevel/train` uses the shared core curve registry (`splineTypes.json`, ID 3, `mm2Train`), allowed only by that type. Roads and decals retain their own allowlists. `lua/trains.lua` reproduces train Hermite X/Z, fixed 0.5 tangents, wrapped neighbor lookup and linear Y. Export the authored `points.spline`, never evaluated sections. Empty/two-point paths remain editable but cannot be exported as moving trains. Import retains incomplete type-2 paths with warnings. No original stock data belongs in fixtures.
+`elements/customElements/train` uses the shared core curve registry (`splineTypes.json`, ID 3, `mm2Train`), allowed only by that type. Roads and decals retain their own allowlists. `lua/trains.lua` reproduces train Hermite X/Z, fixed 0.5 tangents, wrapped neighbor lookup and linear Y. Export the authored `points.spline`, never evaluated sections. Empty/two-point paths remain editable but cannot be exported as moving trains. Import retains incomplete type-2 paths with warnings. No original stock data belongs in fixtures.
 
 Reference executable SHA256: `992c53c9250cf822b44bf4a4013bd5805229bbbeb7b478a4c2556531bc5340f3`. `57A530` builds tangents, `57A370` evaluates Hermite, `57A6D0`/`57A710` wrap neighbors; `578A61..578A9F` override train Y. Comparing 295 positions from London's eight stock routes uses isolated emulation, not game execution. The static route preview does not model reversal timing or body/room/model offsets.
 

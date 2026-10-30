@@ -231,7 +231,7 @@ class HudmapExporter:
 
     def get_shapes(self):
         shapes = Shapes()
-        # the ghosts (replaced by low-level elements) are not drawn, the elements replacing them are
+        # the ghosts (replaced by custom elements) are not drawn, the elements replacing them are
         for road in self.data.get('roads') or []:
             if road.get('ghost', False):
                 continue
@@ -254,7 +254,7 @@ class HudmapExporter:
             for building in line.get('buildings') or []:
                 category = element_category(building['data']['fields']['state'])
                 self.add_mesh(shapes, building.get('roof'), line_category if category == 'auto' else category, 'building', False)
-        for mesh, room_state, default in self.jp.low_level.hudmap_meshes():
+        for mesh, room_state, default in self.jp.custom_elements.hudmap_meshes():
             self.add_mesh(shapes, mesh, element_category(room_state), default, default != 'building')
         for instance in self.data.get('meshInstances') or []:
             self.add_mesh_instance(shapes, instance)

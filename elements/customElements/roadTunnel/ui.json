@@ -1,0 +1,115 @@
+{
+	"label": "CE_ROAD_TUNNEL",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "road",
+					"width": 1.5
+				},
+				{
+					"name": "leftSide",
+					"width": 0.75
+				},
+				{
+					"name": "rightSide",
+					"width": 0.75
+				},
+				{
+					"name": "wall",
+					"width": 0.75
+				},
+				{
+					"name": "flatCeiling",
+					"width": 0.75
+				},
+				{
+					"name": "curvedCeiling",
+					"width": 0.75
+				},
+				{
+					"name": "curvedSides",
+					"width": 0.75
+				},
+				{
+					"name": "culled",
+					"width": 0.75
+				},
+				{
+					"name": "closedStartLeft",
+					"width": 0.75
+				},
+				{
+					"name": "closedEndLeft",
+					"width": 0.75
+				},
+				{
+					"name": "closedStartRight",
+					"width": 0.75
+				},
+				{
+					"name": "closedEndRight",
+					"width": 0.75
+				},
+				{
+					"name": "offsetStartLeft",
+					"width": 0.75
+				},
+				{
+					"name": "offsetEndLeft",
+					"width": 0.75
+				},
+				{
+					"name": "offsetStartRight",
+					"width": 0.75
+				},
+				{
+					"name": "offsetEndRight",
+					"width": 0.75
+				},
+				{
+					"name": "height",
+					"width": 0.75
+				},
+				{
+					"name": "texture0",
+					"width": 1.5
+				},
+				{
+					"name": "texture1",
+					"width": 1.5
+				},
+				{
+					"name": "texture2",
+					"width": 1.5
+				},
+				{
+					"name": "texture3",
+					"width": 1.5
+				},
+				{
+					"name": "texture4",
+					"width": 1.5
+				},
+				{
+					"name": "texture5",
+					"width": 1.5
+				},
+				{
+					"name": "containerGroup",
+					"width": 1.5
+				},
+				{
+					"name": "invisible",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

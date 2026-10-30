@@ -7,7 +7,7 @@ from utils import state_val, state_bool, state_int, state_vector
 from common.bai_writer import MAX_INTERSECTION_ROADS
 from common import report
 from psdl_parts import ExportedCityElement, get_tex
-from low_level import LowLevelExporter
+from custom_elements import CustomElementExporter
 
 # the ring of BAI intersections replacing an intersection with too many roads (see get_split_intersection): roads per
 # intersection of the ring (with the two ring roads, at most 5 as in the stock cities), ring radius (fraction of the mean
@@ -1373,7 +1373,7 @@ class JsonProcessor:
 
     def get_decals(self, res):
         # Strip edges are evaluated by the core's JSON components in the editor, not resampled here.
-        for decal in self.data.get('lowLevelElements') or []:
+        for decal in self.data.get('customElements') or []:
             if decal.get('type') != 'decal':
                 continue
             state = decal.get('data', {}).get('fields', {}).get('state', {})
@@ -1483,7 +1483,7 @@ class JsonProcessor:
             return None
         chain = self.bai_chains[self.road_map[road_id]]
         rec = self.exported_roads.get(chain[0][0])
-        if rec is not None and 'lowLevel' in rec:
+        if rec is not None and 'customElement' in rec:
             # a BAI road replacing the road (in the same direction)
             return 0 if at_road_start else 1
         first_id, first_rev = chain[0]
@@ -1588,14 +1588,14 @@ class JsonProcessor:
         return str(self.traffic_intersections[self.intersection_map[intersection_id]][2])
 
     def get_bai_end_section(self, key, at_start):
-        # the BAI section at the start or end of an exported road (or low-level BAI road)
+        # the BAI section at the start or end of an exported road (or BAI road custom element)
         rec = self.exported_roads[key]
-        sections = rec['bai_cross_sections'] if 'lowLevel' in rec else self.get_bai_sections(rec, False)
+        sections = rec['bai_cross_sections'] if 'customElement' in rec else self.get_bai_sections(rec, False)
         return sections[0] if at_start else sections[-1]
 
     def get_bai_entries(self, intersection):
         # the BAI road ends on an intersection, counterclockwise, as (road key in exported_roads, at road start): its
-        # roads in their order (the low-level BAI roads replacing them in their place), unless low-level BAI roads end on
+        # roads in their order (the BAI road custom elements replacing them in their place), unless BAI road custom elements end on
         # it otherwise (connected to it by hand, or a converted road connected elsewhere): then all of them by angle
         order = intersection['data']['fields']['sortOrder']
         res = []
@@ -1612,10 +1612,10 @@ class JsonProcessor:
             res.append((key, at_start))
             if key != road_id:
                 replacing.append((key, at_start))
-        low_level = self.low_level.procedural_intersection_ends(intersection['id'])
-        if Counter(replacing) == Counter(low_level):
+        custom_elements = self.custom_elements.procedural_intersection_ends(intersection['id'])
+        if Counter(replacing) == Counter(custom_elements):
             return res
-        ends = [(key, at_start) for key, at_start in res if 'lowLevel' not in self.exported_roads[key]] + low_level
+        ends = [(key, at_start) for key, at_start in res if 'customElement' not in self.exported_roads[key]] + custom_elements
         mids = [np.mean(np.array(self.get_bai_end_section(key, at_start), dtype=float), axis=0) for key, at_start in ends]
         c = intersection['center'] if 'center' in intersection else np.mean(mids, axis=0)
         ends = [end for _, end in sorted(zip([math.atan2(m[2] - c[2], m[0] - c[0]) for m in mids], ends), key=lambda x: x[0])]
@@ -1773,8 +1773,8 @@ class JsonProcessor:
         return {'ends': end_keys, 'nodes': nodes, 'connectors': connectors}
 
     def get_traffic(self, res):
-        # the BAI intersections of the low-level elements (with the ids of the ghost intersections they replace)
-        self.traffic_intersections.extend(self.low_level.traffic_intersections())
+        # the BAI intersections of the custom elements (with the ids of the ghost intersections they replace)
+        self.traffic_intersections.extend(self.custom_elements.traffic_intersections())
 
         # the roads joined by seamless intersections
         compatible_joints = {}
@@ -1825,10 +1825,10 @@ class JsonProcessor:
                 self.traffic_intersections.append(obj)
         self.seamless_joint_ids &= used_joints
 
-        # the BAI roads of the low-level elements, each one a chain of its own (the road it replaces, if any, is
+        # the BAI roads of the custom elements, each one a chain of its own (the road it replaces, if any, is
         # mapped to it: its traffic lights and the intersections listing it use it)
         replaced_roads = {}
-        for key, rec in self.low_level.traffic_roads():
+        for key, rec in self.custom_elements.traffic_roads():
             self.exported_roads[key] = rec
             self.bai_chains.append([(key, False)])
             if rec['source_road'] is not None:
@@ -1850,7 +1850,7 @@ class JsonProcessor:
         self.bai_splits = {}
         next_road_id = len(self.bai_chains)
         for obj in self.traffic_intersections:
-            if 'lowLevel' in obj[1]:
+            if 'customElement' in obj[1]:
                 continue
             split = self.get_split_intersection(obj, next_road_id)
             if split is not None:
@@ -1859,14 +1859,14 @@ class JsonProcessor:
 
         for i in range(len(self.bai_chains)):
             rec = self.exported_roads[self.bai_chains[i][0][0]]
-            if 'lowLevel' in rec:
-                self.low_level.traffic_road(res, i, rec)
+            if 'customElement' in rec:
+                self.custom_elements.traffic_road(res, i, rec)
             else:
                 self.get_traffic_road(res, i, self.bai_chains[i])
 
         for obj in self.traffic_intersections:
-            if 'lowLevel' in obj[1]:
-                self.low_level.traffic_intersection(res, obj)
+            if 'customElement' in obj[1]:
+                self.custom_elements.traffic_intersection(res, obj)
                 continue
             split = self.bai_splits.get(obj[1]['id'])
             if split is None:
@@ -1904,7 +1904,7 @@ class JsonProcessor:
             self.block_perimeters_bounds.append([[float('-inf'), float('-inf')], [float('inf'), float('inf')]])
 
         self.cur_road_key = 0
-        self.low_level = LowLevelExporter(self)
+        self.custom_elements = CustomElementExporter(self)
         self.exported_roads = {}
         # exported_roads: {road id: {'elem': ExportedCityElement, 'road': Road, 'block': int}}
         self.traffic_intersections = []
@@ -1956,16 +1956,16 @@ class JsonProcessor:
             if self.verbose: print("exporting " + patch['data']['name'])
             self.guarded_element(res, patch['data']['name'], 'terrainPatch', lambda: self.get_patch(res, patch, manual_blocks), patch['id'])
 
-        print("processing low-level rooms...")
-        self.low_level.process_rooms(res)
+        print("processing room custom elements...")
+        self.custom_elements.process_rooms(res)
 
         print("processing building lines...")
         for line in data['buildingLines']:
             if self.verbose: print("exporting " + line['data']['name'])
             self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line), line['id'])
 
-        print("processing low-level elements outside of rooms...")
-        self.low_level.process_unassigned(res)
+        print("processing custom elements outside of rooms...")
+        self.custom_elements.process_unassigned(res)
 
         print("processing traffic...")
         with report.guarded("the traffic was not exported"):

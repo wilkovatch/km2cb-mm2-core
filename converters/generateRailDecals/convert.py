@@ -5,17 +5,17 @@ import sys
 import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'exporters/psdl'))
-import low_level_conversion as llc
+import custom_element_conversion as cec
 from common.bai_writer import BAIWriter, RouteGeometry, resampled_parameters, section_frames, normalized
 
 
 def convert(data):
-    converter = llc.Converter(copy.deepcopy(data))
-    out = llc.Output()
+    converter = cec.Converter(copy.deepcopy(data))
+    out = cec.Output()
     for target in data['convert']:
         intersection = converter.find('intersections', target['id'])
         if intersection is None:
-            raise llc.ConversionError('CONVERSION_ERROR_MISSING')
+            raise cec.ConversionError('CONVERSION_ERROR_MISSING')
         ends = []
         for rid in intersection['roads']:
             road = converter.data['roads'][rid]
@@ -60,4 +60,4 @@ def convert(data):
 
 
 if __name__ == '__main__':
-    llc.run(sys.argv, convert)
+    cec.run(sys.argv, convert)

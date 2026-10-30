@@ -108,7 +108,7 @@ def main():
         cb.api.project.settings.set(extraFolders=folders)
         cb.api.api.configure(autoFlush=False)
         cb.progress(0.2,text['IMPORT_CITY_GEOMETRY'])
-        result=cb.call('lowLevel.import',data=city.payload())
+        result=cb.call('customElement.import',data=city.payload())
         for start in range(0,len(city.meshes),100):
             cb.batch([('meshes.create',m) for m in city.meshes[start:start+100]])
             cb.progress(0.4+0.4*min(start+100,len(city.meshes))/max(len(city.meshes),1),text['IMPORT_CITY_OBJECTS'])

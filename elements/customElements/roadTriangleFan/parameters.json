@@ -1,0 +1,15 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "CE_ROAD_TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

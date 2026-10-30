@@ -1,0 +1,44 @@
+{
+	"controlPoints": [
+		{
+			"name": "p1",
+			"label": "CE_CORNER_1",
+			"defaultPosition": [
+				0,
+				0,
+				0
+			]
+		},
+		{
+			"name": "p2",
+			"label": "CE_CORNER_2",
+			"defaultPosition": [
+				0,
+				0,
+				3
+			]
+		},
+		{
+			"name": "p3",
+			"label": "CE_CORNER_3",
+			"defaultPosition": [
+				6,
+				0,
+				0
+			]
+		},
+		{
+			"name": "p4",
+			"label": "CE_CORNER_4",
+			"defaultPosition": [
+				6,
+				0,
+				3
+			]
+		}
+	],
+	"geometry": "psdl.crosswalk",
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

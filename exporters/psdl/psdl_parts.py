@@ -2,7 +2,7 @@
 # "<prefix,><block>_<TYPE>" (ROADS, ROADSN, ROADN, ROADD, ROADDN, RAIL, RAILC, SW, CW, IS, BLOCK, ROOF, FAC, FACB, SLIVER,
 # NUL, PKG, INST, PTH, BAI, TRAFL, DECAL), with its vertices, its triangles (used to find the perimeter of the block),
 # its textures and the properties of its type. They are made from the procedural elements (json_processor.py) and from
-# the low-level elements (low_level.py), and the converters make low-level elements from them.
+# the custom elements (custom_elements.py), and the converters make custom elements from them.
 
 import os
 

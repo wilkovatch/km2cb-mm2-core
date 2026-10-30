@@ -1,0 +1,43 @@
+{
+	"label": "CE_ROOM",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "echo",
+					"width": 0.75
+				},
+				{
+					"name": "warp",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapCategory",
+					"width": 1.5
+				},
+				{
+					"name": "simplifyPerimeter",
+					"width": 1.5
+				},
+				{
+					"name": "convert:roomPerimeter",
+					"width": 1.5
+				},
+				{
+					"name": "pointsGroup",
+					"width": 1.5
+				},
+				{
+					"name": "containerGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

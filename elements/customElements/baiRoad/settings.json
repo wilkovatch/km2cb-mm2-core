@@ -1,0 +1,101 @@
+{
+	"controlPoints": [
+		{
+			"name": "sections",
+			"label": "CE_SECTIONS",
+			"array": {
+				"min": 2,
+				"defaultCount": 2,
+				"defaultStep": [
+					0,
+					0,
+					10
+				]
+			},
+			"children": [
+				{
+					"name": "rightEdge",
+					"label": "CE_BAI_RIGHT_EDGE",
+					"defaultPosition": [
+						6,
+						0,
+						0
+					]
+				},
+				{
+					"name": "rightCurb",
+					"label": "CE_BAI_RIGHT_CURB",
+					"defaultPosition": [
+						4,
+						0,
+						0
+					]
+				},
+				{
+					"name": "backwardLanes",
+					"label": "CE_BAI_BACKWARD_LANES",
+					"array": {
+						"min": 0,
+						"defaultCount": 1,
+						"uniform": true,
+						"defaultStep": [
+							-1,
+							0,
+							0
+						]
+					},
+					"defaultPosition": [
+						2,
+						0,
+						0
+					]
+				},
+				{
+					"name": "forwardLanes",
+					"label": "CE_BAI_FORWARD_LANES",
+					"array": {
+						"min": 0,
+						"defaultCount": 1,
+						"uniform": true,
+						"defaultStep": [
+							1,
+							0,
+							0
+						]
+					},
+					"defaultPosition": [
+						-2,
+						0,
+						0
+					]
+				},
+				{
+					"name": "leftCurb",
+					"label": "CE_BAI_LEFT_CURB",
+					"defaultPosition": [
+						-4,
+						0,
+						0
+					]
+				},
+				{
+					"name": "leftEdge",
+					"label": "CE_BAI_LEFT_EDGE",
+					"defaultPosition": [
+						-6,
+						0,
+						0
+					]
+				}
+			]
+		}
+	],
+	"geometry": "psdl.baiRoad",
+	"derivedPoints": {
+		"flag": "autoCalculated",
+		"function": "psdl.baiRoadPoints"
+	},
+	"createMenu": {
+		"group": "CREATE_PSDL_ELEMENT"
+	}
+}

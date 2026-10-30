@@ -1,0 +1,36 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "TEXTURE",
+			"type": "texture",
+			"placeholder": "TEXTURE_PH"
+		},
+		{
+			"name": "uRepeat",
+			"label": "CE_U_REPEAT",
+			"type": "int",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "vRepeat",
+			"label": "CE_V_REPEAT",
+			"type": "int",
+			"placeholder": "VALUE_PH"
+		},
+		{
+			"name": "bound",
+			"label": "CE_FACADE_BOUND",
+			"type": "reference",
+			"tooltip": "CE_FACADE_BOUND_TOOLTIP",
+			"referenceTypes": [
+				"customElement/facadeBound"
+			]
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

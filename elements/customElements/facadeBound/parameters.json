@@ -1,0 +1,15 @@
+{
+	"parameters": [
+		{
+			"name": "bothSides",
+			"label": "CE_BOTH_SIDES",
+			"type": "bool",
+			"tooltip": "CE_BOTH_SIDES_TOOLTIP"
+		},
+		{
+			"name": "invisible",
+			"label": "CE_INVISIBLE",
+			"type": "bool"
+		}
+	]
+}

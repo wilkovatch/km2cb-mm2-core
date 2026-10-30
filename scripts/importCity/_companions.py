@@ -185,7 +185,7 @@ def import_settings(city, root, name):
         roam=aimap(roam_path)
         if roam.get('policeCars'):city.properties['roamPoliceCars']=roam['policeCars']
     # Only the width is stored in the waypoints; height and depth stay at the editor's defaults.
-    checkpoint_scale=json.loads((CORE/'elements/customTypes/checkpoint.json').read_text(encoding='utf-8'))['parameters'][0]['objectInstanceSettings']['defaultScale']
+    checkpoint_scale=json.loads((CORE/'elements/customCityPropertiesTypes/checkpoint.json').read_text(encoding='utf-8'))['parameters'][0]['objectInstanceSettings']['defaultScale']
     for prefix,key,ckey in (('blitz','blitzRaces','blitznames'),('circuit','circuitRaces','circuitnames'),('race','checkpointRaces','checkpointnames')):
         names=cinfo.get(ckey,'').split('|');races=[]
         for i,row in enumerate(rows(find(root,'race/'+race_dir+'/mm'+prefix+'data.csv'))):
