@@ -479,7 +479,7 @@
 	"PROP_STRIP_RAW_SPACING": "Spacing (quarter meters; 0 = 5 m)",
 	"INST_MODIFIERS": "INST modifiers",
 	"INST_MODIFIERS_TOOLTIP": "The flags of the INST record: 256 (the default) is visible from every angle, 0 from the front only",
-	"CREATE_INDIVIDUAL_PROP": "Individual props",
+	"CREATE_INDIVIDUAL_PROP": "Individual prop",
 	"CREATE_INST_MESH": "INST mesh",
 	"CE_INVISIBLE": "Invisible (no game collision)",
 	"CREATE_DECAL": "Decal",
