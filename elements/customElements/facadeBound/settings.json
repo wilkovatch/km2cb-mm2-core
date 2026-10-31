@@ -39,6 +39,7 @@
 	],
 	"geometry": "psdl.facadeBound",
 	"constraints": "psdl.slantedConstraints",
+	"creatable": false,
 	"createMenu": {
 		"group": "CREATE_PSDL_ELEMENT"
 	}

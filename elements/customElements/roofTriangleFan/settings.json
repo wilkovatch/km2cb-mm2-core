@@ -34,6 +34,7 @@
 	},
 	"geometry": "psdl.fan",
 	"constraints": "psdl.flatMesh",
+	"creatable": false,
 	"createMenu": {
 		"group": "CREATE_PSDL_ELEMENT"
 	}

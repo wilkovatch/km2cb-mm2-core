@@ -35,6 +35,7 @@
 		}
 	],
 	"geometry": "psdl.roadWithoutSidewalks",
+	"creatable": false,
 	"createMenu": {
 		"group": "CREATE_PSDL_ELEMENT"
 	}

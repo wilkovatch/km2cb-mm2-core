@@ -28,6 +28,7 @@
 		}
 	],
 	"geometry": "psdl.buildingGroup",
+	"creatable": false,
 	"createMenu": {
 		"group": "CREATE_PSDL_ELEMENT"
 	}

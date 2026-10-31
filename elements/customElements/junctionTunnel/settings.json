@@ -30,6 +30,7 @@
 		}
 	],
 	"geometry": "psdl.junctionTunnel",
+	"creatable": false,
 	"createMenu": {
 		"group": "CREATE_PSDL_ELEMENT"
 	}

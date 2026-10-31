@@ -8,10 +8,6 @@
 				{
 					"name": "mainGroup",
 					"width": 1.5
-				},
-				{
-					"name": "convert:toPsdl",
-					"width": 1.5
 				}
 			]
 		},

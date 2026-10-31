@@ -20,6 +20,7 @@
 		}
 	],
 	"geometry": "psdl.sidewalkCap",
+	"creatable": false,
 	"createMenu": {
 		"group": "CREATE_PSDL_ELEMENT"
 	}
