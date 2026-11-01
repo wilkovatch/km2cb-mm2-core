@@ -155,3 +155,9 @@ The fixed-seed ten-route SF/London check preserves sampled lane counts and ambie
 ### Decal migration
 
 Core version 3 migrates manual decals from city properties into spline-driven custom elements, preserving their names, textures, widths and centerline points as low-poly splines. The normal migration creates backups first and also preserves incomplete decals for editing. The old Decals tab and automatic rail settings are removed. **Previously automatic rail decals are not baked:** generate intersection connections with the new button and place any road-length decals separately.
+
+## Direction arrows in the editor
+
+Vehicle and cable-car lane lines show repeated arrows when the lines are visible, including **View > Show all traffic lanes**. The arrows follow the city's **Drive on left** setting, on both procedural roads and custom BAI roads. Pedestrian lanes and alleys stay plain because pedestrians travel both ways.
+
+Moving-object loops (boats, ducks, tugs and ferries) and opponent waypoint lines also show arrows in path order. Train lines stay plain because trains run back and forth. Arrows are editor overlays and do not change the exported paths.

@@ -4,7 +4,7 @@
         "curveTypes": [4],
         "defaultCurveType": 4,
         "closed": true,
-        "line": { "color": "cyan", "always": true, "heightOffset": 0.05 },
+        "line": { "color": "cyan", "arrowDirection": "1", "always": true, "heightOffset": 0.05 },
         "previewTolerance": 0.05,
         "previewMaxDepth": 8,
         "sectionVertices": [],

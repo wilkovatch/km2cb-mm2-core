@@ -1,5 +1,6 @@
 {
 	"injectableParameters": [
+		{ "parameter": "driveOnLeft", "onRoads": true, "onCustomElements": true },
 		{
 			"parameter": "trafficLight1",
 			"onRoads": true

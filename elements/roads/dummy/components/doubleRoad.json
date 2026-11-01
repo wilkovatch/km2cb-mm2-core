@@ -39,6 +39,7 @@
 	"trafficLanes": [
 		{
 			"type": "if(pedestrianStreet, 0, 1)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, -1, 1))",
 			"condition": "not disableTraffic",
 			"bounds": [
 				"trafV0",
@@ -51,6 +52,7 @@
 		},
 		{
 			"type": "if(pedestrianStreet, 0, 2)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, 1, -1))",
 			"condition": "not disableTraffic",
 			"bounds": [
 				"trafV1",

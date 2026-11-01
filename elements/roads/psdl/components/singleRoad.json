@@ -60,6 +60,7 @@
 	"trafficLanes": [
 		{
 			"type": "if(pedestrianStreet, 0, 1)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, -1, 1))",
 			"condition": "not disableTraffic",
 			"bounds": [
 				"trafV0",
@@ -72,6 +73,7 @@
 		},
 		{
 			"type": "if(pedestrianStreet, 0, 2)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, 1, -1))",
 			"condition": "not disableTraffic",
 			"bounds": [
 				"trafV1",
@@ -84,6 +86,7 @@
 		},
 		{
 			"type": "3",
+			"arrowDirection": "if(_GLOBAL_driveOnLeft, -1, 1)",
 			"condition": "cableCarLine",
 			"bounds": [
 				"v3-h-localRight*cableCarOffsetI",
@@ -95,6 +98,7 @@
 		},
 		{
 			"type": "4",
+			"arrowDirection": "if(_GLOBAL_driveOnLeft, 1, -1)",
 			"condition": "cableCarLine",
 			"bounds": [
 				"v3-h-localRight*cableCarOffsetI",

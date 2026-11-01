@@ -637,15 +637,15 @@ function M.baiRoad(v, ctx)
     }
     -- thin lines slightly above the points, as the lanes of the procedural roads (shown also while anything in the room
     -- is edited, and with the lanes of the roads by View > Show all traffic lanes)
-    local function lane(points, color)
-        lines[#lines + 1] = { points = points, color = color, heightOffset = 0.01, always = v.alwaysShown, withContainer = true, traffic = true }
+    local function lane(points, color, direction)
+        lines[#lines + 1] = { points = points, color = color, arrowDirection = direction or 0, heightOffset = 0.01, always = v.alwaysShown, withContainer = true, traffic = true }
     end
-    local function lanes(name, color)
+    local function lanes(name, color, direction)
         local n = #s[1][name]
         for k = 1, n do
             local points = {}
             for i, section in ipairs(s) do points[i] = section[name][k] end
-            lane(points, color)
+            lane(points, color, direction)
         end
     end
     -- the pedestrians walk in the middle of the sidewalk (at the height of its edge)
@@ -662,8 +662,8 @@ function M.baiRoad(v, ctx)
         if not v.noRightPedestrians then sidewalk("leftEdge", "leftCurb") end
     end
     -- in alleys (pedestrian streets) the lanes are walked by pedestrians
-    lanes("backwardLanes", v.alley and PEDESTRIAN_COLOR or BACKWARD_COLOR)
-    lanes("forwardLanes", v.alley and PEDESTRIAN_COLOR or FORWARD_COLOR)
+    lanes("backwardLanes", v.alley and PEDESTRIAN_COLOR or BACKWARD_COLOR, v.alley and 0 or (v._GLOBAL_driveOnLeft and 1 or -1))
+    lanes("forwardLanes", v.alley and PEDESTRIAN_COLOR or FORWARD_COLOR, v.alley and 0 or (v._GLOBAL_driveOnLeft and -1 or 1))
     return { lines = lines }
 end
 
