@@ -19,6 +19,7 @@
 		"project": true,
 		"projectionMask": 136,
 		"scalable": true,
+		"presetScale": true,
 		"scaleAxes": [
 			true,
 			false,
