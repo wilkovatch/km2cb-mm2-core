@@ -5,5 +5,12 @@
         "label": "TRAIN_SPLINE",
         "evaluate": "trains.evaluate",
         "controlParameters": "trains.controlParameters"
+    },
+    {
+        "id": 4,
+        "name": "mm2Boat",
+        "label": "BOAT_SPLINE",
+        "evaluate": "boats.evaluate",
+        "controlParameters": "boats.controlParameters"
     }
 ]

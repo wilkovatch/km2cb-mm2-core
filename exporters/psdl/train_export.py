@@ -1,8 +1,7 @@
-from common.file_io import BinaryFileHelper
 from common import report
+from route_pathset import write_routes, PATH_TYPE_LINE_STRIP
 
 # the stock lines (race/london/london_train.pathset) are line strips with a spacing of 20 (5 m)
-PATH_TYPE_LINE_STRIP = 2
 PATH_SPACING = 20
 
 
@@ -40,20 +39,5 @@ def export_trains(data, racesubfolder, cityname):
         from pathlib import Path
         Path(racesubfolder + cityname + "_train.pathset").unlink(missing_ok=True)
         return
-    file = BinaryFileHelper(racesubfolder + cityname + "_train.pathset", 'wb')
-    file.write_raw_string("PTH1")
-    file.write_uint32(len(lines))
-    file.write_uint32(0)
-    for i, points in enumerate(lines):
-        file.write_string32("PATH" + str(i))
-        file.write_uint32(len(points))
-        file.write_uint32(0)
-        for p in points:
-            file.write_uint32(0)  # room (not used by the game)
-            for c in p:
-                file.write_float(c)
-        file.write_byte(PATH_TYPE_LINE_STRIP)
-        file.write_byte(PATH_SPACING)
-        file.write_uint16(0)
-    file.close()
+    write_routes(racesubfolder + cityname + "_train.pathset", [("PATH" + str(i), points, PATH_SPACING) for i, points in enumerate(lines)])
     print(str(len(lines)) + " train lines exported")

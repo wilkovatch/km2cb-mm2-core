@@ -1,0 +1,25 @@
+{
+	"parameters": [
+		{
+			"name": "model",
+			"label": "BOAT_MODEL",
+			"tooltip": "BOAT_MODEL_TOOLTIP",
+			"type": "enum",
+			"enumLabels": [
+				"BOAT_MODEL_SAILBOAT",
+				"BOAT_MODEL_SAILBOARD",
+				"BOAT_MODEL_DUCK",
+				"BOAT_MODEL_TUG",
+				"BOAT_MODEL_WATER_TAXI",
+				"BOAT_MODEL_CAR_FERRY"
+			]
+		},
+		{
+			"name": "speed",
+			"label": "BOAT_SPEED",
+			"tooltip": "BOAT_SPEED_TOOLTIP",
+			"placeholder": "BOAT_SPEED_PH",
+			"type": "float"
+		}
+	]
+}

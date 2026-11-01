@@ -1,0 +1,10 @@
+{
+    "label": "CREATE_MOVING_OBJECT",
+    "menuWidth": 1.5,
+    "tabs": [{ "label": "", "elements": [
+        { "name": "mainGroup", "width": 1.5 },
+		{ "name": "pointsGroup", "width": 1.5 },
+        { "name": "model", "width": 1.5 },
+        { "name": "speed", "width": 1.5 }
+    ] }]
+}

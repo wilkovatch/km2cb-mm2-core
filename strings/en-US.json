@@ -487,5 +487,19 @@
 	"GENERATE_RAIL_DECALS": "Generate rail decals",
 	"GENERATE_RAIL_DECALS_TOOLTIP": "Create editable tram rail connections across this intersection. Delete previous decals manually before regenerating.",
 	"CREATE_TRAIN": "Train",
-	"TRAIN_SPLINE": "MM2 train Hermite"
+	"TRAIN_SPLINE": "MM2 train Hermite",
+	"MOVING_OBJECTS_SUBMENU": "Moving objects",
+	"CREATE_MOVING_OBJECT": "Other moving object",
+	"BOAT_SPLINE": "MM2 boat Catmull-Rom",
+	"BOAT_MODEL": "Model",
+	"BOAT_MODEL_TOOLTIP": "What moves along the route. The sailboat is the default model of the sailboat path file, the others are the stock models of the game (the game must have them). The car ferry is written to the ferry path file",
+	"BOAT_MODEL_SAILBOAT": "Sailboat",
+	"BOAT_MODEL_SAILBOARD": "Sailboard",
+	"BOAT_MODEL_DUCK": "Duck",
+	"BOAT_MODEL_TUG": "Tug",
+	"BOAT_MODEL_WATER_TAXI": "Water taxi",
+	"BOAT_MODEL_CAR_FERRY": "Car ferry",
+	"BOAT_SPEED": "Speed (m/s)",
+	"BOAT_SPEED_PH": "0 (model default)",
+	"BOAT_SPEED_TOOLTIP": "The average speed in metres per second (each boat varies by 1 m/s in game), in steps of 0.25. 0 uses the default of the model (2 for ducks, 20 for sailboards, 5 for the others). Ignored by the car ferry, which always moves at the same speed"
 }

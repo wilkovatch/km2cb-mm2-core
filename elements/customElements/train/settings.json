@@ -1,5 +1,5 @@
 {
-    "createMenu": { "direct": true },
+    "createMenu": { "direct": true, "submenu": "MOVING_OBJECTS_SUBMENU" },
     "spline": {
         "curveTypes": [3],
         "defaultCurveType": 3,
