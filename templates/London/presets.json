@@ -7,8 +7,8 @@
         "texture": "texture/r4i_rails_f.tex",
         "width": 2.0,
         "curveType": 0,
-        "segments": 20,
-        "segmentsPer100m": false,
+        "segments": 50,
+        "segmentsPer100m": true,
         "hermiteTension": 0.5
       }
     ],

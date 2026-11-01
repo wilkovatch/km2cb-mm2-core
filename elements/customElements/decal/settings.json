@@ -16,7 +16,8 @@
 			2
 		],
 		"defaultCurveType": 2,
-		"segments": 20,
+		"segments": 50,
+		"segmentsPer100m": true,
 		"projectPoints": true,
 		"projectSections": true,
 		"projectionMask": 136,
