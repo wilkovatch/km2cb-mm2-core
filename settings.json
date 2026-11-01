@@ -12,11 +12,5 @@
 	"customMeshFormats": [
 		"pkg"
 	],
-	"viewToggles": [
-		{
-			"name": "roomOutlines",
-			"label": "VIEW_ROOM_OUTLINES",
-			"default": true
-		}
-	]
+	"viewToggles": []
 }
