@@ -1,10 +1,10 @@
 {
 	"program": "km2CityBuilder",
-	"version": "0.2.1",
+	"version": "0.2.2",
 	"coreVersion": 4,
 	"coreFeatureVersion": 8,
 	"programVersion": 4,
-	"featureVersion": 1,
+	"featureVersion": 2,
 	"surfaceProjectionTerrainFallbackOnly": true,
 	"customTextureFormats": [
 		"tex"

@@ -12,6 +12,13 @@
         "hermiteTension": 0.5
       }
     ],
+    "customElement/decalSingle": [
+      {
+        "name": "Default",
+        "type": "decalSingle",
+        "texture": "texture/r4i_rails_f.tex"
+      }
+    ],
     "propElem": [
       {
         "start": 9.0,

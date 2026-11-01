@@ -119,6 +119,39 @@ class DecalTests(unittest.TestCase):
             DecalWriter(Scene(objects),str(Path(tmp)/'test.psdl')).write()
             self.assertFalse((Path(tmp)/'test/decals.pathset').exists())
 
+    def test_single_decal_corners_and_export(self):
+        from json_processor import JsonProcessor, decal_single_corners
+        corners = decal_single_corners(dict(position=[10, 2, 20], scale=[2, 1, 10]))
+        np.testing.assert_allclose(corners, [[9, 2, 15], [11, 2, 15], [9, 2, 25], [11, 2, 25]])
+        # yaw 90 turns the length (Z) to X; the size and the winding (seen from above in the editor's left-handed space,
+        # the same as the strips of the spline decals) don't change
+        for rotation in ([0, 90, 0], [0, 37, 0], [0, 0, 0]):
+            c = np.array(decal_single_corners(dict(position=[0, 0, 0], rotation=rotation, scale=[2, 1, 10])))
+            self.assertAlmostEqual(np.linalg.norm(c[1] - c[0]), 2)
+            self.assertAlmostEqual(np.linalg.norm(c[2] - c[0]), 10)
+            self.assertLess(np.cross(c[1] - c[0], c[2] - c[0])[1], 0)
+        c = np.array(decal_single_corners(dict(position=[0, 0, 0], rotation=[0, 90, 0], scale=[2, 1, 10])))
+        np.testing.assert_allclose(c[2] - c[0], [10, 0, 0], atol=1e-9)
+        # pitch 90 lowers the far end (a positive X rotation tips the front down, as in the engine)
+        c = np.array(decal_single_corners(dict(position=[0, 0, 0], rotation=[90, 0, 0], scale=[2, 1, 10])))
+        np.testing.assert_allclose(c[2] - c[0], [0, -10, 0], atol=1e-9)
+        processor = JsonProcessor.__new__(JsonProcessor)
+        processor.find_block = lambda position: 0
+        processor.get_tex = lambda tex: tex.split('/')[-1]
+        decal = dict(type='decalSingle', data=dict(name='Single', fields=dict(state=dict(texture='texture/zebra.tex'))),
+                     points=dict(center=dict(id=0, position=[10, 2, 20], rotation=[0, 0, 0], scale=[2, 1, 10])))
+        res = []
+        processor.get_single_decal(decal, res)
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0].name, '0_DECAL')
+        self.assertEqual(res[0].properties['texture'], 'zebra')
+        self.assertEqual(res[0].properties['strip_pairs'], '1')
+        self.assertEqual(len(res[0].vertices), 4)
+        res = []
+        decal['data']['fields']['state']['texture'] = ''
+        processor.get_single_decal(decal, res)
+        self.assertEqual(res, [])
+
     def test_city_import_creates_editable_splines_and_reports_width_loss(self):
         sys.path.insert(0, str(CORE / 'scripts/importCity'))
         from _test_import_city import write_psdl

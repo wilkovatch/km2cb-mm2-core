@@ -25,6 +25,34 @@ DECAL_DEFAULT_WIDTH = 1.0
 CABLE_CAR_RAIL_DECAL_TEXTURE = 'r4i_rails_f'
 CABLE_CAR_RAIL_DECAL_WIDTH = 2.0
 DECAL_MAX_TEXTURE_NAME = 31
+# the game draws a decal with the room of the middle of its points 0 and 2, so a longer single decal is partly hidden
+DECAL_SINGLE_MAX_LENGTH = 25.0
+
+
+def euler_rotate(p, euler):
+    # a vector rotated by euler angles in degrees, as the editor applies them to its points: Z, then X, then Y (the
+    # same as lua/decals.lua)
+    x, y, z = p
+    c, s = math.cos(math.radians(euler[2])), math.sin(math.radians(euler[2]))
+    x, y = c * x - s * y, s * x + c * y
+    c, s = math.cos(math.radians(euler[0])), math.sin(math.radians(euler[0]))
+    y, z = c * y - s * z, s * y + c * z
+    c, s = math.cos(math.radians(euler[1])), math.sin(math.radians(euler[1]))
+    x, z = c * x + s * z, -s * x + c * z
+    return (x, y, z)
+
+
+def decal_single_corners(point):
+    # the corners of a single decal (decalSingle) as the strip pairs of a spline decal: the start pair, then the end one,
+    # each from the side with U 1 to the one with U 0 (not lifted)
+    position = point['position']
+    rotation = point.get('rotation') or (0, 0, 0)
+    scale = point.get('scale') or (1, 1, 1)
+    corners = []
+    for sx, sz in ((-0.5, -0.5), (0.5, -0.5), (-0.5, 0.5), (0.5, 0.5)):
+        offset = euler_rotate((sx * scale[0], 0.0, sz * scale[2]), rotation)
+        corners.append(tuple(position[i] + offset[i] for i in range(3)))
+    return corners
 
 
 class JsonProcessor:
@@ -1374,6 +1402,9 @@ class JsonProcessor:
     def get_decals(self, res):
         # Strip edges are evaluated by the core's JSON components in the editor, not resampled here.
         for decal in self.data.get('customElements') or []:
+            if decal.get('type') == 'decalSingle':
+                self.get_single_decal(decal, res)
+                continue
             if decal.get('type') != 'decal':
                 continue
             state = decal.get('data', {}).get('fields', {}).get('state', {})
@@ -1398,6 +1429,35 @@ class JsonProcessor:
                 elem.properties.update(original_name=name, texture=texture, strip_pairs='1')
                 elem.mat = 'NONE'
                 res.append(elem)
+
+    def get_single_decal(self, decal, res):
+        # a quad: one piece of two pairs, as the strips of the spline decals
+        state = decal.get('data', {}).get('fields', {}).get('state', {})
+        name = decal.get('data', {}).get('name', 'decal')
+        texture = self.get_decal_texture(state_val(state, 'texture', ''))
+        point = (decal.get('points') or {}).get('center')
+        if not point:
+            report.warning('the decal ' + name + ' has no point, it is not exported')
+            return
+        if not texture or len(texture) > DECAL_MAX_TEXTURE_NAME:
+            report.warning('the decal ' + name + ' has a missing or overlong texture name, it is not exported')
+            return
+        scale = point.get('scale') or (1, 1, 1)
+        if abs(scale[0]) < 1e-4 or abs(scale[2]) < 1e-4:
+            report.warning('the decal ' + name + ' has no width or length, it is not exported')
+            return
+        if scale[0] * scale[2] < 0:
+            report.warning('the decal ' + name + ' is mirrored (a negative width or length), the game draws its back, which is culled')
+        if abs(scale[2]) > DECAL_SINGLE_MAX_LENGTH:
+            report.warning('the decal ' + name + ' is longer than ' + str(DECAL_SINGLE_MAX_LENGTH) + ' m; it is visible only with its starting room')
+        if self.find_block(tuple(point['position'])) < 0:
+            report.warning('the decal ' + name + ' is outside of the blocks; it is visible only with its starting room')
+        elem = ExportedCityElement()
+        elem.name = '0_DECAL'
+        elem.vertices = decal_single_corners(point)
+        elem.properties.update(original_name=name, texture=texture, strip_pairs='1')
+        elem.mat = 'NONE'
+        res.append(elem)
 
     def get_cable_car_offset(self, r_state):
         # as cableCarOffsetI in the road parameters

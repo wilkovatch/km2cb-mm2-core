@@ -1,0 +1,11 @@
+{
+	"parameters": [
+		{
+			"name": "texture",
+			"label": "DECAL_TEXTURE",
+			"tooltip": "DECAL_TEXTURE_TOOLTIP",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
+		}
+	]
+}

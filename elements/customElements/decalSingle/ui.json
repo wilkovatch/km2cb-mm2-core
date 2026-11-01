@@ -1,0 +1,23 @@
+{
+	"label": "CREATE_DECAL_SINGLE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "texture",
+					"width": 1.5
+				},
+				{
+					"name": "transformGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

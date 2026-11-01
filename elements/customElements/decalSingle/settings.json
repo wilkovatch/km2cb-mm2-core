@@ -1,0 +1,34 @@
+{
+	"presets": true,
+	"defaultPreset": {
+		"texture": "texture/r4i_rails_f.tex"
+	},
+	"geometryLayer": 13,
+	"createMenu": {
+		"direct": true,
+		"submenu": "DECALS_MENU",
+		"label": "CREATE_DECAL_SINGLE_MENU"
+	},
+	"point": {
+		"rotatable": true,
+		"rotationAxes": [
+			false,
+			true,
+			false
+		],
+		"project": true,
+		"projectionMask": 136,
+		"scalable": true,
+		"scaleAxes": [
+			true,
+			false,
+			true
+		],
+		"defaultScale": [
+			2,
+			1,
+			10
+		]
+	},
+	"geometry": "decals.single"
+}

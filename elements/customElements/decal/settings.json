@@ -7,7 +7,9 @@
 	},
 	"geometryLayer": 13,
 	"createMenu": {
-		"direct": true
+		"direct": true,
+		"submenu": "DECALS_MENU",
+		"label": "CREATE_DECAL_SPLINE_MENU"
 	},
 	"spline": {
 		"curveTypes": [
