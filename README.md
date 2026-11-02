@@ -2,7 +2,23 @@ This core for km2 City Builder adds support for Midtown Madness 2 cities
 
 The main repository for the city builder is here: https://github.com/wilkovatch/km2-city-builder
 
-This core uses code from this repository: https://github.com/wilkovatch/psdl-exporter-common, it's included as a submodule, so make sure to use `--recurse-submodules` when cloning this repository.
+The exporter is included directly in this repository, including `exporters/psdl/common` and its original license. Cloning the core does not require submodules.
+
+## Creating races
+
+Create and select a race in City properties. **Create > Checkpoint** adds directly to that race. Open its **Amateur** or **Professional** subcontainer to edit that difficulty's police cars and opponents: **Create > Police car** and **Create > Opponent** use the selected difficulty automatically. Only that setup's police cars and opponent routes are visible and selectable. Blitz races have police cars but no opponents. While the police cars of the roam mode are being edited, **Create > Police car** adds to those instead.
+
+The race panel shows each setting on one row, with the amateur value on the left and the professional one on the right. Its Amateur and Professional buttons open the difficulty setups; each has separate Police cars and Opponents lists with Edit and Delete. Checkpoints and props stay at race level. The blue container menu shows **2 containers selected** for a race and its difficulty, with entries to reopen or deselect each. Deselecting only the difficulty keeps race props and checkpoints visible; switching or deselecting the race clears the difficulty too.
+
+For an opponent, the first click places its starting car, and later clicks draw the waypoint route as a Low Poly spline. The car's position and heading remain independently editable. Its panel edits the car model and tuning; difficulty comes from the selected subcontainer. An empty professional set still uses the amateur opponents when exported. **Back** returns to the list the element was opened from, or to its difficulty setup if an opponent was clicked in the city (the race for props). Deleting a checkpoint or police car clicked in the city just closes its panel; deleting one opened from a list returns there.
+
+The **Props** submenu also turns blue: individual props, mass placement, prop lines, prop strips and polygons created there belong to the selected race. Deselect the race with the blue container menu to place ordinary city props. Race props appear only while their race is selected; radius erasing affects only props in that scope. Changing races cancels placement into the old race.
+
+The race panel's Contents list edits and deletes owned elements. Cloning a race copies its contents with independent control points; deleting a race removes them together, with undo/redo support. Race props export separately to `race/<city>/<race-id>.pathset`, alongside that race's AIMAP and opponent files, and are included in archive exports. The exporter tracks its own race prop filenames to remove stale files after race deletion or reordering.
+
+Core migration 5 backs up older cities and converts their existing opponents to owned spline elements, preserving starting cars, tuning, difficulty, waypoint order and incomplete routes. Race settings, checkpoints and police cars remain in their existing containers.
+
+Difficulty subcontainers use the existing saved opponent difficulty and police arrays, so existing cities keep their data without an additional migration. Cloning, deleting, undoing and reloading a race preserve both setups. Export formats and the professional fallback are unchanged.
 
 ## Surface projection
 
@@ -20,9 +36,7 @@ The progress bar has a **Cancel** button. Completed files remain after cancellat
 
 The SF and London city templates include building presets based on the facades of the original cities: 69 named styles for SF and 62 for London, in addition to their Default presets. They include matching building-side and building-block presets, using the original texture combinations, facade tile sizes and roof textures. Choose them in the building editor or in Whole city buildings. The stock textures must be provided in `Files/common/MidtownMadness2/texture` as usual. These are reusable procedural styles: each repeats its facade on all sides, and ground-floor slivers are adapted to editable texture blocks. The source rooms, dimensions and textures are listed in [Building presets](BUILDING_PRESETS.md). Existing cities keep their own presets; the template presets are copied when creating a new city.
 
-To import the output in Blender you can use these two plugins:
-- https://github.com/wilkovatch/km2cb-to-blender-mm2-plugin (to import the resulting .bin file in Blender)
-- https://github.com/wilkovatch/mm2-blender-psdl-plugin (to export the PSDL and other files)
+The builder exports directly to the game formats. BIN-only export remains available as an intermediate format for inspection and tools; Blender integration is no longer maintained.
 
 Exporters supported (accessible by selecting the PSDL format when exporting):
  - PSDL
@@ -33,7 +47,7 @@ Exporters supported (accessible by selecting the PSDL format when exporting):
  - PKG and bounds (BND, BBND, TER) of the elements exported to PKG
  - CINFO and AIMAP (races, opponents, police, ambient traffic)
  - Hudmap (the map of the HUD) and race maps (the maps of the race menus)
- - BIN (select "BIN only" to save only the BIN file and use it in Blender)
+ - BIN (select "BIN only" to save the intermediate exporter data)
 
 The files are written as in the folder of the game, ready to be copied there (or packed in an .ar file). The PSDL goes in a `city` folder: if the chosen .psdl file is in a folder named `city`, it is used as it is, otherwise a `city` folder is created in the chosen folder. The other folders are next to the `city` folder:
 ```

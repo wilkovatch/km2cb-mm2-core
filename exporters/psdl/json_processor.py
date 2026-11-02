@@ -1261,6 +1261,9 @@ class JsonProcessor:
                 elem.properties['original_name'] = mesh['name']
                 elem.properties['object'] = get_instance_mesh_name(dict_mesh)
                 elem.properties['flags'] = flags
+                owner = state_val(state, '_propertyContainerId', '')
+                if is_prop and owner:
+                    elem.properties['race'] = owner
                 elem.translation = mref['position']
                 elem.rotation = mref['rotation']
                 elem.scale = mref['scale']

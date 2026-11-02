@@ -22,7 +22,7 @@ class ArPacker:
         # adds the files of the folder (recursively), named <prefix>/<path in the folder>
         for dirpath, _, filenames in os.walk(folder):
             for filename in filenames:
-                if self.is_placeholder(filename):
+                if self.is_placeholder(filename) or filename.startswith('.km2-'):
                     continue
                 source = os.path.join(dirpath, filename)
                 name = os.path.relpath(source, folder).replace(os.sep, '/')

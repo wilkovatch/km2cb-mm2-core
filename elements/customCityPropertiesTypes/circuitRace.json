@@ -11,75 +11,86 @@
 			"type": "string"
 		},
 		{
-			"name": "timeOfDay",
-			"label": "TIME_OF_DAY",
-			"type": "enum",
-			"enumLabels": [
-				"TIME_OF_DAY_MORNING",
-				"TIME_OF_DAY_NOON",
-				"TIME_OF_DAY_EVENING",
-				"TIME_OF_DAY_NIGHT"
-			],
-		},
-		{
-			"name": "timeOfDay_professional",
-			"label": "TIME_OF_DAY_PROFESSIONAL",
-			"type": "enum",
-			"enumLabels": [
-				"TIME_OF_DAY_MORNING",
-				"TIME_OF_DAY_NOON",
-				"TIME_OF_DAY_EVENING",
-				"TIME_OF_DAY_NIGHT"
-			],
-		},
-		{
-			"name": "weather",
-			"label": "WEATHER",
-			"type": "enum",
-			"enumLabels": [
-				"WEATHER_CLEAR",
-				"WEATHER_CLOUDY",
-				"WEATHER_FOGGY",
-				"WEATHER_RAINY"
-			],
-		},
-		{
-			"name": "weather_professional",
-			"label": "WEATHER_PROFESSIONAL",
-			"type": "enum",
-			"enumLabels": [
-				"WEATHER_CLEAR",
-				"WEATHER_CLOUDY",
-				"WEATHER_FOGGY",
-				"WEATHER_RAINY"
-			],
-		},
-		{
 			"name": "speedLimit",
 			"label": "SPEED_LIMIT",
 			"type": "float"
 		},
 		{
+			"name": "timeOfDay",
+			"label": "RACE_AMATEUR",
+			"type": "enum",
+			"enumLabels": [
+				"TIME_OF_DAY_MORNING",
+				"TIME_OF_DAY_NOON",
+				"TIME_OF_DAY_EVENING",
+				"TIME_OF_DAY_NIGHT"
+			]
+		},
+		{
+			"name": "timeOfDay_professional",
+			"label": "RACE_PROFESSIONAL",
+			"type": "enum",
+			"enumLabels": [
+				"TIME_OF_DAY_MORNING",
+				"TIME_OF_DAY_NOON",
+				"TIME_OF_DAY_EVENING",
+				"TIME_OF_DAY_NIGHT"
+			]
+		},
+		{
+			"name": "weather",
+			"label": "RACE_AMATEUR",
+			"type": "enum",
+			"enumLabels": [
+				"WEATHER_CLEAR",
+				"WEATHER_CLOUDY",
+				"WEATHER_FOGGY",
+				"WEATHER_RAINY"
+			]
+		},
+		{
+			"name": "weather_professional",
+			"label": "RACE_PROFESSIONAL",
+			"type": "enum",
+			"enumLabels": [
+				"WEATHER_CLEAR",
+				"WEATHER_CLOUDY",
+				"WEATHER_FOGGY",
+				"WEATHER_RAINY"
+			]
+		},
+		{
 			"name": "trafficDensity",
-			"label": "TRAFFIC_DENSITY",
+			"label": "RACE_AMATEUR",
 			"type": "float"
 		},
 		{
 			"name": "trafficDensity_professional",
-			"label": "TRAFFIC_DENSITY_PROFESSIONAL",
+			"label": "RACE_PROFESSIONAL",
 			"tooltip": "PROFESSIONAL_TOOLTIP",
 			"type": "float"
 		},
 		{
 			"name": "pedestriansDensity",
-			"label": "PEDESTRIANS_DENSITY",
+			"label": "RACE_AMATEUR",
 			"type": "float"
 		},
 		{
 			"name": "pedestriansDensity_professional",
-			"label": "PEDESTRIANS_DENSITY_PROFESSIONAL",
+			"label": "RACE_PROFESSIONAL",
 			"tooltip": "PROFESSIONAL_TOOLTIP",
 			"type": "float"
+		},
+		{
+			"name": "laps",
+			"label": "RACE_AMATEUR",
+			"type": "int"
+		},
+		{
+			"name": "laps_professional",
+			"label": "RACE_PROFESSIONAL",
+			"tooltip": "PROFESSIONAL_TOOLTIP",
+			"type": "int"
 		},
 		{
 			"name": "checkpoints",
@@ -87,45 +98,141 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customCityPropertiesType": "checkpoint"
+				"customCityPropertiesType": "checkpoint",
+				"hint": "CHECKPOINTS_CREATE_HINT",
+				"subPanel": true,
+				"hideAddButton": true
 			}
 		},
 		{
 			"name": "policeCars",
-			"label": "POLICE_CARS",
+			"label": "RACE_AMATEUR",
 			"type": "customCityProperties",
-			"customCityPropertiesType": "racePoliceCars"
+			"customCityPropertiesType": "raceSetupAmateur"
 		},
 		{
 			"name": "policeCars_professional",
-			"label": "POLICE_CARS_PROFESSIONAL",
+			"label": "RACE_PROFESSIONAL",
 			"tooltip": "PROFESSIONAL_TOOLTIP",
 			"type": "customCityProperties",
-			"customCityPropertiesType": "racePoliceCars"
+			"customCityPropertiesType": "raceSetupProfessional"
+		}
+	],
+	"uiInfo": [
+		{
+			"name": "name",
+			"width": 1.5
 		},
 		{
-			"name": "opponents",
-			"label": "EDIT_OPPONENTS",
-			"type": "customCityProperties",
-			"customCityPropertiesType": "opponentSet"
+			"name": "speedLimit",
+			"width": 1.5
 		},
 		{
-			"name": "opponents_professional",
-			"label": "EDIT_OPPONENTS_PROFESSIONAL",
-			"tooltip": "PROFESSIONAL_TOOLTIP",
-			"type": "customCityProperties",
-			"customCityPropertiesType": "opponentSet"
+			"name": "label:TIME_OF_DAY",
+			"width": 1.5
 		},
 		{
-			"name": "laps",
-			"label": "RACE_LAPS",
-			"type": "int"
+			"name": "timeOfDay_professional",
+			"width": 0.75
+		},
+		{
+			"name": "timeOfDay",
+			"width": 0.75
+		},
+		{
+			"name": "label:WEATHER",
+			"width": 1.5
+		},
+		{
+			"name": "weather_professional",
+			"width": 0.75
+		},
+		{
+			"name": "weather",
+			"width": 0.75
+		},
+		{
+			"name": "label:TRAFFIC_DENSITY",
+			"width": 1.5
+		},
+		{
+			"name": "trafficDensity_professional",
+			"width": 0.75
+		},
+		{
+			"name": "trafficDensity",
+			"width": 0.75
+		},
+		{
+			"name": "label:PEDESTRIANS_DENSITY",
+			"width": 1.5
+		},
+		{
+			"name": "pedestriansDensity_professional",
+			"width": 0.75
+		},
+		{
+			"name": "pedestriansDensity",
+			"width": 0.75
+		},
+		{
+			"name": "label:RACE_LAPS",
+			"width": 1.5
 		},
 		{
 			"name": "laps_professional",
-			"label": "RACE_LAPS_PROFESSIONAL",
-			"tooltip": "PROFESSIONAL_TOOLTIP",
-			"type": "int"
+			"width": 0.75
+		},
+		{
+			"name": "laps",
+			"width": 0.75
+		},
+		{
+			"name": "checkpoints",
+			"width": 1.5
+		},
+		{
+			"name": "label:RACE_DIFFICULTY",
+			"width": 1.5
+		},
+		{
+			"name": "policeCars_professional",
+			"width": 0.75
+		},
+		{
+			"name": "policeCars",
+			"width": 0.75
+		},
+		{
+			"name": "content:RACE_PROPS",
+			"width": 1.5
 		}
-	]
+	],
+	"elementContainer": {
+		"category": "race",
+		"types": [
+			"individualProp",
+			"propLine",
+			"propStrip",
+			"propPolygon"
+		],
+		"contentGroups": [
+			{
+				"label": "RACE_PROPS",
+				"hint": "PROPS_CREATE_HINT",
+				"types": [
+					"individualProp",
+					"propLine",
+					"propStrip",
+					"propPolygon"
+				]
+			}
+		],
+		"commands": [
+			{
+				"label": "CREATE_RACE_CHECKPOINT",
+				"path": "checkpoints"
+			}
+		]
+	}
 }

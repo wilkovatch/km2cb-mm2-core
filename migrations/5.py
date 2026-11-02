@@ -1,8 +1,11 @@
 """All the format changes since core version 4, before the builder decodes the city:
 - the experimental standalone prop rules are removed
+- the race opponents move to owned Low Poly splines
 """
 import copy
+import math
 import sys
+import uuid
 import MigrationHelper
 
 
@@ -22,6 +25,42 @@ def remove_prop_path_presets(presets):
         presets.pop(key, None)
 
 
+# Race opponents
+
+def migrate_opponents(data):
+    properties = data.get('cityProperties') or {}
+    points = data['terrainPoints'] = data.get('terrainPoints') or []
+    key = 'customElements' if 'customElements' in data else 'lowLevelElements'
+    elements = data[key] = data.get(key) or []
+    all_elements = (data.get('customElements') or []) + (data.get('lowLevelElements') or [])
+    point_id = max((p['id'] for p in points), default=-1) + 1
+    element_id = max((e['id'] for e in all_elements), default=-1) + 1
+    for race_key in ('blitzRaces', 'circuitRaces', 'checkpointRaces'):
+        for race in properties.get(race_key) or []:
+            owner = race.setdefault('_elementContainerId', uuid.uuid4().hex)
+            for difficulty, opponents_key in enumerate(('opponents', 'opponents_professional')):
+                container = race.get(opponents_key) or {}
+                for index, opponent in enumerate(container.get('opponents') or []):
+                    state = copy.deepcopy(opponent)
+                    controls = []
+                    for entry in state.pop('waypoints', []) or []:
+                        waypoint = entry.get('waypoint')
+                        if waypoint is None:
+                            continue
+                        value = waypoint.get('localPosition') or {}
+                        pos = {axis: float(value.get(axis, 0)) for axis in ('x', 'y', 'z')} if isinstance(value, dict) else dict(zip(('x', 'y', 'z'), value))
+                        if len(pos) != 3 or not all(math.isfinite(v) for v in pos.values()):
+                            raise ValueError('Invalid opponent waypoint in race ' + race.get('name', ''))
+                        points.append(dict(id=point_id, position=pos, dividing=False, linkType=0, elementType=0, elementId=-1, anchorIndex=-1, percent=0))
+                        controls.append(point_id)
+                        point_id += 1
+                    state.update(type='opponent', curveType=2, segments=20, difficulty=difficulty, _propertyContainerId=owner)
+                    elements.append(dict(id=element_id, name=(race.get('name') or 'Race') + ' Opponent ' + str(index + 1) + (' (professional)' if difficulty else ''),
+                                         state=state, points=dict(spline=controls), containerId=-1))
+                    element_id += 1
+                race.pop(opponents_key, None)
+
+
 def migrate_presets(source):
     data = copy.deepcopy(source)
     presets = data.get('presets')
@@ -33,6 +72,7 @@ def migrate_presets(source):
 def migrate_city(source):
     data = copy.deepcopy(source)
     remove_prop_paths(data)
+    migrate_opponents(data)
     return data
 
 

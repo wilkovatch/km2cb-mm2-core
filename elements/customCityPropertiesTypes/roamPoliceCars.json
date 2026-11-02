@@ -11,8 +11,22 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customCityPropertiesType": "policeCar"
+				"customCityPropertiesType": "policeCar",
+				"hint": "POLICE_CARS_CREATE_HINT",
+				"hideAddButton": true
 			}
 		}
-	]
+	],
+	"elementContainer": {
+		"category": "race",
+		"types": [],
+		"commands": [
+			{
+				"label": "CREATE_RACE_POLICE",
+				"path": "policeCars"
+			}
+		],
+		"editLabel": "EDIT_POLICE_CARS",
+		"deselectLabel": "HIDE_POLICE_CARS"
+	}
 }

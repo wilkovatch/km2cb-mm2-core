@@ -29,6 +29,9 @@ def export_prop_placer(processor, element, result):
         part.name, part.mat = '0_PTH', 'NONE'
         part.vertices = points
         part.properties.update(object=model_name(model), flags='2', spacing=str(int(spacing)), original_name=element['data']['name'])
+        owner = state_val(state, '_propertyContainerId', '')
+        if owner:
+            part.properties['race'] = owner
         part.source = ('customElement', element['id'])
         result.append(part)
         return
@@ -38,6 +41,9 @@ def export_prop_placer(processor, element, result):
             part.name, part.mat = '0_PTH', 'NONE'
             model = processor.data['meshDict'][int(prop['meshId'])]['name']
             part.properties.update(object=model_name(model), flags='1', original_name=element['data']['name'])
+            owner = state_val(state, '_propertyContainerId', '')
+            if owner:
+                part.properties['race'] = owner
             part.translation, part.rotation, part.scale = prop['position'], prop['rotation'], prop['scale']
             part.source = ('customElement', element['id'])
             result.append(part)

@@ -106,6 +106,8 @@ try:
     data = dj.decode_json(sys.argv[2])
     if ExportReport is not None:
         ExportReport.init(data)
+    from race_elements import validate_ownership
+    validate_ownership(data)
     physics_map = read_physics_map()
     jp = JsonProcessor(data, verbose)
     jp.get_objects()
@@ -122,6 +124,10 @@ try:
             layout.path('geometry'), layout.path('bound')
         )
         writer.write()
+        if write_pathset:
+            with report.guarded("the race props were not written"):
+                from race_elements import write_props
+                write_props(scene_input, data, layout)
         os.remove(bin_file)
 
     # the other files are written even if one fails, when the errors are collected (see common/report.py)

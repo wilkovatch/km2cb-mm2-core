@@ -1,0 +1,61 @@
+{
+	"label": null,
+	"exclusiveEditing": {
+		"enabled": true,
+		"category": "raceDifficulty"
+	},
+	"parameters": [
+		{
+			"name": "policeCars",
+			"label": "POLICE_CARS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customCityPropertiesType": "policeCar",
+				"hint": "POLICE_CARS_CREATE_HINT",
+				"hideAddButton": true,
+				"subPanel": true
+			}
+		}
+	],
+	"elementContainer": {
+		"category": "raceDifficulty",
+		"parentCategory": "race",
+		"filterParameter": "difficulty",
+		"filterValue": 0,
+		"types": [
+			"opponent"
+		],
+		"commands": [
+			{
+				"label": "CREATE_RACE_POLICE",
+				"path": "policeCars"
+			}
+		],
+		"editLabel": "EDIT_RACE_AMATEUR",
+		"deselectLabel": "DESELECT_RACE_AMATEUR",
+		"contentGroups": [
+			{
+				"label": "RACE_OPPONENTS",
+				"hint": "OPPONENTS_CREATE_HINT",
+				"types": [
+					"opponent"
+				]
+			}
+		]
+	},
+	"uiInfo": [
+		{
+			"name": "label:RACE_AMATEUR",
+			"width": 1.5
+		},
+		{
+			"name": "policeCars",
+			"width": 1.5
+		},
+		{
+			"name": "content:RACE_OPPONENTS",
+			"width": 1.5
+		}
+	]
+}

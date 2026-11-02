@@ -15,5 +15,6 @@
     "defaultPreset": {
         "seed": 0,
         "models": []
-    }
+    },
+    "propertyContainerCategory": "race"
 }

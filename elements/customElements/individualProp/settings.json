@@ -13,5 +13,6 @@
 		"massPlacement": true,
 		"randomRotation": true,
 		"namePrefix": "Prop"
-	}
+	},
+	"propertyContainerCategory": "race"
 }

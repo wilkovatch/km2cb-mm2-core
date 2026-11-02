@@ -3,6 +3,8 @@ from pathlib import Path
 from utils import state_val, state_bool, state_vector, state_vector_scale
 from train_export import export_trains
 from boat_export import export_boats
+from race_elements import opponents as spline_opponents
+from common import report
 
 
 class CinfoAimapExporter:
@@ -28,6 +30,8 @@ class CinfoAimapExporter:
         rot0 = state_vector(model, "localRotation")
         rot0_y = rot0["y"] if rot0["y"] != 0 else 0.001 # exactly 0 breaks things
         waypoints = state_val(opponent, "waypoints", [])
+        if not waypoints:
+            report.warning('Opponent ' + opponent_id + ' has no waypoints; place its route before playing the race')
         lines = [
             "x,y,z,brake,forward offset,side offset,target speed,speed start,side start",
             ",".join([str(-pos0["x"]), str(pos0["y"]), str(pos0["z"]), str(rot0_y), "0", "0", "0", "0"]),
@@ -69,6 +73,8 @@ class CinfoAimapExporter:
         return race_id + "-" + ("p" if is_professional else "a") + "-" + str(i)
 
     def get_race_array_in_container(self, data, key, is_p):
+        if key == 'opponents':
+            return spline_opponents(self.json_processor.data, data, is_p)
         container = state_val(data, key + ("_professional" if is_p else ""), [])
         array = state_val(container, key, [])
         if array == [] and is_p:

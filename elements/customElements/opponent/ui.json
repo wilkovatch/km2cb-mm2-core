@@ -1,0 +1,59 @@
+{
+    "label": "CREATE_OPPONENT",
+    "menuWidth": 1.5,
+    "tabs": [
+        {
+            "label": "",
+            "elements": [
+                {
+                    "name": "mainGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "pointsGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "carModel",
+                    "width": 1.5
+                },
+                {
+                    "name": "speedMultiplier",
+                    "width": 1.5
+                },
+                {
+                    "name": "cautionInCorners",
+                    "width": 1.5
+                },
+                {
+                    "name": "cautionInCornersThreshold",
+                    "width": 1.5
+                },
+                {
+                    "name": "avoidTraffic",
+                    "width": 1.5
+                },
+                {
+                    "name": "avoidProps",
+                    "width": 1.5
+                },
+                {
+                    "name": "avoidPlayers",
+                    "width": 1.5
+                },
+                {
+                    "name": "avoidOpponents",
+                    "width": 1.5
+                },
+                {
+                    "name": "badPathfinding",
+                    "width": 1.5
+                },
+                {
+                    "name": "brakingBias",
+                    "width": 1.5
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,36 @@
+{
+    "createMenu": {
+        "direct": true,
+        "label": "CREATE_OPPONENT"
+    },
+    "propertyContainerCategory": "raceDifficulty",
+    "requiresPropertyContainer": true,
+    "placementObject": "carModel",
+    "spline": {
+        "curveTypes": [
+            2
+        ],
+        "defaultCurveType": 2,
+        "line": {
+            "color": "yellow",
+            "always": true,
+            "arrowDirection": "1",
+            "heightOffset": 0.05
+        },
+        "sectionVertices": [],
+        "components": [],
+        "textures": [],
+        "widths": []
+    },
+    "defaultPreset": {
+        "speedMultiplier": 1.0,
+        "cautionInCorners": 50.0,
+        "cautionInCornersThreshold": 0.7,
+        "avoidTraffic": true,
+        "avoidProps": true,
+        "avoidPlayers": true,
+        "avoidOpponents": true,
+        "badPathfinding": false,
+        "brakingBias": 1.0
+    }
+}

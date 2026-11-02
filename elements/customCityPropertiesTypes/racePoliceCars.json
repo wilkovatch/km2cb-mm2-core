@@ -11,7 +11,9 @@
 			"type": "array",
 			"arrayProperties": {
 				"maxElements": -1,
-				"customCityPropertiesType": "policeCar"
+				"customCityPropertiesType": "policeCar",
+				"hint": "POLICE_CARS_CREATE_HINT",
+				"hideAddButton": true
 			}
 		}
 	]
