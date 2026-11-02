@@ -21,7 +21,8 @@ class MainWriter:
                  cap_materials,
                  physics_map=None,
                  geometry_path=None,
-                 bound_path=None):
+                 bound_path=None,
+                 assume_mm2hook=False):
         self.filepath = filepath
         self.scene_input = scene_input
         self.write_psdl = write_psdl
@@ -36,12 +37,13 @@ class MainWriter:
         # the folders of the PKG and bound files (see PKGWriter)
         self.geometry_path = geometry_path
         self.bound_path = bound_path
+        self.assume_mm2hook = assume_mm2hook
 
     # each file is written even if the ones before failed, when the errors are collected (see report.guarded)
     def write(self):
         if self.write_psdl:
             with report.guarded("the PSDL was not written"):
-                writer = PSDLWriter(self.scene_input, self.filepath, self.split_non_coplanar_roads, self.cap_materials)
+                writer = PSDLWriter(self.scene_input, self.filepath, self.split_non_coplanar_roads, self.cap_materials, self.assume_mm2hook)
                 writer.write()
         if self.write_inst:
             with report.guarded("the INST was not written"):

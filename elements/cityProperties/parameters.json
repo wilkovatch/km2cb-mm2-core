@@ -11,6 +11,12 @@
 			"type": "string"
 		},
 		{
+			"name": "assumeMM2Hook",
+			"label": "ASSUME_MM2HOOK",
+			"tooltip": "ASSUME_MM2HOOK_TOOLTIP",
+			"type": "bool"
+		},
+		{
 			"name": "speedLimit",
 			"label": "SPEED_LIMIT",
 			"type": "float"

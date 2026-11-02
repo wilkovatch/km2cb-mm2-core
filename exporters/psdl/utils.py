@@ -43,6 +43,14 @@ class BinaryWriter:
     def close(self):
         self.file.close()
 
+# the props type of the rows of parked cars, exported by parked_car_export.py instead of as props
+PARKED_CARS_TYPE = 'parkedCars'
+
+
+def placed_props(line):
+    # the props of a prop line of an element that have a model: the others are only places, for those who read them
+    return [prop for prop in line['props'] if int(prop['meshId']) >= 0]
+
 # Functions to get a value from a dictionary without throwing an error if the state or the key is missing
 def state_val(state, key, default = None):
     if state is None or type(state) is not dict:

@@ -12,6 +12,10 @@
 				{
 					"name": "cityFileName",
 					"width": 1.5
+				},
+				{
+					"name": "assumeMM2Hook",
+					"width": 1.5
 				}
 			]
 		},

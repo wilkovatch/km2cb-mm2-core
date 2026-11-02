@@ -14,6 +14,7 @@ from cinfo_aimap_export import CinfoAimapExporter
 from scene_input import StandaloneSceneInput
 from output_layout import OutputLayout
 from ar_packer import ArPacker
+from utils import state_bool
 from common.main_writer import MainWriter
 from common import report
 
@@ -121,7 +122,8 @@ try:
             psdl_file, scene_input, write_psdl, write_inst, write_bai,
             write_pathset, write_pkgs, split_non_coplanar_roads,
             accurate_bai_culling, cap_materials, physics_map,
-            layout.path('geometry'), layout.path('bound')
+            layout.path('geometry'), layout.path('bound'),
+            state_bool(data.get('cityProperties'), 'assumeMM2Hook')
         )
         writer.write()
         if write_pathset:

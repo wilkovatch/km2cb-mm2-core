@@ -3,7 +3,7 @@ import math
 import os
 from collections import Counter
 import numpy as np
-from utils import state_val, state_bool, state_int, state_vector
+from utils import state_val, state_bool, state_int, state_vector, placed_props, PARKED_CARS_TYPE
 from common.bai_writer import MAX_INTERSECTION_ROADS
 from common import report
 from psdl_parts import ExportedCityElement, get_tex
@@ -547,11 +547,11 @@ class JsonProcessor:
         if prop_lines is not None and type(prop_rule) is dict:
             for key in prop_rule:
                 value = prop_rule[key]
-                if isinstance(value, dict) and value['type'] != 'psdl':
+                if isinstance(value, dict) and value['type'] not in ('psdl', PARKED_CARS_TYPE):
                     for value2 in prop_lines:
                         if value2['name'] == key:
                             # TODO: prop lines
-                            for prop in value2['props']:
+                            for prop in placed_props(value2):
                                 dict_mesh = self.data['meshDict'][int(prop['meshId'])]
                                 prop_elem = ExportedCityElement()
                                 cube = self.get_cube(1)
@@ -2047,7 +2047,7 @@ class JsonProcessor:
 
         from prop_placers import export_prop_placer
         for element in data.get('customElements') or []:
-            if element.get('type') in ('propLine', 'propStrip', 'propPolygon'):
+            if element.get('type') in ('propLine', 'propPolygon'):
                 self.guarded_element(res, element['data']['name'], 'customElement',
                                      lambda e=element: export_prop_placer(self, e, res), element['id'])
 

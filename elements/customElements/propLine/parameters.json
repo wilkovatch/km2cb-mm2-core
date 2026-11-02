@@ -1,3 +1,10 @@
 {
-    "parameters": []
+    "parameters": [
+        {
+            "name": "width",
+            "label": "PROP_LINE_WIDTH",
+            "type": "float",
+            "placeholder": "VALUE_PH"
+        }
+    ]
 }

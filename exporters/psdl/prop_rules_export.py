@@ -13,7 +13,7 @@ class PropRulesExporter:
         elems = []
         for rules in self.json_processor.prop_rules:
             for rule in rules:
-                for elem in rule['elements']:
+                for elem in (rule or {}).get('elements') or []:
                     if elem not in elems:
                         elems.append(elem)
 
@@ -32,10 +32,10 @@ class PropRulesExporter:
             new_left = {'name': n_name + 'left', 'elems': []}
             new_right = {'name': n_name + 'right', 'elems': []}
             if left is not None:
-                for elem in left['elements']:
+                for elem in left.get('elements') or []:
                     new_left['elems'].append(elems.index(elem))
             if right is not None:
-                for elem in right['elements']:
+                for elem in right.get('elements') or []:
                     new_right['elems'].append(elems.index(elem))
             new_rule['leftRule'] = new_left
             new_rule['rightRule'] = new_right
@@ -112,7 +112,8 @@ class PropRulesExporter:
         header = ['name', 'start', 'distance', 'maxUse', 'minLerp', 'maxLerp', 'file1', 'file2', 'file3', 'file4', '']
         writer.writerow(header)
         for d in defs:
-            row = [d['name'], d['start'], d['elemDistance'], d['maxNumber'], d['minHorizPos'], d['maxHorizPos']]
+            max_number = 9999 if d['maxNumber'] == 0 else d['maxNumber']
+            row = [d['name'], d['start'], d['elemDistance'], max_number, d['minHorizPos'], d['maxHorizPos']]
             for mesh in d['meshes']:
                 clean_mesh = mesh.replace('\\', '/').split('/')[-1].split('.')[0]
                 row.append(clean_mesh)

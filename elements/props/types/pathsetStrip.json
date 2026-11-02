@@ -1,0 +1,36 @@
+{
+    "label": "PROP_TYPE_PATHSET_STRIP",
+    "lineOnly": true,
+    "placement": "prop_rows.pathset",
+    "meshTransform": true,
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "mesh",
+                "label": "PROP_ELEM_MESH",
+                "type": "mesh"
+            },
+            {
+                "name": "elemDistance",
+                "label": "PROP_LINE_SPACING",
+                "type": "float",
+                "defaultValueInArray": 5.0,
+                "range": [
+                    0.25,
+                    63.75,
+                    0.25
+                ]
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "mesh",
+            "width": 1.5
+        },
+        {
+            "name": "elemDistance",
+            "width": 1.5
+        }
+    ]
+}

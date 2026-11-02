@@ -1,0 +1,23 @@
+{
+    "label": "PROP_TYPE_PSDL",
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "elements",
+                "label": "PROP_ELEM_LIST_ELEMENTS",
+                "type": "array",
+                "arrayProperties": {
+                    "propsTypes": [
+                        "psdlProp"
+                    ]
+                }
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "elements",
+            "width": 1.5
+        }
+    ]
+}

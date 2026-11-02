@@ -213,7 +213,6 @@
 		"types": [
 			"individualProp",
 			"propLine",
-			"propStrip",
 			"propPolygon"
 		],
 		"contentGroups": [
@@ -223,7 +222,6 @@
 				"types": [
 					"individualProp",
 					"propLine",
-					"propStrip",
 					"propPolygon"
 				]
 			}

@@ -1,0 +1,75 @@
+{
+    "label": "PROP_TYPE_PSDL",
+    "nestedOnly": true,
+    "placement": "prop_rows.psdl",
+    "meshTransform": true,
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "meshes",
+                "label": "PROP_ELEM_MESHES",
+                "type": "meshList"
+            },
+            {
+                "name": "start",
+                "label": "PROP_ELEM_START",
+                "placeholder": "VALUE_PH",
+                "type": "float"
+            },
+            {
+                "name": "elemDistance",
+                "label": "PROP_ELEM_DISTANCE",
+                "placeholder": "VALUE_PH",
+                "type": "float",
+                "defaultValueInArray": 5.0
+            },
+            {
+                "name": "maxNumber",
+                "label": "PROP_ELEM_MAX_NUM",
+                "placeholder": "VALUE_PH",
+                "type": "int",
+                "defaultValueInArray": 9999.0
+            },
+            {
+                "name": "minHorizPos",
+                "label": "PROP_ELEM_MIN_POS",
+                "placeholder": "VALUE_PH",
+                "type": "float",
+                "defaultValueInArray": 0.5
+            },
+            {
+                "name": "maxHorizPos",
+                "label": "PROP_ELEM_MAX_POS",
+                "placeholder": "VALUE_PH",
+                "type": "float",
+                "defaultValueInArray": 0.5
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "meshes",
+            "width": 1.5
+        },
+        {
+            "name": "elemDistance",
+            "width": 1.5
+        },
+        {
+            "name": "start",
+            "width": 0.75
+        },
+        {
+            "name": "maxNumber",
+            "width": 0.75
+        },
+        {
+            "name": "minHorizPos",
+            "width": 1.5
+        },
+        {
+            "name": "maxHorizPos",
+            "width": 1.5
+        }
+    ]
+}

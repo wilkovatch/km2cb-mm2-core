@@ -1,0 +1,63 @@
+{
+    "label": "PROP_TYPE_PARKED_CARS",
+    "placement": "parked_cars.row",
+    "meshTransform": true,
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "start",
+                "label": "PROP_ELEM_START",
+                "placeholder": "VALUE_PH",
+                "type": "float"
+            },
+            {
+                "name": "end",
+                "label": "PROP_ELEM_END",
+                "placeholder": "VALUE_PH",
+                "type": "float"
+            },
+            {
+                "name": "elemDistance",
+                "label": "PROP_PARKED_DISTANCE",
+                "tooltip": "PROP_PARKED_DISTANCE_TOOLTIP",
+                "placeholder": "VALUE_PH",
+                "type": "float",
+                "defaultValueInArray": 5.25
+            },
+            {
+                "name": "xPos",
+                "label": "PROP_ELEM_XPOS",
+                "placeholder": "VALUE_PH",
+                "type": "float"
+            },
+            {
+                "name": "reverse",
+                "label": "PROP_PARKED_REVERSE",
+                "tooltip": "PROP_PARKED_REVERSE_TOOLTIP",
+                "type": "bool"
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "start",
+            "width": 0.75
+        },
+        {
+            "name": "end",
+            "width": 0.75
+        },
+        {
+            "name": "elemDistance",
+            "width": 0.75
+        },
+        {
+            "name": "xPos",
+            "width": 0.75
+        },
+        {
+            "name": "reverse",
+            "width": 1.5
+        }
+    ]
+}

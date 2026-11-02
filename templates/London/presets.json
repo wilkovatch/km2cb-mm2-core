@@ -17,1741 +17,11 @@
         "name": "Default",
         "type": "decalSingle",
         "texture": "texture/r4i_rails_f.tex",
-        "pointScale": { "x": 2.0, "y": 1.0, "z": 10.0 }
-      }
-    ],
-    "propElem": [
-      {
-        "start": 9.0,
-        "maxNumber": 9999,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightstreet_l.pkg"
-        ],
-        "random": true,
-        "name": "Default",
-        "type": "psdl",
-        "elemDistance": 29.0
-      },
-      {
-        "start": 9.0,
-        "maxNumber": 9999,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightstreet_l.pkg"
-        ],
-        "random": true,
-        "name": "streetlight",
-        "type": "psdl",
-        "elemDistance": 29.0
-      },
-      {
-        "start": 11.0,
-        "maxNumber": 1,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_benchwood_f.pkg"
-        ],
-        "random": true,
-        "name": "bench",
-        "type": "psdl",
-        "elemDistance": 10.0
-      },
-      {
-        "start": 9.0,
-        "maxNumber": 1,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_dumpstr_l.pkg"
-        ],
-        "random": true,
-        "name": "dumpster",
-        "type": "psdl",
-        "elemDistance": 10.0
-      },
-      {
-        "start": 2.0,
-        "maxNumber": 1,
-        "minHorizPos": 0.2,
-        "maxHorizPos": 0.2,
-        "meshes": [
-          "geometry/sp_mailbox_l.pkg"
-        ],
-        "random": true,
-        "name": "mailbox",
-        "type": "psdl",
-        "elemDistance": 1.0
-      },
-      {
-        "start": 13.0,
-        "maxNumber": 9999,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_parkmtr_f.pkg"
-        ],
-        "random": true,
-        "name": "meter",
-        "type": "psdl",
-        "elemDistance": 17.0
-      },
-      {
-        "start": 7.0,
-        "maxNumber": 1,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_newsgroup01_l.pkg"
-        ],
-        "random": true,
-        "name": "newsboxs",
-        "type": "psdl",
-        "elemDistance": 10.0
-      },
-      {
-        "start": 16.0,
-        "maxNumber": 1,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_phonebooth_l.pkg"
-        ],
-        "random": true,
-        "name": "phone",
-        "type": "psdl",
-        "elemDistance": 29.0
-      },
-      {
-        "start": 9.0,
-        "maxNumber": 6,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightpark_f.pkg"
-        ],
-        "random": true,
-        "name": "streetlight02",
-        "type": "psdl",
-        "elemDistance": 40.0
-      },
-      {
-        "start": 18.0,
-        "maxNumber": 6,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightpark_f.pkg"
-        ],
-        "random": true,
-        "name": "streetlight02b",
-        "type": "psdl",
-        "elemDistance": 40.0
-      },
-      {
-        "start": 9.0,
-        "maxNumber": 6,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightthames_l.pkg"
-        ],
-        "random": true,
-        "name": "streetlight03",
-        "type": "psdl",
-        "elemDistance": 40.0
-      },
-      {
-        "start": 18.0,
-        "maxNumber": 6,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightthames_l.pkg"
-        ],
-        "random": true,
-        "name": "streetlight03b",
-        "type": "psdl",
-        "elemDistance": 40.0
-      },
-      {
-        "start": 9.0,
-        "maxNumber": 6,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_light_tall_l.pkg"
-        ],
-        "random": true,
-        "name": "streetlight04",
-        "type": "psdl",
-        "elemDistance": 40.0
-      },
-      {
-        "start": 18.0,
-        "maxNumber": 6,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_light_tall_l.pkg"
-        ],
-        "random": true,
-        "name": "streetlight04b",
-        "type": "psdl",
-        "elemDistance": 40.0
-      },
-      {
-        "start": 18.0,
-        "maxNumber": 9999,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_lightstreet_l.pkg"
-        ],
-        "random": true,
-        "name": "streetlightb",
-        "type": "psdl",
-        "elemDistance": 29.0
-      },
-      {
-        "start": 14.0,
-        "maxNumber": 2,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_tree1_s.pkg",
-          "geometry/sp_tree1_s.pkg"
-        ],
-        "random": true,
-        "name": "streetree",
-        "type": "psdl",
-        "elemDistance": 50.0
-      },
-      {
-        "start": 4.0,
-        "maxNumber": 1,
-        "minHorizPos": 0.1,
-        "maxHorizPos": 0.1,
-        "meshes": [
-          "geometry/sp_can_royal_l.pkg"
-        ],
-        "random": true,
-        "name": "trashcan",
-        "type": "psdl",
-        "elemDistance": 10.0
-      }
-    ],
-    "propContainer": [
-      {
-        "name": "Default",
-        "type": "psdl"
-      },
-      {
-        "name": "n01left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n01right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n02left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          }
-        ]
-      },
-      {
-        "name": "n02right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n03left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n03right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          }
-        ]
-      },
-      {
-        "name": "n04left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n04right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlightb",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n05left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          }
-        ]
-      },
-      {
-        "name": "n05right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlightb",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n06left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          }
-        ]
-      },
-      {
-        "name": "n06right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlightb",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n07left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n07right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          }
-        ]
-      },
-      {
-        "name": "n08left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n08right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlightb",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n09left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n09right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n10left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n10right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n11left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n11right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightpark_f.pkg"
-            ],
-            "random": true,
-            "name": "streetlight02b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n12left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 14.0,
-            "maxNumber": 2,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_tree1_s.pkg",
-              "geometry/sp_tree1_s.pkg"
-            ],
-            "random": true,
-            "name": "streetree",
-            "type": "psdl",
-            "elemDistance": 50.0
-          }
-        ]
-      },
-      {
-        "name": "n12right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          }
-        ]
-      },
-      {
-        "name": "n13left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          }
-        ]
-      },
-      {
-        "name": "n13right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_light_tall_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight04b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n14left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightthames_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight03",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n14right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 6,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightthames_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight03b",
-            "type": "psdl",
-            "elemDistance": 40.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          }
-        ]
-      },
-      {
-        "name": "n15left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlightb",
-            "type": "psdl",
-            "elemDistance": 29.0
-          }
-        ]
-      },
-      {
-        "name": "n15right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight",
-            "type": "psdl",
-            "elemDistance": 29.0
-          }
-        ]
-      },
-      {
-        "name": "n16left",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 9.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlight",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 16.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_phonebooth_l.pkg"
-            ],
-            "random": true,
-            "name": "phone",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 4.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_can_royal_l.pkg"
-            ],
-            "random": true,
-            "name": "trashcan",
-            "type": "psdl",
-            "elemDistance": 10.0
-          },
-          {
-            "start": 7.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_newsgroup01_l.pkg"
-            ],
-            "random": true,
-            "name": "newsboxs",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
-      },
-      {
-        "name": "n16right",
-        "type": "psdl",
-        "elements": [
-          {
-            "start": 18.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_lightstreet_l.pkg"
-            ],
-            "random": true,
-            "name": "streetlightb",
-            "type": "psdl",
-            "elemDistance": 29.0
-          },
-          {
-            "start": 2.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.2,
-            "maxHorizPos": 0.2,
-            "meshes": [
-              "geometry/sp_mailbox_l.pkg"
-            ],
-            "random": true,
-            "name": "mailbox",
-            "type": "psdl",
-            "elemDistance": 1.0
-          },
-          {
-            "start": 13.0,
-            "maxNumber": 9999,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_parkmtr_f.pkg"
-            ],
-            "random": true,
-            "name": "meter",
-            "type": "psdl",
-            "elemDistance": 17.0
-          },
-          {
-            "start": 11.0,
-            "maxNumber": 1,
-            "minHorizPos": 0.1,
-            "maxHorizPos": 0.1,
-            "meshes": [
-              "geometry/sp_benchwood_f.pkg"
-            ],
-            "random": true,
-            "name": "bench",
-            "type": "psdl",
-            "elemDistance": 10.0
-          }
-        ]
+        "pointScale": {
+          "x": 2.0,
+          "y": 1.0,
+          "z": 10.0
+        }
       }
     ],
     "roadPropRule": [
@@ -1776,7 +46,7 @@
               ],
               "random": true,
               "name": "streetlight02",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -1790,7 +60,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             },
             {
@@ -1803,7 +73,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -1822,7 +92,7 @@
               ],
               "random": true,
               "name": "streetlight02b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -1836,7 +106,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             },
             {
@@ -1849,7 +119,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -1872,7 +142,7 @@
               ],
               "random": true,
               "name": "streetlight02",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -1885,7 +155,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -1898,7 +168,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             }
           ]
@@ -1917,7 +187,7 @@
               ],
               "random": true,
               "name": "streetlight02b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -1930,7 +200,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             },
             {
@@ -1943,7 +213,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -1966,7 +236,7 @@
               ],
               "random": true,
               "name": "streetlight04",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -1979,7 +249,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -1993,7 +263,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2012,7 +282,7 @@
               ],
               "random": true,
               "name": "streetlight04b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2026,7 +296,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             },
             {
@@ -2039,7 +309,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             }
           ]
@@ -2062,7 +332,7 @@
               ],
               "random": true,
               "name": "streetlight",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2075,7 +345,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2089,7 +359,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2108,7 +378,7 @@
               ],
               "random": true,
               "name": "streetlightb",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2122,7 +392,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             },
             {
@@ -2135,7 +405,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2158,7 +428,7 @@
               ],
               "random": true,
               "name": "streetlight",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2171,7 +441,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2184,7 +454,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -2197,7 +467,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             }
           ]
@@ -2216,7 +486,7 @@
               ],
               "random": true,
               "name": "streetlightb",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2229,7 +499,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -2242,7 +512,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2255,7 +525,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2278,7 +548,7 @@
               ],
               "random": true,
               "name": "streetlight",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2291,7 +561,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2304,7 +574,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             }
           ]
@@ -2323,7 +593,7 @@
               ],
               "random": true,
               "name": "streetlightb",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2337,7 +607,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2360,7 +630,7 @@
               ],
               "random": true,
               "name": "streetlight02",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2373,7 +643,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2392,7 +662,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2405,7 +675,7 @@
               ],
               "random": true,
               "name": "streetlight02b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             }
           ]
@@ -2428,7 +698,7 @@
               ],
               "random": true,
               "name": "streetlight",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2441,7 +711,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2454,7 +724,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -2467,7 +737,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             },
             {
@@ -2480,7 +750,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2499,7 +769,7 @@
               ],
               "random": true,
               "name": "streetlightb",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2512,7 +782,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2525,7 +795,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -2538,7 +808,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2551,7 +821,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2574,7 +844,7 @@
               ],
               "random": true,
               "name": "streetlight02",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2587,7 +857,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2606,7 +876,7 @@
               ],
               "random": true,
               "name": "streetlight02b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2620,7 +890,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2643,7 +913,7 @@
               ],
               "random": true,
               "name": "streetlight04",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2656,7 +926,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2669,7 +939,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2683,7 +953,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2702,7 +972,7 @@
               ],
               "random": true,
               "name": "streetlight04b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2715,7 +985,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -2728,7 +998,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2741,7 +1011,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             },
             {
@@ -2755,7 +1025,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2778,7 +1048,7 @@
               ],
               "random": true,
               "name": "streetlight02",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2791,7 +1061,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2804,7 +1074,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             },
             {
@@ -2817,7 +1087,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2836,7 +1106,7 @@
               ],
               "random": true,
               "name": "streetlight02b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2850,7 +1120,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             },
             {
@@ -2863,7 +1133,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -2886,7 +1156,7 @@
               ],
               "random": true,
               "name": "streetlight04",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2899,7 +1169,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2912,7 +1182,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -2926,7 +1196,7 @@
               ],
               "random": true,
               "name": "streetree",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 50.0
             }
           ]
@@ -2945,7 +1215,7 @@
               ],
               "random": true,
               "name": "streetlight04b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -2958,7 +1228,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -2971,7 +1241,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -2984,7 +1254,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             }
           ]
@@ -3007,7 +1277,7 @@
               ],
               "random": true,
               "name": "streetlight04",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -3020,7 +1290,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -3033,7 +1303,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             }
           ]
@@ -3052,7 +1322,7 @@
               ],
               "random": true,
               "name": "streetlight04b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -3065,7 +1335,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -3078,7 +1348,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -3101,7 +1371,7 @@
               ],
               "random": true,
               "name": "streetlight03",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -3114,7 +1384,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -3127,7 +1397,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -3146,7 +1416,7 @@
               ],
               "random": true,
               "name": "streetlight03b",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 40.0
             },
             {
@@ -3159,7 +1429,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             }
           ]
@@ -3182,7 +1452,7 @@
               ],
               "random": true,
               "name": "streetlightb",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             }
           ]
@@ -3201,7 +1471,7 @@
               ],
               "random": true,
               "name": "streetlight",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             }
           ]
@@ -3224,7 +1494,7 @@
               ],
               "random": true,
               "name": "streetlight",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -3237,7 +1507,7 @@
               ],
               "random": true,
               "name": "phone",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -3250,7 +1520,7 @@
               ],
               "random": true,
               "name": "trashcan",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             },
             {
@@ -3263,7 +1533,7 @@
               ],
               "random": true,
               "name": "newsboxs",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -3282,7 +1552,7 @@
               ],
               "random": true,
               "name": "streetlightb",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 29.0
             },
             {
@@ -3295,7 +1565,7 @@
               ],
               "random": true,
               "name": "mailbox",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 1.0
             },
             {
@@ -3308,7 +1578,7 @@
               ],
               "random": true,
               "name": "meter",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 17.0
             },
             {
@@ -3321,7 +1591,7 @@
               ],
               "random": true,
               "name": "bench",
-              "type": "psdl",
+              "type": "psdlProp",
               "elemDistance": 10.0
             }
           ]
@@ -3638,7 +1908,7 @@
                 ],
                 "random": true,
                 "name": "streetlight",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -3651,7 +1921,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -3665,7 +1935,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -3684,7 +1954,7 @@
                 ],
                 "random": true,
                 "name": "streetlightb",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -3698,7 +1968,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -3711,7 +1981,7 @@
                 ],
                 "random": true,
                 "name": "bench",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -3897,7 +2167,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -3910,7 +2180,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -3924,7 +2194,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -3943,7 +2213,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -3957,7 +2227,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -3970,7 +2240,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -4074,7 +2344,7 @@
                 ],
                 "random": true,
                 "name": "streetlight02",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4088,7 +2358,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -4101,7 +2371,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -4120,7 +2390,7 @@
                 ],
                 "random": true,
                 "name": "streetlight02b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4134,7 +2404,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -4147,7 +2417,7 @@
                 ],
                 "random": true,
                 "name": "bench",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -4251,7 +2521,7 @@
                 ],
                 "random": true,
                 "name": "streetlight",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -4264,7 +2534,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -4277,7 +2547,7 @@
                 ],
                 "random": true,
                 "name": "meter",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 17.0
               },
               {
@@ -4290,7 +2560,7 @@
                 ],
                 "random": true,
                 "name": "mailbox",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 1.0
               }
             ]
@@ -4309,7 +2579,7 @@
                 ],
                 "random": true,
                 "name": "streetlightb",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -4322,7 +2592,7 @@
                 ],
                 "random": true,
                 "name": "meter",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 17.0
               },
               {
@@ -4335,7 +2605,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -4348,7 +2618,7 @@
                 ],
                 "random": true,
                 "name": "newsboxs",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -4452,7 +2722,7 @@
                 ],
                 "random": true,
                 "name": "streetlight",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -4465,7 +2735,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -4478,7 +2748,7 @@
                 ],
                 "random": true,
                 "name": "mailbox",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 1.0
               }
             ]
@@ -4497,7 +2767,7 @@
                 ],
                 "random": true,
                 "name": "streetlightb",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -4511,7 +2781,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -4615,7 +2885,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4628,7 +2898,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -4642,7 +2912,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -4661,7 +2931,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4675,7 +2945,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -4688,7 +2958,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -4792,7 +3062,7 @@
                 ],
                 "random": true,
                 "name": "streetlight02",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4805,7 +3075,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -4818,7 +3088,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -4837,7 +3107,7 @@
                 ],
                 "random": true,
                 "name": "streetlight02b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4850,7 +3120,7 @@
                 ],
                 "random": true,
                 "name": "mailbox",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 1.0
               },
               {
@@ -4863,7 +3133,7 @@
                 ],
                 "random": true,
                 "name": "newsboxs",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -4967,7 +3237,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -4980,7 +3250,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -4994,7 +3264,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -5013,7 +3283,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5027,7 +3297,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -5040,7 +3310,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -5144,7 +3414,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5157,7 +3427,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -5171,7 +3441,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -5190,7 +3460,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5204,7 +3474,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -5217,7 +3487,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -5321,7 +3591,7 @@
                 ],
                 "random": true,
                 "name": "streetlight",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -5334,7 +3604,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -5347,7 +3617,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -5360,7 +3630,7 @@
                 ],
                 "random": true,
                 "name": "newsboxs",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -5379,7 +3649,7 @@
                 ],
                 "random": true,
                 "name": "streetlightb",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -5392,7 +3662,7 @@
                 ],
                 "random": true,
                 "name": "mailbox",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 1.0
               },
               {
@@ -5405,7 +3675,7 @@
                 ],
                 "random": true,
                 "name": "meter",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 17.0
               },
               {
@@ -5418,7 +3688,7 @@
                 ],
                 "random": true,
                 "name": "bench",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -5522,7 +3792,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5535,7 +3805,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -5549,7 +3819,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               }
             ]
@@ -5568,7 +3838,7 @@
                 ],
                 "random": true,
                 "name": "streetlight04b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5582,7 +3852,7 @@
                 ],
                 "random": true,
                 "name": "streetree",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 50.0
               },
               {
@@ -5595,7 +3865,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -5699,7 +3969,7 @@
                 ],
                 "random": true,
                 "name": "streetlight",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -5712,7 +3982,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -5725,7 +3995,7 @@
                 ],
                 "random": true,
                 "name": "meter",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 17.0
               },
               {
@@ -5738,7 +4008,7 @@
                 ],
                 "random": true,
                 "name": "mailbox",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 1.0
               },
               {
@@ -5751,7 +4021,7 @@
                 ],
                 "random": true,
                 "name": "bench",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -5770,7 +4040,7 @@
                 ],
                 "random": true,
                 "name": "streetlightb",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -5783,7 +4053,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -5796,7 +4066,7 @@
                 ],
                 "random": true,
                 "name": "meter",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 17.0
               },
               {
@@ -5809,7 +4079,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               },
               {
@@ -5822,7 +4092,7 @@
                 ],
                 "random": true,
                 "name": "newsboxs",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -5926,7 +4196,7 @@
                 ],
                 "random": true,
                 "name": "streetlight02",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5939,7 +4209,7 @@
                 ],
                 "random": true,
                 "name": "trashcan",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               },
               {
@@ -5952,7 +4222,7 @@
                 ],
                 "random": true,
                 "name": "phone",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 29.0
               }
             ]
@@ -5971,7 +4241,7 @@
                 ],
                 "random": true,
                 "name": "streetlight02b",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 40.0
               },
               {
@@ -5984,7 +4254,7 @@
                 ],
                 "random": true,
                 "name": "mailbox",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 1.0
               },
               {
@@ -5997,7 +4267,7 @@
                 ],
                 "random": true,
                 "name": "newsboxs",
-                "type": "psdl",
+                "type": "psdlProp",
                 "elemDistance": 10.0
               }
             ]
@@ -16673,6 +14943,1740 @@
         "type": "texture",
         "assetName": "texture/wf_win_city02_2s_6_l.tex",
         "name": "wf_win_city02_2s_6_l"
+      }
+    ],
+    "props/psdl": [
+      {
+        "name": "Default",
+        "type": "psdl"
+      },
+      {
+        "name": "n01left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n01right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n02left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n02right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n03left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n03right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n04left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n04right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n05left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n05right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n06left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n06right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n07left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n07right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          }
+        ]
+      },
+      {
+        "name": "n08left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n08right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n09left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n09right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n10left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n10right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n11left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n11right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightpark_f.pkg"
+            ],
+            "random": true,
+            "name": "streetlight02b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n12left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 14.0,
+            "maxNumber": 2,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_tree1_s.pkg",
+              "geometry/sp_tree1_s.pkg"
+            ],
+            "random": true,
+            "name": "streetree",
+            "type": "psdlProp",
+            "elemDistance": 50.0
+          }
+        ]
+      },
+      {
+        "name": "n12right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n13left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          }
+        ]
+      },
+      {
+        "name": "n13right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_light_tall_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight04b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n14left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightthames_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight03",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n14right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 6,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightthames_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight03b",
+            "type": "psdlProp",
+            "elemDistance": 40.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n15left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n15right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          }
+        ]
+      },
+      {
+        "name": "n16left",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 9.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlight",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 16.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_phonebooth_l.pkg"
+            ],
+            "random": true,
+            "name": "phone",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 4.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_can_royal_l.pkg"
+            ],
+            "random": true,
+            "name": "trashcan",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          },
+          {
+            "start": 7.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_newsgroup01_l.pkg"
+            ],
+            "random": true,
+            "name": "newsboxs",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      },
+      {
+        "name": "n16right",
+        "type": "psdl",
+        "elements": [
+          {
+            "start": 18.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_lightstreet_l.pkg"
+            ],
+            "random": true,
+            "name": "streetlightb",
+            "type": "psdlProp",
+            "elemDistance": 29.0
+          },
+          {
+            "start": 2.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.2,
+            "maxHorizPos": 0.2,
+            "meshes": [
+              "geometry/sp_mailbox_l.pkg"
+            ],
+            "random": true,
+            "name": "mailbox",
+            "type": "psdlProp",
+            "elemDistance": 1.0
+          },
+          {
+            "start": 13.0,
+            "maxNumber": 9999,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_parkmtr_f.pkg"
+            ],
+            "random": true,
+            "name": "meter",
+            "type": "psdlProp",
+            "elemDistance": 17.0
+          },
+          {
+            "start": 11.0,
+            "maxNumber": 1,
+            "minHorizPos": 0.1,
+            "maxHorizPos": 0.1,
+            "meshes": [
+              "geometry/sp_benchwood_f.pkg"
+            ],
+            "random": true,
+            "name": "bench",
+            "type": "psdlProp",
+            "elemDistance": 10.0
+          }
+        ]
+      }
+    ],
+    "props/psdlProp": [
+      {
+        "start": 9.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightstreet_l.pkg"
+        ],
+        "random": true,
+        "name": "Default",
+        "type": "psdlProp",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightstreet_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight",
+        "type": "psdlProp",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 11.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_benchwood_f.pkg"
+        ],
+        "random": true,
+        "name": "bench",
+        "type": "psdlProp",
+        "elemDistance": 10.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_dumpstr_l.pkg"
+        ],
+        "random": true,
+        "name": "dumpster",
+        "type": "psdlProp",
+        "elemDistance": 10.0
+      },
+      {
+        "start": 2.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.2,
+        "maxHorizPos": 0.2,
+        "meshes": [
+          "geometry/sp_mailbox_l.pkg"
+        ],
+        "random": true,
+        "name": "mailbox",
+        "type": "psdlProp",
+        "elemDistance": 1.0
+      },
+      {
+        "start": 13.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_parkmtr_f.pkg"
+        ],
+        "random": true,
+        "name": "meter",
+        "type": "psdlProp",
+        "elemDistance": 17.0
+      },
+      {
+        "start": 7.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_newsgroup01_l.pkg"
+        ],
+        "random": true,
+        "name": "newsboxs",
+        "type": "psdlProp",
+        "elemDistance": 10.0
+      },
+      {
+        "start": 16.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_phonebooth_l.pkg"
+        ],
+        "random": true,
+        "name": "phone",
+        "type": "psdlProp",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightpark_f.pkg"
+        ],
+        "random": true,
+        "name": "streetlight02",
+        "type": "psdlProp",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightpark_f.pkg"
+        ],
+        "random": true,
+        "name": "streetlight02b",
+        "type": "psdlProp",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightthames_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight03",
+        "type": "psdlProp",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightthames_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight03b",
+        "type": "psdlProp",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 9.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_light_tall_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight04",
+        "type": "psdlProp",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 6,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_light_tall_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlight04b",
+        "type": "psdlProp",
+        "elemDistance": 40.0
+      },
+      {
+        "start": 18.0,
+        "maxNumber": 9999,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_lightstreet_l.pkg"
+        ],
+        "random": true,
+        "name": "streetlightb",
+        "type": "psdlProp",
+        "elemDistance": 29.0
+      },
+      {
+        "start": 14.0,
+        "maxNumber": 2,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_tree1_s.pkg",
+          "geometry/sp_tree1_s.pkg"
+        ],
+        "random": true,
+        "name": "streetree",
+        "type": "psdlProp",
+        "elemDistance": 50.0
+      },
+      {
+        "start": 4.0,
+        "maxNumber": 1,
+        "minHorizPos": 0.1,
+        "maxHorizPos": 0.1,
+        "meshes": [
+          "geometry/sp_can_royal_l.pkg"
+        ],
+        "random": true,
+        "name": "trashcan",
+        "type": "psdlProp",
+        "elemDistance": 10.0
       }
     ]
   }

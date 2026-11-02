@@ -1,5 +1,6 @@
 {
 	"variableSections": false,
+	"rollRequires": "assumeMM2Hook",
 	"sectionVertices": [
 		"-0.5*totalWidthI",
 		"-0.5*roadWidthT",

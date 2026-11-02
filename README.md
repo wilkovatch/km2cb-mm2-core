@@ -12,7 +12,7 @@ The race panel shows each setting on one row, with the amateur value on the left
 
 For an opponent, the first click places its starting car, and later clicks draw the waypoint route as a Low Poly spline. The car's position and heading remain independently editable. Its panel edits the car model and tuning; difficulty comes from the selected subcontainer. An empty professional set still uses the amateur opponents when exported. **Back** returns to the list the element was opened from, or to its difficulty setup if an opponent was clicked in the city (the race for props). Deleting a checkpoint or police car clicked in the city just closes its panel; deleting one opened from a list returns there.
 
-The **Props** submenu also turns blue: individual props, mass placement, prop lines, prop strips and polygons created there belong to the selected race. Deselect the race with the blue container menu to place ordinary city props. Race props appear only while their race is selected; radius erasing affects only props in that scope. Changing races cancels placement into the old race.
+The **Props** submenu also turns blue: individual props, mass placement, prop lines and polygons created there belong to the selected race. Deselect the race with the blue container menu to place ordinary city props. Race props appear only while their race is selected; radius erasing affects only props in that scope. Changing races cancels placement into the old race.
 
 The race panel's Contents list edits and deletes owned elements. Cloning a race copies its contents with independent control points; deleting a race removes them together, with undo/redo support. Race props export separately to `race/<city>/<race-id>.pathset`, alongside that race's AIMAP and opponent files, and are included in archive exports. The exporter tracks its own race prop filenames to remove stale files after race deletion or reordering.
 
@@ -54,7 +54,7 @@ The files are written as in the folder of the game, ready to be copied there (or
 city/<city>.psdl, .inst, .bai, .aimap
 city/<city>/        props.pathset, decals.pathset, proprules.csv, propdefs.csv
 tune/               <city>.cinfo, <city>.mmHudMap
-race/<city>/        roam.aimap, the race aimaps, opponents and waypoints, mm*data.csv, <city>_train.pathset, <city>_sailboat.pathset, <city>_ferry.pathset
+race/<city>/        roam.aimap, the race aimaps, opponents and waypoints, mm*data.csv, <city>_train.pathset, <city>_sailboat.pathset, <city>_ferry.pathset, <city>_parkedcar[_<race>].pathset
 geometry/           <city>_mesh<n>.pkg, hudmap_<city>.pkg
 bound/              <city>_mesh<n>_BOUND.bnd/.bbnd/.ter
 texture/            <city>_hudmap<n>.tex, <city>_hudmap<n>_ni.tex
@@ -141,11 +141,21 @@ Be careful if you add railings, as they can only be placed on the block perimete
 - If the BAI file is not present, MM2 will place the player's car in the origin point, this can cause the city to be unplayable if there is nothing there. Make sure that there is something at the origin, or alternatively shift everything in Blender (if you're using it) to make the origin contain something.
 - Building meshes must be on something that will become a block, else they will not be exported to the .bin file. (as the block for the INST element cannot be determined)
 - You can rename building meshes to reorder them, the order will be preserved in the INST file exported. (it can affect rendering through transparent objects)
-- Road prop rules will be exported as PSDL-compatible rules if possible. (propdefs.csv and proprules.csv) This is possible for left and right rules, if the container type is PSDL-compatible. Other rules (middle, etc., and left and right if the container type is not PSDL-compatible) will have their props exported as individual props in the PATHSET file.  
-**Create ? Props** also contains **Prop line**, **Prop strip** and **Polygon**. Their full property panel opens before the first point; draw a spline or polygon perimeter using the usual control-point tools. Ctrl+click follows connected anchors. The **Project to ground** toggle updates placement automatically as controls and surfaces move.
+- Road props will be exported as the prop rules of the game if possible. (propdefs.csv and proprules.csv) This is possible for left and right rules, if the type of the props is **Prop rule**. Other rules (middle, etc., and left and right with another type) will have their props exported as individual props in the PATHSET file.  
+**Create ? Props** also contains **Prop line** and **Polygon**. Their full property panel opens before the first point; draw a spline or polygon perimeter using the usual control-point tools. Ctrl+click follows connected anchors. The **Project to ground** toggle updates placement automatically as controls and surfaces move.
 
-- **Prop line** uses one zero-width strip and the line container. Spacing is entered in metres, from 0.25 to 63.75 in steps of 0.25. It always exports native PATHSET type 2, with spacing restarting on each sampled span. Projection samples the path vertices; the preview and game interpolate prop height between them.
-- **Prop strip** has an editable width across the spline and the normal road-style containers. Its evaluated props export individually, including when a PSDL-compatible container is selected.
+- **Prop line** has the type of its props and their fields directly in its panel, and one preset, which saves them too. A new one is a **Pathset line**: as in the game, the model's own X axis lies along each span of the spline, and on each span the spacing (0.25 to 63.75 m in quarter-metre steps) is stretched to fill it, so a span shorter than the spacing gets no props. It is exported as a native path of `props.pathset`, so it has no width. With **Project to ground** on, the props and the path follow the ground, with a point of the path at each prop; with it off, the path is the evaluated spline and the props stay on its straight spans.
+- A **Custom line** on a prop line follows the spline with the exact spacing, with model Z along it by default, and each prop is exported on its own, level. **Rotation** turns each prop around the vertical axis by that many degrees from its default direction (0 leaves it along the spline). With **Project to ground** each prop is projected separately, so the ground doesn't change where the props go along the line. On a road a Custom line also has its X position across the road.
+- **Max number** set to **0** means **9999** for Custom line, Custom and PSDL prop rule entries, in both the editor and the exported game files. Positive values keep their usual limit.
+- With the other props types, the same as those of the road containers, a prop line has a **Width** across the spline, shown with the outer cyan lines. Its evaluated props export individually, including with the **Prop rule** type (except **Parked cars**, below).
+- **Parked cars** is a props type for the road containers (such as the parking rows) and for prop lines, for the parked cars that the game places by itself. They are exported to `race/<city>/<city>_parkedcar.pathset` instead of as props.
+  - The game decides which slots of a row are used and which cars they get, with a random paint that the editor doesn't show. The cars and the gaps shown in the editor are only an example. The layout in game stays the same from one launch to the next, but editing the city can change it. To have a specific car in a specific place, use a normal prop.
+  - In stock MM2 a slot gets `giz_pcar01_l`, `giz_pcar02_l` or nothing, and the traffic density has no effect. With MM2Hook's default settings it can also get `giz_pcar03_l` (`UseAllParkedCars`), and in Cruise mode the traffic density slider also removes parked cars, with no cars at all when there is no traffic (`DynamicParkedCarDensity`). Turn on **Assume using MM2Hook** in the city properties (Info tab) to have the third model in the example; the exported files are the same either way.
+  - **Slot distance** is in metres, from 5.25 to 100. Other values are limited to that range.
+  - The cars of a road row follow the traffic of the nearest lanes, so **Left-hand traffic** turns them around. On a prop line they run against the direction of the spline, with either traffic side. **Reverse direction** turns a row around.
+  - On a slope the game rolls the cars sideways instead of tilting them along the road, and the editor shows them level. The export warns above 5 degrees: the stock parked cars stay on nearly flat streets.
+  - A prop line that belongs to a race goes to `<city>_parkedcar_<race>.pathset`, with the rows of the rest of the city, because in that race the game reads that file instead of the main one.
+  - A file can have at most 192 rows. The export reports an error above that and writes the first 192 (with the rows of the race first in a race file). `props.pathset` and the race prop files have the same limit on their paths.
 - **Polygon** supports any number of selected models, each with density in props per 100 m? and a yaw range. Its saved seed keeps positions stable. Simple concave perimeters work; self-intersecting or degenerate perimeters show an error. Every generated prop projects separately and exports individually.
 
 All three types support their own property presets, undo/redo, shared or anchored control points, and selection by clicking any generated prop. Migration 5 backs up older cities and removes the experimental standalone prop rules before loading; ordinary road rules and converted road rules are preserved.
@@ -175,6 +185,14 @@ The fixed-seed ten-route SF/London check preserves sampled lane counts and ambie
 ### Decal migration
 
 Core version 3 migrates manual decals from city properties into spline-driven custom elements, preserving their names, textures, widths and centerline points as low-poly splines. The normal migration creates backups first and also preserves incomplete decals for editing. The old Decals tab and automatic rail settings are removed. **Previously automatic rail decals are not baked:** generate intersection connections with the new button and place any road-length decals separately.
+
+## Assume using MM2Hook
+
+By default the core assumes stock MM2. Turn on **Assume using MM2Hook** in the city properties (Info tab) if the city is meant to be played with MM2Hook with its default settings:
+
+- The **Roll** of the road points can be edited. It stays disabled otherwise, but a roll already set still applies and is exported, so a banked road keeps its banking until you turn this on and change it.
+- The example parked cars include the third model (see **Parked cars**).
+- The export warnings about more than 511 texture references describe the limits with MM2Hook instead of those of stock MM2.
 
 ## Direction arrows in the editor
 

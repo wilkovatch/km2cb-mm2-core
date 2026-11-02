@@ -1,0 +1,23 @@
+{
+    "label": "CUSTOM",
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "elements",
+                "label": "PROP_ELEM_LIST_ELEMENTS",
+                "type": "array",
+                "arrayProperties": {
+                    "propsTypes": [
+                        "customProp"
+                    ]
+                }
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "elements",
+            "width": 1.5
+        }
+    ]
+}

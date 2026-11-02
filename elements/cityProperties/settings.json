@@ -1,6 +1,7 @@
 {
 	"injectableParameters": [
 		{ "parameter": "driveOnLeft", "onRoads": true, "onCustomElements": true },
+		{ "parameter": "assumeMM2Hook", "onRoads": true, "onCustomElements": true },
 		{
 			"parameter": "trafficLight1",
 			"onRoads": true

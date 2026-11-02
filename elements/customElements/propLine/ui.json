@@ -10,6 +10,14 @@
                     "width": 1.5
                 },
                 {
+                    "name": "propsGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "width",
+                    "width": 1.5
+                },
+                {
                     "name": "projectToGround",
                     "width": 1.5
                 },
@@ -19,10 +27,6 @@
                 },
                 {
                     "name": "pointsGroup",
-                    "width": 1.5
-                },
-                {
-                    "name": "propsGroup",
                     "width": 1.5
                 },
                 {

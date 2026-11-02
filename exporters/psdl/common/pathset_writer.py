@@ -5,6 +5,11 @@ import numpy as np
 from .scene_input import SceneInput
 from .file_io import BinaryFileHelper
 from .utils import Utils
+from . import report
+
+# the game keeps the paths of a pathset in a fixed array, and its loader doesn't check the number of paths: one more
+# overwrites the count (dgPathSet::Load, 467210)
+MAX_PATHS = 192
 
 
 class PATHSETWriter:
@@ -69,7 +74,8 @@ class PATHSETWriter:
         folder_path = self.filepath.replace(".psdl", "")
         if not os.path.exists(folder_path):
             os.makedirs(folder_path)
-        self.file = BinaryFileHelper(output_path or folder_path + "/props.pathset", 'wb')
+        path = output_path or folder_path + "/props.pathset"
+        self.file = BinaryFileHelper(path, 'wb')
         file = self.file
         self.types = []
         self.totobjs = []
@@ -77,6 +83,10 @@ class PATHSETWriter:
             if (self.scene_input.get_property_container(obj).get('race') or None) != race:
                 continue
             self.process_object(obj)
+        if len(self.types) > MAX_PATHS:
+            report.error(os.path.basename(path) + " has " + str(len(self.types)) + " paths, the game can load " + str(MAX_PATHS) + ": the last " + str(len(self.types) - MAX_PATHS) + " are left out")
+            del self.types[MAX_PATHS:]
+            del self.totobjs[MAX_PATHS:]
         file.write_raw_string("PTH1")
         file.write_uint32(len(self.types))
         file.write_uint32(0)

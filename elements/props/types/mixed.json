@@ -1,0 +1,25 @@
+{
+    "label": "PROP_CONTAINER_TYPE_MIXED",
+    "parametersInfo": {
+        "parameters": [
+            {
+                "name": "elements",
+                "label": "PROP_ELEM_LIST_ELEMENTS",
+                "type": "array",
+                "arrayProperties": {
+                    "propsTypes": [
+                        "line",
+                        "customProp",
+                        "psdlProp"
+                    ]
+                }
+            }
+        ]
+    },
+    "uiInfo": [
+        {
+            "name": "elements",
+            "width": 1.5
+        }
+    ]
+}

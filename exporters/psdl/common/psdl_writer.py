@@ -119,11 +119,12 @@ class TexturePacker:
 
 
 class PSDLWriter:
-    def __init__(self, scene_input: SceneInput, filepath, split_non_coplanar_roads, cap_materials):
+    def __init__(self, scene_input: SceneInput, filepath, split_non_coplanar_roads, cap_materials, assume_mm2hook=False):
         self.scene_input = scene_input
         self.filepath = filepath
         self.split_non_coplanar_roads = split_non_coplanar_roads
         self.cap_materials = cap_materials
+        self.assume_mm2hook = assume_mm2hook
         self.utils = Utils(self.scene_input)
 
     def get_vertex_2(self, bm, index):
@@ -1565,16 +1566,8 @@ class PSDLWriter:
                     ml.append(0)
                     self.shorts_lists.append(ml)
                 else:
-                    max_mat_mult = 7
-                    if self.cap_materials:
-                        max_mat_mult = 1
-                        if bp.mat_id > 511:
-                            self.tex_warning += 1
-                    else:
-                        if bp.mat_id > 511:
-                            self.ct_warning = True
-                        elif bp.mat_id > 2047:
-                            self.tex_warning_2 += 1
+                    max_mat_mult = 1 if self.cap_materials else 7
+                    self.count_high_material(bp.mat_id)
                     ml.append(self.convert_to_attr(0, 10, min(bp.mat_id//256, max_mat_mult)))
                     ml.append(bp.mat_id - 256 * min(bp.mat_id//256, max_mat_mult))
                     self.shorts_lists.append(ml)
@@ -1831,17 +1824,40 @@ class PSDLWriter:
         self.process_materials()
         self.process_blocks()
         self.scene_input.end_progress_bar()
+        self.report_high_materials()
+        print("PSDL Exported!")
+
+    def count_high_material(self, mat_id):
+        if self.cap_materials:
+            if mat_id > 511:
+                self.tex_warning += 1
+        else:
+            if mat_id > 511:
+                self.ct_warning = True
+            if mat_id > 2047:
+                self.tex_warning_2 += 1
+
+    # the limits of stock MM2 don't apply with MM2Hook (the assumeMM2Hook city property), the ones of the format and the tools do
+    def report_high_materials(self):
         if self.ct_warning:
-            report.warning("the city contains more than 511 texture references, " \
-                  "it will work ingame while using MM2Hook but tools like MM2 " \
-                  "City Toolkit will not be able to open it. " \
-                  "Furthermore, stock MM2 (without MM2Hook) will not be able to load it if there "\
-                  "are more than 767 materials (you can check the counter at the beginning of this log)")
+            if self.assume_mm2hook:
+                report.warning("the city contains more than 511 texture references, " \
+                      "it will work ingame with MM2Hook but tools like MM2 City Toolkit will not be able to open it")
+            else:
+                report.warning("the city contains more than 511 texture references, " \
+                      "tools like MM2 City Toolkit will not be able to open it and stock MM2 will not be able to load it " \
+                      "if there are more than 767 materials (you can check the counter at the beginning of this log). " \
+                      "It will work ingame with MM2Hook: if the city is meant for it, " \
+                      "turn on Assume using MM2Hook in the city properties")
         if self.tex_warning > 0:
-            report.warning("the city contains more than 511 texture references, " \
-                  "in stock MM2 (without MM2Hook) some will not be rendered properly " \
-                  "(affects " + str(self.tex_warning) + " objects)")
+            if self.assume_mm2hook:
+                report.warning("the city contains more than 511 texture references and they are capped, " \
+                      "some will not be rendered properly (affects " + str(self.tex_warning) + " objects). " \
+                      "MM2Hook doesn't need the cap, so turn off the option that caps the PSDL materials")
+            else:
+                report.warning("the city contains more than 511 texture references, " \
+                      "in stock MM2 (without MM2Hook) some will not be rendered properly " \
+                      "(affects " + str(self.tex_warning) + " objects)")
         if self.tex_warning_2 > 0:
             report.warning("the city contains more than 2047 texture references, " \
-            "some will not be rendered properly ingame (affects " + str(self.tex_warning) + " objects)")
-        print("PSDL Exported!")
+            "some will not be rendered properly ingame (affects " + str(self.tex_warning_2) + " objects)")
