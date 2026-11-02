@@ -1,0 +1,19 @@
+{
+    "presets": true,
+    "geometryLayer": 13,
+    "createMenu": {
+        "direct": true,
+        "submenu": "PROPS_MENU"
+    },
+    "propPlacer": {
+        "type": "polygon",
+        "projectToGround": true,
+        "meshTransform": true,
+        "maxModels": 0,
+        "density": true
+    },
+    "defaultPreset": {
+        "seed": 0,
+        "models": []
+    }
+}

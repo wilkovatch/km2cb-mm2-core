@@ -1,6 +1,7 @@
 {
 	"createMenu": {
-		"direct": true
+		"direct": true,
+		"submenu": "PROPS_MENU"
 	},
 	"meshInstance": {
 		"placementRules": {

@@ -1,0 +1,39 @@
+{
+    "label": "CREATE_PROP_STRIP",
+    "menuWidth": 1.5,
+    "tabs": [
+        {
+            "label": "",
+            "elements": [
+                {
+                    "name": "mainGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "projectToGround",
+                    "width": 1.5
+                },
+                {
+                    "name": "width",
+                    "width": 1.5
+                },
+                {
+                    "name": "splineGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "pointsGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "propsGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "propPlacerGroup",
+                    "width": 1.5
+                }
+            ]
+        }
+    ]
+}

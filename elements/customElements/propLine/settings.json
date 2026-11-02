@@ -1,0 +1,85 @@
+{
+    "presets": true,
+    "geometryLayer": 13,
+    "createMenu": {
+        "direct": true,
+        "submenu": "PROPS_MENU"
+    },
+    "propPlacer": {
+        "type": "spline",
+        "projectToGround": true,
+        "meshTransform": true,
+        "projectProps": false,
+        "strips": [
+            {
+                "name": "main",
+                "label": "PP_EDIT_MAIN",
+                "start": "0",
+                "end": "0",
+                "allowedContainerTypes": [
+                    "line"
+                ],
+                "placementRules": {
+                    "iterationScope": "edge",
+                    "whileCondition": "i < max(1, floor(totalLength / elemDistance))",
+                    "xPos": "0.5",
+                    "zPos": "if(i=0, 0, lastZ + elemDistance)",
+                    "forward": "cross(worldUp, pathForward)",
+                    "meshTransform": "true",
+                    "autoYOffset": "true"
+                },
+                "parametersInfo": {
+                    "parameters": [
+                        {
+                            "name": "elemDistance",
+                            "label": "PROP_LINE_SPACING",
+                            "type": "float"
+                        }
+                    ]
+                },
+                "uiInfo": [
+                    {
+                        "name": "elemDistance",
+                        "width": 1.5
+                    }
+                ],
+                "ranges": {
+                    "elemDistance": [
+                        0.25,
+                        63.75,
+                        0.25
+                    ]
+                }
+            }
+        ]
+    },
+    "spline": {
+        "curveTypes": [
+            0,
+            1,
+            2
+        ],
+        "defaultCurveType": 2,
+        "segments": 20,
+        "line": {
+            "color": "cyan",
+            "always": true
+        },
+        "sectionVertices": [],
+        "components": [],
+        "textures": [],
+        "widths": []
+    },
+    "defaultPreset": {
+        "propRule": {
+            "main": {
+                "type": "line",
+                "element": {
+                    "type": "line",
+                    "elemDistance": 5,
+                    "mesh": ""
+                }
+            }
+        }
+    }
+}

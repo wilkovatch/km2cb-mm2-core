@@ -505,5 +505,11 @@
 	"BOAT_MODEL_CAR_FERRY": "Car ferry",
 	"BOAT_SPEED": "Speed (m/s)",
 	"BOAT_SPEED_PH": "0 (model default)",
-	"BOAT_SPEED_TOOLTIP": "The average speed in metres per second (each boat varies by 1 m/s in game), in steps of 0.25. 0 uses the default of the model (2 for ducks, 20 for sailboards, 5 for the others). Ignored by the car ferry, which always moves at the same speed"
+	"BOAT_SPEED_TOOLTIP": "The average speed in metres per second (each boat varies by 1 m/s in game), in steps of 0.25. 0 uses the default of the model (2 for ducks, 20 for sailboards, 5 for the others). Ignored by the car ferry, which always moves at the same speed",
+	"PROPS_MENU": "Props",
+	"CREATE_PROP_LINE": "Prop line",
+	"CREATE_PROP_STRIP": "Prop strip",
+	"CREATE_PROP_POLYGON": "Polygon",
+	"PROP_STRIP_WIDTH": "Strip width (m)",
+	"PROP_LINE_SPACING": "Spacing (m; steps of 0.25 m)"
 }

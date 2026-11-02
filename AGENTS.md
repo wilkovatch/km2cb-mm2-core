@@ -111,13 +111,15 @@ Other limits: 511 unique textures per city. PSDL has no per-vertex UVs and max 6
 
 Reverse-engineering setup: install capstone + pefile with `pip install --target <scratch dir>`. Don't name a script `dis.py`, because it shadows the stdlib module capstone imports.
 
-## City importer and standalone prop rules
+## City importer and prop placers
 
 `Scripts → Import MM2 city` lives in `scripts/importCity`. `_formats.py` is bounded binary reading, `_mapping.py` creates converter-shaped custom element payloads, `_companions.py` handles CSV/settings/transforms, and `main.py` is the transactional API adapter. Unknown attribute sizes fail rather than guessing. The viewer-derived readers retain `LICENSE-viewer.txt`.
 
 PSDL type 1 stores regular sidewalk pairs as **inner, outer**. Exactly four references beginning with `0,0` or `1,1` describe an end cap: the first pair is a marker (start/end), not city vertices, and the last pair maps to `sidewalkCap.a/b`, with `which` 1/2. Treating these as regular strips pulls geometry toward vertices 0/1. `_test_sidewalks.py` runs through the builder script CLI with `KM2_IMPORT_TEST_FOLDER`; optional `KM2_MM2_SOURCE_ROOT` adds ten fixed-seed SF/London sidewalk attributes. It checks generated geometry, undo/redo, save/reload and native PSDL re-export without loading a whole stock city.
 
-The base builder's reserved `__propPath` type uses custom element point/history/editor infrastructure, but has API kind `propPath` and separate `propPaths` save/export arrays. Its `data.propLines` are evaluated placements. Never apply native-road `psdl` suppression to these records. `exporters/psdl/prop_paths.py` compares native strip candidates with preview placements before choosing type 2; mismatches fall back to type 0/1. The common writer keeps separate strip records even for identical models/spacing. Changes to it still span the shared exporter submodule.
+The `propLine`, `propStrip` and `propPolygon` custom elements use the generic `settings.propPlacer` capability (builder wiki `Core-Prop-Placers`). `exporters/psdl/prop_placers.py` exports propLine as native PATHSET type 2 from the evaluated `spline.sections`, always using the scoped native line profile and its byte spacing. Strip and polygon `data.propLines` placements always export individually, regardless of PSDL container type. The native line preview interpolates projected span vertices; other placers project each prop. Preserve separate native records for identical models/spacing. `tools/_test_prop_placers.py` checks migration and the actual BIN/PATHSET writer pipeline; `--preview <export-json>` audits editor placement parity. Builder focus: `KM2_SELFTEST_FOCUS=propPlacers`.
+
+Migration 5 holds all the format changes since core version 4. It removes the experimental standalone records before decoding with backups, preserving shared points and ordinary/converted road rules. Obsolete names are recognized only by that migration and its fixtures; there is no builder compatibility type, API or serialized collection.
 
 BAI remains approximate: report lost room memberships and train splines; do not advertise complete stock round-trip equivalence from close lane geometry. `_roundtrip_check.py` reports pedestrian displacement separately. Keep stock checks bounded (five fixed-seed routes per city) and assets/output in scratch folders. The importer adds asset search paths outside undo and references source files without copying them.
 

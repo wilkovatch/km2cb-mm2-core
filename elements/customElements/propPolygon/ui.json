@@ -1,0 +1,35 @@
+{
+    "label": "CREATE_PROP_POLYGON",
+    "menuWidth": 1.5,
+    "tabs": [
+        {
+            "label": "",
+            "elements": [
+                {
+                    "name": "mainGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "projectToGround",
+                    "width": 1.5
+                },
+                {
+                    "name": "seed",
+                    "width": 1.5
+                },
+                {
+                    "name": "models",
+                    "width": 1.5
+                },
+                {
+                    "name": "pointsGroup",
+                    "width": 1.5
+                },
+                {
+                    "name": "propPlacerGroup",
+                    "width": 1.5
+                }
+            ]
+        }
+    ]
+}

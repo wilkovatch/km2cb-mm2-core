@@ -1,0 +1,10 @@
+{
+    "parameters": [
+        {
+            "name": "width",
+            "label": "PROP_STRIP_WIDTH",
+            "type": "float",
+            "placeholder": "VALUE_PH"
+        }
+    ]
+}

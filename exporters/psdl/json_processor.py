@@ -2042,8 +2042,11 @@ class JsonProcessor:
             if self.verbose: print("exporting " + sorted_meshes[i]['name'])
             self.guarded_element(res, sorted_meshes[i]['name'], 'meshInstance', lambda: self.get_mesh_instance(res, sorted_meshes[i], i), sorted_meshes[i]['id'])
 
-        from prop_paths import export_prop_paths
-        export_prop_paths(self, res)
+        from prop_placers import export_prop_placer
+        for element in data.get('customElements') or []:
+            if element.get('type') in ('propLine', 'propStrip', 'propPolygon'):
+                self.guarded_element(res, element['data']['name'], 'customElement',
+                                     lambda e=element: export_prop_placer(self, e, res), element['id'])
 
         self.out_res = res
 

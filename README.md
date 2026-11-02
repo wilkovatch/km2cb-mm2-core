@@ -128,7 +128,13 @@ Be careful if you add railings, as they can only be placed on the block perimete
 - Building meshes must be on something that will become a block, else they will not be exported to the .bin file. (as the block for the INST element cannot be determined)
 - You can rename building meshes to reorder them, the order will be preserved in the INST file exported. (it can affect rendering through transparent objects)
 - Road prop rules will be exported as PSDL-compatible rules if possible. (propdefs.csv and proprules.csv) This is possible for left and right rules, if the container type is PSDL-compatible. Other rules (middle, etc., and left and right if the container type is not PSDL-compatible) will have their props exported as individual props in the PATHSET file.  
-Standalone prop rules can export native PATHSET line strips when the format reproduces their evaluated placements; other rules export individual props.
+**Create ? Props** also contains **Prop line**, **Prop strip** and **Polygon**. Their full property panel opens before the first point; draw a spline or polygon perimeter using the usual control-point tools. Ctrl+click follows connected anchors. The **Project to ground** toggle updates placement automatically as controls and surfaces move.
+
+- **Prop line** uses one zero-width strip and the line container. Spacing is entered in metres, from 0.25 to 63.75 in steps of 0.25. It always exports native PATHSET type 2, with spacing restarting on each sampled span. Projection samples the path vertices; the preview and game interpolate prop height between them.
+- **Prop strip** has an editable width across the spline and the normal road-style containers. Its evaluated props export individually, including when a PSDL-compatible container is selected.
+- **Polygon** supports any number of selected models, each with density in props per 100 m? and a yaw range. Its saved seed keeps positions stable. Simple concave perimeters work; self-intersecting or degenerate perimeters show an error. Every generated prop projects separately and exports individually.
+
+All three types support their own property presets, undo/redo, shared or anchored control points, and selection by clicking any generated prop. Migration 5 backs up older cities and removes the experimental standalone prop rules before loading; ordinary road rules and converted road rules are preserved.
 
 Third-party software:
 - The Python packages used by this core (`pythonInfo/requirements.txt`) are installed with pip from PyPI, their licenses are in `pythonInfo/licenses.txt`.
