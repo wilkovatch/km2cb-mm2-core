@@ -21,11 +21,9 @@ Run the short synthetic tests with `python scripts/importGameAssets/_test_import
 
 The builder and this core are left-handed, Y up, +Z forward, +X right. MM2 game files mirror X (MM2 x = -builder x, the exporters handle it). In-game north is -Z and east is +X.
 
-## Exporter changes span three repos
+## Self-contained exporter
 
-1. the builder (C# program, `Files/python`),
-2. this core (remote `wilkovatch/km2cb-mm2-core`),
-3. the submodule `exporters/psdl/common` = [psdl-exporter-common](https://github.com/wilkovatch/psdl-exporter-common), **shared with the Blender plugin**. Keep it backwards-compatible. For example, `common/report.py` must keep the old behaviour (print warnings, re-raise errors) when there is no `ExportReport`, and PKG paths are optional arguments (the Blender plugin keeps `<city>_geometry`).
+Exporter changes affect the builder (C# and `Files/python`) and this core (`wilkovatch/km2cb-mm2-core`). `exporters/psdl/common` is ordinary tracked code vendored from `psdl-exporter-common`; keep its original license. There is no submodule or Blender compatibility requirement. BIN-only export and standalone writer tools remain supported.
 
 When stashing to compare against old behaviour, stash both the builder repo and this repo. This repo keeps its own older stashes, so pop only yours.
 
