@@ -1,5 +1,6 @@
 {
     "label": "PROP_TYPE_PARKED_CARS",
+    "lineOnly": true,
     "placement": "parked_cars.row",
     "meshTransform": true,
     "parametersInfo": {
@@ -53,7 +54,8 @@
         },
         {
             "name": "xPos",
-            "width": 0.75
+            "width": 0.75,
+            "boundsOnly": true
         },
         {
             "name": "reverse",
