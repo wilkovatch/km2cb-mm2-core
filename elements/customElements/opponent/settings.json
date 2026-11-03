@@ -15,7 +15,8 @@
             "color": "yellow",
             "always": true,
             "arrowDirection": "1",
-            "heightOffset": 0.05
+            "heightOffset": 0.05,
+            "drawWhenCovered": true
         },
         "sectionVertices": [],
         "components": [],
