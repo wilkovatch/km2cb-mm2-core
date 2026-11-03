@@ -4540,8 +4540,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-            "listName": "sf_base_white07b_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -4588,8 +4588,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-            "listName": "sf_base_white07b_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -4656,8 +4656,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-            "listName": "sf_base_tan13_1s_5_l"
+            "assetName": "texture/sf_gsliver04_4_f.tex",
+            "listName": "sf_gsliver04_4_f"
           },
           {
             "type": "texture",
@@ -4734,8 +4734,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan01a_1s_4_l.tex",
-            "listName": "sf_base_tan01a_1s_4_l"
+            "assetName": "texture/sf_gsliver04_4_f.tex",
+            "listName": "sf_gsliver04_4_f"
           },
           {
             "type": "texture",
@@ -4802,8 +4802,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-            "listName": "sf_base_brickred06_1s_5_l"
+            "assetName": "texture/gf_bung_brick_mat_4_f.tex",
+            "listName": "gf_bung_brick_mat_4_f"
           },
           {
             "type": "texture",
@@ -4875,8 +4875,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan01a_1s_4_l.tex",
-            "listName": "sf_base_tan01a_1s_4_l"
+            "assetName": "texture/sf_gsliver04_4_f.tex",
+            "listName": "sf_gsliver04_4_f"
           },
           {
             "type": "texture",
@@ -4933,8 +4933,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white08a_1s_5_l.tex",
-            "listName": "sf_base_white08a_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5001,8 +5001,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white01a_1s_5_l.tex",
-            "listName": "sf_base_white01a_1s_5_l"
+            "assetName": "texture/sf_gsliver06_4_f.tex",
+            "listName": "sf_gsliver06_4_f"
           },
           {
             "type": "texture",
@@ -5079,8 +5079,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office05_door_6_f.tex",
-            "listName": "ef_office05_door_6_f"
+            "assetName": "texture/sf_gsliver06_4_f.tex",
+            "listName": "sf_gsliver06_4_f"
           },
           {
             "type": "texture",
@@ -5157,8 +5157,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-            "listName": "sf_base_brickred06_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5225,8 +5225,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-            "listName": "sf_base_tan13_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5298,8 +5298,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-            "listName": "sf_base_brickred06_1s_5_l"
+            "assetName": "texture/gf_bung_brick_mat_4_f.tex",
+            "listName": "gf_bung_brick_mat_4_f"
           },
           {
             "type": "texture",
@@ -5366,8 +5366,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white06b_1s_5_l.tex",
-            "listName": "sf_base_white06b_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5439,8 +5439,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store13a_1s_5_l.tex",
-            "listName": "sf_store13a_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5497,8 +5497,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_shop04a_1s_4_l.tex",
-            "listName": "kf_shop04a_1s_4_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -5545,8 +5545,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store10_2s_5_l.tex",
-            "listName": "sf_store10_2s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5613,8 +5613,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-            "listName": "sf_base_brickred06_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5691,8 +5691,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office06_door_6_f.tex",
-            "listName": "ef_office06_door_6_f"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5769,8 +5769,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store12b_1s_4_l.tex",
-            "listName": "sf_store12b_1s_4_l"
+            "assetName": "texture/sf_gsliver04_4_f.tex",
+            "listName": "sf_gsliver04_4_f"
           },
           {
             "type": "texture",
@@ -5847,8 +5847,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-            "listName": "sf_base_white07b_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5925,8 +5925,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white04_1s_5_l.tex",
-            "listName": "sf_base_white04_1s_5_l"
+            "assetName": "texture/sf_gsliver01_4_f.tex",
+            "listName": "sf_gsliver01_4_f"
           },
           {
             "type": "texture",
@@ -5983,8 +5983,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store01b_2s_5_l.tex",
-            "listName": "sf_store01b_2s_5_l"
+            "assetName": "texture/sf_gsliver04_4_f.tex",
+            "listName": "sf_gsliver04_4_f"
           },
           {
             "type": "texture",
@@ -6031,8 +6031,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_har_base02_1s_5_l.tex",
-            "listName": "kf_har_base02_1s_5_l"
+            "assetName": "texture/sf_gsliver04_4_f.tex",
+            "listName": "sf_gsliver04_4_f"
           },
           {
             "type": "texture",
@@ -6099,8 +6099,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_shop03b_1s_4_l.tex",
-            "listName": "kf_shop03b_1s_4_l"
+            "assetName": "texture/sf_wall_brickyel01_l.tex",
+            "listName": "sf_wall_brickyel01_l"
           },
           {
             "type": "texture",
@@ -6167,8 +6167,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white01a_1s_5_l.tex",
-            "listName": "sf_base_white01a_1s_5_l"
+            "assetName": "texture/sf_wall_brickyel01_l.tex",
+            "listName": "sf_wall_brickyel01_l"
           },
           {
             "type": "texture",
@@ -6230,8 +6230,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-            "listName": "sf_base_white06a_1s_5_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6303,8 +6303,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store18b_1s_6_l.tex",
-            "listName": "sf_store18b_1s_6_l"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -6381,8 +6381,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store12b_1s_4_l.tex",
-            "listName": "sf_store12b_1s_4_l"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -6439,8 +6439,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store17b_1s_6_l.tex",
-            "listName": "sf_store17b_1s_6_l"
+            "assetName": "texture/sf_gsliver06_4_f.tex",
+            "listName": "sf_gsliver06_4_f"
           },
           {
             "type": "texture",
@@ -6487,8 +6487,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_har_base01_1s_5_l.tex",
-            "listName": "kf_har_base01_1s_5_l"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -6535,8 +6535,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store13b_1s_5_l.tex",
-            "listName": "sf_store13b_1s_5_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6613,8 +6613,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/cf_marble02_win_5_f.tex",
-            "listName": "cf_marble02_win_5_f"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6691,8 +6691,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan05_2s_4_l.tex",
-            "listName": "sf_base_tan05_2s_4_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6769,8 +6769,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store04b_2s_5_l.tex",
-            "listName": "sf_store04b_2s_5_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6837,8 +6837,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan07b_1s_4_l.tex",
-            "listName": "sf_base_tan07b_1s_4_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6890,8 +6890,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-            "listName": "sf_base_tan13_1s_5_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -6958,8 +6958,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-            "listName": "sf_base_white06a_1s_5_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -7036,8 +7036,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/cf_marble02_win_5_f.tex",
-            "listName": "cf_marble02_win_5_f"
+            "assetName": "texture/sf_gsliver06_4_f.tex",
+            "listName": "sf_gsliver06_4_f"
           },
           {
             "type": "texture",
@@ -7104,8 +7104,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store18a_1s_6_l.tex",
-            "listName": "sf_store18a_1s_6_l"
+            "assetName": "texture/sf_gsliver05_4_f.tex",
+            "listName": "sf_gsliver05_4_f"
           },
           {
             "type": "texture",
@@ -7177,8 +7177,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white06b_1s_5_l.tex",
-            "listName": "sf_base_white06b_1s_5_l"
+            "assetName": "texture/gf_bung_blue_mat_4_f.tex",
+            "listName": "gf_bung_blue_mat_4_f"
           },
           {
             "type": "texture",
@@ -7255,8 +7255,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store18a_1s_6_l.tex",
-            "listName": "sf_store18a_1s_6_l"
+            "assetName": "texture/gf_bung_blue_mat_4_f.tex",
+            "listName": "gf_bung_blue_mat_4_f"
           },
           {
             "type": "texture",
@@ -7323,8 +7323,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_shop09_1s_4_l.tex",
-            "listName": "kf_shop09_1s_4_l"
+            "assetName": "texture/gf_bung_peach01_mat_4_f.tex",
+            "listName": "gf_bung_peach01_mat_4_f"
           },
           {
             "type": "texture",
@@ -7386,8 +7386,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-            "listName": "sf_base_white06a_1s_5_l"
+            "assetName": "texture/gf_bung_tan01_mat_4_f.tex",
+            "listName": "gf_bung_tan01_mat_4_f"
           },
           {
             "type": "texture",
@@ -7439,8 +7439,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_shop10_win_6_f.tex",
-            "listName": "ef_shop10_win_6_f"
+            "assetName": "texture/sf_gsliver07_4_f.tex",
+            "listName": "sf_gsliver07_4_f"
           },
           {
             "type": "texture",
@@ -7487,8 +7487,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_storewin02_4_f.tex",
-            "listName": "sf_storewin02_4_f"
+            "assetName": "texture/sf_gsliver07_4_f.tex",
+            "listName": "sf_gsliver07_4_f"
           },
           {
             "type": "texture",
@@ -7555,8 +7555,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_brickred07_1s_5_l.tex",
-            "listName": "sf_base_brickred07_1s_5_l"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -7613,8 +7613,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store17b_1s_6_l.tex",
-            "listName": "sf_store17b_1s_6_l"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -7681,8 +7681,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_shop01_win_6_f.tex",
-            "listName": "ef_shop01_win_6_f"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -7739,8 +7739,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office04_win_6_f.tex",
-            "listName": "ef_office04_win_6_f"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -7807,8 +7807,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office05_door_6_f.tex",
-            "listName": "ef_office05_door_6_f"
+            "assetName": "texture/sf_gsliver07_4_f.tex",
+            "listName": "sf_gsliver07_4_f"
           },
           {
             "type": "texture",
@@ -7885,8 +7885,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office01_door_6_f.tex",
-            "listName": "ef_office01_door_6_f"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -7953,8 +7953,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_store08b_1s_4_l.tex",
-            "listName": "sf_store08b_1s_4_l"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -8006,8 +8006,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_shop01b_1s_4_l.tex",
-            "listName": "kf_shop01b_1s_4_l"
+            "assetName": "texture/sf_gsliver05_4_f.tex",
+            "listName": "sf_gsliver05_4_f"
           },
           {
             "type": "texture",
@@ -8054,8 +8054,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/kf_shop03b_1s_4_l.tex",
-            "listName": "kf_shop03b_1s_4_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -8122,8 +8122,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office05_door_6_f.tex",
-            "listName": "ef_office05_door_6_f"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -8190,8 +8190,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office05_door_6_f.tex",
-            "listName": "ef_office05_door_6_f"
+            "assetName": "texture/sf_gsliver07_4_f.tex",
+            "listName": "sf_gsliver07_4_f"
           },
           {
             "type": "texture",
@@ -8273,8 +8273,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office06_win_6_f.tex",
-            "listName": "ef_office06_win_6_f"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -8351,8 +8351,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_office07_door_6_f.tex",
-            "listName": "ef_office07_door_6_f"
+            "assetName": "texture/sf_gsliver03_4_f.tex",
+            "listName": "sf_gsliver03_4_f"
           },
           {
             "type": "texture",
@@ -8429,8 +8429,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-            "listName": "sf_base_white06a_1s_5_l"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -8507,8 +8507,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/cf_marble03_door_6_f.tex",
-            "listName": "cf_marble03_door_6_f"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -8595,8 +8595,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/cf_marble03_door_6_f.tex",
-            "listName": "cf_marble03_door_6_f"
+            "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+            "listName": "gf_bung_offwhite_mat_4_f"
           },
           {
             "type": "texture",
@@ -8653,8 +8653,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/sf_storewin02_4_f.tex",
-            "listName": "sf_storewin02_4_f"
+            "assetName": "texture/sf_gsliver07_4_f.tex",
+            "listName": "sf_gsliver07_4_f"
           },
           {
             "type": "texture",
@@ -8711,8 +8711,8 @@
           },
           {
             "type": "sliver",
-            "assetName": "texture/ef_union_hotel01_doorside_8_f.tex",
-            "listName": "ef_union_hotel01_doorside_8_f"
+            "assetName": "texture/sf_gsliver07_4_f.tex",
+            "listName": "sf_gsliver07_4_f"
           },
           {
             "type": "texture",
@@ -8774,8 +8774,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-              "listName": "sf_base_white07b_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -8841,8 +8841,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-              "listName": "sf_base_white07b_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -8928,8 +8928,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-              "listName": "sf_base_tan13_1s_5_l"
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
             },
             {
               "type": "texture",
@@ -9025,8 +9025,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan01a_1s_4_l.tex",
-              "listName": "sf_base_tan01a_1s_4_l"
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
             },
             {
               "type": "texture",
@@ -9112,8 +9112,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-              "listName": "sf_base_brickred06_1s_5_l"
+              "assetName": "texture/gf_bung_brick_mat_4_f.tex",
+              "listName": "gf_bung_brick_mat_4_f"
             },
             {
               "type": "texture",
@@ -9204,8 +9204,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan01a_1s_4_l.tex",
-              "listName": "sf_base_tan01a_1s_4_l"
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
             },
             {
               "type": "texture",
@@ -9281,8 +9281,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white08a_1s_5_l.tex",
-              "listName": "sf_base_white08a_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -9368,8 +9368,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white01a_1s_5_l.tex",
-              "listName": "sf_base_white01a_1s_5_l"
+              "assetName": "texture/sf_gsliver06_4_f.tex",
+              "listName": "sf_gsliver06_4_f"
             },
             {
               "type": "texture",
@@ -9465,8 +9465,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office05_door_6_f.tex",
-              "listName": "ef_office05_door_6_f"
+              "assetName": "texture/sf_gsliver06_4_f.tex",
+              "listName": "sf_gsliver06_4_f"
             },
             {
               "type": "texture",
@@ -9562,8 +9562,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-              "listName": "sf_base_brickred06_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -9649,8 +9649,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-              "listName": "sf_base_tan13_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -9741,8 +9741,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-              "listName": "sf_base_brickred06_1s_5_l"
+              "assetName": "texture/gf_bung_brick_mat_4_f.tex",
+              "listName": "gf_bung_brick_mat_4_f"
             },
             {
               "type": "texture",
@@ -9828,8 +9828,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white06b_1s_5_l.tex",
-              "listName": "sf_base_white06b_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -9920,8 +9920,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store13a_1s_5_l.tex",
-              "listName": "sf_store13a_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -9997,8 +9997,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_shop04a_1s_4_l.tex",
-              "listName": "kf_shop04a_1s_4_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -10064,8 +10064,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store10_2s_5_l.tex",
-              "listName": "sf_store10_2s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -10151,8 +10151,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-              "listName": "sf_base_brickred06_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -10248,8 +10248,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office06_door_6_f.tex",
-              "listName": "ef_office06_door_6_f"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -10345,8 +10345,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store12b_1s_4_l.tex",
-              "listName": "sf_store12b_1s_4_l"
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
             },
             {
               "type": "texture",
@@ -10442,8 +10442,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-              "listName": "sf_base_white07b_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -10539,8 +10539,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white04_1s_5_l.tex",
-              "listName": "sf_base_white04_1s_5_l"
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
             },
             {
               "type": "texture",
@@ -10616,8 +10616,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store01b_2s_5_l.tex",
-              "listName": "sf_store01b_2s_5_l"
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
             },
             {
               "type": "texture",
@@ -10683,8 +10683,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_har_base02_1s_5_l.tex",
-              "listName": "kf_har_base02_1s_5_l"
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
             },
             {
               "type": "texture",
@@ -10770,8 +10770,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_shop03b_1s_4_l.tex",
-              "listName": "kf_shop03b_1s_4_l"
+              "assetName": "texture/sf_wall_brickyel01_l.tex",
+              "listName": "sf_wall_brickyel01_l"
             },
             {
               "type": "texture",
@@ -10857,8 +10857,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white01a_1s_5_l.tex",
-              "listName": "sf_base_white01a_1s_5_l"
+              "assetName": "texture/sf_wall_brickyel01_l.tex",
+              "listName": "sf_wall_brickyel01_l"
             },
             {
               "type": "texture",
@@ -10939,8 +10939,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-              "listName": "sf_base_white06a_1s_5_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11031,8 +11031,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store18b_1s_6_l.tex",
-              "listName": "sf_store18b_1s_6_l"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -11128,8 +11128,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store12b_1s_4_l.tex",
-              "listName": "sf_store12b_1s_4_l"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -11205,8 +11205,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store17b_1s_6_l.tex",
-              "listName": "sf_store17b_1s_6_l"
+              "assetName": "texture/sf_gsliver06_4_f.tex",
+              "listName": "sf_gsliver06_4_f"
             },
             {
               "type": "texture",
@@ -11272,8 +11272,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_har_base01_1s_5_l.tex",
-              "listName": "kf_har_base01_1s_5_l"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -11339,8 +11339,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store13b_1s_5_l.tex",
-              "listName": "sf_store13b_1s_5_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11436,8 +11436,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/cf_marble02_win_5_f.tex",
-              "listName": "cf_marble02_win_5_f"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11533,8 +11533,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan05_2s_4_l.tex",
-              "listName": "sf_base_tan05_2s_4_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11630,8 +11630,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store04b_2s_5_l.tex",
-              "listName": "sf_store04b_2s_5_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11717,8 +11717,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan07b_1s_4_l.tex",
-              "listName": "sf_base_tan07b_1s_4_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11789,8 +11789,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-              "listName": "sf_base_tan13_1s_5_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11876,8 +11876,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-              "listName": "sf_base_white06a_1s_5_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -11973,8 +11973,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/cf_marble02_win_5_f.tex",
-              "listName": "cf_marble02_win_5_f"
+              "assetName": "texture/sf_gsliver06_4_f.tex",
+              "listName": "sf_gsliver06_4_f"
             },
             {
               "type": "texture",
@@ -12060,8 +12060,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store18a_1s_6_l.tex",
-              "listName": "sf_store18a_1s_6_l"
+              "assetName": "texture/sf_gsliver05_4_f.tex",
+              "listName": "sf_gsliver05_4_f"
             },
             {
               "type": "texture",
@@ -12152,8 +12152,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white06b_1s_5_l.tex",
-              "listName": "sf_base_white06b_1s_5_l"
+              "assetName": "texture/gf_bung_blue_mat_4_f.tex",
+              "listName": "gf_bung_blue_mat_4_f"
             },
             {
               "type": "texture",
@@ -12249,8 +12249,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store18a_1s_6_l.tex",
-              "listName": "sf_store18a_1s_6_l"
+              "assetName": "texture/gf_bung_blue_mat_4_f.tex",
+              "listName": "gf_bung_blue_mat_4_f"
             },
             {
               "type": "texture",
@@ -12336,8 +12336,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_shop09_1s_4_l.tex",
-              "listName": "kf_shop09_1s_4_l"
+              "assetName": "texture/gf_bung_peach01_mat_4_f.tex",
+              "listName": "gf_bung_peach01_mat_4_f"
             },
             {
               "type": "texture",
@@ -12418,8 +12418,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-              "listName": "sf_base_white06a_1s_5_l"
+              "assetName": "texture/gf_bung_tan01_mat_4_f.tex",
+              "listName": "gf_bung_tan01_mat_4_f"
             },
             {
               "type": "texture",
@@ -12490,8 +12490,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_shop10_win_6_f.tex",
-              "listName": "ef_shop10_win_6_f"
+              "assetName": "texture/sf_gsliver07_4_f.tex",
+              "listName": "sf_gsliver07_4_f"
             },
             {
               "type": "texture",
@@ -12557,8 +12557,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_storewin02_4_f.tex",
-              "listName": "sf_storewin02_4_f"
+              "assetName": "texture/sf_gsliver07_4_f.tex",
+              "listName": "sf_gsliver07_4_f"
             },
             {
               "type": "texture",
@@ -12644,8 +12644,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_brickred07_1s_5_l.tex",
-              "listName": "sf_base_brickred07_1s_5_l"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -12721,8 +12721,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store17b_1s_6_l.tex",
-              "listName": "sf_store17b_1s_6_l"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -12808,8 +12808,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_shop01_win_6_f.tex",
-              "listName": "ef_shop01_win_6_f"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -12885,8 +12885,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office04_win_6_f.tex",
-              "listName": "ef_office04_win_6_f"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -12972,8 +12972,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office05_door_6_f.tex",
-              "listName": "ef_office05_door_6_f"
+              "assetName": "texture/sf_gsliver07_4_f.tex",
+              "listName": "sf_gsliver07_4_f"
             },
             {
               "type": "texture",
@@ -13069,8 +13069,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office01_door_6_f.tex",
-              "listName": "ef_office01_door_6_f"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -13156,8 +13156,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_store08b_1s_4_l.tex",
-              "listName": "sf_store08b_1s_4_l"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -13228,8 +13228,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_shop01b_1s_4_l.tex",
-              "listName": "kf_shop01b_1s_4_l"
+              "assetName": "texture/sf_gsliver05_4_f.tex",
+              "listName": "sf_gsliver05_4_f"
             },
             {
               "type": "texture",
@@ -13295,8 +13295,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/kf_shop03b_1s_4_l.tex",
-              "listName": "kf_shop03b_1s_4_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -13382,8 +13382,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office05_door_6_f.tex",
-              "listName": "ef_office05_door_6_f"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -13469,8 +13469,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office05_door_6_f.tex",
-              "listName": "ef_office05_door_6_f"
+              "assetName": "texture/sf_gsliver07_4_f.tex",
+              "listName": "sf_gsliver07_4_f"
             },
             {
               "type": "texture",
@@ -13571,8 +13571,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office06_win_6_f.tex",
-              "listName": "ef_office06_win_6_f"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -13668,8 +13668,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_office07_door_6_f.tex",
-              "listName": "ef_office07_door_6_f"
+              "assetName": "texture/sf_gsliver03_4_f.tex",
+              "listName": "sf_gsliver03_4_f"
             },
             {
               "type": "texture",
@@ -13765,8 +13765,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-              "listName": "sf_base_white06a_1s_5_l"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -13862,8 +13862,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/cf_marble03_door_6_f.tex",
-              "listName": "cf_marble03_door_6_f"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -13969,8 +13969,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/cf_marble03_door_6_f.tex",
-              "listName": "cf_marble03_door_6_f"
+              "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+              "listName": "gf_bung_offwhite_mat_4_f"
             },
             {
               "type": "texture",
@@ -14046,8 +14046,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/sf_storewin02_4_f.tex",
-              "listName": "sf_storewin02_4_f"
+              "assetName": "texture/sf_gsliver07_4_f.tex",
+              "listName": "sf_gsliver07_4_f"
             },
             {
               "type": "texture",
@@ -14123,8 +14123,8 @@
             },
             {
               "type": "sliver",
-              "assetName": "texture/ef_union_hotel01_doorside_8_f.tex",
-              "listName": "ef_union_hotel01_doorside_8_f"
+              "assetName": "texture/sf_gsliver07_4_f.tex",
+              "listName": "sf_gsliver07_4_f"
             },
             {
               "type": "texture",
@@ -14195,19 +14195,9 @@
         "name": "cf_marble02_win_5_f"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/cf_marble02_win_5_f.tex",
-        "name": "cf_marble02_win_5_f (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/cf_marble03_door_6_f.tex",
         "name": "cf_marble03_door_6_f"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/cf_marble03_door_6_f.tex",
-        "name": "cf_marble03_door_6_f (sliver)"
       },
       {
         "type": "texture",
@@ -14220,19 +14210,9 @@
         "name": "ef_office01_door_6_f"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/ef_office01_door_6_f.tex",
-        "name": "ef_office01_door_6_f (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/ef_office04_win_6_f.tex",
         "name": "ef_office04_win_6_f"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/ef_office04_win_6_f.tex",
-        "name": "ef_office04_win_6_f (sliver)"
       },
       {
         "type": "texture",
@@ -14240,19 +14220,9 @@
         "name": "ef_office05_door_6_f"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/ef_office05_door_6_f.tex",
-        "name": "ef_office05_door_6_f (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/ef_office06_door_6_f.tex",
         "name": "ef_office06_door_6_f"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/ef_office06_door_6_f.tex",
-        "name": "ef_office06_door_6_f (sliver)"
       },
       {
         "type": "texture",
@@ -14260,19 +14230,9 @@
         "name": "ef_office06_win_6_f"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/ef_office06_win_6_f.tex",
-        "name": "ef_office06_win_6_f (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/ef_office07_door_6_f.tex",
         "name": "ef_office07_door_6_f"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/ef_office07_door_6_f.tex",
-        "name": "ef_office07_door_6_f (sliver)"
       },
       {
         "type": "texture",
@@ -14280,29 +14240,14 @@
         "name": "ef_shop01_win_6_f"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/ef_shop01_win_6_f.tex",
-        "name": "ef_shop01_win_6_f (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/ef_shop10_win_6_f.tex",
         "name": "ef_shop10_win_6_f"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/ef_shop10_win_6_f.tex",
-        "name": "ef_shop10_win_6_f (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/ef_union_hotel01_doorside_8_f.tex",
         "name": "ef_union_hotel01_doorside_8_f"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/ef_union_hotel01_doorside_8_f.tex",
-        "name": "ef_union_hotel01_doorside_8_f (sliver)"
       },
       {
         "type": "texture",
@@ -14315,19 +14260,9 @@
         "name": "kf_har_base01_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/kf_har_base01_1s_5_l.tex",
-        "name": "kf_har_base01_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/kf_har_base02_1s_5_l.tex",
         "name": "kf_har_base02_1s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/kf_har_base02_1s_5_l.tex",
-        "name": "kf_har_base02_1s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14345,19 +14280,9 @@
         "name": "kf_shop01b_1s_4_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/kf_shop01b_1s_4_l.tex",
-        "name": "kf_shop01b_1s_4_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/kf_shop03b_1s_4_l.tex",
         "name": "kf_shop03b_1s_4_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/kf_shop03b_1s_4_l.tex",
-        "name": "kf_shop03b_1s_4_l (sliver)"
       },
       {
         "type": "texture",
@@ -14365,19 +14290,9 @@
         "name": "kf_shop04a_1s_4_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/kf_shop04a_1s_4_l.tex",
-        "name": "kf_shop04a_1s_4_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/kf_shop09_1s_4_l.tex",
         "name": "kf_shop09_1s_4_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/kf_shop09_1s_4_l.tex",
-        "name": "kf_shop09_1s_4_l (sliver)"
       },
       {
         "type": "texture",
@@ -14400,19 +14315,9 @@
         "name": "sf_base_brickred06_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_brickred06_1s_5_l.tex",
-        "name": "sf_base_brickred06_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_brickred07_1s_5_l.tex",
         "name": "sf_base_brickred07_1s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_base_brickred07_1s_5_l.tex",
-        "name": "sf_base_brickred07_1s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14430,11 +14335,6 @@
         "name": "sf_base_tan01a_1s_4_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_tan01a_1s_4_l.tex",
-        "name": "sf_base_tan01a_1s_4_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_tan04_1s_4_l.tex",
         "name": "sf_base_tan04_1s_4_l"
@@ -14445,19 +14345,9 @@
         "name": "sf_base_tan05_2s_4_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_tan05_2s_4_l.tex",
-        "name": "sf_base_tan05_2s_4_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_tan07b_1s_4_l.tex",
         "name": "sf_base_tan07b_1s_4_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_base_tan07b_1s_4_l.tex",
-        "name": "sf_base_tan07b_1s_4_l (sliver)"
       },
       {
         "type": "texture",
@@ -14468,11 +14358,6 @@
         "type": "texture",
         "assetName": "texture/sf_base_tan13_1s_5_l.tex",
         "name": "sf_base_tan13_1s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_base_tan13_1s_5_l.tex",
-        "name": "sf_base_tan13_1s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14490,11 +14375,6 @@
         "name": "sf_base_white01a_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_white01a_1s_5_l.tex",
-        "name": "sf_base_white01a_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_white03_win_2s_6_l.tex",
         "name": "sf_base_white03_win_2s_6_l"
@@ -14505,19 +14385,9 @@
         "name": "sf_base_white04_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_white04_1s_5_l.tex",
-        "name": "sf_base_white04_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_white06a_1s_5_l.tex",
         "name": "sf_base_white06a_1s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_base_white06a_1s_5_l.tex",
-        "name": "sf_base_white06a_1s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14525,29 +14395,14 @@
         "name": "sf_base_white06b_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_white06b_1s_5_l.tex",
-        "name": "sf_base_white06b_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_white07b_1s_5_l.tex",
         "name": "sf_base_white07b_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_base_white07b_1s_5_l.tex",
-        "name": "sf_base_white07b_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_base_white08a_1s_5_l.tex",
         "name": "sf_base_white08a_1s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_base_white08a_1s_5_l.tex",
-        "name": "sf_base_white08a_1s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14570,19 +14425,9 @@
         "name": "sf_store01b_2s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_store01b_2s_5_l.tex",
-        "name": "sf_store01b_2s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_store04b_2s_5_l.tex",
         "name": "sf_store04b_2s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_store04b_2s_5_l.tex",
-        "name": "sf_store04b_2s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14590,19 +14435,9 @@
         "name": "sf_store08b_1s_4_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_store08b_1s_4_l.tex",
-        "name": "sf_store08b_1s_4_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_store10_2s_5_l.tex",
         "name": "sf_store10_2s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_store10_2s_5_l.tex",
-        "name": "sf_store10_2s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14610,19 +14445,9 @@
         "name": "sf_store12b_1s_4_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_store12b_1s_4_l.tex",
-        "name": "sf_store12b_1s_4_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_store13a_1s_5_l.tex",
         "name": "sf_store13a_1s_5_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_store13a_1s_5_l.tex",
-        "name": "sf_store13a_1s_5_l (sliver)"
       },
       {
         "type": "texture",
@@ -14630,19 +14455,9 @@
         "name": "sf_store13b_1s_5_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_store13b_1s_5_l.tex",
-        "name": "sf_store13b_1s_5_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_store17b_1s_6_l.tex",
         "name": "sf_store17b_1s_6_l"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_store17b_1s_6_l.tex",
-        "name": "sf_store17b_1s_6_l (sliver)"
       },
       {
         "type": "texture",
@@ -14650,29 +14465,14 @@
         "name": "sf_store18a_1s_6_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_store18a_1s_6_l.tex",
-        "name": "sf_store18a_1s_6_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_store18b_1s_6_l.tex",
         "name": "sf_store18b_1s_6_l"
       },
       {
-        "type": "sliver",
-        "assetName": "texture/sf_store18b_1s_6_l.tex",
-        "name": "sf_store18b_1s_6_l (sliver)"
-      },
-      {
         "type": "texture",
         "assetName": "texture/sf_storewin02_4_f.tex",
         "name": "sf_storewin02_4_f"
-      },
-      {
-        "type": "sliver",
-        "assetName": "texture/sf_storewin02_4_f.tex",
-        "name": "sf_storewin02_4_f (sliver)"
       },
       {
         "type": "texture",
@@ -14943,6 +14743,66 @@
         "type": "texture",
         "assetName": "texture/wf_win_city02_2s_6_l.tex",
         "name": "wf_win_city02_2s_6_l"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/gf_bung_blue_mat_4_f.tex",
+        "name": "gf_bung_blue_mat_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/gf_bung_brick_mat_4_f.tex",
+        "name": "gf_bung_brick_mat_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/gf_bung_offwhite_mat_4_f.tex",
+        "name": "gf_bung_offwhite_mat_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/gf_bung_peach01_mat_4_f.tex",
+        "name": "gf_bung_peach01_mat_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/gf_bung_tan01_mat_4_f.tex",
+        "name": "gf_bung_tan01_mat_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_gsliver01_4_f.tex",
+        "name": "sf_gsliver01_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_gsliver03_4_f.tex",
+        "name": "sf_gsliver03_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_gsliver04_4_f.tex",
+        "name": "sf_gsliver04_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_gsliver05_4_f.tex",
+        "name": "sf_gsliver05_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_gsliver06_4_f.tex",
+        "name": "sf_gsliver06_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_gsliver07_4_f.tex",
+        "name": "sf_gsliver07_4_f (sliver)"
+      },
+      {
+        "type": "sliver",
+        "assetName": "texture/sf_wall_brickyel01_l.tex",
+        "name": "sf_wall_brickyel01_l (sliver)"
       }
     ],
     "props/psdl": [
