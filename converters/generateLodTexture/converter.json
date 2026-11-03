@@ -1,0 +1,13 @@
+{
+	"label": "GENERATE_LOD_TEXTURE",
+	"tooltip": "GENERATE_LOD_TEXTURE_TOOLTIP",
+	"sources": [
+		"road"
+	],
+	"types": [
+		"psdl"
+	],
+	"script": "convert.py",
+	"replace": false,
+	"enabledWhen": "psdl.canGenerateLodTexture"
+}

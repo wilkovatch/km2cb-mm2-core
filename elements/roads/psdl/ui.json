@@ -68,6 +68,10 @@
 				{
 					"name": "textureLOD",
 					"width": 1.5
+				},
+				{
+					"name": "convert:generateLodTexture",
+					"width": 1.5
 				}
 			]
 		},

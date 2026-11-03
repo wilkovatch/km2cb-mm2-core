@@ -159,6 +159,13 @@ local function roadSurface(mesh, left, right)
     strip(mesh, center, right, 1, 0, uScale)
 end
 
+-- Only the double roads have a low LOD texture (the exporter writes just the main texture of the others), and it needs
+-- their road texture (see converters/generateLodTexture)
+function M.canGenerateLodTexture(_, ctx)
+    local state = ctx.element.state
+    return state.isDouble == true and state.texture1 ~= nil and state.texture1 ~= ""
+end
+
 -- Road with sidewalks (0x00): sections of left sidewalk, left road edge, right road edge, right sidewalk
 function M.roadWithSidewalks(v, ctx)
     local s = ctx.points.sections
