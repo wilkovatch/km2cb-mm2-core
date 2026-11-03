@@ -2,8 +2,7 @@
 	"presets": true,
 	"defaultPreset": {
 		"texture": "texture/r4i_rails_f.tex",
-		"width": 2.0,
-		"curveType": 0
+		"width": 2.0
 	},
 	"geometryLayer": 13,
 	"createMenu": {
@@ -17,7 +16,7 @@
 			1,
 			2
 		],
-		"defaultCurveType": 2,
+		"defaultCurveType": 0,
 		"segments": 50,
 		"segmentsPer100m": true,
 		"projectPoints": true,

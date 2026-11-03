@@ -336,7 +336,7 @@ class JsonProcessor:
                 elem.properties['prop_rule'] = rule
 
         if state['echo']: elem.properties['echo'] = '1'
-        if state.get('warp', False): elem.properties['warp'] = '1'
+        if state_bool(instance_state, 'warp'): elem.properties['warp'] = '1'
         if div_type is not None: elem.properties['divider_type'] = str(div_type)
         if div_caps is not None: elem.properties['caps'] = str(div_caps)
         if div_param is not None: elem.properties['divider_param'] = str(div_param)
@@ -737,7 +737,7 @@ class JsonProcessor:
                 elem.properties['original_name'] = intersection['data']['name']
                 if state_bool(state, 'echo'):
                     elem.properties['echo'] = '1'
-                if state.get('warp', False): elem.properties['warp'] = '1'
+                if state_bool(intersection['data']['fields']['instanceState'], 'warp'): elem.properties['warp'] = '1'
                 elem.mat = self.get_tex(mat_tex) + ','
                 for i in ['0', '2']:
                     comma = ',' if i != '2' else ''

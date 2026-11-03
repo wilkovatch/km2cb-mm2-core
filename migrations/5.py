@@ -6,6 +6,7 @@
   had the same name (psdl to psdlProp, custom to customProp), and the propContainer and propElem presets move to a category for
   each type (props/<type>)
 - the map labels move to point elements owned by the singleton Hudmap container
+- the values of the spline, the warp and the projection of the lines move to the instance state: presets don't store them anymore
 """
 import copy
 import math
@@ -16,6 +17,13 @@ import MigrationHelper
 FLAT_TYPES = ('line', 'parkedCars', 'pathsetStrip')
 ITEM_TYPES = {'psdl': 'psdlProp', 'custom': 'customProp', 'line': 'line', 'psdlProp': 'psdlProp', 'customProp': 'customProp'}
 DEFAULT_PRESET = 'Default'
+ROAD_KEYS = ('project', 'projectAll', 'curveType', 'segments', 'segmentsPer100m', 'lpf', 'adjustLowPolyWidth', 'makeCoplanar',
+             'hermiteTension', 'subdivideEqually', 'warp')
+INTERSECTION_KEYS = ('warp',)
+LINE_KEYS = ('projectToGround',)
+# only of the spline types: the same names can be ordinary parameters of the other custom element types
+SPLINE_KEYS = ('curveType', 'segments', 'segmentsPer100m', 'hermiteTension', 'subdivideEqually')
+SPLINE_TYPES = ('decal', 'train', 'opponent', 'propLine', 'movingObject')
 
 
 # Standalone prop rules
@@ -233,6 +241,43 @@ def migrate_map_labels(data):
         element_id += 1
 
 
+# Instance state
+
+def move_keys(elements, keys):
+    # a missing key stays missing, so it reads as it did before
+    for element in elements or []:
+        state = element.get('state')
+        if not isinstance(state, dict):
+            continue
+        instance_state = element.get('instanceState')
+        if not isinstance(instance_state, dict):
+            instance_state = element['instanceState'] = {}
+        for key in keys:
+            if key in state:
+                instance_state[key] = state.pop(key)
+
+
+def move_to_instance_state(data):
+    move_keys(data.get('roads'), ROAD_KEYS)
+    move_keys(data.get('intersections'), INTERSECTION_KEYS)
+    move_keys(data.get('buildingLines'), LINE_KEYS)
+
+
+def remove_keys(presets, keys):
+    for preset in presets or []:
+        for key in keys:
+            preset.pop(key, None)
+
+
+def remove_instance_state_presets(presets):
+    remove_keys(presets.get('road'), ROAD_KEYS)
+    remove_keys(presets.get('intersection'), INTERSECTION_KEYS)
+    remove_keys(presets.get('buildingLine'), LINE_KEYS)
+    for spline_type in SPLINE_TYPES:
+        for prefix in ('customElement/', 'lowLevel/'):  # lowLevel: saved before the rename, the program renames it when loading
+            remove_keys(presets.get(prefix + spline_type), SPLINE_KEYS)
+
+
 def migrate_presets(source):
     """The new presets and the new names of the moved ones (for the states linked to them)."""
     data = copy.deepcopy(source)
@@ -248,6 +293,7 @@ def migrate_presets(source):
     for category, states in presets.items():
         if not category.startswith('props/') and category != 'roadPropRule':
             migrate_rules_in(states, links)
+    remove_instance_state_presets(presets)
     return data, links
 
 
@@ -258,6 +304,7 @@ def migrate_city(source, links=None):
     migrate_old_strips(data)
     migrate_rules_in(data, links or Links())
     migrate_map_labels(data)
+    move_to_instance_state(data)
     return data
 
 

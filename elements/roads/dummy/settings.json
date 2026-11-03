@@ -1,4 +1,14 @@
 {
+	"defaultCurveType": 0,
+	"segments": 10,
+	"segmentsPer100m": false,
+	"hermiteTension": 0.5,
+	"subdivideEqually": false,
+	"project": true,
+	"projectAll": false,
+	"lpf": 0,
+	"adjustLowPolyWidth": false,
+	"makeCoplanar": true,
 	"variableSections": false,
 	"rollRequires": "assumeMM2Hook",
 	"sectionVertices": [
