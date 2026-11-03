@@ -113,16 +113,6 @@
 			}
 		},
 		{
-			"name": "mapLabels",
-			"label": "CP_MAP_LABELS",
-			"tooltip": "CP_MAP_LABELS_TOOLTIP",
-			"type": "array",
-			"arrayProperties": {
-				"maxElements": -1,
-				"customCityPropertiesType": "mapLabel"
-			}
-		},
-		{
 			"name": "hudmapMetersPerPixel",
 			"label": "CP_HUDMAP_METERS_PER_PIXEL",
 			"placeholder": "CP_HUDMAP_METERS_PER_PIXEL_PH",

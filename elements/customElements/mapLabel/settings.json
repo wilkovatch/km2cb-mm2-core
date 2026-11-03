@@ -1,0 +1,20 @@
+{
+	"propertyContainerCategory": "hudmap",
+	"requiresPropertyContainer": true,
+	"createMenu": {
+		"direct": true
+	},
+	"geometryLayer": 18,
+	"castShadows": false,
+	"point": {
+		"rotatable": false,
+		"positionAxes": [
+			true,
+			false,
+			true
+		],
+		"project": true,
+		"projectionMask": 136
+	},
+	"geometry": "map_labels.geometry"
+}

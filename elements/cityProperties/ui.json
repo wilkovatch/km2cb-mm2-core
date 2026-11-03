@@ -83,7 +83,7 @@
 			"label": "CP_HUDMAP",
 			"elements": [
 				{
-					"name": "mapLabels",
+					"name": "content:CP_MAP_LABELS",
 					"width": 1.5
 				},
 				{

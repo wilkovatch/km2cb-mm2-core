@@ -29,6 +29,10 @@ def validate_ownership(data):
     for element in data.get('customElements') or []:
         state = element['data']['fields']['state']
         owner = state_val(state, OWNER, '')
+        if element.get('type') == 'mapLabel':
+            if not owner or owner != state_val(data.get('cityProperties'), IDENTITY, ''):
+                report.error('Map label has no valid Hudmap container: ' + element['data']['name'], element=element['data']['name'], kind='customElement')
+            continue
         if (owner and owner not in known) or (element.get('type') == 'opponent' and not owner):
             report.error('Element has no valid race container: ' + element['data']['name'], element=element['data']['name'], kind='customElement')
     for mesh in data.get('meshInstances') or []:

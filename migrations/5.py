@@ -5,6 +5,7 @@
   pathsetStrip) becomes a flat state of its type, the elements in the lists of the other containers are renamed where a container
   had the same name (psdl to psdlProp, custom to customProp), and the propContainer and propElem presets move to a category for
   each type (props/<type>)
+- the map labels move to point elements owned by the singleton Hudmap container
 """
 import copy
 import math
@@ -205,6 +206,33 @@ def move_presets(presets, links):
         presets['props/' + new_type] = [default] + states
 
 
+# Map labels
+
+def migrate_map_labels(data):
+    props = data.get('cityProperties') or {}
+    labels = props.pop('mapLabels', []) or []
+    if not labels:
+        return
+    owner = props.setdefault('_elementContainerId', uuid.uuid4().hex)
+    points = data['terrainPoints'] = data.get('terrainPoints') or []
+    key = 'customElements' if 'customElements' in data else 'lowLevelElements'
+    elements = data[key] = data.get(key) or []
+    point_id = max((p['id'] for p in points), default=-1) + 1
+    element_id = max((e['id'] for e in (data.get('customElements') or []) + (data.get('lowLevelElements') or [])), default=-1) + 1
+    for label in labels:
+        state = copy.deepcopy(label)
+        old_point = state.pop('point', None)
+        position = old_point.get('localPosition') or {} if isinstance(old_point, dict) else {}
+        position = {axis: float(position.get(axis, 0)) for axis in ('x', 'y', 'z')}
+        if not all(math.isfinite(v) for v in position.values()):
+            raise ValueError('Invalid map label position: ' + state.get('text', ''))
+        points.append(dict(id=point_id, position=position, dividing=False, linkType=0, elementType=0, elementId=-1, anchorIndex=-1, percent=0))
+        state.update(type='mapLabel', _propertyContainerId=owner)
+        elements.append(dict(id=element_id, name=state.get('text') or 'Map label', state=state, points=dict(center=point_id), containerId=-1))
+        point_id += 1
+        element_id += 1
+
+
 def migrate_presets(source):
     """The new presets and the new names of the moved ones (for the states linked to them)."""
     data = copy.deepcopy(source)
@@ -229,6 +257,7 @@ def migrate_city(source, links=None):
     migrate_opponents(data)
     migrate_old_strips(data)
     migrate_rules_in(data, links or Links())
+    migrate_map_labels(data)
     return data
 
 

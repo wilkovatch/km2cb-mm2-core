@@ -1,0 +1,35 @@
+{
+	"label": "CREATE_MAP_LABEL",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "text",
+					"width": 1.5
+				},
+				{
+					"name": "size",
+					"width": 1.5
+				},
+				{
+					"name": "angle",
+					"width": 1.5
+				},
+				{
+					"name": "maps",
+					"width": 1.5
+				},
+				{
+					"name": "transformGroup",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

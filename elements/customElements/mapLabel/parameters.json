@@ -1,5 +1,4 @@
 {
-	"label": "text",
 	"parameters": [
 		{
 			"name": "text",
@@ -30,37 +29,6 @@
 				"MAP_LABEL_MAPS_ROAM",
 				"MAP_LABEL_MAPS_RACES"
 			]
-		},
-		{
-			"name": "point",
-			"label": "MAP_LABEL_POINT",
-			"tooltip": "MAP_LABEL_POINT_TOOLTIP",
-			"type": "objectInstance",
-			"objectInstanceSettings": {
-				"type": "mapLabelPoint",
-				"defaultModel": {
-					"model": "@handle"
-				},
-				"defaultScale": [
-					0.1, 0.1, 0.1
-				],
-				"allowCustomModel": false,
-				"allowPosition": [
-					true,
-					false,
-					true
-				],
-				"allowRotation": [
-					false,
-					false,
-					false
-				],
-				"allowScale": [
-					false,
-					false,
-					false
-				]
-			}
 		}
 	]
 }

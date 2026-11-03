@@ -1,6 +1,7 @@
 import math
 import os
 import re
+from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
@@ -33,9 +34,15 @@ DEFAULT_COLORS = {
     'grass': (162, 219, 138),
     'water': (8, 174, 235),
     'landmark': (215, 130, 134),
-    'label': (112, 112, 112),
+    'label': (0, 0, 0),
 }
-LABEL_HALO = (242, 237, 228)
+DEFAULT_LABEL_FONT = Path(__file__).resolve().parents[2] / 'fonts/LiberationSans-Bold.ttf'
+LABEL_SUPERSAMPLING = 4
+# the stock names are translucent (their ink darkens the water, grass, ground and landmarks by the same factor)
+# and spaced out; map_labels.lua has the same values for the preview
+LABEL_OPACITY = 0.5
+LABEL_TRACKING = 0.12  # of the font size
+ROAM_LABEL_SCALE = 0.75  # stock roam names are smaller than those of the cropped race maps
 MARKER_START = (224, 32, 110)
 MARKER_CHECKPOINT = (124, 224, 0)
 MARKER_CENTER = (255, 255, 0)
@@ -59,7 +66,8 @@ RACE_MAP_RECT = (8, 5, 237, 180)
 FRAME_COLOR = (61, 54, 95)
 RACE_MAP_MARGIN = 0.25
 RACE_MAP_MIN_SIZE = 300.0
-DEFAULT_LABEL_SIZE = 8.0
+DEFAULT_LABEL_SIZE = 6.75
+RACE_MAP_JPEG = dict(quality=98, subsampling=0)  # as the stock race maps: no chroma subsampling, almost lossless
 MARKER_RADIUS = 5.0
 
 # mmHudMap values of the stock San Francisco
@@ -262,7 +270,7 @@ class HudmapExporter:
 
     # Rendering
 
-    def render(self, shapes, rect, size, markers=None, outline=True):
+    def render(self, shapes, rect, size, outline=True):
         # the image (size in pixels) of the area rect (x0, z0, x1, z1), with the markers ([(x, z, color)]),
         # the roads with an outline if requested (only the hudmap, the stock race maps have none)
         w, h = size
@@ -300,8 +308,17 @@ class HudmapExporter:
                     draw.polygon([to_px(p) for p in tri], fill=color)
                     if outlined_draw is not None:
                         outlined_draw.polygon([to_px(p) for p in tri], fill=255 if category in OUTLINED else 0)
-        for x, z, color in markers or []:
-            cx, cy = to_px((x, z))
+        return image.resize((w, h), Image.BOX)
+
+    def draw_markers(self, image, rect, markers):
+        # markers: [(x, z, color)], over the labels as in the stock maps
+        w, h = image.size
+        ss = SUPERSAMPLING
+        layer = Image.new('RGBA', (w * ss, h * ss), (0, 0, 0, 0))
+        draw = ImageDraw.Draw(layer)
+        for x, z, color in markers:
+            cx = (x - rect[0]) * w * ss / (rect[2] - rect[0])
+            cy = (z - rect[1]) * h * ss / (rect[3] - rect[1])
             r = MARKER_RADIUS * ss
             draw.polygon([(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy)], fill=MARKER_OUTLINE)
             r -= ss
@@ -309,7 +326,8 @@ class HudmapExporter:
             if color == MARKER_CHECKPOINT:
                 r *= 0.45
                 draw.polygon([(cx, cy - r), (cx + r, cy), (cx, cy + r), (cx - r, cy)], fill=MARKER_CENTER)
-        return image.resize((w, h), Image.BOX)
+        layer = layer.resize((w, h), Image.BOX)
+        image.paste(layer, (0, 0), layer)
 
     def get_font(self, size):
         size = max(4, int(round(size)))
@@ -323,30 +341,52 @@ class HudmapExporter:
                     font = ImageFont.truetype(path, size)
                 except OSError:
                     report.warning("the label font " + path + " could not be loaded, the default one is used")
-            self.fonts[size] = font or ImageFont.load_default(size)
+            self.fonts[size] = font or ImageFont.truetype(str(DEFAULT_LABEL_FONT), size)
         return self.fonts[size]
 
-    def draw_labels(self, image, rect, labels):
+    def draw_labels(self, image, rect, labels, size_scale=1):
         # labels: [(x, z, text, size, angle)], centered on their point
         w, h = image.size
         for x, z, text, size, angle in labels:
             px = (x - rect[0]) * w / (rect[2] - rect[0])
             py = (z - rect[1]) * h / (rect[3] - rect[1])
-            font = self.get_font(size)
-            halo = max(1, int(round(size / 8)))
-            box = font.getbbox(text, stroke_width=halo)
-            layer = Image.new('RGBA', (box[2] - box[0] + 2, box[3] - box[1] + 2), (0, 0, 0, 0))
-            layer_draw = ImageDraw.Draw(layer)
-            origin = (1 - box[0], 1 - box[1])
-            layer_draw.text(origin, text, font=font, fill=LABEL_HALO + (255,), stroke_width=halo, stroke_fill=LABEL_HALO + (255,))
-            layer_draw.text(origin, text, font=font, fill=self.colors['label'] + (255,))
+            ss = LABEL_SUPERSAMPLING
+            font = self.get_font(size * size_scale * ss)
+            tracking = LABEL_TRACKING * font.size
+            box = font.getbbox(text)
+            width = box[2] - box[0] + tracking * (len(text) - 1)
+            # the mask of all the letters, so that the opacity doesn't add up where they touch
+            mask = Image.new('L', (math.ceil(width) + 2 * ss, box[3] - box[1] + 2 * ss), 0)
+            mask_draw = ImageDraw.Draw(mask)
+            for i, letter in enumerate(text):
+                # the prefix keeps the kerning of the font
+                letter_x = font.getlength(text[:i + 1]) - font.getlength(letter) + i * tracking
+                mask_draw.text((ss - box[0] + letter_x, ss - box[1]), letter, font=font, fill=255)
+            ink = mask.getbbox()
+            if ink is None:
+                continue
+            mask = mask.crop((ink[0] - ss, ink[1] - ss, ink[2] + ss, ink[3] + ss))
             if angle != 0:
-                layer = layer.rotate(angle, resample=Image.BICUBIC, expand=True)
-            image.paste(layer, (int(round(px - layer.size[0] / 2)), int(round(py - layer.size[1] / 2))), layer)
+                mask = mask.rotate(angle, resample=Image.BICUBIC, expand=True)
+            mask = mask.resize((max(1, round(mask.width / ss)), max(1, round(mask.height / ss))), Image.Resampling.LANCZOS)
+            mask = mask.point(lambda v: round(v * LABEL_OPACITY))
+            ink_layer = Image.new('RGB', mask.size, self.colors['label'])
+            image.paste(ink_layer, (int(round(px - mask.width / 2)), int(round(py - mask.height / 2))), mask)
 
     def get_labels(self, roam):
         res = []
-        for label in state_val(self.props, 'mapLabels', []) or []:
+        # Keep standalone export-JSON compatibility; saved cities migrate these to owned point elements.
+        labels = list(state_val(self.props, 'mapLabels', []) or [])
+        for element in self.data.get('customElements') or []:
+            if element.get('type') != 'mapLabel':
+                continue
+            label = dict(element['data']['fields']['state'])
+            center = (element.get('points') or {}).get('center')
+            if center is None:
+                continue
+            label['point'] = dict(localPosition=dict(zip(('x', 'y', 'z'), center['position'])))
+            labels.append(label)
+        for label in labels:
             text = (state_val(label, 'text', '') or '').strip().upper()
             point = state_val(label, 'point', None)
             maps = enum_index(label, 'maps')  # 0: all the maps, 1: roam map only, 2: race maps only
@@ -459,6 +499,9 @@ class HudmapExporter:
         with open(os.path.join(self.layout.dir('tune'), city + ".mmHudMap"), 'w', newline='\r\n') as f:
             f.write(MMHUDMAP.format(water[0] / 255, water[1] / 255, water[2] / 255))
         preview.save(os.path.join(self.layout.root, city + "_hudmap_preview.png"))
+        # A second, annotated preview for editing. Native HUD textures remain label-free.
+        self.draw_labels(preview, (x0, z0, x0 + nx * span, z0 + nz * span), self.get_labels(True))
+        preview.save(os.path.join(self.layout.root, city + "_hudmap_labels_preview.png"))
         print("Hudmap exported! (" + str(len(tiles)) + " tiles of " + str(self.tile_size) + " pixels, "
               + str(self.meters_per_pixel) + " m per pixel)")
         return True
@@ -488,11 +531,12 @@ class HudmapExporter:
 
     def write_race_map(self, shapes, rect, name, labels, markers=None):
         size = (RACE_MAP_RECT[2] - RACE_MAP_RECT[0], RACE_MAP_RECT[3] - RACE_MAP_RECT[1])
-        image = self.render(shapes, rect, size, markers, outline=False)
-        self.draw_labels(image, rect, labels)
+        image = self.render(shapes, rect, size, outline=False)
+        self.draw_labels(image, rect, labels, ROAM_LABEL_SCALE if name == 'roam' else 1)
+        self.draw_markers(image, rect, markers or [])
         res = self.get_frame()
         res.paste(image, RACE_MAP_RECT[:2])
-        res.save(os.path.join(self.layout.dir('jpg'), self.layout.city_name + "_map" + name + ".jpg"), quality=90)
+        res.save(os.path.join(self.layout.dir('jpg'), self.layout.city_name + "_map" + name + ".jpg"), **RACE_MAP_JPEG)
 
     def get_races(self):
         # (race id, start and checkpoint positions), with the ids of the race folder (see cinfo_aimap_export.py)

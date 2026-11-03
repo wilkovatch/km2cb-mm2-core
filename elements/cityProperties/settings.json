@@ -1,7 +1,15 @@
 {
 	"injectableParameters": [
-		{ "parameter": "driveOnLeft", "onRoads": true, "onCustomElements": true },
-		{ "parameter": "assumeMM2Hook", "onRoads": true, "onCustomElements": true },
+		{
+			"parameter": "driveOnLeft",
+			"onRoads": true,
+			"onCustomElements": true
+		},
+		{
+			"parameter": "assumeMM2Hook",
+			"onRoads": true,
+			"onCustomElements": true
+		},
 		{
 			"parameter": "trafficLight1",
 			"onRoads": true
@@ -9,6 +17,28 @@
 		{
 			"parameter": "trafficLight2",
 			"onRoads": true
+		},
+		{
+			"parameter": "hudmapMetersPerPixel",
+			"onCustomElements": true
 		}
-	]
+	],
+	"elementContainer": {
+		"category": "hudmap",
+		"tab": "CP_HUDMAP",
+		"types": [
+			"mapLabel"
+		],
+		"editLabel": "EDIT_HUDMAP",
+		"deselectLabel": "CLOSE_HUDMAP",
+		"contentGroups": [
+			{
+				"label": "CP_MAP_LABELS",
+				"types": [
+					"mapLabel"
+				],
+				"hint": "MAP_LABEL_CREATE_HINT"
+			}
+		]
+	}
 }
