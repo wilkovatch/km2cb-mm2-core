@@ -182,6 +182,8 @@ class HudmapExporter:
         p = self.props
         self.colors = {k: parse_color(state_val(p, 'hudmapColor' + k[0].upper() + k[1:], ''), v, k)
                        for k, v in DEFAULT_COLORS.items()}
+        # Keep the water background of existing cities until a separate color is set.
+        self.colors['background'] = parse_color(state_val(p, 'hudmapColorBackground', ''), self.colors['water'], 'background')
         self.meters_per_pixel = positive(state_val(p, 'hudmapMetersPerPixel'), DEFAULT_METERS_PER_PIXEL)
         self.margin = positive(state_val(p, 'hudmapMargin'), DEFAULT_MARGIN)
         self.outline_width = positive(state_val(p, 'hudmapOutlineWidth'), DEFAULT_OUTLINE_WIDTH, True)
@@ -284,7 +286,7 @@ class HudmapExporter:
         def to_px(p):
             return ((p[0] - rect[0]) * sx, (p[1] - rect[1]) * sz)
 
-        image = Image.new('RGB', (w * ss, h * ss), self.colors['water'])
+        image = Image.new('RGB', (w * ss, h * ss), self.colors['background'])
         draw = ImageDraw.Draw(image)
         # where the outline can be drawn (the pixels of the OUTLINED categories)
         outlined = Image.new('L', image.size, 0) if outline > 0 else None
@@ -476,15 +478,15 @@ class HudmapExporter:
                   + " pixels, increase its meters per pixel or the tile size to have at most " + str(MAX_TILES))
         x0, z0 = cx - nx * span / 2, cz - nz * span / 2
 
-        preview = Image.new('RGB', (nx * self.tile_size, nz * self.tile_size), self.colors['water'])
-        drawn = [c for c in DRAW_ORDER if c != 'water']
+        preview = Image.new('RGB', (nx * self.tile_size, nz * self.tile_size), self.colors['background'])
+        drawn = [c for c in DRAW_ORDER if c != 'water' or self.colors['water'] != self.colors['background']]
         tiles = []
         texture_dir = None
         for iz in range(nz):
             for ix in range(nx):
                 rect = (x0 + ix * span, z0 + iz * span, x0 + (ix + 1) * span, z0 + (iz + 1) * span)
                 if all(len(shapes.in_rect(c, rect)) == 0 for c in drawn):
-                    continue  # only water: the ocean color of the HUD
+                    continue  # empty, or only water matching the HUD background
                 image = self.render(shapes, rect, (self.tile_size, self.tile_size))
                 preview.paste(image, (ix * self.tile_size, iz * self.tile_size))
                 texture = (city + "_hudmap" + str(len(tiles))).lower()
@@ -495,9 +497,9 @@ class HudmapExporter:
                 write_image(os.path.join(texture_dir, texture + "_ni.tex"), stored)
                 tiles.append((texture,) + rect)
         self.write_pkg(os.path.join(self.layout.dir('geometry'), "hudmap_" + city + ".pkg"), tiles)
-        water = self.colors['water']
+        background = self.colors['background']
         with open(os.path.join(self.layout.dir('tune'), city + ".mmHudMap"), 'w', newline='\r\n') as f:
-            f.write(MMHUDMAP.format(water[0] / 255, water[1] / 255, water[2] / 255))
+            f.write(MMHUDMAP.format(background[0] / 255, background[1] / 255, background[2] / 255))
         preview.save(os.path.join(self.layout.root, city + "_hudmap_preview.png"))
         # A second, annotated preview for editing. Native HUD textures remain label-free.
         self.draw_labels(preview, (x0, z0, x0 + nx * span, z0 + nz * span), self.get_labels(True))

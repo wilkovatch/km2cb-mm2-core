@@ -30,8 +30,8 @@ def label(text, maps=0, **kwargs):
     return dict(text=text, maps=maps, point=dict(localPosition=dict(x=100, y=15, z=-100)), **kwargs)
 
 
-def exporter(folder, labels):
-    props = dict(mapLabels=labels, circuitRaces=[{}])
+def exporter(folder, labels, **settings):
+    props = dict(mapLabels=labels, circuitRaces=[{}], **settings)
     return HudmapExporter(SimpleNamespace(data=dict(cityProperties=props)), OutputLayout(str(Path(folder) / 'test.psdl')), {}, folder, False)
 
 
@@ -43,6 +43,68 @@ def shapes():
 
 
 class HudmapTests(unittest.TestCase):
+    def test_background_falls_back_to_water(self):
+        for water in ('', '#123456'):
+            expected = (18, 52, 86) if water else DEFAULT_COLORS['water']
+            for background in (None, '', '  ', 'invalid', '#%02x%02x%02x' % expected):
+                with self.subTest(water=water, background=background):
+                    e = exporter('.', [], hudmapColorWater=water, hudmapColorBackground=background)
+                    image = e.render(Shapes(), (0, 0, 10, 10), (10, 10))
+                    self.assertEqual(image.getpixel((5, 5)), expected)
+            # Existing cities have no background property at all.
+            e = exporter('.', [], hudmapColorWater=water)
+            self.assertEqual(e.render(Shapes(), (0, 0, 10, 10), (10, 10)).getpixel((5, 5)), expected)
+
+    def test_background_keeps_surface_colors(self):
+        e = exporter('.', [], hudmapColorBackground='#204060', hudmapColorWater='#123456')
+        surface = Shapes()
+        surface.add('water', [(-20, -20), (20, -20), (-20, 20)])
+        surface.add('ground', [(40, -20), (80, -20), (80, 20)])
+        image = e.render(surface, (-100, -100, 100, 100), (200, 200))
+        self.assertEqual(image.getpixel((10, 10)), (32, 64, 96))
+        self.assertEqual(image.getpixel((90, 90)), (18, 52, 86))
+        self.assertEqual(image.getpixel((170, 90)), DEFAULT_COLORS['ground'])
+
+    def test_background_exports_water_tiles_tuning_and_menu_maps(self):
+        surface = Shapes()
+        surface.add('water', [(-400, -400), (400, -400), (-400, 400)])
+        surface.add('water', [(400, -400), (400, 400), (-400, 400)])
+        with tempfile.TemporaryDirectory() as folder:
+            e = exporter(folder, [], hudmapColorBackground='#204060', hudmapColorWater='#123456')
+            self.assertTrue(e.export_hudmap(surface))
+            with Image.open(Path(folder) / 'test_hudmap_preview.png') as image:
+                preview = image.convert('RGB')
+            self.assertEqual(preview.getpixel((0, 0)), (32, 64, 96))
+            self.assertEqual(preview.getpixel((128, 128)), (18, 52, 86))
+            # Water-only tiles must now exist; the game draws the tuning background where there is no tile.
+            texture = (Path(folder) / 'texture/test_hudmap0.tex').read_bytes()
+            width, height, kind, *_ = struct.unpack('<5HI', texture[:14])
+            self.assertEqual((width, height, kind), (256, 256, 17))
+            native = Image.frombytes('RGB', (width, height), texture[14:14 + width * height * 3]).transpose(Image.FLIP_TOP_BOTTOM)
+            self.assertIsNone(ImageChops.difference(native, preview).getbbox())
+            self.assertEqual(texture, (Path(folder) / 'texture/test_hudmap0_ni.tex').read_bytes())
+            tuning = (Path(folder) / 'tune/test.mmHudMap').read_text()
+            ocean = next(line for line in tuning.splitlines() if 'Ocean Color' in line).split()[2:]
+            for actual, expected in zip(ocean, (32, 64, 96)):
+                self.assertAlmostEqual(float(actual), expected / 255, delta=0.0005)
+            e.export_race_maps(surface)
+            for name in ('roam', 'circuit0'):
+                with Image.open(Path(folder) / ('jpg/test_map' + name + '.jpg')) as image:
+                    for actual, expected in zip(image.getpixel((20, 90)), (32, 64, 96)):
+                        self.assertAlmostEqual(actual, expected, delta=3)
+                    for actual, expected in zip(image.getpixel((120, 90)), (18, 52, 86)):
+                        self.assertAlmostEqual(actual, expected, delta=3)
+
+    def test_water_only_tiles_stay_omitted_with_matching_background(self):
+        surface = Shapes()
+        surface.add('water', [(-400, -400), (400, -400), (-400, 400)])
+        with tempfile.TemporaryDirectory() as folder:
+            e = exporter(folder, [], hudmapColorWater='#123456')
+            self.assertTrue(e.export_hudmap(surface))
+            self.assertFalse((Path(folder) / 'texture').exists())
+            with Image.open(Path(folder) / 'test_hudmap_preview.png') as image:
+                self.assertEqual(image.getextrema(), ((18, 18), (52, 52), (86, 86)))
+
     def test_default_font_and_small_roam_labels(self):
         e = exporter('.', [])
         self.assertEqual(e.get_font(32).getname(), ('Liberation Sans', 'Bold'))

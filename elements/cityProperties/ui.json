@@ -103,6 +103,10 @@
 					"width": 1.5
 				},
 				{
+					"name": "hudmapColorBackground",
+					"width": 1.5
+				},
+				{
 					"name": "hudmapColorRoad",
 					"width": 0.75
 				},
