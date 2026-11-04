@@ -1,4 +1,5 @@
 {
+    "labelParameter": "carModel",
     "createMenu": {
         "direct": true,
         "label": "CREATE_OPPONENT"
