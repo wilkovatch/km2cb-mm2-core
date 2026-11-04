@@ -1,9 +1,6 @@
 import shutil
 from pathlib import Path
 from utils import state_val, state_bool, state_vector, state_vector_scale
-from train_export import export_trains
-from boat_export import export_boats
-from parked_car_export import export_parked_cars
 from race_elements import opponents as spline_opponents
 from common import report
 
@@ -356,10 +353,6 @@ class CinfoAimapExporter:
         self.export_city_aimap(layout.psdl, p)
 
         self.export_roam_aimap(racesubfolder, p)
-
-        export_trains(self.json_processor.data, racesubfolder, cityname)
-        export_boats(self.json_processor.data, racesubfolder, cityname)
-        export_parked_cars(self.json_processor.data, racesubfolder, cityname)
 
         blitzdata = []
         for i in range(len(blitz_races)):

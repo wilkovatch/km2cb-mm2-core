@@ -38,7 +38,7 @@ Exporters supported (accessible by selecting the PSDL format when exporting):
  - PSDL
  - BAI
  - INST
- - PATHSET (props and decals)
+ - PATHSET (props, decals, parked cars, trains and boats; independent of CINFO and AIMAP)
  - Prop rules
  - PKG and bounds (BND, BBND, TER) of the elements exported to PKG
  - CINFO and AIMAP (races, opponents, police, ambient traffic)

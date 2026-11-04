@@ -11,6 +11,9 @@ from json_processor import JsonProcessor
 from bin_export import BINExporter
 from prop_rules_export import PropRulesExporter
 from cinfo_aimap_export import CinfoAimapExporter
+from train_export import export_trains
+from boat_export import export_boats
+from parked_car_export import export_parked_cars
 from scene_input import StandaloneSceneInput
 from output_layout import OutputLayout
 from ar_packer import ArPacker
@@ -137,6 +140,12 @@ try:
         with report.guarded("the prop rules were not written"):
             prop_exp = PropRulesExporter(jp, verbose)
             prop_exp.export_props_rules(bin_file)
+
+    if write_pathset and not write_bin_only:
+        # These are PATHSET files too; CINFO/AIMAP need not be selected to refresh them.
+        for label, export_paths in [('trains', export_trains), ('boats', export_boats), ('parked cars', export_parked_cars)]:
+            with report.guarded('the ' + label + ' were not written'):
+                export_paths(data, layout.dir('race'), layout.city_name)
 
     if write_cinfo_aimap:
         with report.guarded("the CINFO and AIMAP files were not written"):
