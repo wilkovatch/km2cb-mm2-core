@@ -7,6 +7,7 @@
 	"geometryLayer": 18,
 	"castShadows": false,
 	"point": {
+		"anchorable": false,
 		"rotatable": false,
 		"positionAxes": [
 			true,

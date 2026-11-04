@@ -5,6 +5,7 @@
     },
     "propertyContainerCategory": "race",
     "point": {
+        "anchorable": false,
         "rotatable": true,
         "rotationAxes": [false, true, false],
         "project": false,

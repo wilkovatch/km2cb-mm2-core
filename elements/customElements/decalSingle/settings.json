@@ -10,6 +10,7 @@
 		"label": "CREATE_DECAL_SINGLE_MENU"
 	},
 	"point": {
+		"anchorable": false,
 		"rotatable": true,
 		"rotationAxes": [
 			false,
