@@ -3,7 +3,7 @@ import math
 import struct
 from common import report
 from psdl_parts import ExportedCityElement
-from utils import state_val, placed_props, PARKED_CARS_TYPE
+from utils import state_val, placed_props, PARKED_CARS_TYPES
 
 
 NATIVE_LINE_TYPE = 'pathsetStrip'
@@ -72,7 +72,7 @@ def export_prop_placer(processor, element, result):
         result.append(part)
         return
     for line in element['data'].get('propLines') or []:
-        if state_val(state_val(state_val(state, 'propRule', {}), line.get('name'), {}), 'type') == PARKED_CARS_TYPE:
+        if state_val(state_val(state_val(state, 'propRule', {}), line.get('name'), {}), 'type') in PARKED_CARS_TYPES:
             continue  # exported by parked_car_export.py
         for prop in placed_props(line):
             part = ExportedCityElement()

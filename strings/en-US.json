@@ -511,6 +511,8 @@
 	"BOAT_SPEED_TOOLTIP": "The average speed in metres per second (each boat varies by 1 m/s in game), in steps of 0.25. 0 uses the default of the model (2 for ducks, 20 for sailboards, 5 for the others). Ignored by the car ferry, which always moves at the same speed",
 	"PROPS_MENU": "Props",
 	"CREATE_PROP_LINE": "Prop line",
+	"CREATE_PARKED_CAR": "Parked car",
+	"PARKED_CAR_PREVIEW_HINT": "Example car only. The game chooses the model and paint and may leave this slot empty.",
 	"CREATE_PROP_POLYGON": "Polygon",
 	"PROP_LINE_WIDTH": "Width (m)",
 	"PROP_LINE_SPACING": "Spacing (m; steps of 0.25 m)",

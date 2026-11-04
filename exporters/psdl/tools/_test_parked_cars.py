@@ -47,11 +47,63 @@ def row(slots, forward=(0, 0, 1)):
     return dict(name='row', kind='road', owner='', slots=slots, forwards=[forward] * len(slots))
 
 
+def single(name='Single parked car', position=(3.0, 7.0, 11.0), forward=(0, 0, 1), owner=''):
+    element = strip(name, [position], owner, forward)
+    element['type'] = element['data']['fields']['state']['type'] = 'parkedCar'
+    element['data']['fields']['state']['propRule']['main']['type'] = 'parkedCar'
+    element['data']['propLines'][0]['props'][0]['meshId'] = 0  # the fixed preview must never become a normal prop
+    return element
+
+
 def straight(count=4, step=6.0, x=3.0):
     return [(x, 1.0, i * step) for i in range(count)]
 
 
 class ParkedCars(unittest.TestCase):
+    def test_single_car_uses_one_horizontal_slot_at_its_position_and_heading(self):
+        for yaw in (0, 37, 90, 180, 270):
+            forward = (math.sin(math.radians(yaw)), 0, math.cos(math.radians(yaw)))
+            with self.subTest(yaw=yaw), tempfile.TemporaryDirectory() as directory:
+                data = dict(customElements=[single(forward=forward)])
+                export_parked_cars(data, directory + '/', 'x')
+                paths = read_paths(Path(directory) / 'x_parkedcar.pathset')
+                self.assertEqual(len(paths), 1)
+                _, typ, raw, points = paths[0]
+                self.assertEqual(typ, 2)
+                self.assertEqual(len(points), 2)
+                self.assertEqual(points[0], (-3, 7, 11))
+                self.assertAlmostEqual(points[1][1], 7)
+                self.assertAlmostEqual(math.dist(*points), 6, places=5)
+                self.assertAlmostEqual(points[1][0] - points[0][0], -6 * forward[0], places=5)
+                self.assertAlmostEqual(points[1][2] - points[0][2], 6 * forward[2], places=5)
+                self.assertEqual(len(native_positions(points, raw)), 1)
+
+    def test_single_cars_and_rows_share_city_and_race_files(self):
+        data = dict(roads=[road('City row', straight(2))], customElements=[single(), single('Race car', (9, 0, 0), owner='A')],
+                    cityProperties=dict(circuitRaces=[dict(_elementContainerId='A')]))
+        with tempfile.TemporaryDirectory() as directory:
+            export_parked_cars(data, directory + '/', 'x')
+            self.assertEqual(len(read_paths(Path(directory) / 'x_parkedcar.pathset')), 2)
+            paths = read_paths(Path(directory) / 'x_parkedcar_circuit0.pathset')
+            self.assertEqual(len(paths), 3)
+            self.assertEqual(paths[0][3][0], (-9, 0, 0))
+
+    def test_single_cars_count_towards_the_shared_path_limit(self):
+        data = dict(customElements=[single(str(i)) for i in range(MAX_PATHS + 1)])
+        with tempfile.TemporaryDirectory() as directory, patch('parked_car_export.report.error') as error:
+            export_parked_cars(data, directory + '/', 'x')
+            self.assertEqual(len(read_paths(Path(directory) / 'x_parkedcar.pathset')), MAX_PATHS)
+            self.assertIn('the last 1', error.call_args.args[0])
+
+    def test_single_car_previews_are_not_exported_as_ordinary_props(self):
+        element = single()
+        parts = []
+        export_prop_placer(SimpleNamespace(data=dict(meshDict=[dict(name='geometry/giz_pcar01_l.pkg')])), element, parts)
+        self.assertEqual(parts, [])
+        JsonProcessor.get_road_props(SimpleNamespace(data=dict(meshDict=[])), parts, element,
+                                     element['data']['fields']['state']['propRule'], 'customElement')
+        self.assertEqual(parts, [])
+
     def test_path_mirrors_x_and_gives_the_last_slot_a_span(self):
         points, raw = get_path(row(straight()))
         self.assertEqual(points, [(-3.0, 1.0, i * 6.0) for i in range(5)])

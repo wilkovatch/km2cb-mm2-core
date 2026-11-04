@@ -43,8 +43,8 @@ class BinaryWriter:
     def close(self):
         self.file.close()
 
-# the props type of the rows of parked cars, exported by parked_car_export.py instead of as props
-PARKED_CARS_TYPE = 'parkedCars'
+# the props types of parked car rows and single slots, exported by parked_car_export.py instead of as props
+PARKED_CARS_TYPES = ('parkedCars', 'parkedCar')
 
 
 def placed_props(line):

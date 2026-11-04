@@ -213,7 +213,8 @@
 		"types": [
 			"individualProp",
 			"propLine",
-			"propPolygon"
+			"propPolygon",
+			"parkedCar"
 		],
 		"contentGroups": [
 			{
@@ -222,7 +223,8 @@
 				"types": [
 					"individualProp",
 					"propLine",
-					"propPolygon"
+					"propPolygon",
+					"parkedCar"
 				]
 			}
 		],

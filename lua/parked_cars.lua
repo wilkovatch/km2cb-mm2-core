@@ -6,6 +6,24 @@ local MODELS = { "geometry/giz_pcar01_l.pkg", "geometry/giz_pcar02_l.pkg", "geom
 -- the exporter gives a row a vertex at each slot, the game needs a span of at least 5 m
 local MIN_SPACING, MAX_SPACING = 5.25, 100
 
+-- A point element uses a short, horizontal reference line to give its single slot a position and heading.
+function M.singleGeometry(_, ctx)
+    local center = ctx.points.center
+    local yaw = math.rad((ctx.rotations.center or vec3(0, 0, 0)).y)
+    local forward = vec3(math.sin(yaw), 0, math.cos(yaw))
+    local right = vec3(math.cos(yaw), 0, -math.sin(yaw)) * 0.5
+    return { propLines = {
+        { container = "main", startBound = { center + right, center + right + forward },
+          endBound = { center - right, center - right + forward } }
+    } }
+end
+
+function M.single(_, ctx)
+    local line = ctx.sample(0.5, 0)
+    -- Always show an example, even though the game may leave the slot empty.
+    return { { position = line.position, forward = line.tangent, model = MODELS[1] } }
+end
+
 function M.row(v, ctx)
     -- stock: rand() % 3, 0 leaves the slot empty and the other two give the two models
     -- MM2Hook (UseAllParkedCars): rand() % 4, 0 leaves the slot empty and the other three give the three models

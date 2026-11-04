@@ -3,7 +3,7 @@ import math
 import os
 from collections import Counter
 import numpy as np
-from utils import state_val, state_bool, state_int, state_vector, placed_props, PARKED_CARS_TYPE
+from utils import state_val, state_bool, state_int, state_vector, placed_props, PARKED_CARS_TYPES
 from common.bai_writer import MAX_INTERSECTION_ROADS
 from common import report
 from psdl_parts import ExportedCityElement, get_tex
@@ -547,7 +547,7 @@ class JsonProcessor:
         if prop_lines is not None and type(prop_rule) is dict:
             for key in prop_rule:
                 value = prop_rule[key]
-                if isinstance(value, dict) and value['type'] not in ('psdl', PARKED_CARS_TYPE):
+                if isinstance(value, dict) and value['type'] not in ('psdl', *PARKED_CARS_TYPES):
                     for value2 in prop_lines:
                         if value2['name'] == key:
                             # TODO: prop lines

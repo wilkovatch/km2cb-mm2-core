@@ -1,4 +1,4 @@
-"""The rows of the parkedCars props type: the parked cars of the game (race/<city>/<city>_parkedcar[_<race>].pathset).
+"""Parked car rows and single slots: the parked cars of the game (race/<city>/<city>_parkedcar[_<race>].pathset).
 
 The game chooses the cars itself: for each slot of a path it places one of the giz_pcar models or nothing, along the
 direction of the path, so the models of the editor are only an example and the rows have all the placements of the type.
@@ -15,7 +15,7 @@ from common import report
 from common.pathset_writer import MAX_PATHS
 from race_elements import races, IDENTITY, OWNER
 from route_pathset import write_routes
-from utils import state_val, state_bool, PARKED_CARS_TYPE
+from utils import state_val, state_bool, PARKED_CARS_TYPES
 
 MIN_SPACING = 5  # the game uses 5 m for anything lower
 MAX_SPACING_RAW = 255
@@ -38,7 +38,7 @@ def container_rows(name, state, prop_lines, kind, owner=''):
     if not isinstance(rule, dict):
         return rows
     for key, container in rule.items():
-        if not isinstance(container, dict) or container.get('type') != PARKED_CARS_TYPE:
+        if not isinstance(container, dict) or container.get('type') not in PARKED_CARS_TYPES:
             continue
         line = next((l for l in prop_lines or [] if l.get('name') == key), None)
         if line is None or not line.get('props'):

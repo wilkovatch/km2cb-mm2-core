@@ -1,0 +1,20 @@
+{
+    "createMenu": {
+        "direct": true,
+        "submenu": "PROPS_MENU"
+    },
+    "propertyContainerCategory": "race",
+    "point": {
+        "rotatable": true,
+        "rotationAxes": [false, true, false],
+        "project": false,
+        "projectionMask": 136
+    },
+    "geometry": "parked_cars.singleGeometry",
+    "propsContainers": ["main"],
+    "defaultPreset": {
+        "propRule": {
+            "main": { "type": "parkedCar" }
+        }
+    }
+}

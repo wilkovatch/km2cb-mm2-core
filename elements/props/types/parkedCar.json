@@ -1,0 +1,8 @@
+{
+    "label": "CREATE_PARKED_CAR",
+    "nestedOnly": true,
+    "placement": "parked_cars.single",
+    "meshTransform": true,
+    "parametersInfo": { "parameters": [] },
+    "uiInfo": []
+}
