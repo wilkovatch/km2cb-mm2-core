@@ -16,10 +16,6 @@ The **Props** submenu also turns blue: individual props, mass placement, prop li
 
 The race panel's Contents list edits and deletes owned elements. Cloning a race copies its contents with independent control points; deleting a race removes them together, with undo/redo support. Race props export separately to `race/<city>/<race-id>.pathset`, alongside that race's AIMAP and opponent files, and are included in archive exports. The exporter tracks its own race prop filenames to remove stale files after race deletion or reordering.
 
-Core migration 5 backs up older cities and converts their existing opponents to owned spline elements, preserving starting cars, tuning, difficulty, waypoint order and incomplete routes. Race settings, checkpoints and police cars remain in their existing containers.
-
-Difficulty subcontainers use the existing saved opponent difficulty and police arrays, so existing cities keep their data without an additional migration. Cloning, deleting, undoing and reloading a race preserve both setups. Export formats and the professional fallback are unchanged.
-
 ## Surface projection
 
 The terrain grid is a placement guide in MM2. Elements that automatically project onto city surfaces, such as decals, first search roads, intersections, terrain patches, supported custom geometry and INST meshes. They use the grid only if no supported city surface is found, even when that surface is several metres below it. Roads and other elements that explicitly follow the heightmap keep doing so.
@@ -167,7 +163,7 @@ Be careful if you add railings, as they can only be placed on the block perimete
 
 - **Parked car** places one native parked-car slot with one click, without a mesh selector. Move it and rotate its heading with the normal point controls, including editing its height. Use the **Project to ground** button to put it on the surface beneath it; it keeps its height until you move or project it again, without following later surface changes. It cannot be scaled, pitched or rolled. The editor always shows `giz_pcar01_l` as an example: the game chooses the model and paint and may leave the slot empty, as with **Parked cars** rows. It exports to the same parked-car file, including race ownership, and each single slot uses one of the file's 192 paths. The preview mesh is not exported as an ordinary prop or INST mesh.
 
-Prop lines, polygons and individual props support their own property presets, undo/redo, shared or anchored control points, and selection by clicking any generated prop. Parked cars use the normal point-element undo/redo and save/reload lifecycle. Migration 5 backs up older cities and removes the experimental standalone prop rules before loading; ordinary road rules and converted road rules are preserved.
+Prop lines, polygons and individual props support their own property presets, undo/redo, shared or anchored control points, and selection by clicking any generated prop. Parked cars use the normal point-element undo/redo and save/reload lifecycle.
 
 Third-party software:
 - The Python packages used by this core (`pythonInfo/requirements.txt`) are installed with pip from PyPI, their licenses are in `pythonInfo/licenses.txt`.
@@ -190,10 +186,6 @@ Developer checks: `python scripts/importCity/_test_import_city.py` runs short sy
 `_test_sidewalks.py` uses the same builder CLI and environment variables for a short sidewalk regression: synthetic strips and end caps, plus ten fixed-seed stock attributes when a source root is supplied. It checks the generated mesh, point order, cap markers, undo/redo, save/reload and PSDL re-export.
 
 The fixed-seed ten-route SF/London check preserves sampled lane counts and ambient permissions, with lane-position differences below 0.03 mm. Existing exporter vertex welding changes some surface vertices by up to 3.3 cm. On two curved London routes, sidewalk curves stay close but their samples at corresponding road sections shift by 10–14 m as sections are regenerated. Close lanes alone therefore do not establish equivalent pedestrian or traffic behavior. This bounded check does not replace an in-game check of a whole imported city.
-
-### Decal migration
-
-Core version 3 migrates manual decals from city properties into spline-driven custom elements, preserving their names, textures, widths and centerline points as low-poly splines. The normal migration creates backups first and also preserves incomplete decals for editing. The old Decals tab and automatic rail settings are removed. **Previously automatic rail decals are not baked:** generate intersection connections with the new button and place any road-length decals separately.
 
 ## Assume using MM2Hook
 
