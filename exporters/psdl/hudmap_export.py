@@ -288,8 +288,8 @@ class HudmapExporter:
 
         image = Image.new('RGB', (w * ss, h * ss), self.colors['background'])
         draw = ImageDraw.Draw(image)
-        # where the outline can be drawn (the pixels of the OUTLINED categories)
-        outlined = Image.new('L', image.size, 0) if outline > 0 else None
+        # Allow outlines on uncovered background; surfaces replace this with their category rule.
+        outlined = Image.new('L', image.size, 255) if outline > 0 else None
         outlined_draw = ImageDraw.Draw(outlined) if outline > 0 else None
         for category in DRAW_ORDER:
             triangles = shapes.in_rect(category, cull)

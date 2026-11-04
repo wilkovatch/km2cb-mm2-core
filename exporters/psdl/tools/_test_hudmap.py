@@ -43,6 +43,56 @@ def shapes():
 
 
 class HudmapTests(unittest.TestCase):
+    def test_road_outline_on_uncovered_background(self):
+        road = Shapes()
+        road.add('road', [(30, 20), (70, 20), (70, 80)])
+        road.add('road', [(30, 20), (70, 80), (30, 80)])
+        for settings in ({}, dict(hudmapColorBackground='#204060', hudmapColorOutline='#123456')):
+            e = exporter('.', [], hudmapOutlineWidth=2, **settings)
+            for outline in (True, False):
+                with self.subTest(settings=settings, outline=outline):
+                    image = e.render(road, (0, 0, 100, 100), (100, 100), outline=outline)
+                    self.assertEqual(image.getpixel((28, 50)), e.colors['outline' if outline else 'background'])
+                    self.assertEqual(image.getpixel((27, 50)), e.colors['background'])
+                    self.assertEqual(image.getpixel((50, 50)), e.colors['road'])
+            e.outline_width = 0
+            image = e.render(road, (0, 0, 100, 100), (100, 100))
+            self.assertEqual(image.getpixel((28, 50)), e.colors['background'])
+
+    def test_road_outline_keeps_surface_category_rules(self):
+        e = exporter('.', [], hudmapOutlineWidth=2)
+        for category in ('ground', 'building', 'grass', 'water', 'landmark'):
+            with self.subTest(category=category):
+                surface = Shapes()
+                surface.add(category, [(0, 0), (100, 0), (100, 100)])
+                surface.add(category, [(0, 0), (100, 100), (0, 100)])
+                surface.add('road', [(30, 20), (70, 20), (70, 80)])
+                surface.add('road', [(30, 20), (70, 80), (30, 80)])
+                image = e.render(surface, (0, 0, 100, 100), (100, 100))
+                expected = e.colors['outline' if category in ('ground', 'building') else category]
+                self.assertEqual(image.getpixel((28, 50)), expected)
+                self.assertEqual(image.getpixel((27, 50)), e.colors[category])
+                self.assertEqual(image.getpixel((50, 50)), e.colors['road'])
+
+    def test_isolated_road_outline_exports_to_native_hud_tiles(self):
+        road = Shapes()
+        road.add('road', [(-20, -60), (20, -60), (20, 60)])
+        road.add('road', [(-20, -60), (20, 60), (-20, 60)])
+        with tempfile.TemporaryDirectory() as folder:
+            e = exporter(folder, [], hudmapMetersPerPixel=1, hudmapOutlineWidth=2, hudmapMargin=20)
+            self.assertTrue(e.export_hudmap(road))
+            with Image.open(Path(folder) / 'test_hudmap_preview.png') as image:
+                preview = image.convert('RGB')
+            self.assertEqual(preview.getpixel((106, 128)), e.colors['outline'])
+            self.assertEqual(preview.getpixel((105, 128)), e.colors['background'])
+            self.assertEqual(preview.getpixel((128, 128)), e.colors['road'])
+            texture = (Path(folder) / 'texture/test_hudmap0.tex').read_bytes()
+            width, height, kind, *_ = struct.unpack('<5HI', texture[:14])
+            self.assertEqual((width, height, kind), (256, 256, 17))
+            native = Image.frombytes('RGB', (width, height), texture[14:14 + width * height * 3]).transpose(Image.FLIP_TOP_BOTTOM)
+            self.assertIsNone(ImageChops.difference(native, preview).getbbox())
+            self.assertEqual(texture, (Path(folder) / 'texture/test_hudmap0_ni.tex').read_bytes())
+
     def test_background_falls_back_to_water(self):
         for water in ('', '#123456'):
             expected = (18, 52, 86) if water else DEFAULT_COLORS['water']
