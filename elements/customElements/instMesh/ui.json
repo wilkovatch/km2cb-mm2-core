@@ -1,45 +1,45 @@
 {
 	"label": "CREATE_INST_MESH",
-	"menuWidth": 1.8,
+	"menuWidth": 1.5,
 	"tabs": [
 		{
 			"label": "",
 			"elements": [
 				{
 					"name": "mainGroup",
-					"width": 1.8
+					"width": 1.5
 				},
 				{
 					"name": "placementGroup",
-					"width": 1.8
+					"width": 1.5
 				},
 				{
 					"name": "transformGroup",
-					"width": 1.8
+					"width": 1.5
 				},
 				{
 					"name": "hudmapCategory",
-					"width": 1.8
+					"width": 1.5
 				},
 				{
 					"name": "instLandmark",
-					"width": 1.8
+					"width": 0.75
 				},
 				{
 					"name": "instSimpleCollision",
-					"width": 1.8
+					"width": 0.75
 				},
 				{
 					"name": "instBanger",
-					"width": 1.8
+					"width": 0.75
 				},
 				{
 					"name": "instMultiroom",
-					"width": 1.8
+					"width": 0.75
 				},
 				{
 					"name": "instPaintJob",
-					"width": 1.8
+					"width": 1.5
 				}
 			]
 		}
