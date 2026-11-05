@@ -326,6 +326,237 @@ class HudmapTests(unittest.TestCase):
             preview = Image.open(Path(folder) / 'test_hudmap_labels_preview.png')
             self.assertIsNone(ImageChops.difference(original, preview).getbbox())
 
+    # One-way arrows
+
+    def arrow_exporter(self, roads, chains=None, hudmap_mpp=1, **props):
+        # roads: {key: (forward lanes, backward lanes, [center points], state)}, with the exported x (the game mirrors it)
+        records = {}
+        for key, (forward, backward, center, state) in roads.items():
+            state = dict(state, forwardLanes=forward, backwardLanes=backward)
+            sections = [[(x - 4, 0, z), (x - 3, 0, z), (x + 3, 0, z), (x + 4, 0, z)] for x, z in center]
+            records[key] = dict(road=dict(data=dict(fields=dict(state=state), mesh=dict(submeshes=[dict(materialId=-1)]))), sections=sections)
+
+        def bai_sections(rec, reverse):
+            return [list(reversed(s)) for s in reversed(rec['sections'])] if reverse else rec['sections']
+
+        def lane_counts(state):
+            return (0, 0) if state.get('disableTraffic') else (state['forwardLanes'], state['backwardLanes'])
+
+        jp = SimpleNamespace(data=dict(cityProperties=dict(hudmapMetersPerPixel=hudmap_mpp, **props)), exported_roads=records,
+                             get_bai_sections=bai_sections, get_bai_lane_counts=lane_counts)
+        if chains is not None:
+            jp.bai_chains = chains
+        return HudmapExporter(jp, None, {}, '.', False)
+
+    def blue(self, pixel):
+        return pixel[2] > 200 and pixel[0] < 60 and pixel[1] < 60
+
+    def pale(self, pixel):
+        return pixel[0] < 240 and pixel[1] < 240 and pixel[2] > 240
+
+    def road_shapes(self, e):
+        shapes = Shapes()
+        shapes.add('road', [(-5000, -5000), (5000, -5000), (-5000, 5000)])
+        shapes.add('road', [(5000, -5000), (5000, 5000), (-5000, 5000)])
+        shapes.arrows = e.get_arrows()
+        return shapes
+
+    def test_arrow_head_points_with_the_traffic(self):
+        # going +z in the export: south on the map (north is -z), the x of the export isn't mirrored at x = 0
+        line = [(0, -40), (0, 40)]
+        for lanes, head_south in (((2, 0), True), ((0, 2), False)):
+            with self.subTest(lanes=lanes):
+                e = self.arrow_exporter({'r': (lanes[0], lanes[1], line, {})})
+                image = e.render(self.road_shapes(e), (-50, -50, 50, 50), (100, 100), outline=False)
+                # 14 pixels from the middle of the road, the head in the last 4, widest at its back
+                self.assertTrue(self.blue(image.getpixel((50, 54 if head_south else 45))))
+                self.assertFalse(self.blue(image.getpixel((50, 45 if head_south else 54))))
+                # the shaft, pale on the other side of the head
+                self.assertTrue(self.pale(image.getpixel((50, 45 if head_south else 54))))
+                self.assertEqual(image.getpixel((50, 41 if head_south else 58)), e.colors['road'])
+                self.assertEqual(image.getpixel((53, 50)), e.colors['road'])
+
+    def test_arrow_x_is_mirrored_as_the_game(self):
+        # going +x in the export goes -x in the game: west, on the left of the map
+        e = self.arrow_exporter({'r': (1, 0, [(-40, 0), (40, 0)], {})})
+        image = e.render(self.road_shapes(e), (-50, -50, 50, 50), (100, 100), outline=False)
+        self.assertTrue(self.blue(image.getpixel((45, 50))))
+        self.assertFalse(self.blue(image.getpixel((54, 50))))
+
+    def test_arrows_only_on_one_way_roads_with_traffic(self):
+        far = [(-40, 0), (40, 0)]
+        for name, lanes, state, expected in (('one way', (1, 0), {}, 1), ('two way', (1, 1), {}, 0), ('no lanes', (0, 0), {}, 0),
+                                             ('no traffic', (1, 0), dict(disableTraffic=True), 0), ('pedestrian', (1, 0), dict(pedestrianStreet=True), 0),
+                                             ('hidden', (1, 0), dict(hudmapCategory=7), 0), ('ground', (1, 0), dict(hudmapCategory=1), 0),
+                                             ('road category', (1, 0), dict(hudmapCategory=6), 1)):
+            with self.subTest(name):
+                e = self.arrow_exporter({'r': (lanes[0], lanes[1], far, state)})
+                self.assertEqual(len(e.get_arrows()), expected)
+
+    def test_arrows_setting_and_color(self):
+        e = self.arrow_exporter({'r': (1, 0, [(-40, 0), (40, 0)], {})}, hudmapHideArrows=True)
+        self.assertEqual(e.get_arrows(), [])
+        e = self.arrow_exporter({'r': (1, 0, [(0, -40), (0, 40)], {})}, hudmapColorArrow='#ff0000')
+        image = e.render(self.road_shapes(e), (-50, -50, 50, 50), (100, 100), outline=False)
+        self.assertEqual(image.getpixel((50, 54)), (255, 0, 0))
+
+    def test_arrows_keep_their_distance_preferring_the_longest_road(self):
+        e = self.arrow_exporter({'short': (1, 0, [(-10, 0), (10, 0)], {}), 'long': (1, 0, [(-30, 15), (30, 15)], {}),
+                                 'far': (1, 0, [(-10, 200), (10, 200)], {}), 'tiny': (1, 0, [(-4, 400), (4, 400)], {})}, hudmap_mpp=1)
+        arrows = e.get_arrows()
+        # the distance is in pixels of the hudmap (20), the tiny road is below the minimum (10)
+        self.assertEqual([round(a[1][-1]) for a in arrows], [60, 20])
+        self.assertEqual(sorted(a[0][0][1] for a in arrows), [15, 200])
+
+    def test_arrows_of_a_row_of_roads_go_through_it(self):
+        # two short roads meeting at a seamless joint, the second one drawn the other way: one way as a whole
+        roads = {'a': (1, 0, [(0, -8), (0, 0)], {}), 'b': (0, 1, [(0, 8), (0, 0)], {})}
+        e = self.arrow_exporter(roads, chains=[[('a', False), ('b', True)]], hudmap_mpp=1)
+        arrows = e.get_arrows()
+        self.assertEqual(len(arrows), 1)
+        self.assertEqual(arrows[0][0], [(-0.0, -8.0), (-0.0, 0.0), (-0.0, 8.0)])
+        # not one way, as a whole
+        roads['b'] = (1, 0, [(0, 8), (0, 0)], {})
+        self.assertEqual(self.arrow_exporter(roads, chains=[[('a', False), ('b', True)]], hudmap_mpp=1).get_arrows(), [])
+
+    def test_arrow_follows_the_road_and_stays_on_a_short_one(self):
+        e = self.arrow_exporter({'r': (1, 0, [(-6, 0), (6, 0)], {})}, hudmap_mpp=1)
+        image = e.render(self.road_shapes(e), (-50, -50, 50, 50), (100, 100), outline=False)
+        # 12 m of road: the arrow ends at the end of the road (x -6 in the export, 6 in the game)
+        self.assertEqual(image.getpixel((58, 50)), e.colors['road'])
+        self.assertEqual(image.getpixel((42, 50)), e.colors['road'])
+        # around a bend
+        e = self.arrow_exporter({'r': (1, 0, [(0, -20), (0, 0), (20, 0)], {})}, hudmap_mpp=1)
+        image = e.render(self.road_shapes(e), (-50, -50, 50, 50), (100, 100), outline=False)
+        self.assertNotEqual(image.getpixel((50, 47)), e.colors['road'])
+        self.assertTrue(self.blue(image.getpixel((46, 50))))
+
+    def test_menu_maps_scale_the_arrows_between_limits(self):
+        e = self.arrow_exporter({'r': (1, 0, [(0, -400), (0, 400)], {})}, hudmap_mpp=5.5)
+        shapes = self.road_shapes(e)
+
+        def arrow_rows(meters_per_pixel):
+            size = 100
+            half = size * meters_per_pixel / 2
+            image = e.render(shapes, (-half, -half, half, half), (size, size), outline=False)
+            return sum(1 for y in range(size) if image.getpixel((50, y)) != e.colors['road'])
+
+        self.assertAlmostEqual(arrow_rows(5.5), 14, delta=1)  # as on the hudmap
+        self.assertAlmostEqual(arrow_rows(1), 14, delta=1)  # a zoomed race map: not bigger in pixels
+        self.assertAlmostEqual(arrow_rows(8), 14 * 5.5 / 8, delta=1)  # follows the map when it is smaller
+        self.assertAlmostEqual(arrow_rows(50), 7, delta=1)  # but not too small
+
+    def test_arrows_are_seamless_across_tiles(self):
+        e = self.arrow_exporter({'r': (1, 0, [(0, -60), (0, 60)], {})})
+        shapes = self.road_shapes(e)
+        whole = e.render(shapes, (-20, -20, 20, 20), (40, 40), outline=False)
+        tile = e.render(shapes, (-20, -20, 20, 2), (40, 22), outline=False)
+        self.assertIsNone(ImageChops.difference(whole.crop((0, 0, 40, 22)), tile).getbbox())
+
+    # Movable bridges
+
+    def bridge_element(self, id=1, start=(0, 0, -50), finish=(0, 0, 50), **state):
+        return dict(id=id, type='bridge', data=dict(name='Bridge', fields=dict(state=state)),
+                    points=dict(start=dict(position=list(start)), finish=dict(position=list(finish))))
+
+    def bridge_exporter(self, elements, roads=(), folder='.', **props):
+        data = dict(cityProperties=dict(props), customElements=elements, roads=list(roads), intersections=[], terrainPatches=[], buildingLines=[], meshInstances=[])
+        jp = SimpleNamespace(data=data, custom_elements=SimpleNamespace(hudmap_meshes=lambda: []), exported_roads={})
+        return HudmapExporter(jp, None, {}, folder, False)
+
+    def test_bridge_is_drawn_as_a_road_by_default(self):
+        e = self.bridge_exporter([self.bridge_element()])
+        shapes = e.get_shapes().with_bridges()
+        self.assertEqual(len(shapes.triangles['road']), 2)
+        image = e.render(shapes, (-50, -50, 50, 50), (100, 100), outline=False)
+        self.assertEqual(image.getpixel((50, 50)), e.colors['road'])
+        # the default width, along +z, across x
+        half = 18.5 / 2
+        self.assertEqual(image.getpixel((round(50 + half - 1), 50)), e.colors['road'])
+        self.assertEqual(image.getpixel((round(50 + half + 1), 50)), e.colors['background'])
+        self.assertEqual(image.getpixel((50, 1)), e.colors['road'])
+
+    def test_bridge_category(self):
+        for index, expected in ((5, 'landmark'), (6, 'road'), (1, 'ground')):
+            shapes = self.bridge_exporter([self.bridge_element(hudmapCategory=index)]).get_shapes().with_bridges()
+            self.assertEqual(len(shapes.triangles[expected]), 2)
+        shapes = self.bridge_exporter([self.bridge_element(hudmapCategory=7)]).get_shapes().with_bridges()
+        self.assertIsNone(shapes.bounds())
+
+    def test_bridge_incomplete_is_left_out(self):
+        same = self.bridge_element(start=(5, 0, 5), finish=(5, 0, 5))
+        missing = self.bridge_element()
+        del missing['points']['finish']
+        self.assertIsNone(self.bridge_exporter([same, missing]).get_shapes().with_bridges().bounds())
+
+    def test_bridge_width_comes_from_the_attached_roads_at_their_angle(self):
+        road = dict(id=7, data=dict(fields=dict(state=dict(totalWidth=30))))
+        element = self.bridge_element()
+        # the ends of the roads at 45 degrees: the deck is a parallelogram, without bow ties whichever way the roads go
+        element['points']['start']['anchor'] = dict(kind='road', id=7, insideDirection=[1, 0, -1])
+        element['points']['finish']['anchor'] = dict(kind='road', id=7, insideDirection=[-1, 0, 1])
+        e = self.bridge_exporter([element], [road])
+        triangles = e.get_shapes().with_bridges().triangles['road']
+        area = sum(abs((t[1][0] - t[0][0]) * (t[2][1] - t[0][1]) - (t[2][0] - t[0][0]) * (t[1][1] - t[0][1])) / 2 for t in triangles)
+        # the corners are on the end sections of the roads, 30 m long at 45 degrees from the 100 m between the hinges
+        self.assertAlmostEqual(area, 30 / 2 ** 0.5 * 100, delta=1e-6)
+        xs = [p[0] for t in triangles for p in t]
+        self.assertAlmostEqual(max(xs), 15 / 2 ** 0.5, delta=1e-6)
+
+    def test_bridge_width_comes_from_the_model_when_not_attached(self):
+        with tempfile.TemporaryDirectory() as folder:
+            geometry = Path(folder) / 'geometry'
+            geometry.mkdir()
+            sys.path.insert(0, str(CORE / 'exporters/psdl/tools'))
+            from _test_bridges import write_pkg
+            write_pkg(geometry / 'wide_bridge.pkg', [(-20, 0, -15), (20, 1, 15)])
+            e = self.bridge_exporter([self.bridge_element(mesh='geometry/wide_bridge.pkg')], folder=folder)
+            xs = [p[0] for t in e.get_shapes().with_bridges().triangles['road'] for p in t]
+            self.assertAlmostEqual(max(xs), 20, delta=1e-5)
+            self.assertAlmostEqual(min(xs), -20, delta=1e-5)
+
+    def test_race_bridges_are_only_on_the_maps_of_their_race(self):
+        city = self.bridge_element(1, (0, 0, -50), (0, 0, 50))
+        other = self.bridge_element(2, (300, 0, -50), (300, 0, 50))
+        added = self.bridge_element(3, (-300, 0, -50), (-300, 0, 50), _propertyContainerId='race-a')
+        replacement = self.bridge_element(4, (0, 0, -50), (0, 0, 50), _propertyContainerId='race-a', hudmapCategory=5, replaces=dict(kind='customElement', id=1))
+        foreign = self.bridge_element(5, (600, 0, -50), (600, 0, 50), _propertyContainerId='race-b')
+        shapes = self.bridge_exporter([city, other, added, replacement, foreign]).get_shapes()
+        base = shapes.with_bridges()
+        self.assertEqual((len(base.triangles['road']), len(base.triangles['landmark'])), (4, 0))
+        race = shapes.with_bridges('race-a')
+        # the other city bridge and the one it adds as roads, the replacement with its own category instead of the city one
+        self.assertEqual((len(race.triangles['road']), len(race.triangles['landmark'])), (4, 2))
+        self.assertLess(race.bounds()[0], -200 - 90)
+        self.assertEqual(shapes.with_bridges('race-b').bounds()[0], -600 - 18.5 / 2)
+
+    def test_exports_include_the_bridges(self):
+        with tempfile.TemporaryDirectory() as folder:
+            race = dict(_elementContainerId='race-a', checkpoints=[dict(checkpoint=dict(localPosition=dict(x=0, y=0, z=0)))])
+            bridge = self.bridge_element(1, (-200, 0, 0), (200, 0, 0), _propertyContainerId='race-a')
+            city = self.bridge_element(2, (0, 0, -300), (0, 0, 300))
+            e = self.bridge_exporter([bridge, city], folder=folder, circuitRaces=[race])
+            e.layout = OutputLayout(str(Path(folder) / 'test.psdl'))
+            e.margin = 20
+            e.export()
+            with Image.open(Path(folder) / 'test_hudmap_preview.png') as image:
+                preview = image.convert('RGB')
+            # only the city bridge on the HUD: north of the center, and nothing east of it where the bridge of the race is
+            center = preview.width // 2
+            self.assertEqual(preview.getpixel((center, center - 40)), e.colors['road'])
+            self.assertEqual(preview.getpixel((center + 20, center)), e.colors['background'])
+            with Image.open(Path(folder) / 'jpg/test_mapcircuit0.jpg') as image:
+                race_map = image.convert('RGB')
+            with Image.open(Path(folder) / 'jpg/test_maproam.jpg') as image:
+                roam_map = image.convert('RGB')
+
+            # along the middle of the maps: the bridge of the race crosses all of it, on the roam map there is only the city one
+            def whites(image):
+                y = (RACE_MAP_RECT[1] + RACE_MAP_RECT[3]) // 2
+                return sum(1 for x in range(RACE_MAP_RECT[0], RACE_MAP_RECT[2]) if min(image.getpixel((x, y))) > 240)
+            self.assertGreater(whites(race_map), 150)
+            self.assertLess(whites(roam_map), 20)
+
     def test_builder_export_json(self):
         if len(sys.argv) < 2 or not Path(sys.argv[1]).is_file():
             self.skipTest('optional builder export JSON not supplied')

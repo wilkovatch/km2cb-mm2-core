@@ -207,6 +207,19 @@
 			"type": "string"
 		},
 		{
+			"name": "hudmapColorArrow",
+			"label": "CP_HUDMAP_COLOR_ARROW",
+			"placeholder": "CP_HUDMAP_COLOR_ARROW_PH",
+			"tooltip": "CP_HUDMAP_COLOR_TOOLTIP",
+			"type": "string"
+		},
+		{
+			"name": "hudmapHideArrows",
+			"label": "CP_HUDMAP_HIDE_ARROWS",
+			"tooltip": "CP_HUDMAP_HIDE_ARROWS_TOOLTIP",
+			"type": "bool"
+		},
+		{
 			"name": "hudmapLabelFont",
 			"label": "CP_HUDMAP_LABEL_FONT",
 			"placeholder": "CP_HUDMAP_LABEL_FONT_PH",

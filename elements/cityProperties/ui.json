@@ -139,6 +139,14 @@
 					"width": 0.75
 				},
 				{
+					"name": "hudmapColorArrow",
+					"width": 0.75
+				},
+				{
+					"name": "hudmapHideArrows",
+					"width": 0.75
+				},
+				{
 					"name": "hudmapLabelFont",
 					"width": 1.5
 				}

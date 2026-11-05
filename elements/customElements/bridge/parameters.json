@@ -9,6 +9,7 @@
         { "name": "paired", "label": "BRIDGE_PAIRED", "tooltip": "BRIDGE_PAIRED_TOOLTIP", "type": "bool" },
         { "name": "behavior", "label": "BRIDGE_BEHAVIOR", "tooltip": "BRIDGE_BEHAVIOR_TOOLTIP", "type": "enum", "enumLabels": ["BRIDGE_TIMED", "BRIDGE_PROXIMITY", "BRIDGE_CLOSED", "BRIDGE_OPEN"] },
         { "name": "preview", "label": "BRIDGE_PREVIEW", "tooltip": "BRIDGE_PREVIEW_TOOLTIP", "type": "enum", "instanceSpecific": true, "enumLabels": ["BRIDGE_INITIAL", "BRIDGE_CLOSED", "BRIDGE_OPEN"] },
-        { "name": "replaces", "label": "BRIDGE_REPLACES", "tooltip": "BRIDGE_REPLACES_TOOLTIP", "type": "reference", "referenceTypes": ["customElement/bridge"] }
+        { "name": "replaces", "label": "BRIDGE_REPLACES", "tooltip": "BRIDGE_REPLACES_TOOLTIP", "type": "reference", "referenceTypes": ["customElement/bridge"] },
+        { "name": "hudmapCategory", "label": "HUDMAP_CATEGORY", "tooltip": "HUDMAP_CATEGORY_TOOLTIP", "type": "enum", "enumLabels": ["HUDMAP_CATEGORY_AUTO", "HUDMAP_CATEGORY_GROUND", "HUDMAP_CATEGORY_GRASS", "HUDMAP_CATEGORY_WATER", "HUDMAP_CATEGORY_BUILDING", "HUDMAP_CATEGORY_LANDMARK", "HUDMAP_CATEGORY_ROAD", "HUDMAP_CATEGORY_HIDDEN"] }
     ]
 }

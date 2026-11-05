@@ -1,13 +1,18 @@
+import bisect
 import math
 import os
 import re
+import struct
 from pathlib import Path
 
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
+from bridge_export import DEFAULT_MESH, find_file, pkg_size
 from common.file_io import BinaryFileHelper
 from common.tex_writer import write_image
-from utils import state_val, state_vector
+from prop_placers import model_name
+from race_elements import IDENTITY, OWNER
+from utils import state_bool, state_val, state_vector
 from common import report
 
 # The map of the city drawn from its geometry, seen from above with the north (-z in the game) up:
@@ -35,6 +40,7 @@ DEFAULT_COLORS = {
     'water': (8, 174, 235),
     'landmark': (215, 130, 134),
     'label': (0, 0, 0),
+    'arrow': (4, 0, 255),
 }
 DEFAULT_LABEL_FONT = Path(__file__).resolve().parents[2] / 'fonts/LiberationSans-Bold.ttf'
 LABEL_SUPERSAMPLING = 4
@@ -69,6 +75,23 @@ RACE_MAP_MIN_SIZE = 300.0
 DEFAULT_LABEL_SIZE = 6.75
 RACE_MAP_JPEG = dict(quality=98, subsampling=0)  # as the stock race maps: no chroma subsampling, almost lossless
 MARKER_RADIUS = 5.0
+
+# the arrows of the one-way roads, measured on the stock San Francisco hudmap: a pale shaft and a small solid head at the end
+# the traffic goes to, of a fixed size whatever the road, in pixels at the meters per pixel of the hudmap.
+# The stock maps have them on about a third of the one-way roads, placed by hand (36 in San Francisco, about 100 in London):
+# here one in the middle of the longest roads, at a minimum distance from each other (about 70 on the stock roads)
+ARROW_LENGTH = 14.0
+ARROW_HEAD_LENGTH = 4.0
+ARROW_HEAD_WIDTH = 3.0
+ARROW_SHAFT_WIDTH = 2.0
+ARROW_SHAFT_OPACITY = 0.22
+ARROW_MIN_ROAD_LENGTH = 10.0  # shorter roads get none, the ones shorter than the arrow get a shorter arrow
+ARROW_SPACING = 20.0
+ARROW_MIN_SCALE = 0.5  # on the menu maps the arrows follow the zoom of the map, up to the hudmap size and down to this
+
+# the movable bridges are drawn as their deck, from one hinge to the other. Its width is the one of the road attached to
+# each end, otherwise the one of the model, otherwise this (giz_bridge01_l with its railings)
+DEFAULT_BRIDGE_WIDTH = 18.5
 
 # mmHudMap values of the stock San Francisco
 MMHUDMAP = """type: a
@@ -131,6 +154,21 @@ def game_xz(v):
     return (-v[0], v[2])
 
 
+def path_lengths(points):
+    res = [0.0]
+    for a, b in zip(points, points[1:]):
+        res.append(res[-1] + math.dist(a, b))
+    return res
+
+
+def path_point(points, lengths, distance):
+    # the point of the path at a distance from its start
+    i = min(max(bisect.bisect_right(lengths, distance), 1), len(points) - 1)
+    span = lengths[i] - lengths[i - 1]
+    t = (distance - lengths[i - 1]) / span if span > 0 else 0
+    return (points[i - 1][0] + (points[i][0] - points[i - 1][0]) * t, points[i - 1][1] + (points[i][1] - points[i - 1][1]) * t)
+
+
 def rotate(q, v):
     # rotation of the vector v by the quaternion q (x, y, z, w)
     x, y, z, w = q
@@ -146,6 +184,20 @@ class Shapes:
     # the triangles (in game x, z) of each category
     def __init__(self):
         self.triangles = {c: [] for c in DRAW_ORDER}
+        self.arrows = []  # the paths of the one-way arrows: (points, lengths), in the direction of the traffic
+        self.bridges = []  # the movable bridges, see with_bridges
+
+    def with_bridges(self, owner=''):
+        # the shapes with the bridges of the city, and of a race if it owns some (without the city bridges they replace there)
+        res = Shapes()
+        res.triangles = {c: list(t) for c, t in self.triangles.items()}
+        res.arrows = self.arrows
+        replaced = {b['replaces'] for b in self.bridges if owner and b['owner'] == owner}
+        for bridge in self.bridges:
+            if bridge['owner'] == owner or (not bridge['owner'] and bridge['id'] not in replaced):
+                for tri in bridge['triangles']:
+                    res.add(bridge['category'], tri)
+        return res
 
     def add(self, category, tri):
         if category in self.triangles:
@@ -190,6 +242,7 @@ class HudmapExporter:
         tile_index = enum_index(p, 'hudmapTileSize')
         self.tile_size = TILE_SIZES[tile_index] if 0 <= tile_index < len(TILE_SIZES) else TILE_SIZES[0]
         self.fonts = {}
+        self.bridge_widths = {}
 
     # Shapes
 
@@ -239,6 +292,129 @@ class HudmapExporter:
         shapes.add(category, (corners[0], corners[1], corners[2]))
         shapes.add(category, (corners[0], corners[2], corners[3]))
 
+    def bridge_model_width(self, state):
+        model = model_name(state_val(state, 'mesh') or DEFAULT_MESH)
+        if model not in self.bridge_widths:
+            self.bridge_widths[model] = DEFAULT_BRIDGE_WIDTH
+            for root in (self.data.get('cityFolder'), self.common_dir):
+                path = find_file(Path(root) / 'geometry', model + '.pkg') if root else None
+                if path:
+                    try:
+                        self.bridge_widths[model] = pkg_size(path)[0]
+                    except (ValueError, OSError, IndexError, KeyError, struct.error) as error:
+                        report.warning('the model ' + model + ' could not be read, its bridges have the default width on the maps: ' + str(error))
+                    break
+        return self.bridge_widths[model]
+
+    def attached_road_end(self, point):
+        # the half width of the road a bridge point is attached to and the direction across it, None if there is none
+        anchor = point.get('anchor')
+        if not anchor or anchor.get('kind') != 'road':
+            return None
+        road = next((r for r in self.data.get('roads') or [] if r['id'] == anchor.get('id')), None)
+        direction = anchor.get('insideDirection')
+        if road is None or not direction:
+            return None
+        width = float(state_val(road['data']['fields']['state'], 'totalWidth', 0) or 0)
+        length = math.hypot(direction[0], direction[2])
+        if width <= 0 or length < 1e-6:
+            return None
+        return width / 2, (direction[2] / length, -direction[0] / length)
+
+    def add_bridge(self, shapes, element):
+        state = element['data']['fields']['state']
+        category = element_category(state)
+        category = 'road' if category == 'auto' else category
+        points = element.get('points') or {}
+        if category == 'hidden' or 'start' not in points or 'finish' not in points:
+            return
+        ends = [points['start'], points['finish']]
+        a, b = ends[0]['position'], ends[1]['position']
+        dx, dz = b[0] - a[0], b[2] - a[2]
+        length = math.hypot(dx, dz)
+        if length < 0.001:
+            return  # incomplete, as between the two clicks that place it
+        corners = []
+        for end in ends:
+            attached = self.attached_road_end(end)
+            half, across = attached or (self.bridge_model_width(state) / 2, (dz / length, -dx / length))
+            if across[0] * dz - across[1] * dx < 0:
+                across = (-across[0], -across[1])  # the roads at the two ends go opposite ways
+            p = end['position']
+            corners.append((game_xz((p[0] - across[0] * half, 0.0, p[2] - across[1] * half)),
+                            game_xz((p[0] + across[0] * half, 0.0, p[2] + across[1] * half))))
+        (left0, right0), (left1, right1) = corners
+        replaces = state_val(state, 'replaces')
+        shapes.bridges.append(dict(id=element.get('id'), owner=state_val(state, OWNER, '') or '', category=category,
+                                   replaces=replaces.get('id') if isinstance(replaces, dict) else None,
+                                   triangles=[(left0, right0, right1), (left0, right1, left1)]))
+
+    def is_drawn_as_road(self, road):
+        state = road['data']['fields']['state']
+        category = element_category(state)
+        if category != 'auto':
+            return category == 'road'
+        submeshes = (road['data'].get('mesh') or {}).get('submeshes') or []
+        return any(self.texture_category(self.material_texture(s['materialId']), 'road') == 'road' for s in submeshes)
+
+    def traffic_lanes(self, rec):
+        # the lanes (forward, backward) of an exported road, None if it has no traffic or isn't drawn as a road
+        element = rec.get('customElement')
+        if element is not None:
+            room = self.jp.custom_elements.room_of(element)
+            category = element_category(room['data']['fields']['state']) if room is not None else 'auto'
+            if category not in ('auto', 'road') or state_bool(element['data']['fields']['state'], 'alley'):
+                return None
+            return rec['forward_lanes'], rec['backward_lanes']
+        state = rec['road']['data']['fields']['state']
+        if state_bool(state, 'pedestrianStreet') or not self.is_drawn_as_road(rec['road']):
+            return None
+        return self.jp.get_bai_lane_counts(state)
+
+    def one_way_path(self, chain):
+        # the center of a row of one-way roads in the direction of the traffic, None if it isn't one
+        # (the forward lanes go from the start of a road to its end, as the left lanes of the BAI)
+        points = []
+        backward = None
+        for key, reverse in chain:
+            rec = self.jp.exported_roads.get(key)
+            lanes = self.traffic_lanes(rec) if rec is not None else None
+            if lanes is None or (lanes[0] > 0) == (lanes[1] > 0):
+                return None
+            road_backward = (lanes[1] > 0) != reverse  # going along the row
+            if backward is not None and road_backward != backward:
+                return None
+            backward = road_backward
+            for section in self.jp.get_bai_sections(rec, reverse):
+                # between the curbs
+                center = game_xz([(section[1][i] + section[-2][i]) / 2 for i in range(3)])
+                if len(points) == 0 or math.dist(points[-1], center) > 1e-6:
+                    points.append(center)
+        if len(points) < 2:
+            return None
+        if backward:
+            points.reverse()
+        return points, path_lengths(points)
+
+    def get_arrows(self):
+        if state_bool(self.props, 'hudmapHideArrows'):
+            return []
+        # the rows of roads of the BAI, then the roads outside of them (e.g. with a free end, as on a bridge)
+        chains = list(getattr(self.jp, 'bai_chains', []))
+        in_chains = {key for chain in chains for key, _ in chain}
+        chains += [[(key, False)] for key in getattr(self.jp, 'exported_roads', {}) if key not in in_chains]
+        paths = [path for path in map(self.one_way_path, chains)
+                 if path is not None and path[1][-1] >= ARROW_MIN_ROAD_LENGTH * self.meters_per_pixel]
+        paths.sort(key=lambda path: -path[1][-1])
+        res = []
+        centers = []
+        for points, lengths in paths:
+            center = path_point(points, lengths, lengths[-1] / 2)
+            if all(math.dist(center, other) >= ARROW_SPACING * self.meters_per_pixel for other in centers):
+                centers.append(center)
+                res.append((points, lengths))
+        return res
+
     def get_shapes(self):
         shapes = Shapes()
         # the ghosts (replaced by custom elements) are not drawn, the elements replacing them are
@@ -268,6 +444,10 @@ class HudmapExporter:
             self.add_mesh(shapes, mesh, element_category(room_state), default, default != 'building')
         for instance in self.data.get('meshInstances') or []:
             self.add_mesh_instance(shapes, instance)
+        for element in self.data.get('customElements') or []:
+            if element.get('type') == 'bridge':
+                self.add_bridge(shapes, element)
+        shapes.arrows = self.get_arrows()
         return shapes
 
     # Rendering
@@ -310,7 +490,42 @@ class HudmapExporter:
                     draw.polygon([to_px(p) for p in tri], fill=color)
                     if outlined_draw is not None:
                         outlined_draw.polygon([to_px(p) for p in tri], fill=255 if category in OUTLINED else 0)
+        self.draw_arrows(image, shapes.arrows, to_px, min(sx, sz) / ss)
         return image.resize((w, h), Image.BOX)
+
+    def draw_arrows(self, image, arrows, to_px, pixels_per_meter):
+        # over the roads, on the supersampled image; the shafts follow the road, each head points along its end
+        if len(arrows) == 0:
+            return
+        ss = SUPERSAMPLING
+        scale = min(max(self.meters_per_pixel * pixels_per_meter, ARROW_MIN_SCALE), 1)
+        arrow_meters = ARROW_LENGTH * scale / pixels_per_meter
+        head_meters = ARROW_HEAD_LENGTH * scale / pixels_per_meter
+        # one mask, so that the opacity doesn't add up where a shaft bends
+        shafts = Image.new('L', image.size, 0)
+        shafts_draw = ImageDraw.Draw(shafts)
+        heads = []
+        for points, lengths in arrows:
+            length = min(arrow_meters, lengths[-1])
+            start, end = (lengths[-1] - length) / 2, (lengths[-1] + length) / 2
+            inner = [p for p, s in zip(points, lengths) if start < s < end]
+            line = [to_px(p) for p in [path_point(points, lengths, start)] + inner + [path_point(points, lengths, end)]]
+            shafts_draw.line(line, fill=round(255 * ARROW_SHAFT_OPACITY), width=max(1, round(ARROW_SHAFT_WIDTH * scale * ss)), joint='curve')
+            tip = line[-1]
+            base = to_px(path_point(points, lengths, end - min(head_meters, length)))
+            dx, dy = tip[0] - base[0], tip[1] - base[1]
+            norm = math.hypot(dx, dy)
+            if norm == 0:
+                continue
+            dx, dy = dx / norm, dy / norm
+            head_length = ARROW_HEAD_LENGTH * scale * ss
+            back = (tip[0] - dx * head_length, tip[1] - dy * head_length)
+            side = (-dy * ARROW_HEAD_WIDTH * scale * ss / 2, dx * ARROW_HEAD_WIDTH * scale * ss / 2)
+            heads.append([tip, (back[0] + side[0], back[1] + side[1]), (back[0] - side[0], back[1] - side[1])])
+        image.paste(self.colors['arrow'], (0, 0) + image.size, shafts)
+        draw = ImageDraw.Draw(image)
+        for head in heads:
+            draw.polygon(head, fill=self.colors['arrow'])
 
     def draw_markers(self, image, rect, markers):
         # markers: [(x, z, color)], over the labels as in the stock maps
@@ -464,6 +679,7 @@ class HudmapExporter:
         file.close()
 
     def export_hudmap(self, shapes):
+        shapes = shapes.with_bridges()
         bounds = shapes.bounds()
         if bounds is None:
             report.warning("the city has nothing to draw, no hudmap exported")
@@ -549,17 +765,18 @@ class HudmapExporter:
                 for c in state_val(race, 'checkpoints', []) or []:
                     pos = state_vector(state_val(c, 'checkpoint', {}), 'localPosition')
                     points.append((-pos['x'], pos['z']))
-                res.append((prefix + str(i), points))
+                res.append((prefix + str(i), points, state_val(race, IDENTITY, '')))
         return res
 
     def export_race_maps(self, shapes):
-        bounds = shapes.bounds()
+        city_shapes = shapes.with_bridges()
+        bounds = city_shapes.bounds()
         if bounds is None:
             return
-        self.write_race_map(shapes, self.fit_rect(bounds, 0.02, 0), "roam", self.get_labels(True))
+        self.write_race_map(city_shapes, self.fit_rect(bounds, 0.02, 0), "roam", self.get_labels(True))
         races = self.get_races()
         labels = self.get_labels(False)
-        for race_id, points in races:
+        for race_id, points, owner in races:
             if len(points) == 0:
                 report.warning("the race " + race_id + " has no checkpoints, its map shows the whole city")
                 rect = self.fit_rect(bounds, 0.02, 0)
@@ -568,7 +785,7 @@ class HudmapExporter:
                 rect = self.fit_rect((min(xs), min(zs), max(xs), max(zs)), RACE_MAP_MARGIN, RACE_MAP_MIN_SIZE)
             # the start over the checkpoints
             markers = [(x, z, MARKER_CHECKPOINT) for x, z in points[1:]] + [(x, z, MARKER_START) for x, z in points[:1]]
-            self.write_race_map(shapes, rect, race_id, labels, markers)
+            self.write_race_map(shapes.with_bridges(owner), rect, race_id, labels, markers)
         print("Race maps exported! (roam and " + str(len(races)) + " races)")
 
     def export(self):

@@ -13,6 +13,7 @@
             { "name": "behavior", "width": 1.8 },
             { "name": "preview", "width": 1.8 },
             { "name": "replaces", "width": 1.8 },
+            { "name": "hudmapCategory", "width": 1.8 },
             { "name": "label:BRIDGE_PLACEMENT_HINT", "width": 1.8, "height": 1.2 },
             { "name": "pointsGroup", "width": 1.8 }
         ] }

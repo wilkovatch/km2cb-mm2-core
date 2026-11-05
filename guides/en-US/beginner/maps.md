@@ -16,7 +16,7 @@ Open the **Hudmap** tab of **Edit → City properties**:
 
 ## What appears on the map
 
-Roads and intersections are drawn as roads, terrain patches as ground, and the roofs of building lines as buildings. Grass and water are detected from the texture.
+Roads, intersections and movable bridges are drawn as roads, terrain patches as ground, and the roofs of building lines as buildings. Grass and water are detected from the texture. Small blue arrows show the direction of the one-way roads, as in the stock cities. To leave them out, check **Hide arrows** in the **Hudmap** tab.
 
 To change how something appears, use **Hudmap category** in its panel. For example, set a building to **Landmark** to draw it in red. Mesh instances are not drawn, unless you give them a category.
 

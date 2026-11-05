@@ -32,11 +32,27 @@ What each element draws as:
 | Terrain patches | Ground, or grass or water by their texture |
 | Perimeter-only patches | Not drawn |
 | Roofs of building lines | Buildings |
+| Movable bridges | Road |
 | Mesh instances | Not drawn |
 
 Grass and water come from the physics material of the texture in `city/materials.csv` (grass, mud, water, deepwater), or from its name (grass, park, lawn, water, pond, river, sea).
 
 **Hudmap category** overrides this on any of these elements. For example, use **Landmark** to draw a building in red, **Ground** for a walkway inside a block, or **Hidden**. A mesh instance with a category is drawn as its bounding box. The parts of roads passing through an intersection take the category of the intersection, unless they have their own.
+
+## One-way arrows
+
+All the maps show the direction of the one-way roads with small blue arrows, as in the stock cities. The head points the way the traffic goes.
+
+- The exporter chooses where they go. Each arrow is in the middle of a road, or of a row of roads joined by seamless intersections, starting from the longest ones and keeping them at least 20 pixels apart, so not every one-way road gets one. Roads shorter than 10 pixels get none.
+- Only roads with traffic that are drawn as roads get one, so a road with **Hidden** or another category doesn't.
+- The **Arrows** color changes them, and **Hide arrows** leaves them out.
+- On the race maps they are at most the size they have on the map of the HUD, and at least half of it.
+
+## Movable bridges
+
+A bridge is drawn as a straight deck between its two points, in the position of a closed bridge. Where a point is on the end of a road, the deck joins the edges of that road. Elsewhere it has the width of the model of the bridge, or about 18.5 m if the model isn't available.
+
+A bridge that belongs to a race is drawn only on the map of that race, instead of the city bridge it replaces, if any. The map of the HUD and the roam map show the city bridges.
 
 ## Labels
 
