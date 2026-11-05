@@ -28,6 +28,8 @@
 | `<city>_train.pathset` | Trains |
 | `<city>_sailboat.pathset` | Boats, ducks, tugs and water taxis |
 | `<city>_ferry.pathset` | The car ferry |
+| `<city>_bridge.pathset` | Movable bridges |
+| `<city>_bridge_<race>.pathset` | A complete set of bridges for that race, replacing the main file |
 | `<city>_parkedcar.pathset` | Parked cars |
 | `<city>_parkedcar_<race>.pathset` | The parked cars of one race, read instead of the main file |
 

@@ -1,0 +1,20 @@
+{
+    "createMenu": { "direct": true, "submenu": "MOVING_OBJECTS_SUBMENU" },
+    "presets": true,
+    "propertyContainerCategory": "race",
+    "replacesReference": "replaces",
+    "roadEndAnchors": true,
+    "placementPoints": ["start", "finish"],
+    "controlPoints": [
+        { "name": "start", "label": "BRIDGE_START", "defaultPosition": [0, 0, 0] },
+        { "name": "finish", "label": "BRIDGE_FINISH", "defaultPosition": [0, 0, 60] }
+    ],
+    "geometry": "bridges.geometry",
+    "defaultPreset": {
+        "paired": true,
+        "mesh": "geometry/giz_bridge01_l.pkg",
+        "trussTexture": "texture/tl_bridgetruss_side_l.tex",
+        "bottomTexture": "texture/tl_bridgetruss_bot_l.tex",
+        "railTexture": "texture/tl_bridgetrim_l.tex"
+    }
+}

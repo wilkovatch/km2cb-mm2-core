@@ -183,6 +183,10 @@
 		{
 			"name": "content:RACE_PROPS",
 			"width": 1.5
+		},
+		{
+			"name": "content:RACE_BRIDGES",
+			"width": 1.5
 		}
 	],
 	"elementContainer": {
@@ -191,7 +195,8 @@
 			"individualProp",
 			"propLine",
 			"propPolygon",
-			"parkedCar"
+			"parkedCar",
+			"bridge"
 		],
 		"contentGroups": [
 			{
@@ -203,6 +208,11 @@
 					"propPolygon",
 					"parkedCar"
 				]
+			},
+			{
+				"label": "RACE_BRIDGES",
+				"hint": "BRIDGES_CREATE_HINT",
+				"types": ["bridge"]
 			}
 		],
 		"commands": [

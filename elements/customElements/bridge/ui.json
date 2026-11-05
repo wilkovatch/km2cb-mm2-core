@@ -1,0 +1,20 @@
+{
+    "label": "CREATE_BRIDGE",
+    "menuWidth": 1.8,
+    "tabs": [
+        { "label": "", "elements": [
+            { "name": "mainGroup", "width": 1.8 },
+            { "name": "mesh", "width": 1.8 },
+            { "name": "convert:generateBridgeMesh", "width": 1.8 },
+            { "name": "trussTexture", "width": 1.8 },
+            { "name": "bottomTexture", "width": 1.8 },
+            { "name": "railTexture", "width": 1.8 },
+            { "name": "paired", "width": 1.8 },
+            { "name": "behavior", "width": 1.8 },
+            { "name": "preview", "width": 1.8 },
+            { "name": "replaces", "width": 1.8 },
+            { "name": "label:BRIDGE_PLACEMENT_HINT", "width": 1.8, "height": 1.2 },
+            { "name": "pointsGroup", "width": 1.8 }
+        ] }
+    ]
+}

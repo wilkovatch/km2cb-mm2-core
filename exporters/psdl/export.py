@@ -13,6 +13,7 @@ from prop_rules_export import PropRulesExporter
 from cinfo_aimap_export import CinfoAimapExporter
 from train_export import export_trains
 from boat_export import export_boats
+from bridge_export import export_bridges
 from parked_car_export import export_parked_cars
 from scene_input import StandaloneSceneInput
 from output_layout import OutputLayout
@@ -143,7 +144,7 @@ try:
 
     if write_pathset and not write_bin_only:
         # These are PATHSET files too; CINFO/AIMAP need not be selected to refresh them.
-        for label, export_paths in [('trains', export_trains), ('boats', export_boats), ('parked cars', export_parked_cars)]:
+        for label, export_paths in [('trains', export_trains), ('boats', export_boats), ('bridges', lambda *args: export_bridges(*args, get_common_dir())), ('parked cars', export_parked_cars)]:
             with report.guarded('the ' + label + ' were not written'):
                 export_paths(data, layout.dir('race'), layout.city_name)
 

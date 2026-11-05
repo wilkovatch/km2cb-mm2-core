@@ -19,6 +19,7 @@ import ExportReport
 from psdl_parts import ExportedCityElement
 from _test_parked_cars import single
 from _test_boats import boat, LOOP
+from _test_bridges import bridge
 from _test_prop_placers import read_paths
 
 
@@ -52,7 +53,7 @@ def processor(data, verbose):
 def city():
     opponent = dict(carModel=dict(meshPath='geometry/vpbug.pkg'), waypoints=[dict(waypoint=dict(localPosition=dict(x=1, y=0, z=2)))])
     race = dict(_elementContainerId='A', opponents=dict(opponents=[opponent]), checkpoints=[])
-    elements = [single(), single(owner='A'), boat('Boat', 0, LOOP), boat('Ferry', 5, LOOP),
+    elements = [single(), single(owner='A'), boat('Boat', 0, LOOP), boat('Ferry', 5, LOOP), bridge(), bridge(1, _propertyContainerId='A'),
                 dict(type='train', data=dict(name='Train'), points=dict(spline=[dict(id=i, position=p) for i, p in enumerate(LOOP)]))]
     for i, element in enumerate(elements):
         element['id'] = i
@@ -108,7 +109,8 @@ class ExportOverwrite(unittest.TestCase):
                         'race/test/mmblitzdata.csv', 'race/test/mmcircuitdata.csv', 'race/test/mmracedata.csv',
                         'race/test/roam.aimap', 'race/test/roam.aimap_p', 'race/test/test_parkedcar.pathset',
                         'race/test/test_parkedcar_circuit0.pathset', 'race/test/test_train.pathset',
-                        'race/test/test_sailboat.pathset', 'race/test/test_ferry.pathset'}
+                        'race/test/test_sailboat.pathset', 'race/test/test_ferry.pathset',
+                        'race/test/test_bridge.pathset', 'race/test/test_bridge_circuit0.pathset'}
             self.assertTrue(required <= expected.keys(), required - expected.keys())
             for name, payload in expected.items():
                 if not Path(name).name.startswith('.km2-'):
@@ -132,11 +134,11 @@ class ExportOverwrite(unittest.TestCase):
             data['customElements'][0]['data']['propLines'][0]['props'][0]['position'] = [30, 7, 11]
             self.run_export(directory, data, **flags)
             self.assertEqual(read_paths(path)[0][3][0], (-30, 7, 11))
-            for kind in ('train', 'sailboat', 'ferry'):
+            for kind in ('train', 'sailboat', 'ferry', 'bridge'):
                 self.assertTrue(path.with_name('test_' + kind + '.pathset').exists())
             data['customElements'] = []
             self.run_export(directory, data, **flags)
-            for kind in ('parkedcar', 'train', 'sailboat', 'ferry'):
+            for kind in ('parkedcar', 'train', 'sailboat', 'ferry', 'bridge'):
                 self.assertFalse(path.with_name('test_' + kind + '.pathset').exists())
 
     def test_cinfo_only_preserves_disabled_pathset_outputs(self):
@@ -152,7 +154,7 @@ class ExportOverwrite(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory, patch('train_export.export_trains', side_effect=ValueError('invalid train')):
             self.run_export(directory, cinfo_aimap=False, expected_exit=1)
             folder = Path(directory) / 'race/test'
-            for kind in ('parkedcar', 'sailboat', 'ferry'):
+            for kind in ('parkedcar', 'sailboat', 'ferry', 'bridge'):
                 self.assertTrue(read_paths(folder / ('test_' + kind + '.pathset')))
 
     def test_bin_only_overwrites_without_writing_city_routes(self):

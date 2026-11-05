@@ -40,6 +40,8 @@ def path_on_ground(slots, distance, name):
 
 
 def export_prop_placer(processor, element, result):
+    if element.get('type') == 'bridge':
+        return  # the models are previews of bridge_export.py's native leaves
     if element.get('validationError'):
         raise ValueError(element['validationError'])
     state = element['data']['fields']['state']

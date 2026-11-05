@@ -1,0 +1,14 @@
+{
+    "parameters": [
+        { "name": "mesh", "label": "BRIDGE_MODEL", "tooltip": "BRIDGE_MODEL_TOOLTIP", "type": "mesh" },
+        { "name": "trussTexture", "label": "BRIDGE_TRUSS_TEXTURE", "tooltip": "BRIDGE_TRUSS_TEXTURE_TOOLTIP", "type": "texture" },
+        { "name": "bottomTexture", "label": "BRIDGE_BOTTOM_TEXTURE", "tooltip": "BRIDGE_BOTTOM_TEXTURE_TOOLTIP", "type": "texture" },
+        { "name": "railTexture", "label": "BRIDGE_RAIL_TEXTURE", "tooltip": "BRIDGE_RAIL_TEXTURE_TOOLTIP", "type": "texture" },
+        { "name": "generatedMesh", "type": "string", "instanceSpecific": true },
+        { "name": "generatedLength", "type": "float", "instanceSpecific": true },
+        { "name": "paired", "label": "BRIDGE_PAIRED", "tooltip": "BRIDGE_PAIRED_TOOLTIP", "type": "bool" },
+        { "name": "behavior", "label": "BRIDGE_BEHAVIOR", "tooltip": "BRIDGE_BEHAVIOR_TOOLTIP", "type": "enum", "enumLabels": ["BRIDGE_TIMED", "BRIDGE_PROXIMITY", "BRIDGE_CLOSED", "BRIDGE_OPEN"] },
+        { "name": "preview", "label": "BRIDGE_PREVIEW", "tooltip": "BRIDGE_PREVIEW_TOOLTIP", "type": "enum", "instanceSpecific": true, "enumLabels": ["BRIDGE_INITIAL", "BRIDGE_CLOSED", "BRIDGE_OPEN"] },
+        { "name": "replaces", "label": "BRIDGE_REPLACES", "tooltip": "BRIDGE_REPLACES_TOOLTIP", "type": "reference", "referenceTypes": ["customElement/bridge"] }
+    ]
+}
