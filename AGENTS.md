@@ -19,6 +19,10 @@ The importer selects only PKG/MTX geometry, TEX/TGA textures, banger tuning and 
 
 Run the short synthetic tests with `python scripts/importGameAssets/_test_import_assets.py` from the core folder (standard library only). Test fixtures and outputs live in a temporary directory; use a writable `TMP`/`TEMP` if the sandbox's default temp directory is restricted. Stock checks should sample about ten entries with a fixed seed and compare them to the extracted data configured in the builder's local instructions; do not extract the entire game for a test. Helper/test filenames start with `_` so they cannot appear as separate Scripts-menu entries. Menu and runtime strings are in the script's `strings/en-US.json`.
 
+## Guides
+
+`guides/en-US/{beginner,advanced,export}` are the guides shown in **Help > Guides** (format in the builder's `wiki/Core-Guides.md`). They are written for users, so they leave out what the README leaves out (the PSDL attributes, migrations). When a feature changes, update them with the README: the export guide lists every flag of `exporters/psdl/settings.json` and every exported file, and the advanced guide the limits and `mm2.log` messages below. `selftest undo <new folder> --mode guide` in the builder checks their links and structure, not whether they are true.
+
 ## Coordinates
 
 The builder and this core are left-handed, Y up, +Z forward, +X right. MM2 game files mirror X (MM2 x = -builder x, the exporters handle it). In-game north is -Z and east is +X.

@@ -1,0 +1,18 @@
+{
+	"title": "Beginner guide",
+	"order": 1,
+	"chapters": [
+		"before-you-start",
+		"creating-the-city",
+		"roads",
+		"intersections",
+		"terrain",
+		"buildings",
+		"props-and-meshes",
+		"decals",
+		"trains-and-boats",
+		"races",
+		"maps",
+		"exporting"
+	]
+}

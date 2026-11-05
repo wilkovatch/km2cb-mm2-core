@@ -1,0 +1,19 @@
+{
+	"title": "Advanced guide",
+	"order": 2,
+	"chapters": [
+		"blocks",
+		"export-to-pkg",
+		"railings",
+		"traffic",
+		"cable-cars",
+		"low-lod-textures",
+		"props",
+		"parked-cars",
+		"decals",
+		"trains-and-boats",
+		"hudmap",
+		"surface-projection",
+		"limits"
+	]
+}

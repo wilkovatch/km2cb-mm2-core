@@ -1,0 +1,12 @@
+{
+	"title": "Export guide",
+	"order": 3,
+	"chapters": [
+		"dialog",
+		"layout",
+		"files",
+		"flags",
+		"archive",
+		"checking"
+	]
+}

@@ -4,6 +4,8 @@ The main repository for the city builder is here: https://github.com/wilkovatch/
 
 The exporter is included directly in this repository, including `exporters/psdl/common` and its original license. Cloning the core does not require submodules.
 
+The core includes a beginner guide, an advanced guide and an export guide, in **Help > Guides** of the city builder (the files are in `guides`).
+
 ## Creating races
 
 Create and select a race in City properties. **Create > Checkpoint** adds directly to that race. Open its **Amateur** or **Professional** subcontainer to edit that difficulty's police cars and opponents: **Create > Police car** and **Create > Opponent** use the selected difficulty automatically. Only that setup's police cars and opponent routes are visible and selectable. Blitz races have police cars but no opponents. While the police cars of the roam mode are being edited, **Create > Police car** adds to those instead.
