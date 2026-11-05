@@ -5,6 +5,7 @@ from collections import Counter
 import numpy as np
 from utils import state_val, state_bool, state_int, state_vector, placed_props, PARKED_CARS_TYPES
 from common.bai_writer import MAX_INTERSECTION_ROADS
+from common.inst_writer import INST_LANDMARK, INST_BANGER, INST_SIMPLE_COLLISION, INST_MULTIROOM, inst_modifiers
 from common import report
 from psdl_parts import ExportedCityElement, get_tex
 from custom_elements import CustomElementExporter
@@ -27,6 +28,31 @@ CABLE_CAR_RAIL_DECAL_WIDTH = 2.0
 DECAL_MAX_TEXTURE_NAME = 31
 # the game draws a decal with the room of the middle of its points 0 and 2, so a longer single decal is partly hidden
 DECAL_SINGLE_MAX_LENGTH = 25.0
+
+
+def get_inst_modifiers(mesh, state):
+    # the modifiers of the INST record of a mesh instance, warning about the combinations that don't work
+    if mesh.get('type') is None:
+        return inst_modifiers(0, INST_LANDMARK)  # the parametric objects have no parameters for them
+    landmark, banger = state_bool(state, 'instLandmark'), state_bool(state, 'instBanger')
+    simple_collision, multiroom = state_bool(state, 'instSimpleCollision'), state_bool(state, 'instMultiroom')
+    paint_job = int(state_int(state, 'instPaintJob'))
+    name = mesh['name']
+
+    def warn(text):
+        report.warning('the INST mesh ' + name + ' ' + text, element=name, kind='meshInstance')
+    if simple_collision and not landmark and not banger:
+        warn('has No wheel collision without Landmark: the game ignores it')
+    if banger and (landmark or simple_collision):
+        warn('is a Banger with Landmark or No wheel collision: the game creates a banger, and the original cities never combine them')
+    if multiroom and landmark:
+        warn('has Multiroom with Landmark: the game places it in a single block')
+    if not 0 <= paint_job <= 255:
+        warn('has the paint job ' + str(paint_job) + ', outside of the range from 0 to 255')
+        paint_job = max(0, min(255, paint_job))
+    flags = (INST_LANDMARK if landmark else 0) | (INST_BANGER if banger else 0)
+    flags |= (INST_SIMPLE_COLLISION if simple_collision else 0) | (INST_MULTIROOM if multiroom else 0)
+    return inst_modifiers(paint_job, flags)
 
 
 def euler_rotate(p, euler):
@@ -1257,7 +1283,7 @@ class JsonProcessor:
                     elem.name = str(index) + ',' + '0_PTH'
                 else:
                     elem.name = str(index) + ',' + str(cur_block) + '_INST'
-                    flags = str(int(state_val(state, 'instModifiers', 256))) # 256 is for inst objects visible from every angle (0 is for front only)
+                    flags = str(get_inst_modifiers(mesh, state))
                 elem.properties['original_name'] = mesh['name']
                 elem.properties['object'] = get_instance_mesh_name(dict_mesh)
                 elem.properties['flags'] = flags

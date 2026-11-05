@@ -115,15 +115,15 @@ class IndependentPointsMigration(unittest.TestCase):
 
     def test_versions_and_templates(self):
         settings = json.loads((CORE / 'settings.json').read_text())
-        self.assertEqual((settings['coreVersion'], settings['programVersion'], settings['featureVersion']), (6, 5, 1))
-        self.assertEqual(json.loads((CORE / 'templates/_common/preferences.json').read_text())['coreVersion'], 6)
+        self.assertEqual((settings['coreVersion'], settings['programVersion'], settings['featureVersion']), (7, 5, 1))
+        self.assertEqual(json.loads((CORE / 'templates/_common/preferences.json').read_text())['coreVersion'], 7)
         for kind in migration.POINT_TYPES:
             self.assertFalse(json.loads((CORE / ('elements/customElements/' + kind + '/settings.json')).read_text())['point']['anchorable'])
 
     def test_program_compatibility_and_migration_selection(self):
         with tempfile.TemporaryDirectory() as folder:
             helper = self.prepare_folder(pathlib.Path(folder))
-            self.assertEqual([pathlib.Path(p).name for p in helper.get_migrations_todo(5, 1)], ['6.py'])
+            self.assertEqual([pathlib.Path(p).name for p in helper.get_migrations_todo(5, 1)], ['6.py', '7.py'])
             for program, feature in ((4, 99), (5, 0)):
                 with self.assertRaisesRegex(Exception, 'CORE_IS_FOR_NEWER_PROGRAM'):
                     helper.get_migrations_todo(program, feature)

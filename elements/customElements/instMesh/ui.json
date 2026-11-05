@@ -22,7 +22,23 @@
 					"width": 1.8
 				},
 				{
-					"name": "instModifiers",
+					"name": "instLandmark",
+					"width": 1.8
+				},
+				{
+					"name": "instSimpleCollision",
+					"width": 1.8
+				},
+				{
+					"name": "instBanger",
+					"width": 1.8
+				},
+				{
+					"name": "instMultiroom",
+					"width": 1.8
+				},
+				{
+					"name": "instPaintJob",
 					"width": 1.8
 				}
 			]

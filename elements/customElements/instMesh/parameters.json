@@ -17,9 +17,34 @@
 			]
 		},
 		{
-			"name": "instModifiers",
-			"label": "INST_MODIFIERS",
-			"tooltip": "INST_MODIFIERS_TOOLTIP",
+			"name": "instLandmark",
+			"label": "INST_LANDMARK",
+			"tooltip": "INST_LANDMARK_TOOLTIP",
+			"type": "bool",
+			"defaultValue": true
+		},
+		{
+			"name": "instSimpleCollision",
+			"label": "INST_SIMPLE_COLLISION",
+			"tooltip": "INST_SIMPLE_COLLISION_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "instBanger",
+			"label": "INST_BANGER",
+			"tooltip": "INST_BANGER_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "instMultiroom",
+			"label": "INST_MULTIROOM",
+			"tooltip": "INST_MULTIROOM_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "instPaintJob",
+			"label": "INST_PAINT_JOB",
+			"tooltip": "INST_PAINT_JOB_TOOLTIP",
 			"placeholder": "VALUE_PH",
 			"type": "int"
 		}

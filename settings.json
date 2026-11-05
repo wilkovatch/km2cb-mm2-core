@@ -1,7 +1,7 @@
 {
 	"program": "km2CityBuilder",
 	"version": "0.3.0",
-	"coreVersion": 6,
+	"coreVersion": 7,
 	"coreFeatureVersion": 8,
 	"programVersion": 5,
 	"featureVersion": 1,

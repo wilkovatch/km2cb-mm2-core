@@ -23,13 +23,25 @@ The difference between an INST mesh and an individual prop can't be changed late
 
 Click a placed mesh to edit it: W moves, E rotates, R scales.
 
-> The game doesn't support scaling props. It only supports horizontal scaling of INST meshes visible from all angles, and their collision doesn't scale with them.
+> The game doesn't support scaling props. It only supports horizontal scaling of INST meshes with the **Landmark** option, and their collision doesn't scale with them.
 
 ## INST meshes need a block
 
 An INST mesh goes in the block under it, so it must stand on something that becomes a block. An invisible terrain patch works. Otherwise it is not exported.
 
 The game can only load about 600 different objects in the INST file. The same mesh used many times counts once, so reuse meshes. The exporter warns above 597.
+
+## INST mesh options
+
+| Option | What it does |
+|---|---|
+| **Landmark** | Visible from every angle, for monuments and other whole objects. It is on by default. Turn it off for facades, which are visible from the front only |
+| **No wheel collision** | Wheels don't collide with the mesh. It only works together with **Landmark** |
+| **Banger** | Creates a banger instead of a static mesh. Don't combine it with **Landmark** or **No wheel collision** |
+| **Multiroom** | Places the mesh in all the blocks its bound touches, as the tunnels of the original cities. The mesh needs a bound file, and it only works with **Landmark** off |
+| **Paint job** | Which paint job of the mesh to use |
+
+The exporter warns about combinations that don't work.
 
 ## Props along roads
 

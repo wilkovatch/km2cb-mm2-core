@@ -15,6 +15,17 @@ SLOTS_PER_OBJECT = 6
 RESERVED_GEOMETRY_SLOTS = 512
 MAX_OBJECTS = (GEOMETRY_SLOTS - RESERVED_GEOMETRY_SLOTS) // SLOTS_PER_OBJECT
 
+# The flags of an INST record, the high byte of its modifiers (midtown2.exe 0x4656f0, the low byte is the paint job).
+# The game doesn't read the other bits
+INST_LANDMARK = 1 << 0  # visible from every angle, with a bound if there is one
+INST_BANGER = 1 << 1  # a banger instead of a static instance, checked before the landmark flag
+INST_SIMPLE_COLLISION = 1 << 2  # no wheel collision, read only with the landmark flag
+INST_MULTIROOM = 1 << 5  # placed in all the rooms its bound touches, only without the landmark flag
+
+
+def inst_modifiers(paint_job, flags):
+    return paint_job | (flags << 8)
+
 
 class INSTWriter:
     def __init__(self, scene_input: SceneInput, filepath):
@@ -36,8 +47,8 @@ class INSTWriter:
         self.export_elem(rot, scalex, scaley, scalez, origo, iblock, obj_name, flags, axes)
 
     def process_pkg_group(self, group):
-        # the pkg is in coordinates relative to its pivot, 256 = visible from every angle
-        self.export_elem([0, 0, 0], 1, 1, 1, group.pivot, group.block, group.stem, 256)
+        # the pkg is in coordinates relative to its pivot
+        self.export_elem([0, 0, 0], 1, 1, 1, group.pivot, group.block, group.stem, inst_modifiers(0, INST_LANDMARK))
 
     def export_elem(self, rot, scalex, scaley, scalez, origo, iblock, obj_name, flags, axes=None):
         file = self.file
