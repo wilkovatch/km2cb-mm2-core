@@ -17,10 +17,10 @@ The archive includes the textures and meshes in the city folder, so nothing else
 Before you test, make sure that:
 
 - The roads and terrain are connected, with no gaps.
-- The start of each race is on a block.
+- The start of each race is on a room.
 - No intersection has more than 11 roads.
 - No road has more than 4 lanes per side.
-- Meshes and buildings stand on something that becomes a block.
+- Meshes and buildings stand on something that becomes a room.
 - The custom textures are in the city folder.
 
 > If you export without the BAI file, the game puts the player's car at the origin of the city, so make sure there is something there.
@@ -33,5 +33,5 @@ The most frequent causes are too many textures, too many different meshes, or to
 
 ## What's next
 
-- The [Advanced guide](../advanced/blocks.md) covers railings, cable car details, exporting elements as meshes, low-detail textures and much more.
+- The [Advanced guide](../advanced/rooms.md) covers railings, cable car details, exporting elements as meshes, low-detail textures and much more.
 - The [Export guide](../export/dialog.md) explains each exported file and each export option.

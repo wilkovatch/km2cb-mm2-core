@@ -1,6 +1,6 @@
 # Intersections
 
-Intersections appear when you connect roads, as in the Basic guide. Each one becomes a block of the city.
+Intersections appear when you connect roads, as in the Basic guide. Each one becomes a room of the city.
 
 Click on an intersection to set its **Sidewalk texture**, **Road texture** and **Default crosswalk texture**.
 

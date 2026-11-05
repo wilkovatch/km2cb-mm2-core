@@ -2,7 +2,7 @@
 
 This guide takes you through a complete Midtown Madness 2 city, one type of element at a time, and points out what each one needs to work in the game. It assumes you know the editor: if not, read the **Basic guide** in **Help → Guides** first.
 
-When you want more depth, the [Advanced guide](../advanced/blocks.md) picks up where this one stops, and the [Export guide](../export/dialog.md) explains the exported files.
+When you want more depth, the [Advanced guide](../advanced/rooms.md) picks up where this one stops, and the [Export guide](../export/dialog.md) explains the exported files.
 
 ## Import the game assets
 
@@ -32,7 +32,7 @@ The exported city is otherwise the same.
 
 A few facts explain most of the advice in this guide:
 
-- **The game divides the city into blocks.** Every road, intersection and terrain patch usually becomes a block, and blocks have to connect to each other exactly, point by point.
-- **Cars must always be on a block.** A car that crosses a gap between blocks leaves the city, as far as the game is concerned.
+- **The game divides the city into rooms.** Every road, intersection and terrain patch usually becomes a room, and rooms have to connect to each other exactly, point by point.
+- **Cars must always be in a room.** A car that crosses a gap between rooms leaves the city, as far as the game is concerned.
 - **Roads drive the traffic.** Ambient vehicles and pedestrians follow what you set on the roads.
 - **The game has limits.** Too many textures, meshes or roads at an intersection can crash it. The exporter warns you about most of them, so read its messages.

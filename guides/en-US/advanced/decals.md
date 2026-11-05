@@ -4,7 +4,7 @@
 
 Each decal is a strip with its texture tiled along it, in square tiles as wide as the strip, with a whole number of tiles in each piece.
 
-- **Pieces and blocks:** a decal is divided into pieces, one per segment, at most 25 m long. The game draws each piece only when the block where it starts is visible. So keep decals on the blocks: the export log warns about points outside of them.
+- **Pieces and rooms:** a decal is divided into pieces, one per segment, at most 25 m long. The game draws each piece only when the room where it starts is visible. So keep decals on the rooms: the export log warns about points outside of them.
 - **Height:** decals are lifted by 1 cm, to stay above the surface.
 - **Names:** the path of a decal is named after its texture, so texture names can have at most 31 characters.
 
@@ -24,7 +24,7 @@ A single decal is one piece of the same file:
 - Scale X is its width and scale Z its length. Presets include the size.
 - Only its center is put on the surface, so on a slope the rectangle stays flat.
 - A negative scale mirrors it, and it is then not drawn, so the export warns about it.
-- Keep it under 25 m, on the blocks.
+- Keep it under 25 m, on the rooms.
 
 ## Surfaces
 

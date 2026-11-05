@@ -9,7 +9,7 @@ Their height follows the surface below them, so you only need to place them wher
 
 ## Rules for the game
 
-- **Keep decals on the blocks.** The game draws each piece of a decal only when the block where it starts is visible. The export log warns about points outside of blocks.
+- **Keep decals on the rooms.** The game draws each piece of a decal only when the room where it starts is visible. The export log warns about points outside of rooms.
 - **The texture has to be in the game.** A decal's texture isn't exported with it, except in the archive, which includes the textures of the city folder. Transparent areas of the texture show what's under the decal.
 - **Keep texture names to 31 characters.**
 - **Keep a single decal under 25 m.**

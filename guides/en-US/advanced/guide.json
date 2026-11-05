@@ -2,7 +2,7 @@
 	"title": "Advanced guide",
 	"order": 2,
 	"chapters": [
-		"blocks",
+		"rooms",
 		"export-to-pkg",
 		"railings",
 		"traffic",

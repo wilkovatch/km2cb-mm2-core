@@ -13,7 +13,7 @@ If you want only some areas to have buildings, use invisible terrain patches for
 
 ## Rules for building lines
 
-- **Keep each line on a single border between two blocks.** This is mostly a problem for the outer ring of buildings created automatically around the city.
+- **Keep each line on a single border between two rooms.** This is mostly a problem for the outer ring of buildings created automatically around the city.
 - **Slopes are fine:** the presets fill the gaps with plain masonry, plaster or siding.
 
 ## Stock-style buildings
@@ -22,10 +22,10 @@ To make a building with no real ground floor, like most stock buildings, set the
 
 ## Collisions
 
-Each facade has a collision surface in the game. If cars can sometimes drive through a building, check **Fix bound by duplicating it** in its panel, which also adds the surface to the block in front. Use it only where needed.
+Each facade has a collision surface in the game. If cars can sometimes drive through a building, check **Fix bound by duplicating it** in its panel, which also adds the surface to the room in front. Use it only where needed.
 
 On a building line, it only applies when **Front only** is checked.
 
-## Which block?
+## Which room?
 
-A building line is placed in the block it stands on. So a building needs something under it that becomes a block: a road, an intersection or a terrain patch, which can be invisible.
+A building line is placed in the room it stands on. So a building needs something under it that becomes a room: a road, an intersection or a terrain patch, which can be invisible.

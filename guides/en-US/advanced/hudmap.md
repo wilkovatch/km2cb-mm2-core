@@ -37,7 +37,7 @@ What each element draws as:
 
 Grass and water come from the physics material of the texture in `city/materials.csv` (grass, mud, water, deepwater), or from its name (grass, park, lawn, water, pond, river, sea).
 
-**Hudmap category** overrides this on any of these elements. For example, use **Landmark** to draw a building in red, **Ground** for a walkway inside a block, or **Hidden**. A mesh instance with a category is drawn as its bounding box. The parts of roads passing through an intersection take the category of the intersection, unless they have their own.
+**Hudmap category** overrides this on any of these elements. For example, use **Landmark** to draw a building in red, **Ground** for a walkway inside a room, or **Hidden**. A mesh instance with a category is drawn as its bounding box. The parts of roads passing through an intersection take the category of the intersection, unless they have their own.
 
 ## One-way arrows
 

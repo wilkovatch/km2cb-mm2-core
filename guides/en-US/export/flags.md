@@ -42,9 +42,9 @@ This option writes `city/<city>.bin` and keeps it, for inspection and tools. **I
 In a loose export, exporting only what changed is quicker, and the files you skip aren't touched. For example:
 
 - **Only the traffic changed:** keep only **Export BAI** on.
-- **The meshes didn't change:** turn off **Export PKG and bound files**. The INST entries and the empty blocks are still written.
+- **The meshes didn't change:** turn off **Export PKG and bound files**. The INST entries and the empty rooms are still written.
 - **The map doesn't need updating:** turn off **Export hudmap and race maps**, which can take a while.
 
-Keep in mind that the files of different exports need to match, since they all describe the same city: after changing roads or blocks, export the PSDL and the files that depend on it together.
+Keep in mind that the files of different exports need to match, since they all describe the same city: after changing roads or rooms, export the PSDL and the files that depend on it together.
 
 Requirements: **Export hudmap and race maps** needs the Python module Pillow. Without it, the export warns and skips the maps.

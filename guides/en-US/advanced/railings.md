@@ -15,8 +15,8 @@ The **Continue** checkboxes at the bottom of the tab say whether the railing goe
 3. Click **Switch to railing placement**.
 4. Click the perimeter points of the patch where the railing goes.
 
-> Railings are placed on the perimeter of the **block**, not of the terrain patch. Select points that are also perimeter points of the block, or it won't work properly in the game.
+> Railings are placed on the perimeter of the **room**, not of the terrain patch. Select points that are also perimeter points of the room, or it won't work properly in the game.
 
-This matters most with **Merge with other connected patches**, since merged patches share a single block, and points between them aren't on its perimeter.
+This matters most with **Merge with other connected patches**, since merged patches share a single room, and points between them aren't on its perimeter.
 
 A railing can't start at vertex 0 of a perimeter when the perimeter can't be rotated: the export log warns about this.

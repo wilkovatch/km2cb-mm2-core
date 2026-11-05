@@ -4,8 +4,8 @@ Check **Export to PKG** on a road, intersection, terrain patch or building line 
 
 ## What happens
 
-- Roads, intersections and terrain patches still become blocks, but empty ones, with the perimeter of the element and no surface. The element is placed in its block through the INST file.
-- Building lines are placed in the block they are on, as usual.
+- Roads, intersections and terrain patches still become rooms, but empty ones, with the perimeter of the element and no surface. The element is placed in its room through the INST file.
+- Building lines are placed in the room they are on, as usual.
 - The meshes go in `geometry/<city>_mesh<n>.pkg`, with only the low level of detail, which the game uses at every distance.
 - Their collisions go in `bound/<city>_mesh<n>_BOUND.bnd`, `.bbnd` and `.ter`.
 
@@ -28,4 +28,4 @@ Bigger ones are skipped, with a warning.
 
 ## Saving time
 
-When the meshes haven't changed, uncheck **Export PKG and bound files** in the export dialog. The exporter then writes only the INST entries and the empty blocks.
+When the meshes haven't changed, uncheck **Export PKG and bound files** in the export dialog. The exporter then writes only the INST entries and the empty rooms.

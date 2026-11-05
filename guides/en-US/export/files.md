@@ -2,9 +2,9 @@
 
 ## City geometry and objects
 
-**`city/<city>.psdl`** is the city itself: the blocks with their roads, intersections, terrain, facades, roofs and railings. Its texture list comes from what you used.
+**`city/<city>.psdl`** is the city itself: the rooms with their roads, intersections, terrain, facades, roofs and railings. Its texture list comes from what you used.
 
-**`city/<city>.inst`** lists the static meshes (INST meshes, and elements exported to PKG), each in the block it stands on.
+**`city/<city>.inst`** lists the static meshes (INST meshes, and elements exported to PKG), each in the room it stands on.
 
 **`geometry/<city>_mesh<n>.pkg`** and **`bound/<city>_mesh<n>_BOUND.*`** are the meshes and collisions of the elements with **Export to PKG** checked. The ground type of the collisions comes from `city/materials.csv`, as explained in [Export to PKG](../advanced/export-to-pkg.md).
 

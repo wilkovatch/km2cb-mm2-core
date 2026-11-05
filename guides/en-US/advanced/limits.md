@@ -7,7 +7,7 @@
 | Lanes per side of a road | 4 | Drops the extra lanes, warns |
 | Roads at a traffic intersection | 11 | Splits the intersection, warns |
 | Different textures in the city | 511 in stock MM2 | Warns (see below) |
-| Texture index of a block with prop rules | Below 255 | Reorders them, or drops the props and warns |
+| Texture index of a room with prop rules | Below 255 | Reorders them, or drops the props and warns |
 | Different INST objects | About 600 | Warns above 597 |
 | PSDL vertices | 65536 | |
 | Paths in a pathset file | 192 | Reports an error, writes the first 192 |
@@ -30,9 +30,9 @@ Reuse textures, and delete low LOD textures you no longer use.
 
 | Message | Meaning | What to do |
 |---|---|---|
-| `PHYS.DeclareMover : mover not even in city` | A car is outside of every block | Look for gaps, and for edges not connected to a neighboring block |
+| `PHYS.DeclareMover : mover not even in city` | A car is outside of every room | Look for gaps, and for edges not connected to a neighboring room |
 | `Vehicle ... did not have permission to traverse intersection` | The **First in, first out** rule was broken | Try another rule at that intersection |
-| Exception at `0045da58` after "Placing props along road segments" (or "Invalid command" without the hook) | A block with a prop rule uses a texture index of 255 or more | Reduce the textures, or the blocks with prop rules |
+| Exception at `0045da58` after "Placing props along road segments" (or "Invalid command" without the hook) | A room with a prop rule uses a texture index of 255 or more | Reduce the textures, or the rooms with prop rules |
 | Exception at `004a48d8` after "Loading objects...", then `memMemoryAllocator::FindHeap failed` | Too many different objects | Export fewer elements to PKG, reuse meshes |
 | A crash in the ambient traffic (around `0053a0d2`) | An intersection with more than 11 roads | Reduce the roads there |
 | A crash at `005440c5`, in the update of lane vehicles | The cause isn't known yet | |

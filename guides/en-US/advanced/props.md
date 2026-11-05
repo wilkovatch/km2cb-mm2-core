@@ -16,9 +16,9 @@
 
 ## Prop rules and textures
 
-The game places prop rules only along blocks whose textures have an index below 255 in the PSDL. Otherwise it quits while loading the city, or crashes with MM2Hook.
+The game places prop rules only along rooms whose textures have an index below 255 in the PSDL. Otherwise it quits while loading the city, or crashes with MM2Hook.
 
-The exporter gives the lowest indices to the textures of divided roads, and then to the blocks with props. If more than about 255 textures are still needed, it warns, and the props of those blocks aren't exported.
+The exporter gives the lowest indices to the textures of divided roads, and then to the rooms with props. If more than about 255 textures are still needed, it warns, and the props of those rooms aren't exported.
 
 ## Pathset line and Custom line
 
