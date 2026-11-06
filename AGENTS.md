@@ -27,6 +27,7 @@ Read every topic relevant to the task before changing the core or running its wo
 
 | Before working on... | Read |
 |---|---|
+| API/undo scenarios, fixtures, focused checks or test baselines | [Developer tests](docs/agents/testing.md) and [test commands](tests/README.md) |
 | Any exporter change, native engine limits, crashes or reverse-engineering setup | [Exporter workflow and engine limits](docs/agents/exporting.md) |
 | Stock asset extraction, DAVE archives, city importing or importer round trips | [Game assets and city importing](docs/agents/assets-and-importing.md) |
 | PSDL attributes, converters, rooms, BAI lanes or pedestrians | [PSDL custom elements and BAI](docs/agents/psdl-and-bai.md) |
