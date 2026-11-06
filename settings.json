@@ -12,5 +12,11 @@
 	"customMeshFormats": [
 		"pkg"
 	],
-	"viewToggles": []
+	"viewToggles": [],
+	"developerPaths": [
+		"tests",
+		"docs",
+		"AGENTS.md",
+		"CLAUDE.md"
+	]
 }

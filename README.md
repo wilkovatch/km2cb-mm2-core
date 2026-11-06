@@ -3,6 +3,10 @@ This core for [km2 City Builder](https://github.com/wilkovatch/km2-city-builder)
 > [!NOTE]
 > Claude Code and other AI agents were used during the development of this project and for writing its documentation, including this README, and the in-app guides.
 
+## Installing
+
+Install the core from **Settings → Preferences → Cores** of the city builder. The core manager installs and updates it to its tagged releases, and **Show info** lists the changes of each release.
+
 ## Guides
 
 The core includes a beginner guide, an advanced guide and an export guide, in **Help > Guides** of the city builder (the files are in `guides`). They explain how to build a city, the MM2 features and limits, and every export option and exported file.

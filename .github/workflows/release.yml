@@ -1,0 +1,77 @@
+# Tags a release of the core whenever a push to main changes the files installed by the city builder
+# (changes to the tests, the developer documentation, the README and the workflows alone are ignored; the guides count).
+# The tag is v<version>-<short commit hash>, with <version> taken from settings.json, like the city builder's releases.
+# It is an annotated tag whose message is the changelog (the commits since the previous release, version number
+# increases excluded): the city builder installs and updates cores to their latest release tag and shows these messages
+# as the changelog, so only plain git is needed and no release page is created.
+name: Tag release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '**'
+      - '!tests/**'
+      - '!docs/**'
+      - '!README.md'
+      - '!AGENTS.md'
+      - '!CLAUDE.md'
+      - '!.github/**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # the full history is needed for the previous tag and the changelog
+          fetch-depth: 0
+
+      - name: Determine the version
+        id: version
+        run: |
+          VERSION=$(jq -r .version settings.json)
+          TAG="v$VERSION-$(git rev-parse --short HEAD)"
+          echo "TAG=$TAG" >> "$GITHUB_ENV"
+          if git rev-parse -q --verify "refs/tags/$TAG" > /dev/null; then
+            echo "The release $TAG already exists, nothing to do."
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # commits that only change the version number in settings.json are left out
+      - name: Write the changelog
+        if: steps.version.outputs.exists == 'false'
+        run: |
+          PREV=$(git describe --tags --abbrev=0 --match 'v*' HEAD 2>/dev/null || true)
+          RANGE=${PREV:+$PREV..}HEAD
+          paths=(. ':(exclude)tests' ':(exclude)docs' ':(exclude,top)README.md' ':(exclude,top)AGENTS.md' ':(exclude,top)CLAUDE.md' ':(exclude).github')
+          is_version_bump() {
+            [ "$(git show --format= --name-only "$1" -- "${paths[@]}")" = "settings.json" ] || return 1
+            local lines
+            lines=$(git show --format= --unified=0 "$1" -- settings.json | grep -E '^[+-]' | grep -Ev '^(\+\+\+|---) ') || return 1
+            ! grep -Evq '^[+-][[:space:]]*"version"[[:space:]]*:[[:space:]]*"[^"]*",?[[:space:]]*$' <<< "$lines"
+          }
+          changes=$(git log $RANGE --no-merges --format='%h' -- "${paths[@]}" | while read -r commit; do
+            is_version_bump "$commit" || git log -1 --format='- %s (%h)' "$commit"
+          done)
+          echo "${changes:-- No changes to the core files}" > notes.txt
+          cat notes.txt
+
+      - name: Create the tag
+        if: steps.version.outputs.exists == 'false'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -F notes.txt "$GITHUB_SHA"
+          git push origin "refs/tags/$TAG"

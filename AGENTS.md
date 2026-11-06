@@ -13,6 +13,10 @@ Never commit original game data (`city/materials.csv`, stock `.pkg`/`.tex`/bound
 
 Do not put migrations information in the README, the migration process should be transparent to users.
 
+## Releases and installs
+
+`.github/workflows/release.yml` tags every push to `main` that changes installed files as `v<version>-<short hash>` (`version` from `settings.json`), with an annotated tag whose message is the changelog. The builder's core manager installs and updates users' copies only to these tags and shows the messages under **Show info**. Increase `version` before pushing a release that users should see as new, and keep migration-breaking work off `main` until it is complete. User installs leave out the `developerPaths` of `settings.json` (`tests`, `docs`, `AGENTS.md`, `CLAUDE.md`); add new developer-only paths there. Develop in a plain `git clone`, which keeps every file; an install from the core manager is sparse (`git sparse-checkout disable` turns it into a full checkout).
+
 ## Guides
 
 `guides/en-US/{beginner,advanced,export}` are the guides shown in **Help > Guides** (format in the builder's `wiki/Core-Guides.md`). They are the detailed user documentation and leave out internals (the PSDL attributes, migrations). The README stays a short overview of the core (what it supports, game files, exporting, licenses) and points to the guides: don't add step-by-step instructions or feature details to it, only a line to its Features list for a major new feature. When a feature changes, update the guides: the export guide lists every flag of `exporters/psdl/settings.json` and every exported file, and the advanced guide the [limits and `mm2.log` messages](docs/agents/exporting.md#midtown-madness-2-reference). `selftest undo <new folder> --mode guide` in the builder checks their links and structure, not whether they are true.
