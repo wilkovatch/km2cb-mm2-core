@@ -18,7 +18,7 @@ CORE = Path(__file__).resolve().parents[2]
 sys.path.append(str(CORE / 'exporters' / 'psdl'))
 sys.path.append(str(CORE / 'server'))
 import custom_element_conversion as cec
-from common.tex_writer import write_image
+from writers.tex_writer import write_image
 from texture_formats import read_file
 from utils import state_bool, state_int, state_val
 

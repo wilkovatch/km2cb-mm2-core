@@ -4,8 +4,8 @@ import json
 import os
 import re
 from utils import state_val
-from common.pathset_writer import PATHSETWriter
-from common import report
+from writers.pathset_writer import PATHSETWriter
+from writers import report
 
 OWNER = '_propertyContainerId'
 IDENTITY = '_elementContainerId'
@@ -72,7 +72,7 @@ def write_props(scene, data, layout):
         with open(manifest, encoding='utf-8') as stream:
             previous = json.load(stream)
     names = []
-    present = {scene.get_property_container(obj).get('race') for obj in scene.get_object_list()}
+    present = {part.properties.get('race') for part in scene.parts}
     for race_id, race in races(data):
         owner = state_val(race, IDENTITY, '')
         if not owner or owner not in present:

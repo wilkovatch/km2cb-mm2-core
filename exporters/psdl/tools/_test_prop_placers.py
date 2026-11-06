@@ -22,9 +22,8 @@ sys.path.insert(0, str(CORE.parents[1] / 'python'))
 from prop_placers import export_prop_placer
 from prop_rules_export import PropRulesExporter
 from utils import placed_props
-from bin_export import BINExporter
-from scene_input import StandaloneSceneInput
-from common.pathset_writer import PATHSETWriter, MAX_PATHS
+from scene import Scene
+from writers.pathset_writer import PATHSETWriter, MAX_PATHS
 from MigrationHelper import MigrationHelper
 
 spec = importlib.util.spec_from_file_location('prop_placer_migration', CORE / 'migrations/5.py')
@@ -52,12 +51,9 @@ def read_paths(path):
 
 
 def write_paths(parts, directory):
-    processor = SimpleNamespace(get_objects=lambda: parts)
     target = str(Path(directory) / 'props.psdl')
     with contextlib.redirect_stdout(io.StringIO()):
-        binary = str(Path(directory) / 'parts.bin')
-        BINExporter(processor, False).export_bin_file(binary)
-        PATHSETWriter(StandaloneSceneInput(binary), target).write()
+        PATHSETWriter(Scene(parts), target).write()
     return read_paths(Path(directory) / 'props/props.pathset')
 
 
@@ -105,7 +101,7 @@ class PropPlacers(unittest.TestCase):
         self.assertEqual(native_positions([[0, 0, 0], [0, 0, 3]], 20), [])
         self.assertEqual(len(native_positions([[0, 0, 0], [0, 0, 3], [0, 0, 8]], 20)), 1)
 
-    def test_native_lines_stay_separate_in_actual_binary_writer(self):
+    def test_native_lines_stay_separate_in_actual_writer(self):
         parts = []
         for spacing in (0.25, 5, 10, 63.75):
             export_prop_placer(SimpleNamespace(data={}), line(spacing), parts)
@@ -119,7 +115,7 @@ class PropPlacers(unittest.TestCase):
         parts = []
         for _ in range(MAX_PATHS + 1):
             export_prop_placer(SimpleNamespace(data={}), line(), parts)
-        with tempfile.TemporaryDirectory() as directory, patch('common.pathset_writer.report.error') as error:
+        with tempfile.TemporaryDirectory() as directory, patch('writers.pathset_writer.report.error') as error:
             paths = write_paths(parts, directory)
         self.assertEqual(len(paths), MAX_PATHS)
         self.assertIn('the last 1 are left out', error.call_args.args[0])

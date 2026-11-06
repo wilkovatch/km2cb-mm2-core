@@ -6,12 +6,13 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from types import SimpleNamespace
 import numpy as np
 
 CORE = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(CORE / 'exporters/psdl'))
 sys.path.insert(0, str(CORE.parents[1] / 'python'))
-from common.decal_writer import DecalWriter
+from writers.decal_writer import DecalWriter
 from decal_check import read_pathset, check_path
 
 spec = importlib.util.spec_from_file_location('decal_migration', CORE / 'migrations/3.py')
@@ -20,12 +21,11 @@ spec.loader.exec_module(migration)
 
 
 class Scene:
-    def __init__(self, objects): self.objects = objects
-    def get_object_list(self): return self.objects
-    def get_object_name(self, obj): return obj['name']
-    def get_property_container(self, obj): return obj['properties']
-    def get_vertices_num(self, obj): return len(obj['vertices'])
-    def get_vertex(self, obj, i): return obj['vertices'][i]
+    # the parts as the writers read them (see scene.py), from dicts already in the space of the writers
+    def __init__(self, objects):
+        self.parts = [SimpleNamespace(name=o['name'], type=o['name'].split(',')[-1].split('_')[1],
+                                      properties=o['properties'], vertices=[tuple(v) for v in o['vertices']])
+                      for o in objects]
 
 
 def audit_preview(export_json, pathset):
@@ -120,7 +120,7 @@ class DecalTests(unittest.TestCase):
             self.assertFalse((Path(tmp)/'test/decals.pathset').exists())
 
     def test_single_decal_corners_and_export(self):
-        from json_processor import JsonProcessor, decal_single_corners
+        from decals import decal_single_corners, export_single_decal
         corners = decal_single_corners(dict(position=[10, 2, 20], scale=[2, 1, 10]))
         np.testing.assert_allclose(corners, [[9, 2, 15], [11, 2, 15], [9, 2, 25], [11, 2, 25]])
         # yaw 90 turns the length (Z) to X; the size and the winding (seen from above in the editor's left-handed space,
@@ -135,13 +135,11 @@ class DecalTests(unittest.TestCase):
         # pitch 90 lowers the far end (a positive X rotation tips the front down, as in the engine)
         c = np.array(decal_single_corners(dict(position=[0, 0, 0], rotation=[90, 0, 0], scale=[2, 1, 10])))
         np.testing.assert_allclose(c[2] - c[0], [0, -10, 0], atol=1e-9)
-        processor = JsonProcessor.__new__(JsonProcessor)
-        processor.find_block = lambda position: 0
-        processor.get_tex = lambda tex: tex.split('/')[-1]
+        processor = SimpleNamespace(find_block=lambda position: 0, get_tex=lambda tex: tex.split('/')[-1])
         decal = dict(type='decalSingle', data=dict(name='Single', fields=dict(state=dict(texture='texture/zebra.tex'))),
                      points=dict(center=dict(id=0, position=[10, 2, 20], rotation=[0, 0, 0], scale=[2, 1, 10])))
         res = []
-        processor.get_single_decal(decal, res)
+        export_single_decal(processor, decal, res)
         self.assertEqual(len(res), 1)
         self.assertEqual(res[0].name, '0_DECAL')
         self.assertEqual(res[0].properties['texture'], 'zebra')
@@ -149,7 +147,7 @@ class DecalTests(unittest.TestCase):
         self.assertEqual(len(res[0].vertices), 4)
         res = []
         decal['data']['fields']['state']['texture'] = ''
-        processor.get_single_decal(decal, res)
+        export_single_decal(processor, decal, res)
         self.assertEqual(res, [])
 
     def test_city_import_creates_editable_splines_and_reports_width_loss(self):

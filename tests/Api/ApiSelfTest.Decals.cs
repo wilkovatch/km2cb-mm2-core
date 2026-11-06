@@ -10,11 +10,17 @@ namespace Api {
         static float[] SplinePosition(Vector3 value) => new[] { value.X, value.Y, value.Z };
 
         //the PSDL attributes are not in the Create menu: the checks of the grouped creation make their group creatable for a while
-        static System.Action MakeGroupCreatable(string group) {
-            var hidden = CityElements.Types.Parsers.TypeParser.GetCustomElementTypes().Values.Select(t => t.typeData.settings)
-                .Where(s => !s.creatable && s.createMenu?.group == group).ToList();
-            foreach (var s in hidden) s.creatable = true;
-            return () => { foreach (var s in hidden) s.creatable = false; };
+        //the core has no grouped types: two types go in the default creation group (CREATE_CUSTOM_ELEMENT) for the test
+        const string TestCreationGroup = "CREATE_CUSTOM_ELEMENT";
+        static System.Action MakeTestCreationGroup() {
+            var types = CityElements.Types.Parsers.TypeParser.GetCustomElementTypes();
+            var settings = new[] { "train", "movingObject" }.Select(t => types[t].typeData.settings).ToList();
+            var saved = settings.Select(s => (s.createMenu, s.creatable)).ToList();
+            foreach (var s in settings) {
+                s.createMenu = new CityElements.Types.CustomElementCreateMenu { group = TestCreationGroup };
+                s.creatable = true;
+            }
+            return () => { for (int i = 0; i < settings.Count; i++) (settings[i].createMenu, settings[i].creatable) = saved[i]; };
         }
 
         async Task Decals() {
@@ -23,9 +29,7 @@ namespace Api {
             var schema = await Call("state.schema", new { @ref = 0 });
             Check("manual and automatic decals are no longer city properties", !schema["parameters"].Any(p =>
                 p["name"].Value<string>() == "decals" || p["name"].Value<string>() == "cableCarRailDecals"));
-            var psdlTypes = types.Values.Where(t => t.typeData.settings.createMenu?.group == "CREATE_PSDL_ELEMENT").ToList();
-            Check("decals have a direct menu entry and PSDL elements are hidden from the Create menu", types["decal"].typeData.settings.createMenu.direct &&
-                psdlTypes.Count > 0 && psdlTypes.All(t => !t.typeData.settings.creatable));
+            Check("decals have a direct menu entry", types["decal"].typeData.settings.createMenu.direct);
             builder.ReloadCreateMenu();
             var menu = CallBuilder<MenuBar>("GetMenuBar").FindChildren("*", nameof(MenuButton), true, false).OfType<MenuButton>()
                 .First(b => b.Text == StringManager.Get("CREATE")).GetPopup();
@@ -39,7 +43,6 @@ namespace Api {
             Check("the decals keep their full names outside of the menu", Operations.CustomElements.GetTypeLabel("decal") == StringManager.Get("CREATE_DECAL") &&
                 Operations.CustomElements.GetTypeLabel("decalSingle") == StringManager.Get("CREATE_DECAL_SINGLE"));
             var direct = Enumerable.Range(0, decalsMenu.ItemCount).First(i => decalsMenu.GetItemText(i) == splineLabel);
-            Check("Create exposes a direct decal and no PSDL group", !Enumerable.Range(0, menu.ItemCount).Any(i => menu.GetItemText(i) == StringManager.Get("CREATE_PSDL_ELEMENT")));
             decalsMenu.EmitSignal(PopupMenu.SignalName.IdPressed, decalsMenu.GetItemId(direct));
             History.UndoManager.Record("place first spline point", () => builder.customElementPlacer.PlaceAt(new GameEngine.Raycast.RaycastHit { point = new Vector3(-700, 0, -700) }));
             var clicked = builder.customElementPlacer.GetElement();
@@ -53,14 +56,14 @@ namespace Api {
             var clickedId = History.ElementRegistry.GetId(clicked);
             await Call("customElement.delete", new { element = clickedId });
             await IntersectionDecalPlacement();
-            var restore = MakeGroupCreatable("CREATE_PSDL_ELEMENT");
+            var restore = MakeTestCreationGroup();
             try {
                 builder.ReloadCreateMenu();
-                var grouped = Enumerable.Range(0, menu.ItemCount).First(i => menu.GetItemText(i) == StringManager.Get("CREATE_PSDL_ELEMENT"));
+                var grouped = Enumerable.Range(0, menu.ItemCount).First(i => menu.GetItemText(i) == StringManager.Get(TestCreationGroup));
                 menu.EmitSignal(PopupMenu.SignalName.IdPressed, menu.GetItemId(grouped));
                 var groupedTypes = (List<string>)typeof(EditorPanels.CustomElementEditorPanel).GetField("creatableTypes",
                     System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(builder.customElementEditorPanel);
-                Check("the PSDL creation panel excludes direct decal entries", groupedTypes.Count > 0 && !groupedTypes.Contains("decal"));
+                Check("the grouped creation panel excludes direct decal entries", groupedTypes.Count > 0 && !groupedTypes.Contains("decal"));
                 builder.CloseAllPanels();
             } finally {
                 restore();
@@ -710,18 +713,6 @@ namespace Api {
                 if (id >= 0) await Call("customElement.delete", new { element = id });
                 types.Remove(key);
             }
-            var overlay = (await Call("customElement.create", new { type = "decal", points = new { spline = new[] {
-                new { position = new[] { 650, 0, 600 } }, new { position = new[] { 650, 0, 610 } } } } })).Value<int>();
-            var surface = (await Call("customElement.create", new { type = "triangleFan", mesh = new {
-                vertices = new[] { new { position = new[] { 640, 10, 590 } }, new { position = new[] { 640, 10, 620 } },
-                    new { position = new[] { 660, 10, 620 } }, new { position = new[] { 660, 10, 590 } } }, triangles = new[] { 0, 1, 2, 0, 2, 3 }
-            } })).Value<int>();
-            var overlayElement = (CustomElement)History.UndoManager.GetAliveElement(overlay);
-            Check("spline sections project onto custom element surfaces created later (" + overlayElement.splineData.sections[0].center[1] + ")", overlayElement.splineData.sections.All(s => Mathf.Abs(s.center[1] - 10) < 0.001f));
-            await Call("customElement.move", new { element = surface, offset = new[] { 0, 3, 0 } });
-            Check("moving a custom element surface refreshes projected spline sections (" + overlayElement.splineData.sections[0].center[1] + ")", overlayElement.splineData.sections.All(s => Mathf.Abs(s.center[1] - 13) < 0.001f));
-            await Call("customElement.delete", new { element = overlay });
-            await Call("customElement.delete", new { element = surface });
         }
 
         async Task ReloadSplines() {

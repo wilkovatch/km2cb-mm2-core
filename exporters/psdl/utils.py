@@ -1,47 +1,6 @@
 import os
-import struct
 from pathlib import Path
 
-
-class BinaryWriter:
-    def __init__(self, filepath):
-        self.file = open(filepath, 'wb')
-
-    def write_raw(self, value):
-        self.file.write(value)
-
-    def write_byte(self, value):
-        self.file.write(bytes([value]))
-
-    def write_string(self, string):
-        length = len(string)
-        self.write_byte(length)
-        if length > 0:
-            self.file.write(string.encode('ascii'))
-
-    def write_uint32(self, value):
-        byte_array = int(value).to_bytes(4, byteorder='little', signed=False)
-        self.file.write(byte_array)
-
-    def write_uint16(self, value):
-        byte_array = int(value).to_bytes(2, byteorder='little', signed=False)
-        self.file.write(byte_array)
-
-    def write_float(self, value):
-        float_value = float(value)
-        self.file.write(struct.pack('<f', float_value))
-
-    def write_vec3(self, value):
-        self.write_float(value[0])
-        self.write_float(value[2])
-        self.write_float(value[1])
-
-    def write_vec2(self, value):
-        self.write_float(value[0])
-        self.write_float(value[1])
-
-    def close(self):
-        self.file.close()
 
 # the props types of parked car rows and single slots, exported by parked_car_export.py instead of as props
 PARKED_CARS_TYPES = ('parkedCars', 'parkedCar')

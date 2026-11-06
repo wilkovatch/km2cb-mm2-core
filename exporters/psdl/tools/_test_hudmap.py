@@ -18,6 +18,7 @@ sys.path[:0] = [str(CORE / 'exporters/psdl'), str(CORE.parents[1] / 'python')]
 from hudmap_export import (HudmapExporter, Shapes, DEFAULT_COLORS, DEFAULT_LABEL_FONT, DEFAULT_LABEL_SIZE, LABEL_OPACITY,
                            LABEL_TRACKING, MARKER_CHECKPOINT, RACE_MAP_RECT)
 from output_layout import OutputLayout
+from traffic.paths import paths_from_sections
 from ar_packer import ArPacker
 from MigrationHelper import MigrationHelper
 
@@ -336,16 +337,12 @@ class HudmapTests(unittest.TestCase):
             sections = [[(x - 4, 0, z), (x - 3, 0, z), (x + 3, 0, z), (x + 4, 0, z)] for x, z in center]
             records[key] = dict(road=dict(data=dict(fields=dict(state=state), mesh=dict(submeshes=[dict(materialId=-1)]))), sections=sections)
 
-        def bai_sections(rec, reverse):
-            return [list(reversed(s)) for s in reversed(rec['sections'])] if reverse else rec['sections']
-
-        def lane_counts(state):
-            return (0, 0) if state.get('disableTraffic') else (state['forwardLanes'], state['backwardLanes'])
+        def paths(key, reverse=False):
+            res = paths_from_sections(records[key]['sections'], 0, 0)
+            return res.reversed() if reverse else res
 
         jp = SimpleNamespace(data=dict(cityProperties=dict(hudmapMetersPerPixel=hudmap_mpp, **props)), exported_roads=records,
-                             get_bai_sections=bai_sections, get_bai_lane_counts=lane_counts)
-        if chains is not None:
-            jp.bai_chains = chains
+                             traffic=SimpleNamespace(chains=chains or [], paths=paths))
         return HudmapExporter(jp, None, {}, '.', False)
 
     def blue(self, pixel):
@@ -461,7 +458,7 @@ class HudmapTests(unittest.TestCase):
 
     def bridge_exporter(self, elements, roads=(), folder='.', **props):
         data = dict(cityProperties=dict(props), customElements=elements, roads=list(roads), intersections=[], terrainPatches=[], buildingLines=[], meshInstances=[])
-        jp = SimpleNamespace(data=data, custom_elements=SimpleNamespace(hudmap_meshes=lambda: []), exported_roads={})
+        jp = SimpleNamespace(data=data, exported_roads={}, traffic=SimpleNamespace(chains=[]))
         return HudmapExporter(jp, None, {}, folder, False)
 
     def test_bridge_is_drawn_as_a_road_by_default(self):

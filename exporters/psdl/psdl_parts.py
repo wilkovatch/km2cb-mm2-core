@@ -1,8 +1,8 @@
-# The parts of the city as the PSDL writer reads them (written to the .bin file by BINExporter): each one is named
-# "<prefix,><block>_<TYPE>" (ROADS, ROADSN, ROADN, ROADD, ROADDN, RAIL, RAILC, SW, CW, IS, BLOCK, ROOF, FAC, FACB, SLIVER,
-# NUL, PKG, INST, PTH, BAI, TRAFL, DECAL), with its vertices, its triangles (used to find the perimeter of the block),
-# its textures and the properties of its type. They are made from the procedural elements (json_processor.py) and from
-# the custom elements (custom_elements.py), and the converters make custom elements from them.
+# The parts of the city as the writers read them (through scene.py, which converts them to the space of the writers):
+# each one is named "<prefix,><block>_<TYPE>" (ROADS, ROADSN, ROADN, ROADD, ROADDN, RAIL, RAILC, SW, CW, IS, BLOCK, ROOF,
+# FAC, FACB, SLIVER, NUL, PKG, INST, PTH, DECAL), with its vertices, its triangles (used to find the perimeter of the
+# block), its textures and the properties of its type. They are made from the elements of the city by json_processor.py
+# (and decals.py, prop_placers.py); see docs/exporter.md in the core.
 
 import os
 
@@ -20,7 +20,7 @@ class ExportedCityElement:
         self.translation = (0, 0, 0)
         self.rotation = (0, 0, 0, 1)
         self.scale = (1, 1, 1)
-        self.source = None  # the element of the city it comes from: (kind, id), not written to the .bin
+        self.source = None  # the element of the city it comes from: (kind, id)
 
     def part_type(self):
         return self.name.split(',')[-1].split('_')[1].split('.')[0]

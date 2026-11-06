@@ -1,33 +1,13 @@
 import copy
 import math
 import os
-from collections import Counter
 import numpy as np
 from utils import state_val, state_bool, state_int, state_vector, placed_props, PARKED_CARS_TYPES
-from common.bai_writer import MAX_INTERSECTION_ROADS
-from common.inst_writer import INST_LANDMARK, INST_BANGER, INST_SIMPLE_COLLISION, INST_MULTIROOM, inst_modifiers
-from common import report
+from writers.inst_writer import INST_LANDMARK, INST_BANGER, INST_SIMPLE_COLLISION, INST_MULTIROOM, inst_modifiers
+from writers import report
 from psdl_parts import ExportedCityElement, get_tex
-from custom_elements import CustomElementExporter
-
-# the ring of BAI intersections replacing an intersection with too many roads (see get_split_intersection): roads per
-# intersection of the ring (with the two ring roads, at most 5 as in the stock cities), ring radius (fraction of the mean
-# distance of the road ends from the centre), lanes per side and lane width of the ring roads, distance of the ring roads
-# from the intersections, distance between their sections
-SPLIT_GROUP_ROADS = 3
-SPLIT_RING_RADIUS = 0.65
-SPLIT_RING_LANES = 2
-SPLIT_RING_LANE_WIDTH = 3.5
-SPLIT_RING_END_DISTANCE = 8.0
-SPLIT_RING_STEP = 5.0
-
-# the decals (decals.pathset): the default widths, and the longest texture name the game reads
-DECAL_DEFAULT_WIDTH = 1.0
-CABLE_CAR_RAIL_DECAL_TEXTURE = 'r4i_rails_f'
-CABLE_CAR_RAIL_DECAL_WIDTH = 2.0
-DECAL_MAX_TEXTURE_NAME = 31
-# the game draws a decal with the room of the middle of its points 0 and 2, so a longer single decal is partly hidden
-DECAL_SINGLE_MAX_LENGTH = 25.0
+from traffic.network import BaiNetworkBuilder, is_seamless
+from decals import export_decals
 
 
 def get_inst_modifiers(mesh, state):
@@ -55,32 +35,6 @@ def get_inst_modifiers(mesh, state):
     return inst_modifiers(paint_job, flags)
 
 
-def euler_rotate(p, euler):
-    # a vector rotated by euler angles in degrees, as the editor applies them to its points: Z, then X, then Y (the
-    # same as lua/decals.lua)
-    x, y, z = p
-    c, s = math.cos(math.radians(euler[2])), math.sin(math.radians(euler[2]))
-    x, y = c * x - s * y, s * x + c * y
-    c, s = math.cos(math.radians(euler[0])), math.sin(math.radians(euler[0]))
-    y, z = c * y - s * z, s * y + c * z
-    c, s = math.cos(math.radians(euler[1])), math.sin(math.radians(euler[1]))
-    x, z = c * x + s * z, -s * x + c * z
-    return (x, y, z)
-
-
-def decal_single_corners(point):
-    # the corners of a single decal (decalSingle) as the strip pairs of a spline decal: the start pair, then the end one,
-    # each from the side with U 1 to the one with U 0 (not lifted)
-    position = point['position']
-    rotation = point.get('rotation') or (0, 0, 0)
-    scale = point.get('scale') or (1, 1, 1)
-    corners = []
-    for sx, sz in ((-0.5, -0.5), (0.5, -0.5), (-0.5, 0.5), (0.5, 0.5)):
-        offset = euler_rotate((sx * scale[0], 0.0, sz * scale[2]), rotation)
-        corners.append(tuple(position[i] + offset[i] for i in range(3)))
-    return corners
-
-
 class JsonProcessor:
     # ignore_blocks: the parts outside of every block go in block 1 instead of being skipped (the converters, which
     # process elements without the city around them)
@@ -92,7 +46,7 @@ class JsonProcessor:
         self.verbose = verbose
         self.cur_mesh_idx = 0
         self.out_res = None
-        self.seamless_epsilon = 0.03 # as the vertices merged by the psdl writer
+        self.network = None  # the BAI (see traffic/), built after the elements
 
     def get_manual_block_number(self, state):
         if 'blockNumber' in state:
@@ -500,9 +454,6 @@ class JsonProcessor:
             return
         state = road['data']['fields']['state']
         runtime_state = road['data']['fields']['runtimeState']
-        if road.get('ghost', False) and parent_intersection is None:
-            self.get_road_props(res, road, state_val(state, 'propRule'), road['data']['name'])
-            return
         block_perimeters = self.block_perimeters
         mesh = road['data']['mesh']
         og_name = road['data']['name'] if parent_intersection == None else parent_intersection['data']['name']
@@ -838,7 +789,7 @@ class JsonProcessor:
     def get_intersection(self, res, intersection, manual_blocks):
         state = intersection['data']['fields']['state']
         instance_state = intersection['data']['fields']['instanceState']
-        if state['type'] != 'psdl' or self.is_seamless(intersection) or intersection.get('ghost', False):
+        if state['type'] != 'psdl' or is_seamless(intersection):
             return
         block_perimeters = self.block_perimeters
         mesh = intersection['data']['mesh']
@@ -1249,23 +1200,9 @@ class JsonProcessor:
         state = mesh['settings']
         parameter_name = state_val(state, '_parameterName')
         if parameter_name in ("startTrafficLight", "endTrafficLight"):
+            # a traffic light of a road end: in the BAI, not an object of its own
             road_id = state_val(state, '_parentObjectId', -1)
-            bai_end = self.get_bai_road_end(road_id, parameter_name == "startTrafficLight") if road_id >= 0 else None
-            if bai_end is not None:
-                elem = ExportedCityElement()
-                cube = self.get_cube(1)
-                elem.vertices = cube['vertices']
-                elem.indices = cube['indices']
-                elem.name = '0_TRAFL'
-                elem.properties['is_start_intersection_light'] = "1" if bai_end == 0 else "0"
-                elem.properties['road_id'] = str(self.road_map[road_id])
-                elem.properties['original_name'] = mesh['name']
-                elem.properties['object'] = get_instance_mesh_name(dict_mesh)
-                elem.translation = mref['position']
-                elem.rotation = mref['rotation']
-                elem.scale = mref['scale']
-                elem.mat = 'NONE'
-                res.append(elem)
+            self.traffic.attach_traffic_light(road_id, parameter_name == "startTrafficLight", mref['position'], mref['rotation'])
         else:
             block = 0
             is_prop = mesh.get('type') == 'individualProp' # the other mesh instances (and the parametric objects) are INST meshes
@@ -1296,674 +1233,6 @@ class JsonProcessor:
                 elem.mat = 'NONE'
                 res.append(elem)
 
-    # Seamless intersections: two roads joined without a surface between them. In the BAI, roads with the same
-    # section and lanes joined this way are a single road through the rooms of all of them, other ones get a
-    # two-road intersection sharing the room of one of the roads, where vehicles never stop.
-
-    def is_seamless(self, intersection):
-        instance_state = intersection['data']['fields']['instanceState']
-        roads = intersection['roads']
-        return state_bool(instance_state, 'seamless') and len(roads) == 2 and roads[0] != roads[1]
-
-    def get_road_name(self, road_id):
-        return self.data['roads'][road_id]['data']['name']
-
-    def get_bai_lane_counts(self, r_state):
-        f_lanes = state_int(r_state, 'forwardLanes')
-        b_lanes = state_int(r_state, 'backwardLanes')
-        if state_bool(r_state, 'disableTraffic'):
-            return 0, 0
-        return f_lanes, b_lanes
-
-    def get_editor_lanes(self, rec, num_sections):
-        # the traffic lanes drawn in the editor (forward, backward), None if they don't match the lanes of the road
-        road = rec['road']
-        fields = road['data']['fields']
-        f_lanes, b_lanes = self.get_bai_lane_counts(fields['state'])
-        forward = []
-        backward = []
-        for lane in fields.get('lanes', []):
-            name = lane['name']
-            if name.startswith('traffic_1_') or name.startswith('traffic_2_'):
-                points = [np.subtract(p, (0, 0.01, 0)) for p in lane['points']]  # they're drawn 1 cm above the road
-                if len(points) != num_sections:
-                    return None
-                (forward if name.startswith('traffic_1_') else backward).append(points)
-        if len(forward) != f_lanes or len(backward) != b_lanes:
-            return None
-        return forward, backward
-
-    def get_bai_cross_sections(self, rec):
-        # the BAI sections of an exported road, from its start: the right outer edge, the right curb, the lanes from the
-        # right to the left (the right side has the backward lanes), the left curb, the left outer edge (the curbs are
-        # the outer edges without sidewalks)
-        if 'bai_cross_sections' in rec:
-            return rec['bai_cross_sections']
-        road = rec['road']
-        r_state = road['data']['fields']['state']
-        r_rt_state = road['data']['fields']['runtimeState']
-        base = rec['bai_sections']
-        res = []
-        if len(base) >= 2:
-            has_geo_sidewalks = self.road_has_sidewalks(r_state, r_rt_state)
-            curbs = []
-            for s in base:
-                curbs.append((s[1] if has_geo_sidewalks else s[0], s[-2] if has_geo_sidewalks else s[-1]))
-            f_lanes, b_lanes = self.get_bai_lane_counts(r_state)
-            lanes = self.get_editor_lanes(rec, len(base))
-            if lanes is not None:
-                forward, backward = lanes
-            else:
-                if f_lanes + b_lanes > 0 and not state_bool(r_state, 'pedestrianStreet'):
-                    report.warning('the traffic lanes of ' + road['data']['name'] + ' are not as in the editor in the BAI', element=road['data']['name'], kind='road')
-                # lanes spread evenly between the curbs (or the curbs and the divider)
-                divided = self.road_has_divider(r_state) and len(base[0]) >= (6 if has_geo_sidewalks else 4)
-                forward = [[] for _ in range(f_lanes)]
-                backward = [[] for _ in range(b_lanes)]
-                for s, (rc, lc) in zip(base, curbs):
-                    if divided:
-                        r_inner = s[2] if has_geo_sidewalks else s[1]
-                        l_inner = s[3] if has_geo_sidewalks else s[2]
-                    else:
-                        mid = np.divide(np.add(rc, lc), 2)
-                        r_inner = mid if f_lanes > 0 else lc
-                        l_inner = mid if b_lanes > 0 else rc
-                    for k in range(b_lanes):
-                        backward[k].append(np.add(r_inner, np.multiply(np.subtract(rc, r_inner), (k + 0.5) / b_lanes)))
-                    for k in range(f_lanes):
-                        forward[k].append(np.add(l_inner, np.multiply(np.subtract(lc, l_inner), (k + 0.5) / f_lanes)))
-            # from the right to the left
-            right_dir = np.subtract(base[0][-1], base[0][0])
-            def lateral(lane):
-                return float(np.dot(np.subtract(lane[0], base[0][0]), right_dir))
-            lanes_rl = sorted(backward, key=lateral) + sorted(forward, key=lateral)
-            for i in range(len(base)):
-                s = base[i]
-                rc, lc = curbs[i]
-                res.append([s[0], rc] + [lane[i] for lane in lanes_rl] + [lc, s[-1]])
-        rec['bai_cross_sections'] = res
-        return res
-
-    def get_bai_vps(self, rec):
-        sections = self.get_bai_cross_sections(rec)
-        return len(sections[0]) if len(sections) > 0 else 0
-
-    def get_bai_sections(self, rec, reverse):
-        # the BAI sections of an exported road (see get_bai_cross_sections), from its end to its start if reversed
-        sections = self.get_bai_cross_sections(rec)
-        if reverse:
-            sections = [list(reversed(s)) for s in reversed(sections)]
-        return sections
-
-    def get_bai_layout(self, rec, reverse):
-        # the lanes and ambients of an exported road, as seen going from its end to its start if reversed
-        road = rec['road']
-        r_state = road['data']['fields']['state']
-        r_rt_state = road['data']['fields']['runtimeState']
-        left_ped = not state_bool(r_state, 'disableLeftPedestrians')
-        right_ped = not state_bool(r_state, 'disableRightPedestrians')
-        f_lanes, b_lanes = self.get_bai_lane_counts(r_state)
-        with_peds = left_ped or right_ped
-        with_traffic = (b_lanes > 0 or f_lanes > 0) and not state_bool(r_state, 'pedestrianStreet')
-        with_both = with_peds and with_traffic
-        traffic_type = '0' if with_both else ('1' if with_peds else ('2' if with_traffic else '3'))
-        if reverse:
-            f_lanes, b_lanes = b_lanes, f_lanes
-            left_ped, right_ped = right_ped, left_ped
-        return {
-            'forward_lanes': f_lanes,
-            'backward_lanes': b_lanes,
-            'left_ped': left_ped,
-            'right_ped': right_ped,
-            'traffic_type': traffic_type,
-            'has_geo_sidewalks': int(self.road_has_sidewalks(r_state, r_rt_state)),
-            'vps': self.get_bai_vps(rec),
-            'cable_car': state_bool(r_state, 'cableCarLine'),
-            'cable_car_offset': self.get_cable_car_offset(r_state)
-        }
-
-    def get_decal_texture(self, tex):
-        # the name of a texture as decals name it (the name of the file, without the extension)
-        if tex is None or tex == '':
-            return None
-        return os.path.splitext(self.get_tex(tex))[0].lower()
-
-    def get_decals(self, res):
-        # Strip edges are evaluated by the core's JSON components in the editor, not resampled here.
-        for decal in self.data.get('customElements') or []:
-            if decal.get('type') == 'decalSingle':
-                self.get_single_decal(decal, res)
-                continue
-            if decal.get('type') != 'decal':
-                continue
-            state = decal.get('data', {}).get('fields', {}).get('state', {})
-            name = decal.get('data', {}).get('name', 'decal')
-            texture = self.get_decal_texture(state_val(state, 'texture', ''))
-            pieces = (decal.get('spline') or {}).get('pieces', [])
-            if not pieces:
-                report.warning('the decal ' + name + ' has less than two distinct usable points, it is not exported')
-                continue
-            if not texture or len(texture) > DECAL_MAX_TEXTURE_NAME:
-                report.warning('the decal ' + name + ' has a missing or overlong texture name, it is not exported')
-                continue
-            if any(self.find_block(tuple(section['center'])) < 0 for piece in pieces for section in piece):
-                report.warning('the decal ' + name + ' has points outside of the blocks; each piece is visible only with its starting room')
-            for piece in pieces:
-                if len(piece) != 2 or any(len(section['vertices']) != 2 for section in piece):
-                    report.warning('the decal ' + name + ' has an invalid strip cross-section, it is not exported')
-                    continue
-                elem = ExportedCityElement()
-                elem.name = '0_DECAL'
-                elem.vertices = [tuple(v) for section in piece for v in section['vertices']]
-                elem.properties.update(original_name=name, texture=texture, strip_pairs='1')
-                elem.mat = 'NONE'
-                res.append(elem)
-
-    def get_single_decal(self, decal, res):
-        # a quad: one piece of two pairs, as the strips of the spline decals
-        state = decal.get('data', {}).get('fields', {}).get('state', {})
-        name = decal.get('data', {}).get('name', 'decal')
-        texture = self.get_decal_texture(state_val(state, 'texture', ''))
-        point = (decal.get('points') or {}).get('center')
-        if not point:
-            report.warning('the decal ' + name + ' has no point, it is not exported')
-            return
-        if not texture or len(texture) > DECAL_MAX_TEXTURE_NAME:
-            report.warning('the decal ' + name + ' has a missing or overlong texture name, it is not exported')
-            return
-        scale = point.get('scale') or (1, 1, 1)
-        if abs(scale[0]) < 1e-4 or abs(scale[2]) < 1e-4:
-            report.warning('the decal ' + name + ' has no width or length, it is not exported')
-            return
-        if scale[0] * scale[2] < 0:
-            report.warning('the decal ' + name + ' is mirrored (a negative width or length), the game draws its back, which is culled')
-        if abs(scale[2]) > DECAL_SINGLE_MAX_LENGTH:
-            report.warning('the decal ' + name + ' is longer than ' + str(DECAL_SINGLE_MAX_LENGTH) + ' m; it is visible only with its starting room')
-        if self.find_block(tuple(point['position'])) < 0:
-            report.warning('the decal ' + name + ' is outside of the blocks; it is visible only with its starting room')
-        elem = ExportedCityElement()
-        elem.name = '0_DECAL'
-        elem.vertices = decal_single_corners(point)
-        elem.properties.update(original_name=name, texture=texture, strip_pairs='1')
-        elem.mat = 'NONE'
-        res.append(elem)
-
-    def get_cable_car_offset(self, r_state):
-        # as cableCarOffsetI in the road parameters
-        offset = float(state_val(r_state, 'cableCarOffset', 0) or 0)
-        return offset if offset > 0 else 2.5
-
-    def has_bai_geometry(self, road_id):
-        rec = self.exported_roads.get(road_id)
-        return rec is not None and len(self.get_bai_sections(rec, False)) >= 2
-
-    def are_seamless_roads_compatible(self, intersection):
-        # same layout and the same section at the joint, going from the first road into the second one
-        r0, r1 = intersection['roads']
-        if not self.has_bai_geometry(r0) or not self.has_bai_geometry(r1):
-            return False
-        rec0 = self.exported_roads[r0]
-        rec1 = self.exported_roads[r1]
-        rev0 = rec0['road']['startIntersectionId'] == intersection['id']
-        rev1 = rec1['road']['endIntersectionId'] == intersection['id']
-        if self.get_bai_layout(rec0, rev0) != self.get_bai_layout(rec1, rev1):
-            return False
-        sec0 = self.get_bai_sections(rec0, rev0)[-1]
-        sec1 = self.get_bai_sections(rec1, rev1)[0]
-        return all(np.linalg.norm(np.subtract(a, b)) < self.seamless_epsilon for a, b in zip(sec0, sec1))
-
-    def get_far_intersection(self, road_id, reverse):
-        road = self.exported_roads[road_id]['road']
-        return road['startIntersectionId'] if reverse else road['endIntersectionId']
-
-    def get_near_intersection(self, road_id, reverse):
-        return self.get_far_intersection(road_id, not reverse)
-
-    def get_bai_chains(self, compatible_joints):
-        # the roads in a row through compatible seamless joints, as (road id, reversed)
-        visited = set()
-        chains = []
-
-        def walk(road_id, reverse):
-            chain = []
-            while road_id not in visited:
-                visited.add(road_id)
-                chain.append((road_id, reverse))
-                far = self.get_far_intersection(road_id, reverse)
-                if far not in compatible_joints:
-                    break
-                r0, r1 = compatible_joints[far]['roads']
-                road_id = r1 if road_id == r0 else r0
-                reverse = self.exported_roads[road_id]['road']['endIntersectionId'] == far
-            return chain
-
-        for road_id in self.exported_roads:
-            if road_id in visited:
-                continue
-            road = self.exported_roads[road_id]['road']
-            if road['startIntersectionId'] not in compatible_joints:
-                chains.append(walk(road_id, False))
-            elif road['endIntersectionId'] not in compatible_joints:
-                chains.append(walk(road_id, True))
-
-        looped = [road_id for road_id in self.exported_roads if road_id not in visited]
-        if len(looped) > 0:
-            names = ', '.join(self.get_road_name(r) for r in looped)
-            report.warning('the roads ' + names + ' form a loop of seamless intersections without other intersections, no BAI road for them')
-        return chains
-
-    def get_seamless_joint_intersection(self, intersection, used_blocks):
-        # a two-road intersection in the room of one of the roads, or the reason why it can't be made
-        for road_id in intersection['roads']:
-            if not self.has_bai_geometry(road_id):
-                return (None, 'the road ' + self.get_road_name(road_id) + ' is not exported or has no traffic geometry')
-        for road_id in intersection['roads']:
-            block = self.exported_roads[road_id]['block']
-            if block not in used_blocks:
-                elem = ExportedCityElement()
-                elem.vertices = [intersection['center']]
-                elem.properties['original_name'] = intersection['data']['name']
-                return ([elem, intersection, block], None)
-        return (None, 'the rooms of both roads are already used by other intersections')
-
-    def get_bai_road_end(self, road_id, at_road_start):
-        # the end of the BAI road (0: start, 1: end) on the start or end of a road, None if it isn't one
-        if road_id not in self.road_map:
-            return None
-        chain = self.bai_chains[self.road_map[road_id]]
-        rec = self.exported_roads.get(chain[0][0])
-        if rec is not None and 'customElement' in rec:
-            # a BAI road replacing the road (in the same direction)
-            return 0 if at_road_start else 1
-        first_id, first_rev = chain[0]
-        last_id, last_rev = chain[-1]
-        if road_id == first_id and at_road_start != first_rev:
-            return 0
-        if road_id == last_id and at_road_start == last_rev:
-            return 1
-        return None
-
-    def get_traffic_road(self, res, chain_index, chain):
-        first_rec = self.exported_roads[chain[0][0]]
-        first_rev = chain[0][1]
-        last_rec = self.exported_roads[chain[-1][0]]
-        last_rev = chain[-1][1]
-        layout = self.get_bai_layout(first_rec, first_rev)
-        names = ', '.join(self.exported_roads[road_id]['elem'].properties['original_name'] for road_id, _ in chain)
-        if layout['vps'] == 0:
-            raise Exception('Invalid road while exporting traffic info on road: ' + names)
-
-        vertices = []
-        blocks = []
-        for i in range(len(chain)):
-            rec = self.exported_roads[chain[i][0]]
-            sections = self.get_bai_sections(rec, chain[i][1])
-            if i > 0:
-                sections = sections[1:]  # the joint, the same as the last section of the previous road
-            for section in sections:
-                vertices.extend(section)
-            if rec['block'] not in blocks:
-                blocks.append(rec['block'])
-
-        f_lanes = layout['forward_lanes']
-        b_lanes = layout['backward_lanes']
-        start_int = self.get_near_intersection(chain[0][0], first_rev)
-        end_int = self.get_far_intersection(chain[-1][0], last_rev)
-        first_inst_state = first_rec['road']['data']['fields']['instanceState']
-        last_inst_state = last_rec['road']['data']['fields']['instanceState']
-        start_rule = str(int(state_int(first_inst_state, 'end_rule' if first_rev else 'start_rule'))) if b_lanes > 0 else "0"
-        end_rule = str(int(state_int(last_inst_state, 'start_rule' if last_rev else 'end_rule'))) if f_lanes > 0 else "0"
-        if start_int in self.seamless_joint_ids and b_lanes > 0:
-            start_rule = "3"  # never stop
-        if end_int in self.seamless_joint_ids and f_lanes > 0:
-            end_rule = "3"
-
-        r_state = first_rec['road']['data']['fields']['state']
-        traffic_elem = ExportedCityElement()
-        traffic_elem.properties['original_name'] = names + ' [BAI]'
-        traffic_elem.vertices = vertices
-        traffic_elem.name = '0_BAI'
-        traffic_elem.properties['is_road'] = '1'
-        traffic_elem.properties['id'] = str(chain_index)
-        traffic_elem.properties['right_lanes'] = str(f_lanes)
-        traffic_elem.properties['left_lanes'] = str(b_lanes)
-        traffic_elem.properties['has_sidewalks'] = ('1' if layout['right_ped'] else '0') + ':' + ('1' if layout['left_ped'] else '0')
-        traffic_elem.properties['has_geo_sidewalks'] = str(layout['has_geo_sidewalks'])
-        traffic_elem.properties['traffic_type'] = layout['traffic_type']
-        traffic_elem.properties['bai_layout'] = '2'  # see get_bai_cross_sections
-        traffic_elem.properties['vertices_per_section'] = str(layout['vps'])
-        traffic_elem.properties['divided'] = '1' if self.road_has_divider(r_state) else '0'
-        traffic_elem.properties['freeway'] = '1' if state_bool(r_state, 'freeway') else '0'
-        traffic_elem.properties['alley'] = '1' if state_bool(r_state, 'pedestrianStreet') else '0'
-        if layout['cable_car']:
-            traffic_elem.properties['cable_car'] = '1'
-            traffic_elem.properties['cable_car_offset'] = str(layout['cable_car_offset'])
-        traffic_elem.properties['start_rule'] = start_rule
-        traffic_elem.properties['end_rule'] = end_rule
-        traffic_elem.properties['start_intersection'] = self.get_bai_intersection_key(start_int, chain[0][0], not first_rev)
-        traffic_elem.properties['end_intersection'] = self.get_bai_intersection_key(end_int, chain[-1][0], last_rev)
-        traffic_elem.properties['blocks'] = ';'.join(str(b) for b in blocks)
-        traffic_elem.mat = 'NONE'
-        res.append(traffic_elem)
-
-    def get_traffic_intersection(self, res, obj):
-        #obj: (ExportedCityElement elem, Intersection intersection, int block)
-        traffic_elem = ExportedCityElement()
-        if 'center' in obj[1]:
-            # the BAI writer uses the mean of the vertices as the center
-            traffic_elem.vertices = [obj[1]['center']]
-        else:
-            traffic_elem.indices = obj[0].indices
-            traffic_elem.vertices = obj[0].vertices
-        road_numbers = [str(self.road_map[key]) for key, _ in self.get_bai_entries(obj[1])]
-        traffic_elem.name = '0_BAI'
-        traffic_elem.properties['original_name'] = obj[0].properties['original_name'] + ' [BAI]'
-        traffic_elem.properties['is_road'] = '0'
-        traffic_elem.properties['block'] = str(obj[2])
-        traffic_elem.properties['roads'] = ';'.join(road_numbers)
-        traffic_elem.mat = 'NONE'
-        res.append(traffic_elem)
-
-    # Intersections with more BAI roads than MM2 can handle (see MAX_INTERSECTION_ROADS in the BAI writer) become a ring
-    # of smaller BAI intersections in the same room, each with a few of the roads, joined by two-way roads only for the
-    # cars (along an arc around the centre, where they never stop). All of them are in the room of the intersection, so
-    # the game finds the first one there, as it looks up the intersections of a room before its roads.
-
-    def get_bai_intersection_key(self, intersection_id, road_id, at_road_start):
-        # the intersection a BAI road end refers to (see intersection_key in the BAI writer)
-        split = self.bai_splits.get(intersection_id)
-        if split is not None:
-            return split['ends'][(road_id, at_road_start)]
-        return str(self.traffic_intersections[self.intersection_map[intersection_id]][2])
-
-    def get_bai_end_section(self, key, at_start):
-        # the BAI section at the start or end of an exported road (or BAI road custom element)
-        rec = self.exported_roads[key]
-        sections = rec['bai_cross_sections'] if 'customElement' in rec else self.get_bai_sections(rec, False)
-        return sections[0] if at_start else sections[-1]
-
-    def get_bai_entries(self, intersection):
-        # the BAI road ends on an intersection, counterclockwise, as (road key in exported_roads, at road start): its
-        # roads in their order (the BAI road custom elements replacing them in their place), unless BAI road custom elements end on
-        # it otherwise (connected to it by hand, or a converted road connected elsewhere): then all of them by angle
-        order = intersection['data']['fields']['sortOrder']
-        res = []
-        replacing = []
-        for i in range(len(intersection['roads'])):
-            road_id = intersection['roads'][order[-1 - i]]  # in the generator the roads are clockwise
-            if road_id not in self.road_map:
-                continue
-            key = road_id if road_id in self.exported_roads else self.bai_chains[self.road_map[road_id]][0][0]
-            road = self.data['roads'][road_id]
-            at_start = road['startIntersectionId'] == intersection['id']
-            if at_start and road['endIntersectionId'] == intersection['id'] and (key, True) in res:
-                at_start = False  # a road with both ends here: the start is the first one
-            res.append((key, at_start))
-            if key != road_id:
-                replacing.append((key, at_start))
-        custom_elements = self.custom_elements.procedural_intersection_ends(intersection['id'])
-        if Counter(replacing) == Counter(custom_elements):
-            return res
-        ends = [(key, at_start) for key, at_start in res if 'customElement' not in self.exported_roads[key]] + custom_elements
-        mids = [np.mean(np.array(self.get_bai_end_section(key, at_start), dtype=float), axis=0) for key, at_start in ends]
-        c = intersection['center'] if 'center' in intersection else np.mean(mids, axis=0)
-        ends = [end for _, end in sorted(zip([math.atan2(m[2] - c[2], m[0] - c[0]) for m in mids], ends), key=lambda x: x[0])]
-        # the last road of the order last, as above
-        if len(res) > 0 and res[-1] in ends:
-            k = ends.index(res[-1])
-            ends = ends[k + 1:] + ends[:k + 1]
-        return ends
-
-    def get_surface_height(self, elem, x, z, default):
-        # the height of the highest triangle of a mesh at (x, z), default if there is none
-        if len(elem.indices) < 3:
-            return default
-        v = np.array(elem.vertices, dtype=float)
-        tri = np.array(elem.indices).reshape(-1, 3)
-        a, b, c = v[tri[:, 0]], v[tri[:, 1]], v[tri[:, 2]]
-        d = (b[:, 2] - c[:, 2]) * (a[:, 0] - c[:, 0]) + (c[:, 0] - b[:, 0]) * (a[:, 2] - c[:, 2])
-        ok = np.abs(d) > 1e-9
-        d = np.where(ok, d, 1.0)
-        l1 = ((b[:, 2] - c[:, 2]) * (x - c[:, 0]) + (c[:, 0] - b[:, 0]) * (z - c[:, 2])) / d
-        l2 = ((c[:, 2] - a[:, 2]) * (x - c[:, 0]) + (a[:, 0] - c[:, 0]) * (z - c[:, 2])) / d
-        l3 = 1 - l1 - l2
-        inside = ok & (l1 >= -1e-6) & (l2 >= -1e-6) & (l3 >= -1e-6)
-        if not np.any(inside):
-            return default
-        return float(np.max((l1 * a[:, 1] + l2 * b[:, 1] + l3 * c[:, 1])[inside]))
-
-    def get_split_ring_road(self, road_id, name, block, keys, points, directions):
-        # a two-way BAI road through the points, without sidewalks (see get_bai_cross_sections for the sections)
-        lanes = SPLIT_RING_LANES
-        width = SPLIT_RING_LANE_WIDTH
-        offsets = [lanes * width] * 2 + [lanes * width - (k + 0.5) * width for k in range(lanes)]
-        offsets += [-(k + 0.5) * width for k in range(lanes)] + [-lanes * width] * 2
-        vertices = []
-        for p, d in zip(points, directions):
-            right = np.array((-d[2], 0.0, d[0])) / np.linalg.norm((d[0], d[2]))  # as the roads, see get_bai_cross_sections
-            vertices.extend(np.add(p, np.multiply(right, o)) for o in offsets)
-        elem = ExportedCityElement()
-        elem.properties['original_name'] = name
-        elem.vertices = vertices
-        elem.name = '0_BAI'
-        elem.properties['is_road'] = '1'
-        elem.properties['id'] = str(road_id)
-        elem.properties['right_lanes'] = str(lanes)
-        elem.properties['left_lanes'] = str(lanes)
-        elem.properties['has_sidewalks'] = '0:0'
-        elem.properties['has_geo_sidewalks'] = '0'
-        elem.properties['traffic_type'] = '2'
-        elem.properties['bai_layout'] = '2'
-        elem.properties['vertices_per_section'] = str(len(offsets))
-        elem.properties['divided'] = '0'
-        elem.properties['freeway'] = '0'
-        elem.properties['alley'] = '0'
-        elem.properties['start_rule'] = '3'  # never stop
-        elem.properties['end_rule'] = '3'
-        elem.properties['start_intersection'] = keys[0]
-        elem.properties['end_intersection'] = keys[1]
-        elem.properties['blocks'] = str(block)
-        elem.mat = 'NONE'
-        return elem
-
-    def get_split_intersection(self, obj, first_road_id):
-        # the ring of BAI intersections replacing an intersection with too many roads (None if it isn't needed): the
-        # intersection keys of the road ends, the intersections and the roads of the ring (with ids from first_road_id)
-        surface, intersection, block = obj
-        entries = self.get_bai_entries(intersection)
-        n = len(entries)
-        if n <= MAX_INTERSECTION_ROADS:
-            return None
-        name = intersection['data']['name']
-        centre = np.array(intersection['center'], dtype=float)
-        ends = []
-        for key, at_start in entries:
-            section = self.get_bai_end_section(key, at_start)
-            ends.append(np.divide(np.add(section[0], section[-1]), 2))
-        angles = [math.atan2(p[2] - centre[2], p[0] - centre[0]) for p in ends]
-
-        # the direction of the order around the centre, and the angle after each road end
-        def wrap(a):
-            return (a + math.pi) % (2 * math.pi) - math.pi
-        sign = 1 if sum(wrap(angles[(i + 1) % n] - angles[i]) for i in range(n)) > 0 else -1
-        gaps = [((angles[(i + 1) % n] - angles[i]) * sign) % (2 * math.pi) for i in range(n)]
-
-        # groups of consecutive roads, cut at the widest gaps
-        k = int(math.ceil(n / SPLIT_GROUP_ROADS))
-        sizes = [n // k + (1 if g < n % k else 0) for g in range(k)]
-        best = None
-        for first in range(n):
-            last = first - 1
-            cuts = []
-            for size in sizes:
-                last += size
-                cuts.append(gaps[last % n])
-            if best is None or min(cuts) > best[0]:
-                best = (min(cuts), first)
-        groups = []
-        first = best[1]
-        for size in sizes:
-            groups.append([(first + m) % n for m in range(size)])
-            first += size
-
-        # the intersections of the ring, near their roads
-        radius = SPLIT_RING_RADIUS * float(np.mean([math.hypot(p[0] - centre[0], p[2] - centre[2]) for p in ends]))
-        keys = [str(block) + '.' + str(g) for g in range(k)]
-        node_angles = []
-        node_points = []
-        for group in groups:
-            a = math.atan2(sum(math.sin(angles[i]) for i in group), sum(math.cos(angles[i]) for i in group))
-            x = centre[0] + radius * math.cos(a)
-            z = centre[2] + radius * math.sin(a)
-            y = self.get_surface_height(surface, x, z, float(np.mean([ends[i][1] for i in group])))
-            node_angles.append(a)
-            node_points.append(np.array((x, y, z)))
-
-        # the roads of the ring, from each intersection to the next one
-        connectors = []
-        for g in range(k):
-            g1 = (g + 1) % k
-            delta = ((node_angles[g1] - node_angles[g]) * sign) % (2 * math.pi)
-            margin = min(SPLIT_RING_END_DISTANCE, radius * delta / 4) / radius
-            steps = max(2, int(math.ceil(radius * (delta - 2 * margin) / SPLIT_RING_STEP)))
-            points = []
-            directions = []
-            for t in range(steps + 1):
-                u = t / steps
-                a = node_angles[g] + sign * (margin + (delta - 2 * margin) * u)
-                x = centre[0] + radius * math.cos(a)
-                z = centre[2] + radius * math.sin(a)
-                y0 = node_points[g][1] + (node_points[g1][1] - node_points[g][1]) * u
-                points.append(np.array((x, self.get_surface_height(surface, x, z, y0), z)))
-                directions.append(np.multiply((-math.sin(a), 0.0, math.cos(a)), sign))
-            ring_name = name + ' [BAI ring ' + str(g + 1) + '-' + str(g1 + 1) + ']'
-            connectors.append(self.get_split_ring_road(first_road_id + g, ring_name, block, (keys[g], keys[g1]), points, directions))
-
-        # each intersection: its roads in the same order, then the ring road to the next one and the one from the previous one
-        nodes = []
-        end_keys = {}
-        for g in range(k):
-            road_numbers = [str(self.road_map[entries[i][0]]) for i in groups[g]]
-            road_numbers += [str(first_road_id + g), str(first_road_id + (g - 1) % k)]
-            for i in groups[g]:
-                end_keys[entries[i]] = keys[g]
-            elem = ExportedCityElement()
-            elem.vertices = [node_points[g]]
-            elem.name = '0_BAI'
-            elem.properties['original_name'] = name + ' [BAI ' + str(g + 1) + '/' + str(k) + ']'
-            elem.properties['is_road'] = '0'
-            elem.properties['block'] = str(block)
-            elem.properties['key'] = keys[g]
-            elem.properties['roads'] = ';'.join(road_numbers)
-            elem.mat = 'NONE'
-            nodes.append(elem)
-        print('The BAI intersection of ' + name + ' has ' + str(n) + ' roads (MM2 crashes with more than '
-              + str(MAX_INTERSECTION_ROADS) + '), split into a ring of ' + str(k))
-        return {'ends': end_keys, 'nodes': nodes, 'connectors': connectors}
-
-    def get_traffic(self, res):
-        # the BAI intersections of the custom elements (with the ids of the ghost intersections they replace)
-        self.traffic_intersections.extend(self.custom_elements.traffic_intersections())
-
-        # the roads joined by seamless intersections
-        compatible_joints = {}
-        incompatible_joints = []
-        for intersection in self.data['intersections']:
-            if self.is_seamless(intersection):
-                if self.are_seamless_roads_compatible(intersection):
-                    compatible_joints[intersection['id']] = intersection
-                else:
-                    incompatible_joints.append(intersection)
-
-        # two-road intersections at the other ones, in rooms not used by other intersections
-        used_blocks = set(obj[2] for obj in self.traffic_intersections)
-        joint_intersections = {}
-        failed_joints = {}
-        for intersection in incompatible_joints:
-            (obj, reason) = self.get_seamless_joint_intersection(intersection, used_blocks)
-            if obj is None:
-                failed_joints[intersection['id']] = (intersection, reason)
-            else:
-                joint_intersections[intersection['id']] = obj
-                used_blocks.add(obj[2])
-        self.seamless_joint_ids = set(joint_intersections.keys())
-
-        # a BAI road for each row of roads with intersections at both ends
-        bai_intersections = set(obj[1]['id'] for obj in self.traffic_intersections) | self.seamless_joint_ids
-        self.bai_chains = []
-        for chain in self.get_bai_chains(compatible_joints):
-            ends = [self.get_near_intersection(chain[0][0], chain[0][1]), self.get_far_intersection(chain[-1][0], chain[-1][1])]
-            if all(end in bai_intersections for end in ends):
-                self.bai_chains.append(chain)
-            else:
-                for end in ends:
-                    if end in failed_joints:
-                        names = ', '.join(self.get_road_name(road_id) for road_id, _ in chain)
-                        (joint, reason) = failed_joints[end]
-                        report.warning('no BAI road for ' + names + ': it ends on the seamless intersection ' + joint['data']['name']
-                              + ', which can\'t be a BAI intersection (' + reason + ')',
-                              element=joint['data']['name'], kind='intersection')
-
-        # the two-road intersections without roads are left out
-        used_joints = set()
-        for chain in self.bai_chains:
-            used_joints.add(self.get_near_intersection(chain[0][0], chain[0][1]))
-            used_joints.add(self.get_far_intersection(chain[-1][0], chain[-1][1]))
-        for intersection_id, obj in joint_intersections.items():
-            if intersection_id in used_joints:
-                self.traffic_intersections.append(obj)
-        self.seamless_joint_ids &= used_joints
-
-        # the BAI roads of the custom elements, each one a chain of its own (the road it replaces, if any, is
-        # mapped to it: its traffic lights and the intersections listing it use it)
-        replaced_roads = {}
-        for key, rec in self.custom_elements.traffic_roads():
-            self.exported_roads[key] = rec
-            self.bai_chains.append([(key, False)])
-            if rec['source_road'] is not None:
-                replaced_roads[rec['source_road']] = len(self.bai_chains) - 1
-
-        # lookup tables
-        self.road_map = {}
-        for i in range(len(self.bai_chains)):
-            for road_id, _ in self.bai_chains[i]:
-                self.road_map[road_id] = i
-        for road_id, i in replaced_roads.items():
-            self.road_map[road_id] = i
-
-        self.intersection_map = {}
-        for i in range(len(self.traffic_intersections)):
-            self.intersection_map[self.traffic_intersections[i][1]['id']] = i
-
-        # the intersections with too many roads, split into rings of smaller ones
-        self.bai_splits = {}
-        next_road_id = len(self.bai_chains)
-        for obj in self.traffic_intersections:
-            if 'customElement' in obj[1]:
-                continue
-            split = self.get_split_intersection(obj, next_road_id)
-            if split is not None:
-                self.bai_splits[obj[1]['id']] = split
-                next_road_id += len(split['connectors'])
-
-        for i in range(len(self.bai_chains)):
-            rec = self.exported_roads[self.bai_chains[i][0][0]]
-            if 'customElement' in rec:
-                self.custom_elements.traffic_road(res, i, rec)
-            else:
-                self.get_traffic_road(res, i, self.bai_chains[i])
-
-        for obj in self.traffic_intersections:
-            if 'customElement' in obj[1]:
-                self.custom_elements.traffic_intersection(res, obj)
-                continue
-            split = self.bai_splits.get(obj[1]['id'])
-            if split is None:
-                self.get_traffic_intersection(res, obj)
-            else:
-                res.extend(split['nodes'])
-                res.extend(split['connectors'])
-
     # exports an element (function adds its parts to res); with the errors collected (see report.collecting), a failure is
     # reported and what the element added is removed, so that the other elements are still exported
     def guarded_element(self, res, name, kind, function, element_id=None):
@@ -1993,11 +1262,12 @@ class JsonProcessor:
             self.block_perimeters_bounds.append([[float('-inf'), float('-inf')], [float('inf'), float('inf')]])
 
         self.cur_road_key = 0
-        self.custom_elements = CustomElementExporter(self)
+        # the roads and intersections exported, for the BAI: {road id: {'elem': ExportedCityElement, 'road': road,
+        # 'block': int, 'bai_sections': the sections of its mesh used by the BAI}}, [(ExportedCityElement surface,
+        # intersection, int block)]
         self.exported_roads = {}
-        # exported_roads: {road id: {'elem': ExportedCityElement, 'road': Road, 'block': int}}
         self.traffic_intersections = []
-        # traffic_intersections:  (ExportedCityElement elem, Intersection intersection, int block)[]
+        self.traffic = BaiNetworkBuilder(self.data, self.exported_roads, self.traffic_intersections, self.road_has_sidewalks, self.road_has_divider)
         return manual_blocks
 
     def get_element_parts(self, kind, element, manual_blocks):
@@ -2045,24 +1315,18 @@ class JsonProcessor:
             if self.verbose: print("exporting " + patch['data']['name'])
             self.guarded_element(res, patch['data']['name'], 'terrainPatch', lambda: self.get_patch(res, patch, manual_blocks), patch['id'])
 
-        print("processing room custom elements...")
-        self.custom_elements.process_rooms(res)
-
         print("processing building lines...")
         for line in data['buildingLines']:
             if self.verbose: print("exporting " + line['data']['name'])
             self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line), line['id'])
 
-        print("processing custom elements outside of rooms...")
-        self.custom_elements.process_unassigned(res)
-
         print("processing traffic...")
         with report.guarded("the traffic was not exported"):
-            self.get_traffic(res)
+            self.network = self.traffic.build()
 
         print("processing decals...")
         with report.guarded("the decals were not exported"):
-            self.get_decals(res)
+            export_decals(self, res)
 
         # Sort order of INST meshes can matter for rendering when transparent objects are involved, here the current order gets preserved
         sorted_meshes = sorted(data['meshInstances'], key=lambda mesh: mesh['name'])

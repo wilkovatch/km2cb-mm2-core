@@ -1,9 +1,0 @@
-{
-	"parameters": [
-		{
-			"name": "alwaysShown",
-			"label": "CE_ALWAYS_SHOWN",
-			"type": "bool"
-		}
-	]
-}

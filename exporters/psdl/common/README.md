@@ -1,3 +1,0 @@
-The MM2 core's native game-file writers, vendored from https://github.com/wilkovatch/psdl-exporter-common at commit e3ee2edacd309ae4c5bb57891ee1e08f06a5685e. These files are maintained directly in the core repository. The original license is in LICENSE.md.
-
-`main_writer.py` coordinates PSDL, INST, BAI, PATHSET, decal and PKG output. `scene_input.py` is the writer input interface; the core's parent folder contains its standalone BIN adapter. `pathset_writer.py` accepts an optional output filename and race ownership filter, used by `race_elements.py` to write per-race props. BIN-only export remains available for diagnostics and tools.

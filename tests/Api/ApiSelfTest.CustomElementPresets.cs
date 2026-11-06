@@ -90,9 +90,9 @@ namespace Api {
             Check("cancelling a draft creates no city elements", M.customElements.Count == count);
             Same("draft edits and cancellation create no undo entries", before, await Call("history.state"));
 
-            var restore = MakeGroupCreatable("CREATE_PSDL_ELEMENT");
+            var restore = MakeTestCreationGroup();
             try {
-                Start(null, "CREATE_PSDL_ELEMENT");
+                Start(null, TestCreationGroup);
                 await Frames(2);
                 var grouped = Field<List<string>>(panel, "creatableTypes");
                 var typeDropdown = Field<EditorPanelElements.Dropdown>(panel, "createTypeDropdown");
@@ -197,34 +197,25 @@ namespace Api {
                 await Expect("preset application rejects a curve mode excluded by the core", "invalid_value", "state.applyPreset", new { @ref = peerId, name = presetName });
                 await Expect("preset sync rejects a curve mode excluded by the core", "invalid_value", "presets.sync", new { category, name = presetName });
             } finally { TP.GetCustomElementTypes()["decal"].typeData.settings.spline.curveTypes = curveTypes; }
-            var roomSettings = TP.GetCustomElementTypes()["room"].typeData.settings;
-            var roomPresets = roomSettings.presets;
-            var contains = roomSettings.container.contains;
-            int roomId = -1;
+            //another type with a preset of the same name (the core has no container type to also check that sync keeps containers)
+            int otherId = -1;
             try {
-                roomSettings.presets = true;
-                roomSettings.container.contains = contains.Concat(new[] { "decal" }).ToArray();
-                roomId = (await Call("customElement.create", new { type = "room" })).Value<int>();
-                await Call("presets.save", new { category = "customElement/room", name = presetName, values = new { type = "room", marker = "other type" } });
-                await Call("state.applyPreset", new { @ref = roomId, name = presetName });
-                await Call("customElement.setContainer", new { element = peerId, container = roomId });
+                otherId = (await Call("customElement.create", new { type = "decalSingle" })).Value<int>();
+                await Call("presets.save", new { category = "customElement/decalSingle", name = presetName, values = new { type = "decalSingle", marker = "other type" } });
+                await Call("state.applyPreset", new { @ref = otherId, name = presetName });
                 await Call("presets.sync", new { category, name = presetName });
-                Check("sync preserves containers and isolates matching names in another type", Element(peerId).container == Element(roomId)
-                    && Element(roomId).state.Str("marker") == "other type");
-                Operations.CustomElementPresets.Remember("room", presetName);
-                Check("creation memory is independent for each custom element type", Operations.CustomElementPresets.CreationState("room").Str("type") == "room"
+                Check("sync isolates matching names in another type", Element(otherId).state.Str("marker") == "other type");
+                Operations.CustomElementPresets.Remember("decalSingle", presetName);
+                Check("creation memory is independent for each custom element type", Operations.CustomElementPresets.CreationState("decalSingle").Str("type") == "decalSingle"
                     && Operations.CustomElementPresets.CreationState("decal").Str("type") == "decal");
             } finally {
-                if (roomId >= 0) await Call("customElement.delete", new { element = roomId });
-                PresetManager.GetPresets().presets.Remove("customElement/room");
-                PresetManager.SavePresets();
-                roomSettings.presets = roomPresets;
-                roomSettings.container.contains = contains;
+                if (otherId >= 0) await Call("customElement.delete", new { element = otherId });
+                await Call("presets.delete", new { category = "customElement/decalSingle", name = presetName });
             }
-            await Expect("preset saves reject another type", "invalid_value", "presets.save", new { category, name = "bad", values = new { type = "room" } });
+            await Expect("preset saves reject another type", "invalid_value", "presets.save", new { category, name = "bad", values = new { type = "decalSingle" } });
             await Expect("preset saves reject a non-string type", "invalid_value", "presets.save", new { category, name = "bad", values = new { type = 42 } });
             await Expect("preset saves reject unsupported curve modes", "invalid_value", "presets.save", new { category, name = "bad", values = new { type = "decal", curveType = 99 } });
-            await Expect("disabled custom element types have no preset category", "invalid_value", "presets.list", new { category = "customElement/room" });
+            await Expect("disabled custom element types have no preset category", "invalid_value", "presets.list", new { category = "customElement/train" });
 
             var type = TP.GetCustomElementTypes()["decal"];
             var oldParameters = type.parameterContainer.parameters;

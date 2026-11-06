@@ -1,4 +1,4 @@
-from common.file_io import BinaryFileHelper
+from writers.file_io import BinaryFileHelper
 
 # the routes of the moving objects of the city (trains, boats...): a pathset with a line strip for each route, the
 # points are the control points of the game's own interpolation

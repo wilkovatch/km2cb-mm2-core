@@ -6,18 +6,20 @@ Read this topic for any exporter change. Also read the relevant format/feature t
 
 ## Self-contained exporter
 
-Exporter changes affect the builder (C# and `Files/python`) and this core (`wilkovatch/km2cb-mm2-core`). `exporters/psdl/common` is ordinary tracked code vendored from `psdl-exporter-common`; keep its original license. There is no submodule or Blender compatibility requirement. BIN-only export and standalone writer tools remain supported.
+The structure of the exporter (pipeline, modules, coordinate spaces, parts, the BAI model and its paths, error handling) is documented in [The PSDL exporter](../exporter.md): read it before changing the exporter, and keep it up to date. Exporter changes can affect the builder (C# and `Files/python`) too. The writers in `exporters/psdl/writers` are maintained here only; there is no intermediate file between the processor and the writers.
 
 When stashing to compare against old behaviour, stash both the builder repo and this repo. This repo keeps its own older stashes, so pop only yours.
 
 Useful tools: `exporters/psdl/tools/psdl_check.py` (perimeter spikes/slits, prop-room texture indices), `bai_check.py --lint` (BAI sanity, max 11 roads per intersection), `decal_check.py`.
 
-Fast exporter loop without the game (from the builder folder): `-- export-json <city> --out x.json`, then run this core's `exporters/psdl/export.py <Files/python> x.json x.psdl <flags...>` directly with the builder's `python/python.exe`. A BAI-only export of a large city takes about 3 s.
+Fast exporter loop without the game (from the builder folder): `-- export-json <city> --out x.json`, then run this core's `exporters/psdl/export.py <Files/python> x.json x.psdl <flags...>` directly with the builder's `python/python.exe`, one 0/1 value per flag of `exporters/psdl/settings.json`, in its order (`options.py` names the expected ones when the count is wrong). A BAI-only export of a large city takes about 3 s.
+
+Equivalence check for a refactoring: copy the current `exporters/psdl` (with `server` and `fonts`, which it reads two folders up) to a scratch folder, run both exporters on the same JSON files with the same flags and compare the output trees byte by byte (an `.ar` stores file times: compare its entries). `tools/bai_check.py`'s `read_bai` reads both BAIs for a field-by-field comparison when a change is intended.
 
 Exporter gotchas:
 
 - The PSDL exporter waits for Enter only when stdin is a terminal, and tolerates EOF at that prompt. Linux console launches can inherit closed or redirected stdin; an optional pause must not turn a completed export into an error or mask a real failure. Without a console, the builder's `PythonManager.RunScriptTask` also feeds newlines on stdin for older exporters.
-- A finished export deletes its `.bin`, so "no `.bin` left" is the reliable success test (a Python traceback goes to stderr, which neither `pythonLog.txt` nor the API `output` captures).
+- The exit code is the success test: 1 for an exception or for errors in the report (a Python traceback goes to stderr, which neither `pythonLog.txt` nor the API `output` captures).
 - Exports land in `<path dir>/city/<name>.psdl` (game folder layout from `output_layout.py`; tune, race, geometry, bound, texture, jpg go next to `city`).
 - All PATHSET writers (props, decals, race props, parked cars, trains and boats) run under the `pathset` flag, independently of `cinfo_aimap`. Each city-route writer has its own error guard. Files written again are truncated or replaced, including shorter outputs; repeat-export checks are in `exporters/psdl/tools/_test_export_overwrite.py`.
 - The bundled Python needs `pythonInfo/requirements.txt` (e.g. Pillow for the hudmap). CLI sessions skip the builder's Python check, so install them by hand.

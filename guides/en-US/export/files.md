@@ -58,10 +58,6 @@ Each race has these files in **`race/<city>/`**:
 
 **`jpg/<city>_maproam.jpg`** and **`jpg/<city>_map<race>.jpg`** are the images of the menus.
 
-## The intermediate file
-
-**`city/<city>.bin`** is the exporter's own format, used between reading the city and writing the game files. It is deleted after a normal export, and kept only with **Export BIN only**. The game doesn't use it.
-
 ## What isn't exported
 
 - The textures and meshes of your city, in a loose export. See [Where the files go](layout.md).

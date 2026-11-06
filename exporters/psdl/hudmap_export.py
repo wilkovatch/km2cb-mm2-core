@@ -8,12 +8,13 @@ from pathlib import Path
 from PIL import Image, ImageChops, ImageDraw, ImageFilter, ImageFont
 
 from bridge_export import DEFAULT_MESH, find_file, pkg_size
-from common.file_io import BinaryFileHelper
-from common.tex_writer import write_image
+from writers.file_io import BinaryFileHelper
+from writers.tex_writer import write_image
 from prop_placers import model_name
 from race_elements import IDENTITY, OWNER
 from utils import state_bool, state_val, state_vector
-from common import report
+from traffic.paths import lane_counts
+from writers import report
 
 # The map of the city drawn from its geometry, seen from above with the north (-z in the game) up:
 # - the hudmap, the map of the HUD in the game (no labels): tiles in texture/<city>_hudmap<n>.tex (and the _ni
@@ -359,17 +360,10 @@ class HudmapExporter:
 
     def traffic_lanes(self, rec):
         # the lanes (forward, backward) of an exported road, None if it has no traffic or isn't drawn as a road
-        element = rec.get('customElement')
-        if element is not None:
-            room = self.jp.custom_elements.room_of(element)
-            category = element_category(room['data']['fields']['state']) if room is not None else 'auto'
-            if category not in ('auto', 'road') or state_bool(element['data']['fields']['state'], 'alley'):
-                return None
-            return rec['forward_lanes'], rec['backward_lanes']
         state = rec['road']['data']['fields']['state']
         if state_bool(state, 'pedestrianStreet') or not self.is_drawn_as_road(rec['road']):
             return None
-        return self.jp.get_bai_lane_counts(state)
+        return lane_counts(state)
 
     def one_way_path(self, chain):
         # the center of a row of one-way roads in the direction of the traffic, None if it isn't one
@@ -385,9 +379,12 @@ class HudmapExporter:
             if backward is not None and road_backward != backward:
                 return None
             backward = road_backward
-            for section in self.jp.get_bai_sections(rec, reverse):
+            paths = self.jp.traffic.paths(key, reverse)
+            if paths is None:
+                return None
+            for right_curb, left_curb in zip(paths.right.curb, paths.left.curb):
                 # between the curbs
-                center = game_xz([(section[1][i] + section[-2][i]) / 2 for i in range(3)])
+                center = game_xz([(right_curb[i] + left_curb[i]) / 2 for i in range(3)])
                 if len(points) == 0 or math.dist(points[-1], center) > 1e-6:
                     points.append(center)
         if len(points) < 2:
@@ -400,9 +397,9 @@ class HudmapExporter:
         if state_bool(self.props, 'hudmapHideArrows'):
             return []
         # the rows of roads of the BAI, then the roads outside of them (e.g. with a free end, as on a bridge)
-        chains = list(getattr(self.jp, 'bai_chains', []))
+        chains = list(self.jp.traffic.chains)
         in_chains = {key for chain in chains for key, _ in chain}
-        chains += [[(key, False)] for key in getattr(self.jp, 'exported_roads', {}) if key not in in_chains]
+        chains += [[(key, False)] for key in self.jp.exported_roads if key not in in_chains]
         paths = [path for path in map(self.one_way_path, chains)
                  if path is not None and path[1][-1] >= ARROW_MIN_ROAD_LENGTH * self.meters_per_pixel]
         paths.sort(key=lambda path: -path[1][-1])
@@ -417,14 +414,9 @@ class HudmapExporter:
 
     def get_shapes(self):
         shapes = Shapes()
-        # the ghosts (replaced by custom elements) are not drawn, the elements replacing them are
         for road in self.data.get('roads') or []:
-            if road.get('ghost', False):
-                continue
             self.add_mesh(shapes, road['data'].get('mesh'), element_category(road['data']['fields']['state']), 'road')
         for intersection in self.data.get('intersections') or []:
-            if intersection.get('ghost', False):
-                continue
             intersection_category = element_category(intersection['data']['fields']['state'])
             self.add_mesh(shapes, intersection['data'].get('mesh'), intersection_category, 'road')
             for road in intersection.get('roadsThrough') or []:
@@ -440,8 +432,6 @@ class HudmapExporter:
             for building in line.get('buildings') or []:
                 category = element_category(building['data']['fields']['state'])
                 self.add_mesh(shapes, building.get('roof'), line_category if category == 'auto' else category, 'building', False)
-        for mesh, room_state, default in self.jp.custom_elements.hudmap_meshes():
-            self.add_mesh(shapes, mesh, element_category(room_state), default, default != 'building')
         for instance in self.data.get('meshInstances') or []:
             self.add_mesh_instance(shapes, instance)
         for element in self.data.get('customElements') or []:

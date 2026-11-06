@@ -12,8 +12,8 @@ from unittest.mock import patch
 CORE = pathlib.Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(CORE / 'exporters/psdl'), str(CORE.parents[1] / 'python')]
 
-from common.file_io import BinaryFileHelper
-from common.inst_writer import INSTWriter
+from writers.file_io import BinaryFileHelper
+from writers.inst_writer import INSTWriter
 import json_processor
 
 spec = importlib.util.spec_from_file_location('inst_modifiers_migration', CORE / 'migrations/7.py')
@@ -109,8 +109,7 @@ class Writer(unittest.TestCase):
             writer = INSTWriter.__new__(INSTWriter)
             writer.file = BinaryFileHelper(str(path), 'wb')
             writer.object_names = set()
-            writer.blocks = []
-            writer.utils = SimpleNamespace(get_real_block_number=lambda blocks, block: 0)
+            writer.scene = SimpleNamespace(block_index=lambda block: 0)
             writer.process_pkg_group(SimpleNamespace(pivot=(0, 0, 0), block=0, stem='group'))
             writer.export_elem([0, 0, 0], 1, 1, 1, (0, 0, 0), 0, 'mesh', 0x2007)
             writer.file.close()

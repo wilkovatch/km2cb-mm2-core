@@ -7,8 +7,8 @@ import shutil
 import sys
 from pathlib import Path
 
-from common import report
-from common.pathset_writer import MAX_PATHS
+from writers import report
+from writers.pathset_writer import MAX_PATHS
 from prop_placers import model_name
 from race_elements import races, IDENTITY, OWNER
 from route_pathset import write_routes

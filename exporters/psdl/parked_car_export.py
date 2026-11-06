@@ -11,8 +11,8 @@ import os
 import re
 from pathlib import Path
 
-from common import report
-from common.pathset_writer import MAX_PATHS
+from writers import report
+from writers.pathset_writer import MAX_PATHS
 from race_elements import races, IDENTITY, OWNER
 from route_pathset import write_routes
 from utils import state_val, state_bool, PARKED_CARS_TYPES

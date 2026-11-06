@@ -8,21 +8,6 @@
 			"defaultValue": true
 		},
 		{
-			"id": "bin",
-			"label": "EXPORT_BIN",
-			"disables": [
-				"psdl",
-				"psdl_splitNonCoplanarRoads",
-				"bai",
-				"bai_accurateCulling",
-				"inst",
-				"pathset",
-				"pkgs",
-				"psdl_capMaterials"
-			],
-			"defaultValue": false
-		},
-		{
 			"id": "psdl",
 			"label": "EXPORT_PSDL",
 			"enables": [
@@ -94,16 +79,12 @@
 			"tooltip": "EXPORT_PACK_AR_TOOLTIP",
 			"format": "ar",
 			"formatLabel": "EXPORTER_AR",
-			"disables": [
-				"bin"
-			],
 			"defaultValue": false
 		}
 	],
 	"validation": {
 		"flags": {
 			"propRules": true,
-			"bin": false,
 			"psdl": true,
 			"inst": true,
 			"bai": true,

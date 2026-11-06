@@ -1,7 +1,7 @@
 """Core prop placers: native line paths, or the exact individually evaluated props."""
 import math
 import struct
-from common import report
+from writers import report
 from psdl_parts import ExportedCityElement
 from utils import state_val, placed_props, PARKED_CARS_TYPES
 

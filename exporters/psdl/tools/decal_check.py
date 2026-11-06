@@ -1,4 +1,4 @@
-# Checks decals.pathset files as the game reads them (see common/decal_writer.py)
+# Checks decals.pathset files as the game reads them (see writers/decal_writer.py)
 #
 #   python -I decal_check.py [--verbose] file.pathset [file2.pathset ...]
 #

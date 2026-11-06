@@ -28,7 +28,7 @@ No original game data is included with the core. Open or create a city using thi
 
 ## Exporting
 
-Select the PSDL format when exporting. The exporter writes PSDL, INST, BAI, PATHSET (props, decals, parked cars, trains, boats, bridges), prop rules, PKG and bounds, CINFO and AIMAP (races, opponents, police, ambient traffic), HUD and race maps, laid out as in the game folder. Choose "MM2 archive (.ar)" to get a single archive to put in the game folder. "BIN only" keeps the intermediate exporter data for inspection.
+Select the PSDL format when exporting. The exporter writes PSDL, INST, BAI, PATHSET (props, decals, parked cars, trains, boats, bridges), prop rules, PKG and bounds, CINFO and AIMAP (races, opponents, police, ambient traffic), HUD and race maps, laid out as in the game folder. Choose "MM2 archive (.ar)" to get a single archive to put in the game folder.
 
 `exporters/psdl/tools` contains checkers for exported or stock files: `psdl_check.py` (room perimeters), `bai_check.py` (AI paths) and `decal_check.py` (decals).
 

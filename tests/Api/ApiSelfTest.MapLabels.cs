@@ -125,34 +125,6 @@ namespace Api {
             Label(0).state.SetStr("text", "Centre"); objectList.SetActive(false);
             PC.Assign(Label(0).state, owner);
 
-            var room = Operations.CustomElements.Create(M, "room", Vector3.Zero);
-            var secondLabel = Label(1);
-            GO.SetName(room, "Parent");
-            var contains = room.Settings.container.contains;
-            room.Settings.container.contains = contains.Append("mapLabel").ToArray();
-            try {
-                Label(0).SetContainer(room); Label(1).SetContainer(room);
-                Label(0).state.SetStr("text", "Parent District"); Label(1).state.SetStr("text", "");
-                GO.SetName(Label(1), "Parent fallback");
-                builder.SelectObject(room); M.ProcessUpdate(); await Frames(2);
-                list = Field<EditorPanelElements.ScrollList>(builder.customElementEditorPanel, "contentsList");
-                Check("custom contents keep configured prefixes and shorten fallback names", Texts(list).SequenceEqual(new[] { "Parent District", "fallback" }));
-                list.SetValue(0); Label(0).state.SetStr("text", "Live contents"); builder.customElementEditorPanel.Update();
-                Check("custom contents refresh without losing selection", Texts(list)[0] == "Live contents" && list.Selected == 0);
-                var picker = Field<EditorPanels.CustomElementPickerPanel>(builder.customElementEditorPanel, "picker");
-                picker.Open("test", "test", new List<CustomElement> { null, Label(0), secondLabel }, null, "test", _ => { });
-                list = Field<EditorPanelElements.ScrollList>(picker, "lst");
-                Check("custom-element pickers display configured labels", Texts(list)[1] == "Live contents");
-                list.SetValue(1); Label(0).state.SetStr("text", "Live picker"); builder.NotifyUpdateCompleted();
-                Check("picker labels refresh while selected", Texts(list)[1] == "Live picker" && list.Selected == 1);
-            } finally {
-                builder.CloseAllPanels();
-                foreach (var label in M.GetCustomElementChildren(room)) label.SetContainer(null);
-                room.Settings.container.contains = contains;
-                GO.SetName(secondLabel, names[1]);
-                Label(0).state.SetStr("text", "Centre"); Label(1).state.SetStr("text", "District");
-                Operations.CustomElements.Delete(M, room); M.FlagAsChanged();
-            }
 
             city = M.GetDummy<CityProperties>();
             var raceParameter = CityElements.Types.Parsers.TypeParser.GetCitySettings()["city"].typeData.parametersInfo.parameters.First(p => p.name == "circuitRaces");
@@ -353,35 +325,6 @@ namespace Api {
             var labels = exported["customElements"].Where(e => e["type"].Value<string>() == "mapLabel").ToArray();
             Check("export JSON contains labels as owned point elements", labels.Length == 2 && labels[0]["data"]["fields"]["state"]["text"].Value<string>() == "Downtown"
                 && labels[0]["points"]["center"]["position"][0].Value<float>() == 20);
-            //over a surface above the terrain, whose collider isn't in the physics world yet at the first update of a load
-            var raisedSurface = (await Call("customElement.create", new { type = "triangleFan", name = "Raised surface", mesh = new {
-                vertices = new[] { new { position = new[] { 560f, 12f, 560f } }, new { position = new[] { 640f, 12f, 560f } }, new { position = new[] { 640f, 12f, 640f } }, new { position = new[] { 560f, 12f, 640f } } },
-                triangles = new[] { 0, 2, 1, 0, 3, 2 } } })).Value<int>();
-            History.UndoManager.Record("label over a surface", () => {
-                var label = Operations.CustomElements.Create(M, "mapLabel", new Vector3(600, 0, 600));
-                GO.SetName(label, "Raised"); label.state.SetStr("text", "Raised"); PC.Assign(label.state, owner);
-                M.FlagAsChanged();
-            });
-            await Call("city.flush"); await Frames(5);
-            var surfaceHeight = GeometryHelper.AutoProjectOnSurface(new Vector3(600, 99, 600), 136).Y;
-            CustomElement Raised() => Labels().First(e => e.state.Str("text") == "Raised");
-            float RaisedHeight() => Raised().GetAllPoints()[0].GetPoint().Y;
-            Check("the surface is above the terrain (" + surfaceHeight + ")", surfaceHeight > 5);
-            Check("a new label goes on the surface (" + RaisedHeight() + ")", Mathf.Abs(RaisedHeight() - surfaceHeight) < 0.01f);
-            await Call("city.save"); await Call("city.reload"); await Frames(3);
-            Check("a label saved on a surface is still on it after loading (" + RaisedHeight() + ")", Mathf.Abs(RaisedHeight() - surfaceHeight) < 0.01f);
-            var heightless = ReadCity(cityPath);
-            var savedLabel = heightless["customElements"].First(e => e["state"]?["text"]?.Value<string>() == "Raised");
-            savedLabel["points"]["center"]["position"]["y"] = 0;
-            WriteCity(cityPath, heightless);
-            await Call("city.reload"); await Frames(3);
-            Check("a label saved at height 0 is projected when the city is loaded (" + RaisedHeight() + ")", Mathf.Abs(RaisedHeight() - surfaceHeight) < 0.01f);
-            Check("loading doesn't record an undo step", !(await Call("history.state"))["canUndo"].Value<bool>());
-            raisedSurface = M.customElements.First(e => GO.GetName(e) == "Raised surface") is var loadedSurface ? History.ElementRegistry.GetId(loadedSurface) : -1;
-            await Call("customElement.move", new { element = raisedSurface, offset = new[] { 0, 3, 0 } });
-            Check("a label follows the surface under it (" + RaisedHeight() + ")", Mathf.Abs(RaisedHeight() - surfaceHeight - 3) < 0.01f);
-            await Call("history.undo");
-            Check("undoing the move of the surface brings the label back (" + RaisedHeight() + ")", Mathf.Abs(RaisedHeight() - surfaceHeight) < 0.01f);
             city = M.GetDummy<CityProperties>();
             if (DisplayServer.GetName() != "headless") {
                 await Call("view.camera.set", new { position = V(160, 600, 500), target = V(160, 0, 30) });

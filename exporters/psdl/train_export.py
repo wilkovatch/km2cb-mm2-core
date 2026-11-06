@@ -1,4 +1,4 @@
-from common import report
+from writers import report
 from route_pathset import write_routes, PATH_TYPE_LINE_STRIP
 
 # the stock lines (race/london/london_train.pathset) are line strips with a spacing of 20 (5 m)

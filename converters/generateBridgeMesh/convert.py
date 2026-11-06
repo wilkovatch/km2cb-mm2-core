@@ -20,7 +20,7 @@ CORE = Path(__file__).resolve().parents[2]
 sys.path.append(str(CORE / 'exporters' / 'psdl'))
 import custom_element_conversion as cec
 from bridge_export import generated_tuning, DEFAULT_TRUSS_TEXTURE, DEFAULT_BOTTOM_TEXTURE, DEFAULT_RAIL_TEXTURE
-from common.pkg_writer import PKGWriter
+from writers.pkg_writer import PKGWriter
 from utils import state_bool, state_int, state_val
 
 # gizBridge::UpdateMatrix (577620) adds a world offset of -0.3: the hinge height is at this height in the model, as the top

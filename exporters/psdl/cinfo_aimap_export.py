@@ -2,7 +2,7 @@ import shutil
 from pathlib import Path
 from utils import state_val, state_bool, state_vector, state_vector_scale
 from race_elements import opponents as spline_opponents
-from common import report
+from writers import report
 
 
 class CinfoAimapExporter:

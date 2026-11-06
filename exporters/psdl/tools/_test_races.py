@@ -1,4 +1,4 @@
-"""Short synthetic checks for race migration, OPP parity and race-scoped BIN/PATHSET output."""
+"""Short synthetic checks for race migration, OPP parity and race-scoped PATHSET output."""
 import contextlib
 import copy
 import gzip
@@ -19,9 +19,8 @@ sys.path.insert(0, str(CORE.parents[1] / 'python'))
 from MigrationHelper import MigrationHelper
 from _test_prop_placers import read_paths, line
 from prop_placers import export_prop_placer
-from bin_export import BINExporter
-from scene_input import StandaloneSceneInput
-from common.pathset_writer import PATHSETWriter
+from scene import Scene
+from writers.pathset_writer import PATHSETWriter
 from race_elements import opponents, write_props, validate_ownership
 from output_layout import OutputLayout
 from cinfo_aimap_export import CinfoAimapExporter
@@ -117,9 +116,7 @@ class Races(unittest.TestCase):
         export_prop_placer(SimpleNamespace(data=dict(meshDict=[dict(name='geometry/cone.pkg')])), element, parts)
         with tempfile.TemporaryDirectory() as directory, contextlib.redirect_stdout(io.StringIO()):
             root = Path(directory); layout = OutputLayout(str(root/'test.psdl'))
-            binary = root/'parts.bin'
-            BINExporter(SimpleNamespace(get_objects=lambda:parts), False).export_bin_file(str(binary))
-            scene = StandaloneSceneInput(str(binary))
+            scene = Scene(parts)
             PATHSETWriter(scene, layout.psdl).write()
             write_props(scene, data, layout)
             global_paths = read_paths(root/'city/test/props.pathset')
@@ -131,7 +128,6 @@ class Races(unittest.TestCase):
             self.assertEqual(sorted(p[1] for p in paths_b), [1,2])
             individual = next(p for p in paths_b if p[1] == 1)
             self.assertEqual(individual[3][0], (-3.0,4.0,5.0))
-            binary.unlink()
             archive = root/'test.ar'
             ArPacker(layout, str(root/'assets'), False).pack(str(archive))
             with zipfile.ZipFile(archive) as stream:

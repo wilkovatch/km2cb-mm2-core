@@ -6,7 +6,8 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2] / 'exporters/psdl'))
 import custom_element_conversion as cec
-from common.bai_writer import BAIWriter, RouteGeometry, resampled_parameters, section_frames, normalized
+from traffic.rails import join_rails
+from writers.bai_writer import Route, normalized
 
 
 def convert(data):
@@ -19,33 +20,20 @@ def convert(data):
         ends = []
         for rid in intersection['roads']:
             road = converter.data['roads'][rid]
-            state = road['data']['fields']['state']
-            if not state.get('cableCarLine'):
+            if not road['data']['fields']['state'].get('cableCarLine'):
                 continue
             converter.jp.get_element_parts('road', road, converter.manual_blocks)
-            record = converter.jp.exported_roads.get(rid)
-            if record is None:
+            bai_road = converter.jp.traffic.single_road(rid)
+            if bai_road is None:
                 continue
-            sections = converter.jp.get_bai_sections(record, False)
-            if len(sections) < 2:
-                continue
-            # Work in the same z-up scene coordinates and with the same resampling as the BAI writer.
-            sections = [[np.array([p[0], p[2], p[1]]) for p in section] for section in sections]
-            geo = RouteGeometry()
-            geo.right_outer = [s[0] for s in sections]
-            geo.right_curb = [s[1] for s in sections]
-            geo.left_curb = [s[-2] for s in sections]
-            geo.left_outer = [s[-1] for s in sections]
-            geo = geo.resampled(resampled_parameters(geo.centre()))
-            centre = geo.centre()
-            xs, _, _, _ = section_frames(centre)
-            offset = converter.jp.get_cable_car_offset(state)
+            # the rails as exported in the BAI (in the z-up space of the writer)
+            route = Route(bai_road)
             at_end = road['endIntersectionId'] == intersection['id']
             index, neighbor = (-1, -2) if at_end else (0, 1)
-            heading = normalized(centre[index] - centre[neighbor])
-            rails = [centre[index] + xs[index] * offset, centre[index] - xs[index] * offset]
+            heading = normalized(route.centre[index] - route.centre[neighbor])
+            rails = [route.right.rail[index], route.left.rail[index]]
             ends.append((heading, rails, {}))
-        for i, (curve, _) in enumerate(BAIWriter(None, '', False).join_rails(ends)):
+        for i, (curve, _) in enumerate(join_rails(ends)):
             if not any(np.linalg.norm(p - curve[0]) > 0.001 for p in curve[1:]):
                 continue
             ids = []

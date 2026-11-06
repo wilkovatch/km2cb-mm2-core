@@ -149,7 +149,7 @@ class LodTexture(unittest.TestCase):
     def test_tex_source(self):
         # through the reader of the editor, with the rows of the .tex format (from the bottom)
         sys.path.insert(0, str(CORE / 'exporters/psdl'))
-        from common.tex_writer import write_image
+        from writers.tex_writer import write_image
         write_image(str(self.folder / 'common' / 'Texture' / 'road.tex'), Image.fromarray(road_image()).transpose(Image.FLIP_TOP_BOTTOM))
         self.state['texture1'] = 'texture/road.tex'
         column = self.image()[:, 0]

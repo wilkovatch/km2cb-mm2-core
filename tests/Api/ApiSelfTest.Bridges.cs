@@ -51,11 +51,10 @@ namespace Api {
             M.ShowAnchors(false);
 
             //another type can't be attached to a road end
-            var fan = (await Call("customElement.create", new { type = "triangleFan", points = new JObject(),
-                mesh = new { vertices = new object[] { new { position = V(-400, 0, -800) }, new { position = V(-390, 0, -800) }, new { position = V(-390, 0, -790) } }, triangles = new[] { 0, 1, 2 } } })).Value<int>();
+            var decal = (await Call("customElement.create", new { type = "decalSingle", position = V(-400, 0, -800) })).Value<int>();
             await Expect("a type without roadEndAnchors can't use a road end", "invalid_operation", "customElement.attachPoint",
-                new { element = fan, vertex = 0, to = new { anchor = new { of = EndAt(-330)["of"], index = EndAt(-330)["index"] } } });
-            await Call("customElement.delete", new { element = fan });
+                new { element = decal, path = "center", to = new { anchor = new { of = EndAt(-330)["of"], index = EndAt(-330)["index"] } } });
+            await Call("customElement.delete", new { element = decal });
 
             //the points follow the road end, with undo
             await CheckUndo("attaching a bridge point to a road end", async () =>

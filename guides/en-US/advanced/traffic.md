@@ -1,6 +1,6 @@
 # Traffic and pedestrians
 
-Ambient vehicles follow the traffic lanes shown in the editor, and the exporter writes them to the BAI file. Lane spaces, parking spaces and different numbers of lanes per side are all kept in the game.
+Ambient vehicles, pedestrians and cable cars follow the paths shown in the editor (the traffic lanes, the paths on the sidewalks and the cable car rails), and the exporter writes them to the BAI file. Lane spaces, parking spaces and different numbers of lanes per side are all kept in the game.
 
 ## Road settings
 

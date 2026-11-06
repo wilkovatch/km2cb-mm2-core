@@ -1,4 +1,4 @@
-"""Repeat exports through the entry point and real file writers, with small synthetic BIN parts and no game assets."""
+"""Repeat exports through the entry point and real file writers, with small synthetic parts and no game assets."""
 import contextlib
 import io
 import json
@@ -17,6 +17,8 @@ sys.path[:0] = [str(EXPORTER), str(CORE.parents[1] / 'python')]
 
 import ExportReport
 from psdl_parts import ExportedCityElement
+from options import flag_ids
+from traffic.model import BaiNetwork
 from _test_parked_cars import single
 from _test_boats import boat, LOOP
 from _test_bridges import bridge
@@ -46,8 +48,9 @@ def processor(data, verbose):
              part('0_PTH', [(1, 0, 0), (1, 0, 12)], object='tree', flags='2', spacing='24', race='A'),
              part('0_DECAL', [(-1, 0, 0), (1, 0, 0), (-1, 0, 5), (1, 0, 5)], texture='decal', strip_pairs='1')]
     mesh = dict(vertices=vertices, submeshes=[dict(indices=ground.indices, materialId=-1)])
-    return SimpleNamespace(data=data, get_objects=lambda: parts, prop_rules=[],
-                           custom_elements=SimpleNamespace(hudmap_meshes=lambda: [(mesh, {}, 'ground')]))
+    data.setdefault('terrainPatches', [dict(data=dict(mesh=mesh, fields=dict(state={})))])
+    return SimpleNamespace(data=data, get_objects=lambda: parts, prop_rules=[], network=BaiNetwork(),
+                           exported_roads={}, traffic=SimpleNamespace(chains=[]))
 
 
 def city():
@@ -69,10 +72,10 @@ class ExportOverwrite(unittest.TestCase):
         source.write_text(json.dumps(data if data is not None else city()), encoding='utf-8')
         # No common assets: the modules are already on sys.path; this path locates an empty common folder.
         argv = [str(EXPORTER / 'export.py'), str(folder / 'modules'), str(source), str(folder / 'test.psdl')]
-        defaults = dict(propRules=True, bin=False, psdl=True, inst=True, bai=True, pathset=True,
-                        cinfo_aimap=True, hudmap=True, pkgs=True, split=False, culling=False, cap=False, verbose=False, packAr=False)
-        defaults.update(flags)
-        argv.extend(str(int(value)) for value in defaults.values())
+        values = dict.fromkeys(flag_ids(), True)
+        values.update(psdl_splitNonCoplanarRoads=False, bai_accurateCulling=False, psdl_capMaterials=False, verbose=False, packAr=False)
+        values.update(flags)
+        argv.extend(str(int(value)) for value in values.values())
         output = io.StringIO()
         exit_code = 0
         with contextlib.ExitStack() as stack:
@@ -156,16 +159,6 @@ class ExportOverwrite(unittest.TestCase):
             folder = Path(directory) / 'race/test'
             for kind in ('parkedcar', 'sailboat', 'ferry', 'bridge'):
                 self.assertTrue(read_paths(folder / ('test_' + kind + '.pathset')))
-
-    def test_bin_only_overwrites_without_writing_city_routes(self):
-        with tempfile.TemporaryDirectory() as directory:
-            self.run_export(directory, bin=True)
-            binary = Path(directory) / 'city/test.bin'
-            expected = binary.read_bytes()
-            binary.write_bytes(expected + b'old bytes' * 100)
-            self.run_export(directory, bin=True)
-            self.assertEqual(expected, binary.read_bytes())
-            self.assertFalse((Path(directory) / 'race/test/test_parkedcar.pathset').exists())
 
     def test_archive_and_preview_outputs_replace_previous_export(self):
         with tempfile.TemporaryDirectory() as directory:

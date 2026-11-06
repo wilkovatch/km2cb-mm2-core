@@ -6,7 +6,8 @@
 #           lane offsets and boundaries...) and reports how far they are from the ones in the file. On the stock
 #           sf.bai and london.bai they match (a few stock roads have garbage in the offsets). On the exported files
 #           the sidewalk centre differs around the sharp corners, where the BAI writer moves its points along the
-#           sidewalk for the pedestrians.
+#           sidewalk for the pedestrians, and is on the sidewalk surface (the path drawn in the editor), 7.5 cm above
+#           the stock centre, which is midway between the curb at road level and the outer edge.
 # --lint:   checks the conventions of the stock files (the right side lanes and rails from the end to the start,
 #           the sidewalks from the start to the end, at least 4 sections, unit vectors, 1 m traffic light axes,
 #           flat flag, road ends and intersections consistent, at most 11 roads per intersection), exits with 1 if
@@ -22,7 +23,7 @@ import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..'))
 
-from common.bai_writer import (CDCD_FLOAT, FLAG_FLAT, MAX_INTERSECTION_ROADS, MIN_SECTIONS,  # noqa: E402
+from writers.bai_writer import (CDCD_FLOAT, FLAG_FLAT, MAX_INTERSECTION_ROADS, MIN_SECTIONS,  # noqa: E402
                                cumulative_lengths, lane_boundaries, lateral_offsets, section_frames)
 
 FILE_UP = np.array([0.0, 1.0, 0.0])  # the file is y-up

@@ -5,7 +5,6 @@
 | Option | Default | Writes |
 |---|---|---|
 | **Export prop rules** | On | `propdefs.csv`, `proprules.csv` |
-| **Export BIN only** | Off | Only the `.bin` file (see below) |
 | **Export PSDL** | On | `<city>.psdl` |
 | **Export INST** | On | `<city>.inst` |
 | **Export BAI** | On | `<city>.bai` |
@@ -30,12 +29,6 @@ Some options depend on others, and turn read-only when they don't apply:
 
 - **Split non coplanar roads** and **Cap PSDL materials to 511 (TESTING ONLY)** need **Export PSDL**.
 - **Accurate BAI culling** needs **Export BAI**.
-- **Export BIN only** makes **Export PSDL**, **Export INST**, **Export BAI**, **Export PATHSET**, **Export PKG and bound files** and the options that depend on them read-only, and they are not written.
-- **Pack to .ar archive** makes **Export BIN only** read-only.
-
-## Export BIN only
-
-This option writes `city/<city>.bin` and keeps it, for inspection and tools. **It doesn't turn off everything:** **Export prop rules**, **Export CINFO and AIMAP** and **Export hudmap and race maps** keep their own checkboxes, so turn them off too if you want only the BIN file.
 
 ## Exporting less
 

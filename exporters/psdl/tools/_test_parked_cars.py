@@ -14,7 +14,7 @@ from _test_prop_placers import native_positions, read_paths
 from json_processor import JsonProcessor
 from parked_car_export import export_parked_cars, get_path, get_rows, write_rows, MANIFEST
 from prop_placers import export_prop_placer
-from common.pathset_writer import MAX_PATHS
+from writers.pathset_writer import MAX_PATHS
 
 
 def rotation_towards(forward):

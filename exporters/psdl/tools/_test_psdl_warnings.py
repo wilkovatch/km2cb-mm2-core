@@ -6,7 +6,7 @@ from unittest.mock import patch
 
 CORE = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(CORE / 'exporters/psdl'), str(CORE.parents[1] / 'python')]
-from common.psdl_writer import PSDLWriter
+from writers.psdl_writer import PSDLWriter
 
 
 def warnings(mat_ids, cap=False, hook=False):
@@ -16,7 +16,7 @@ def warnings(mat_ids, cap=False, hook=False):
     writer.ct_warning = False
     for mat_id in mat_ids:
         writer.count_high_material(mat_id)
-    with patch('common.psdl_writer.report.warning') as warning:
+    with patch('writers.psdl_writer.report.warning') as warning:
         writer.report_high_materials()
     return [call.args[0] for call in warning.call_args_list]
 

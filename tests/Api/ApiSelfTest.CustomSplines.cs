@@ -64,27 +64,18 @@ namespace Api {
                 && Traffic().Any(l => l.Name.ToString().StartsWith("traffic_4_") && l.arrowDirection == -1));
             Check("sidewalk and prop-bound lines have no arrows", RoadLines().Where(l => !l.Name.ToString().StartsWith("traffic_") || l.Name.ToString().StartsWith("traffic_0_")).All(l => l.arrowDirection == 0));
             var lanesBefore = Traffic().Select(l => Enumerable.Range(0,l.positionCount).Select(l.GetPosition).ToArray()).ToArray();
-            var baiId = (await Call("customElement.create",new {type="baiRoad",name="Arrow BAI"})).Value<int>();
-            CustomElement Bai() => M.customElements.First(e => e.TypeName == "baiRoad");
-            GameEngine.LineRenderer[] BaiLines() => Bai().generator.GetChildren().OfType<GameEngine.LineRenderer>().ToArray();
-            Check("Lua BAI lanes read injected values as booleans", BaiLines().Any(l => l.arrowDirection == 1) && BaiLines().Any(l => l.arrowDirection == -1));
             await Call("state.setParam",new { @ref=0,name="driveOnLeft",value=true });
-            Check("city traffic reversal updates procedural and Lua BAI lane arrows", Traffic().Where(l => l.Name.ToString().StartsWith("traffic_1_")).All(l => l.arrowDirection == -1)
-                && Bai().cityPropertiesState.Bool("_GLOBAL_driveOnLeft") && BaiLines().First(l => l.arrowDirection != 0).arrowDirection == 1);
+            Check("city traffic reversal updates procedural lane arrows", Traffic().Where(l => l.Name.ToString().StartsWith("traffic_1_")).All(l => l.arrowDirection == -1));
             Check("reversing arrows preserves lane point order", lanesBefore.Zip(Traffic(),(p,l) => p.SequenceEqual(Enumerable.Range(0,l.positionCount).Select(l.GetPosition))).All(x => x));
-            Check("injected custom-element values are not authored properties", !Bai().state.properties.ContainsKey("_GLOBAL_driveOnLeft"));
             await Call("history.undo");
-            Check("undo restores traffic arrow directions", Traffic().Any(l => l.Name.ToString().StartsWith("traffic_1_") && l.arrowDirection == 1) && !Bai().cityPropertiesState.Bool("_GLOBAL_driveOnLeft"));
+            Check("undo restores traffic arrow directions", Traffic().Any(l => l.Name.ToString().StartsWith("traffic_1_") && l.arrowDirection == 1));
             await Call("history.redo");
-            Check("redo restores reversed traffic arrows", Traffic().Any(l => l.Name.ToString().StartsWith("traffic_1_") && l.arrowDirection == -1) && Bai().cityPropertiesState.Bool("_GLOBAL_driveOnLeft"));
+            Check("redo restores reversed traffic arrows", Traffic().Any(l => l.Name.ToString().StartsWith("traffic_1_") && l.arrowDirection == -1));
             await Call("roads.create",new {points=new[] {new {position=new[] {-65f,0f,-50f}},new {position=new[] {65f,0f,-50f}}}});
             Check("new roads inherit the current city traffic side", M.roads[1].runtimeState.Bool("_GLOBAL_driveOnLeft"));
             await Call("state.setParam",new { @ref=roadId,name="pedestrianStreet",value=true });
             Check("pedestrian streets have no vehicle arrowheads", Traffic().Where(l => l.Name.ToString().StartsWith("traffic_0_")).All(l => l.arrowDirection == 0));
             await Call("state.setParam",new { @ref=roadId,name="pedestrianStreet",value=false });
-            await Call("state.setParam",new { @ref=baiId,name="alley",value=true });
-            Check("BAI pedestrian alleys have no directional arrows", BaiLines().All(l => l.arrowDirection == 0));
-            await Call("state.setParam",new { @ref=baiId,name="alley",value=false });
 
             var controls = new[] { new[] {-35f,2f,5f},new[] {35f,2f,5f},new[] {35f,2f,65f},new[] {-35f,2f,65f} };
             var boatId = (await Call("customElement.create",new { type="movingObject",name="Arrow loop",points=new {spline=controls.Select(p => new {position=p}).ToArray()} })).Value<int>();
@@ -102,9 +93,9 @@ namespace Api {
             var train = (CustomElement)History.UndoManager.GetAliveElement(trainId);
             Check("trains remain without arrows", train.generator.GetChildren().OfType<GameEngine.LineRenderer>().All(l => l.arrowDirection == 0));
             builder.CloseAllPanels(); M.ShowIntersections(false); await Frames(2);
-            Check("traffic arrows hide with their existing lines", !GO.GetEnabled(Road().generator.lanesRenderersContainer) && BaiLines().Where(l => l.arrowDirection != 0).All(l => !l.enabled));
+            Check("traffic arrows hide with their existing lines", !GO.GetEnabled(Road().generator.lanesRenderersContainer));
             M.ShowAllTrafficLanes(); await Frames(3);
-            Check("Show all traffic lanes includes arrows on both road kinds", GO.GetEnabled(Road().generator.lanesRenderersContainer) && BaiLines().Any(l => l.enabled && l.arrowDirection != 0));
+            Check("Show all traffic lanes includes the road arrows", GO.GetEnabled(Road().generator.lanesRenderersContainer));
             Check("moving-object arrows remain visible while deselected", BoatLine().enabled);
             await ToSignal(GetTree(),"physics_frame"); await Frames(2);
             var hitPosition = (BoatLine().GetPosition(0)+BoatLine().GetPosition(1))*.5f;
@@ -144,7 +135,7 @@ namespace Api {
             var exportPath = Path.Combine(folder,"..","arrows_export.json");
             await Call("city.exportJson",new {path=exportPath});
             var exportBefore = JObject.Parse(File.ReadAllText(exportPath));
-            var renderers = RoadLines().Concat(BaiLines()).Append(BoatLine()).ToArray();
+            var renderers = RoadLines().Append(BoatLine()).ToArray();
             var directions = renderers.Select(l => l.arrowDirection).ToArray();
             foreach (var renderer in renderers) renderer.arrowDirection = 0;
             await Call("city.exportJson",new {path=exportPath});
@@ -153,8 +144,8 @@ namespace Api {
                 && JToken.DeepEquals(exportBefore["customElements"],exportAfter["customElements"]));
             for (int i = 0; i < renderers.Length; i++) renderers[i].arrowDirection = directions[i];
             await Call("city.save"); await Call("city.reload");
-            Check("reload restores city-dependent directions on procedural and custom roads", Road().runtimeState.Bool("_GLOBAL_driveOnLeft")
-                && Bai().cityPropertiesState.Bool("_GLOBAL_driveOnLeft") && Traffic().Any(l => l.Name.ToString().StartsWith("traffic_1_") && l.arrowDirection == -1));
+            Check("reload restores city-dependent directions on procedural roads and custom elements", Road().runtimeState.Bool("_GLOBAL_driveOnLeft")
+                && Boat().cityPropertiesState.Bool("_GLOBAL_driveOnLeft") && Traffic().Any(l => l.Name.ToString().StartsWith("traffic_1_") && l.arrowDirection == -1));
             Check("reload restores moving-object arrows without injected authored state", BoatLine().arrowDirection == 1 && !Boat().state.properties.ContainsKey("_GLOBAL_driveOnLeft"));
             await Call("city.exportJson",new {path=exportPath});
         }

@@ -32,9 +32,9 @@ Read every topic relevant to the task before changing the core or running its wo
 | Before working on... | Read |
 |---|---|
 | API/undo scenarios, fixtures, focused checks or test baselines | [Developer tests](docs/agents/testing.md) and [test commands](tests/README.md) |
-| Any exporter change, native engine limits, crashes or reverse-engineering setup | [Exporter workflow and engine limits](docs/agents/exporting.md) |
+| Any exporter change, native engine limits, crashes or reverse-engineering setup | [Exporter workflow and engine limits](docs/agents/exporting.md) and [The PSDL exporter](docs/exporter.md) (its structure) |
 | Stock asset extraction, DAVE archives, city importing or importer round trips | [Game assets and city importing](docs/agents/assets-and-importing.md) |
-| PSDL attributes, converters, rooms, BAI lanes or pedestrians | [PSDL custom elements and BAI](docs/agents/psdl-and-bai.md) |
+| PSDL rooms, BAI lanes or pedestrians, the removed PSDL attribute elements | [PSDL rooms and BAI](docs/agents/psdl-and-bai.md) |
 | Prop placers/rules, banger transforms, INST modifiers, PATHSET lines or parked cars | [Props, INST and parked cars](docs/agents/props-and-parked-cars.md) |
 | Decals, rail decals, texture conventions, LOD textures, HUD/menu maps or labels | [Decals, textures and maps](docs/agents/decals-textures-and-maps.md) |
 | Races, opponents, difficulty, point storage, spline state or their migrations | [Races, point values and spline state](docs/agents/races-and-state.md) |
