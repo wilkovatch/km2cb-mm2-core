@@ -15,7 +15,7 @@ Do not put migrations information in the README, the migration process should be
 
 ## Guides
 
-`guides/en-US/{beginner,advanced,export}` are the guides shown in **Help > Guides** (format in the builder's `wiki/Core-Guides.md`). They are written for users, so they leave out what the README leaves out (the PSDL attributes, migrations). When a feature changes, update them with the README: the export guide lists every flag of `exporters/psdl/settings.json` and every exported file, and the advanced guide the [limits and `mm2.log` messages](docs/agents/exporting.md#midtown-madness-2-reference). `selftest undo <new folder> --mode guide` in the builder checks their links and structure, not whether they are true.
+`guides/en-US/{beginner,advanced,export}` are the guides shown in **Help > Guides** (format in the builder's `wiki/Core-Guides.md`). They are the detailed user documentation and leave out internals (the PSDL attributes, migrations). The README stays a short overview of the core (what it supports, game files, exporting, licenses) and points to the guides: don't add step-by-step instructions or feature details to it, only a line to its Features list for a major new feature. When a feature changes, update the guides: the export guide lists every flag of `exporters/psdl/settings.json` and every exported file, and the advanced guide the [limits and `mm2.log` messages](docs/agents/exporting.md#midtown-madness-2-reference). `selftest undo <new folder> --mode guide` in the builder checks their links and structure, not whether they are true.
 
 ## Coordinates
 

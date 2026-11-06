@@ -6,7 +6,7 @@ Also read [Exporter workflow and engine limits](exporting.md). Stock tram/train 
 
 ## Custom elements
 
-Most MM2 custom elements are the PSDL attributes, the others are the decals and trains (the generic mechanism is in the builder's `wiki/Core-Custom-Elements.md`, the decals and trains in the README). Equivalence check: export, convert everything, export again, compare PSDL room by room and BAI. The expected result is 0 differences.
+Most MM2 custom elements are the PSDL attributes, the others are the decals and trains (the generic mechanism is in the builder's `wiki/Core-Custom-Elements.md`, the decals and trains in the advanced guide). Equivalence check: export, convert everything, export again, compare PSDL room by room and BAI. The expected result is 0 differences.
 
 ### PSDL attributes
 

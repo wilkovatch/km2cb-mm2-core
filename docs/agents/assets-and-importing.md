@@ -19,3 +19,17 @@ Run the short synthetic tests with `python scripts/importGameAssets/_test_import
 PSDL type 1 stores regular sidewalk pairs as **inner, outer**. Exactly four references beginning with `0,0` or `1,1` describe an end cap: the first pair is a marker (start/end), not city vertices, and the last pair maps to `sidewalkCap.a/b`, with `which` 1/2. Treating these as regular strips pulls geometry toward vertices 0/1. `_test_sidewalks.py` runs through the builder script CLI with `KM2_IMPORT_TEST_FOLDER`; optional `KM2_MM2_SOURCE_ROOT` adds ten fixed-seed SF/London sidewalk attributes. It checks generated geometry, undo/redo, save/reload and native PSDL re-export without loading a whole stock city.
 
 BAI remains approximate: report lost room memberships and train splines; do not advertise complete stock round-trip equivalence from close lane geometry. `_roundtrip_check.py` reports pedestrian displacement separately. Keep stock checks bounded (five fixed-seed routes per city) and assets/output in scratch folders. The importer adds asset search paths outside undo and references source files without copying them.
+
+User-visible behavior: the import appends to the open city as one undo step (rolled back on failure or cancellation); rooms, attributes and AI become custom elements sharing source vertices and matching existing anchors, INST objects and point props become mesh instances. Single-room prop rules stay attached to road custom elements, rules spanning rooms become standalone **Prop rules** with boundary ribbons and road-center distance references. Native `props.pathset` line strips stay procedural and re-export as type-2 strips only when the evaluated placement matches the format's spacing/orientation (1 cm position, 0.1° yaw tolerance), otherwise as individual props. Source city settings and traffic-model lists apply unless **Apply source city settings** is off. BAI distances, frames, sidewalk centers, lights and culling are regenerated, multi-room route membership is reduced to one owner and arbitrary BAI train splines are omitted; the console reports these approximations.
+
+### Importer checks
+
+- `python scripts/importCity/_test_import_city.py`: short synthetic parser/mapping/strip tests.
+- `_test_builder.py`: runs through the builder's script CLI with `KM2_IMPORT_TEST_FOLDER` naming a new scratch folder; covers import, generic ribbon sampling, undo/redo, save/reload, settings, INST transforms and native strip re-export.
+- `_roundtrip_check.py source/city/name.psdl export/city/name.psdl --sample 10 --seed 42`: JSON semantic audit to stdout; `--out` saves it, `--strict` fails on compared differences.
+- `_test_stock.py`: optional bounded check of five routes per stock city, with `KM2_MM2_SOURCE_ROOT` pointing at the extracted game root.
+- `_test_sidewalks.py`: see above.
+
+Use writable `TMP`/`TEMP` where needed. None of these requires committing stock assets.
+
+Baseline of the fixed-seed ten-route SF/London check: sampled lane counts and ambient permissions are preserved, with lane-position differences below 0.03 mm. Exporter vertex welding moves some surface vertices by up to 3.3 cm. On two curved London routes the sidewalk curves stay close, but their samples at corresponding road sections shift by 10–14 m as sections are regenerated, so close lanes alone don't establish equivalent pedestrian or traffic behavior. This check doesn't replace an in-game check of a whole imported city.
