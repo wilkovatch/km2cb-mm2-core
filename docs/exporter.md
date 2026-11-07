@@ -21,7 +21,7 @@ JSON only ──► prop rules, trains, boats, bridges, parked cars, CINFO/AIMAP
 ```
 
 1. `export.py` reads the arguments (`options.py`), decodes the JSON and checks the race ownership (`race_elements.validate_ownership`), then writes the generated files (`generated_export.py`: low LOD textures under `psdl`, bridge models under `pathset`) and puts their paths in the data.
-2. `JsonProcessor.get_objects` turns each element of the city into **parts** (`psdl_parts.ExportedCityElement`): roads, intersections, terrain patches, building lines, decals (`decals.py`), mesh instances and prop placers (`prop_placers.py`). The roads and intersections also register what the BAI needs (`exported_roads`, `traffic_intersections`), and the BAI network is built after them (see [The BAI](#the-bai)).
+2. `JsonProcessor.get_objects` turns each element of the city into **parts** (`psdl_parts.ExportedCityElement`): roads, intersections, terrain patches, building lines, decals (`decals.py`), mesh instances and prop placers (`prop_placers.py`). The roads and intersections also register what the BAI needs (`exported_roads`, `traffic_intersections`), and the BAI network is built after them (see [The BAI](#the-bai)). `get_objects(traffic_only=True)` stops there, for the checks that need only the network and the room perimeters (`checks/validateOpponents`).
 3. `scene.Scene` converts the parts once to the space of the writers (see [Coordinates](#coordinates)) and finds the rooms.
 4. The writers (`writers/`) write the files from the scene. Each one is guarded (see [Errors](#errors)), so the others are written even if one fails.
 5. The other files are written from the JSON directly (or the processor): prop rules, the PATHSETs of the city routes, CINFO and AIMAP, hudmap and race maps.
@@ -42,6 +42,7 @@ JSON only ──► prop rules, trains, boats, bridges, parked cars, CINFO/AIMAP
 | `traffic/paths.py` | The paths of a procedural road (edges, curbs, lanes, sidewalks, rails) |
 | `traffic/network.py` | `BaiNetworkBuilder`: the BAI roads and intersections from the exported roads and intersections |
 | `traffic/rails.py` | The curves joining the cable car rails through an intersection (for `converters/generateRailDecals`) |
+| `traffic/opponents.py` | The route of the race opponents as the game drives it, on the BAI network (for `checks/validateOpponents` and the warnings of the AIMAP export, see `docs/agents/races-and-state.md`) |
 | `writers/` | The writers of the game files: `psdl_writer`, `cpvs_writer`, `inst_writer`, `bai_writer`, `pathset_writer`, `decal_writer`, `pkg_writer`, `tex_writer`, with `file_io` (binary output) and `report` (warnings and errors) |
 | `cinfo_aimap_export.py`, `race_elements.py`, `hudmap_export.py`, `prop_rules_export.py`, `train_export.py`, `boat_export.py`, `bridge_export.py`, `parked_car_export.py`, `route_pathset.py` | The files written from the JSON |
 | `generated_export.py`, `generated/` | The generated files (road low LOD textures, bridge models), written in the export folder before the other files, their paths set in the data; `generated/` is shared with the editor's generators (`generators/` of the core), `.km2-generated.json` lists what the exports wrote |

@@ -27,6 +27,7 @@ A **warning** means the export finished, but something may not work in the game.
 | Extra lanes dropped | Use at most 4 lanes per side |
 | A cable car line without ends | Leave it open, or add a dead end |
 | Decal points outside of the rooms | Move them onto a room |
+| An opponent waypoint is not on an intersection, or no single road joins two waypoints | Put a waypoint on every intersection of the route. See [Races](../beginner/races.md) |
 | Parked cars on a slope above 5 degrees | Move them to flatter ground |
 | More than 192 paths | Use fewer prop lines, or parked car rows |
 | `materials.csv` not found | Import the game assets, which include it |

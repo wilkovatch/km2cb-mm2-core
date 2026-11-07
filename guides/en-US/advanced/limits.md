@@ -36,6 +36,8 @@ Reuse textures. Generated low LOD textures count too: one for each different roa
 | Exception at `004a48d8` after "Loading objects...", then `memMemoryAllocator::FindHeap failed` | Too many different objects | Export fewer elements to PKG, reuse meshes |
 | A crash in the ambient traffic (around `0053a0d2`) | An intersection with more than 11 roads | Reduce the roads there |
 | A crash at `005440c5`, in the update of lane vehicles | The cause isn't known yet | |
+| `ERROR: Opp: ..., Point - ..., Is not a intersection.` | A waypoint of an opponent is not on an intersection: the game ignores it | Move it onto the intersection, with **Check opponent routes** |
+| `ERROR: Point - ..., Is not in a cull room.` | A point of an opponent (start, waypoint or finish) is outside of every room | Move it onto a road or an intersection |
 
 ## If the player starts somewhere strange
 

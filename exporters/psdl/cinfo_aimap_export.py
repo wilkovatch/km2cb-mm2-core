@@ -315,6 +315,10 @@ class CinfoAimapExporter:
             return
         p = self.json_processor.data['cityProperties']
         cityname = layout.city_name
+        # the opponents that don't reach the finish (as the game drives them), as warnings: the files are written anyway
+        with report.guarded("the opponents were not checked"):
+            from race_elements import check_opponents
+            check_opponents(self.json_processor.data, self.json_processor, self.json_processor.get_objects(), errors=False)
 
         # parse the data
         localized_name = state_val(p, "cityName", "noname")

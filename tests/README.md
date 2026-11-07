@@ -23,7 +23,7 @@ The scratch city folder must be new for creation scenarios. Logs and screenshots
 | `propPlacers`, `parkedCar` | Spline/polygon props, core callbacks and guides; single parked cars and native parked rows |
 | `bridges` | Native preview modes/models, road-end attachments, mesh generation, race replacements, history and reload |
 | `trains`, `boats`, `arrows`, `trafficLanes` | Native route previews, custom road curves, closed loops and direction/traffic geometry |
-| `mapLabels`, `races`, `instMesh`, `heightmapScale`, `unicode` | Map labels, race containers/opponents, INST editing, terrain scaling and Unicode persistence |
+| `mapLabels`, `races`, `instMesh`, `heightmapScale`, `unicode` | Map labels, race containers/opponents and the opponent route check, INST editing, terrain scaling and Unicode persistence |
 | `menus`, `meshTextures`, `meshPreviews`, `meshSelection` | Menu definitions, texture resolution, mesh preview UI and triangle selection |
 
 The normal suite covers the API protocol, creation/editing, undo/redo, transactions, generators, Python/Lua scripting, type inheritance, merge/split, custom elements and their editors, export layout/maps, archives, validation, MCP and rendered checks. Some focused groups have independent setup and are not part of the normal sequence; run them when changing shared test setup or the runner.

@@ -23,7 +23,7 @@ No original game data is included with the core. Open or create a city using thi
 - Individual props, prop lines, prop polygons, INST meshes and parked cars
 - Decals (spline and single), as in `decals.pathset`
 - Trains, boats, ducks, ferries and movable bridges
-- Races (checkpoints, police cars, opponents and race props for each difficulty)
+- Races (checkpoints, police cars, opponents and race props for each difficulty), with a check of the opponent routes as the game drives them
 - HUD map and race menu maps, with map labels
 - Optional MM2Hook features (**Assume using MM2Hook** in the Info tab of the city properties)
 

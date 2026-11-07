@@ -1,0 +1,11 @@
+{
+	"label": "CHECK_OPPONENTS",
+	"tooltip": "CHECK_OPPONENTS_TOOLTIP",
+	"sources": [
+		"propertyContainer/checkpointRace",
+		"propertyContainer/circuitRace",
+		"propertyContainer/blitzRace",
+		"customElement/opponent"
+	],
+	"script": "check.py"
+}

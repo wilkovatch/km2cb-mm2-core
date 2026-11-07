@@ -26,7 +26,13 @@ If you leave the opponents of the professional setup empty, the game uses the am
 
 The first click places the opponent's starting car. Later clicks draw the route it follows, as a line of waypoints. The panel of the opponent sets the car and how it drives.
 
-Place the waypoints near intersections.
+The game doesn't look for a way between two waypoints. It follows a road only from one intersection to the next one, so:
+
+- Put a waypoint **on every intersection** the opponent goes through, including those where it goes straight on. A waypoint in the middle of a road is ignored by the game, and the opponent goes astray.
+- The last waypoint is the finish. It can be anywhere, best on the road after the last intersection.
+- Between two waypoints that are not on neighboring intersections, the opponent leaves the roads and drives straight to the next one, through whatever is in the way. This is fine for a shortcut across an open square, but not through buildings.
+
+**Check opponent routes**, in the panel of the race or of an opponent, finds these problems without exporting. It lists them, and draws over the city the way each opponent will go: green along the roads, orange where it drives straight, red where it hits a building or leaves the city. Select a problem and press **Zoom to it** to see where it is. The export lists the same problems as warnings.
 
 ## Free roaming
 

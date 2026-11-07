@@ -1370,7 +1370,9 @@ class JsonProcessor:
             part.source = (kind, element['id'])
         return res
 
-    def get_objects(self):
+    def get_objects(self, traffic_only=False):
+        # traffic_only: stops after the traffic (the parts of the roads, intersections, terrain patches, building lines
+        # and rails, and the network), for the checks that need only those (not kept as the result)
         if self.out_res is not None:
             return self.out_res
 
@@ -1413,6 +1415,8 @@ class JsonProcessor:
         print("processing traffic...")
         with report.guarded("the traffic was not exported"):
             self.network = self.traffic.build()
+        if traffic_only:
+            return res
 
         print("processing decals...")
         with report.guarded("the decals were not exported"):

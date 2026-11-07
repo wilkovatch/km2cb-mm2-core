@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Godot;
+using Newtonsoft.Json.Linq;
 using CT = CityElements.Types;
 using TP = CityElements.Types.Parsers.TypeParser;
 using PC = Operations.PropertyContainers;
@@ -80,6 +81,85 @@ namespace Api {
                 panel.RefreshValues();
                 Check("reloading the lists disables the move buttons again", !panel.Enabled("three", up) && !panel.Enabled("three", down));
             } finally { panel.Destroy(); }
+        }
+
+        //the check of the opponent routes (checks/validateOpponents): a square of four roads, an opponent driving around
+        //it and one cutting across it (a straight leg out of the rooms), checked through the API and the panel buttons
+        async Task OpponentRouteCheck() {
+            Log("opponent route check");
+            const float a = 400, b = 560;
+            var r1 = (await Call("roads.create", new { points = new[] { Pos(a, a), Pos(b, a) } })).Value<int>();
+            var r2 = (await Call("roads.create", new { points = new object[] { new { roadEnd = new { road = r1, end = "end" } }, Pos(b, b) } })).Value<int>();
+            var r3 = (await Call("roads.create", new { points = new object[] { new { roadEnd = new { road = r2, end = "end" } }, Pos(a, b) } })).Value<int>();
+            await Call("roads.create", new { points = new object[] { new { roadEnd = new { road = r3, end = "end" } }, new { roadEnd = new { road = r1, end = "start" } } } });
+            var city = M.GetDummy<CityProperties>();
+            var param = TP.GetCitySettings()["city"].typeData.parametersInfo.parameters.First(p => p.name == "checkpointRaces");
+            History.UndoManager.Record("add race", () => {
+                History.UndoManager.Touch(city);
+                Operations.States.AddArrayElement(city.state, param);
+                M.FlagAsChanged();
+            });
+            M.ProcessUpdate();
+            var race = city.state.Array<ObjectState>("checkpointRaces")[^1];
+            var owner = PC.EnsureId(race);
+            PC.Sync(M);
+            var amateur = PC.EnsureId(race.State("policeCars"));
+            async Task<int> Opponent(string name, float[] start, params float[][] waypoints) {
+                var id = (await Call("customElement.create", new { type = "opponent", name, propertyContainer = amateur,
+                    points = new { spline = waypoints.Select(p => new { position = p }).ToArray() } })).Value<int>();
+                await Call("state.import", new { @ref = id, values = new { carModel = new { meshPath = "geometry/vpbug.pkg",
+                    localPosition = new { x = start[0], y = start[1], z = start[2] }, localRotation = new { x = 0f, y = 0f, z = 0f } } } });
+                return id;
+            }
+            var good = await Opponent("Route good", V(480, 0, a), V(b, 0, a), V(b, 0, b), V(a, 0, b), V(a, 0, a), V(440, 0, a));
+            var across = await Opponent("Route across", V(480, 0, a), V(b, 0, a), V(a, 0, b), V(440, 0, b));
+            Check("an opponent created with a property container is owned by the race", ((CustomElement)History.ElementRegistry.Get(good)).state.Str(PC.OwnerKey, "") == owner);
+            await Expect("an unknown property container", "not_found", "customElement.create", new { type = "opponent", propertyContainer = "missing" });
+            Check("the check is listed", ((JArray)await Call("checks.list")).Any(c => c["name"]?.Value<string>() == "validateOpponents"));
+            var res = await Call("elements.check", new { check = "validateOpponents", containers = new[] { owner } });
+            var items = ((JArray)res["items"]).OfType<JObject>().ToList();
+            List<JObject> Of(string name) => items.FindAll(i => i["element"]?["name"]?.Value<string>() == name);
+            Check("the opponent driving around the roads reaches the finish", Of("Route good").Count == 1 && Of("Route good")[0]["level"]?.Value<string>() == "info"
+                && Of("Route good")[0]["code"]?.Value<string>() == "opponent_route" && ((JArray)Of("Route good")[0]["overlay"]).Count == 5);
+            Check("the opponent cutting across the square drives out of the city", Of("Route across").Any(i => i["level"]?.Value<string>() == "error"
+                && i["code"]?.Value<string>() == "opponent_leg_blocked" && ((JArray)i["overlay"]).Count == 1 && i["position"] is JArray));
+            Check("the check of a race fails only for the stuck opponent", res["ok"]?.Value<bool>() == false && res["errors"]?.Value<int>() == Of("Route across").Count(i => i["level"]?.Value<string>() == "error"));
+            var single = await Call("elements.check", new { check = "validateOpponents", elements = new[] { new { id = good } } });
+            Check("an opponent can be checked alone", ((JArray)single["items"]).Count == 1 && single["ok"]?.Value<bool>() == true);
+            await Expect("a check of an element it doesn't accept", "not_accepted", "elements.check", new { check = "validateOpponents", elements = new[] { new { id = r1 } } });
+            // the button of the opponent panel, then the results in the validation panel with their overlay
+            var opponent = (CustomElement)History.ElementRegistry.Get(across);
+            ArrayObject.activeElements["race"] = race;
+            ArrayObject.activeElements["raceDifficulty"] = race.State("policeCars");
+            builder.NotifyVisibilityChange(); M.ProcessUpdate();
+            History.UndoManager.Record("edit opponent", () => builder.SelectObject(opponent, true, null));
+            await Frames(2);
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            var pages = (System.Collections.IList)typeof(EditorPanel).GetField("pages", flags).GetValue(builder.customElementEditorPanel);
+            var button = pages.Cast<EditorPanelPage>().SelectMany(page => ((List<List<EditorPanelElement>>)typeof(EditorPanelPage).GetField("elements", flags).GetValue(page)).SelectMany(row => row))
+                .OfType<EditorPanelElements.Button>().Select(x => (Godot.Button)typeof(EditorPanelElements.Button).GetField("button", flags).GetValue(x))
+                .FirstOrDefault(x => x.Text == StringManager.Get("CHECK_OPPONENTS"));
+            Check("the opponent panel has the check button", button != null && !button.Disabled);
+            var panel = (EditorPanels.ValidationEditorPanel)typeof(CityBuilderMenuBar).GetField("validationEditorPanel", flags).GetValue(builder);
+            button?.EmitSignal(Godot.Button.SignalName.Pressed);
+            for (int i = 0; i < 1200 && !(panel.IsOpen() && PreviewField<List<Newtonsoft.Json.Linq.JObject>>(panel, "items").Count > 0); i++) await Frames(1);
+            var shown = PreviewField<List<Newtonsoft.Json.Linq.JObject>>(panel, "items");
+            Check("the button lists the results of the opponent in the validation panel", panel.IsOpen() && shown.Count > 0
+                && shown.TrueForAll(i => i["element"]?["name"]?.Value<string>() == "Route across"));
+            var root = PreviewField<Node3D>(panel, "overlayRoot");
+            Check("the routes are drawn over the city", root != null && GodotObject.IsInstanceValid(root) && root.GetChildCount() == 2 * shown.Sum(i => (i["overlay"] as JArray)?.Count ?? 0));
+            var blocked = shown.FindIndex(i => i["code"]?.Value<string>() == "opponent_leg_blocked");
+            panel.GetType().GetMethod("Select", flags).Invoke(panel, new object[] { blocked });
+            //the overlay lines as (item, line, covered line, ...) tuples
+            var lines = PreviewField<System.Collections.IList>(panel, "overlayLines").Cast<System.Runtime.CompilerServices.ITuple>().ToList();
+            Check("selecting an item highlights only its lines, with their direction", lines.Count > 0 && lines.All(t =>
+                (((GameEngine.LineRenderer)t[1]).arrowDirection == 1) == ((int)t[0] == blocked) && ((GameEngine.LineRenderer)t[2]).arrowDirection == ((GameEngine.LineRenderer)t[1]).arrowDirection));
+            builder.CloseAllPanels();
+            await Frames(2);
+            Check("closing the panel removes the routes", PreviewField<Node3D>(panel, "overlayRoot") == null && (root == null || !GodotObject.IsInstanceValid(root) || root.IsQueuedForDeletion()));
+            ArrayObject.activeElements["race"] = null;
+            ArrayObject.activeElements["raceDifficulty"] = null;
+            builder.NotifyVisibilityChange(); M.ProcessUpdate();
         }
 
         async Task RaceSubcontainers() {
@@ -930,7 +1010,8 @@ namespace Api {
                 var names = type.uiInfo.Select(e => e.name).ToList();
                 var groupNames = type.elementContainer.contentGroups.Select(g => "content:" + g.label).ToList();
                 Check(typeName + " lists all its parameters and content groups in its layout", type.parameters.All(p => names.Contains(p.fullName())) && groupNames.All(names.Contains));
-                Check(typeName + " lists only what exists in its layout", names.All(n => n.StartsWith("label:") || groupNames.Contains(n) || type.parameters.Any(p => p.fullName() == n)));
+                Check(typeName + " lists only what exists in its layout", names.All(n => n.StartsWith("label:") || groupNames.Contains(n) || type.parameters.Any(p => p.fullName() == n)
+                    || (n.StartsWith("check:") && CheckCatalog.Get(n.Substring("check:".Length)) != null)));
             }
             var circuitRace = TP.GetCustomCityPropertiesTypes()["circuitRace"];
             var raceLayout = circuitRace.uiInfo;

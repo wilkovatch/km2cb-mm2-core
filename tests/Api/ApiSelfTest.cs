@@ -212,6 +212,7 @@ namespace Api {
                     await RaceCreation();
                     await RaceSubcontainers();
                     await OpponentWaypointUndo();
+                    await OpponentRouteCheck();
                 } else if (focus == "arrows") {
                     await NewCity();
                     await DirectionArrows();

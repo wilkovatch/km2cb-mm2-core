@@ -204,6 +204,10 @@
 			"width": 0.75
 		},
 		{
+			"name": "check:validateOpponents",
+			"width": 1.5
+		},
+		{
 			"name": "content:RACE_PROPS",
 			"width": 1.5
 		},

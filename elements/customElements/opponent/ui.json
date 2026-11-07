@@ -52,6 +52,10 @@
                 {
                     "name": "brakingBias",
                     "width": 1.5
+                },
+                {
+                    "name": "check:validateOpponents",
+                    "width": 1.5
                 }
             ]
         }
