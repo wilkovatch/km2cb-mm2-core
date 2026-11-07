@@ -1,5 +1,4 @@
-"""Small synthetic checks of the bridge model generator (converters/generateBridgeMesh); no original game assets."""
-import importlib.util
+"""Small synthetic checks of the bridge model generator (generated/bridge_mesh.py) and of its export; no original game assets."""
 import json
 import math
 import os
@@ -8,16 +7,14 @@ import struct
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 CORE = Path(__file__).resolve().parents[3]
 sys.path[:0] = [str(CORE / 'exporters/psdl'), str(CORE.parents[1] / 'python'), str(CORE / 'server')]
-import custom_element_conversion as cec
 import mesh_formats
-from bridge_export import export_bridges
-
-spec = importlib.util.spec_from_file_location('bridge_mesh', CORE / 'converters/generateBridgeMesh/convert.py')
-gen = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(gen)
+from bridge_export import export_bridges, get_bridges
+from generated import bridge_mesh as gen, OutputRoot, GenerationError
+from generated_export import GeneratedExport, MANIFEST
 
 # as the road of giz_bridge01_l
 ROAD = dict(isDouble=True, hasSidewalks=True, totalWidth=18.0, roadWidth=8.0, texture0='texture/walk.tex', texture1='texture/road.tex', textureLOD='texture/road_lo.tex')
@@ -60,7 +57,7 @@ class Generator(unittest.TestCase):
         self.addCleanup(self.folder.cleanup)
 
     def model(self, state=ROAD, length=30.0, angle=0.0, textures=TEXTURES):
-        path = gen.write_model(self.folder.name, state, *textures, length, angle)
+        path = gen.write_model(OutputRoot(self.folder.name), state, *textures, length, angle)
         return path, Path(self.folder.name)
 
     def test_the_stock_proportions(self):
@@ -170,75 +167,121 @@ class Generator(unittest.TestCase):
         self.assertIn('CG 0.000000', tuning)
 
     def data(self, element, *roads):
-        return dict(convert=[dict(kind='customElement', id=element['id'])], customElements=[element], roads=list(roads), cityFolder=self.folder.name)
+        return dict(customElements=[element], roads=list(roads), cityFolder=self.folder.name, cityProperties={})
 
-    def test_the_conversion(self):
+    def generate(self, element, *roads):
+        return gen.generate(element, self.data(element, *roads), OutputRoot(self.folder.name), [self.folder.name])
+
+    def test_the_generation(self):
         element = bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80), 2), trussTexture='texture/my_truss.tex')
-        out, replace = gen.convert(self.data(element, road(1), road(2, totalWidth=24.0)))
-        self.assertFalse(replace)
-        update = out.updates[0]
-        self.assertEqual(update['element'], dict(kind='customElement', id=5))
-        state = update['state']
-        self.assertEqual(state['mesh'], state['generatedMesh'])
-        self.assertEqual(state['generatedLength'], 40.0)
-        parts, shaders = read_pkg(Path(self.folder.name) / state['mesh'])
+        path, length = self.generate(element, road(1), road(2, totalWidth=24.0))
+        self.assertEqual(length, 40.0)
+        parts, shaders = read_pkg(Path(self.folder.name) / path)
         self.assertIn('my_truss', shaders)
         self.assertEqual(bounds(parts['H'])[0], (-12.25, 12.25), 'the widest road')
         self.assertEqual(bounds(parts['H'])[2], (-20.0, 20.0))
         single = bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80)), paired=False)
-        state = gen.convert(self.data(single, road(1)))[0].updates[0]['state']
-        self.assertEqual(state['generatedLength'], 80.0, 'one leaf covers all of it; one road is enough')
-        parts, shaders = read_pkg(Path(self.folder.name) / state['mesh'])
+        path, length = self.generate(single, road(1))
+        self.assertEqual(length, 80.0, 'one leaf covers all of it; one road is enough')
+        parts, shaders = read_pkg(Path(self.folder.name) / path)
         self.assertIn('tl_bridgetruss_side_l', shaders, 'the stock textures by default')
+
+    def test_the_generated_low_lod_texture_of_the_road(self):
+        # the VL part has the low LOD texture generated for the road, written with the model
+        from PIL import Image
+        texture = Path(self.folder.name) / 'texture'
+        texture.mkdir()
+        for name, color in (('road', (10, 20, 30)), ('walk', (200, 200, 180))):
+            Image.new('RGB', (8, 8), color).save(texture / (name + '.png'))
+        lod_road = road(1, texture0='texture/walk.png', texture1='texture/road.png', generateLodTexture=True)
+        element = bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80)))
+        out = OutputRoot(Path(self.folder.name) / 'out')
+        path, _ = gen.generate(element, self.data(element, lod_road), out, [self.folder.name])
+        lod = next(f for f in out.files if f.startswith('texture/'))
+        self.assertTrue(Path(lod).stem.startswith('road_lod_'))
+        self.assertIn(Path(lod).stem, read_pkg(Path(out.root) / path)[1])
+        # when it can't be made, the VL part has the textures of the top
+        missing = road(1, texture0='texture/none.png', texture1='texture/road.png', generateLodTexture=True)
+        path, _ = gen.generate(element, self.data(element, missing), out, [self.folder.name])
+        self.assertFalse(any('_lod_' in shader for shader in read_pkg(Path(out.root) / path)[1]))
 
     def test_the_refusals(self):
         def error(element, *roads):
-            with self.assertRaises(cec.ConversionError) as context:
-                gen.convert(self.data(element, *roads))
+            with self.assertRaises(GenerationError) as context:
+                self.generate(element, *roads)
             return str(context.exception)
         self.assertEqual(error(bridge_element(anchored((0, 0, 0)), anchored((0, 0, 80)))), 'BRIDGE_MESH_ERROR_NO_ROADS')
         self.assertEqual(error(bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 1))), road(1)), 'BRIDGE_MESH_ERROR_LENGTH')
         self.assertEqual(error(bridge_element(anchored((0, 0, 0), 1, (1, 0, 0)), anchored((0, 0, 80))), road(1)), 'BRIDGE_MESH_ERROR_ANGLE')
         self.assertEqual(error(bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80))), road(1, roadWidth=30.0)), 'BRIDGE_MESH_ERROR_WIDTHS')
 
+    def export(self, root, element, *roads):
+        # as export.py: the generated files first, the bridges, then the list of the generated files
+        folder = root / 'race' / 'x'
+        folder.mkdir(parents=True, exist_ok=True)
+        data = self.data(element, *roads)
+        generated = GeneratedExport(root, data, None)
+        generated.lod_textures()
+        generated.bridge_models()
+        export_bridges(data, str(folder), 'x', None)
+        generated.finish()
+        return element['data']['fields']['state'].get('mesh'), folder
+
     def test_the_export(self):
-        element = bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80), 1))
-        state = gen.convert(self.data(element, road(1)))[0].updates[0]['state']
-        element['data']['fields']['state'].update(state)
-        name = Path(state['mesh']).stem
+        element = bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80), 1), generateMesh=True, mesh='geometry/chosen.pkg')
         with tempfile.TemporaryDirectory() as out:
             root = Path(out)
-            folder = root / 'race' / 'x'
-            folder.mkdir(parents=True)
-            data = dict(customElements=[element], cityFolder=self.folder.name, cityProperties={})
-            export_bridges(data, str(folder), 'x', None)
-            for file in ('geometry/' + name + '.pkg', 'bound/' + name + '_BOUND.bnd', 'tune/banger/' + name + '.dgBangerData'):
+            mesh, folder = self.export(root, element, road(1))
+            name = Path(mesh).stem
+            self.assertTrue(name.startswith('bridge_'), 'the generated model, not the one chosen')
+            files = ['bound/' + name + '_BOUND.bnd', 'geometry/' + name + '.pkg', 'tune/banger/' + name + '.dgBangerData']
+            for file in files:
                 self.assertTrue((root / file).exists(), file)
             self.assertIn(b'time:' + name.encode(), (folder / 'x_bridge.pathset').read_bytes())
-            self.assertFalse((root / 'tune/banger/.km2-bridge-tuning.json').exists(), 'the tuning of the city, not a generated one')
-            # again, to the folder of the city
-            inside = Path(self.folder.name) / 'race' / 'x'
-            inside.mkdir(parents=True)
-            export_bridges(dict(data), str(inside), 'x', None)
-            self.assertTrue((inside / 'x_bridge.pathset').exists())
-
-
-class Staleness(unittest.TestCase):
-    def test_a_warning_when_the_hinges_moved(self):
-        from unittest.mock import patch
-        from bridge_export import get_bridges
-        element = bridge_element(anchored((0, 0, 0)), anchored((0, 0, 80)), mesh='geometry/bridge_x.pkg', generatedMesh='geometry/bridge_x.pkg', generatedLength=40.0)
-        with patch('bridge_export.report.warning') as warning:
-            get_bridges(dict(customElements=[element], cityProperties={}))
-            warning.assert_not_called()
+            self.assertEqual(json.loads((root / MANIFEST).read_text()), files)
+            self.assertFalse((root / 'tune/banger/.km2-bridge-tuning.json').exists(), 'its banger data is a generated file')
+            self.assertEqual(list(Path(self.folder.name).iterdir()), [], 'nothing in the folder of the city')
+            # a file that was there before is never removed
+            (root / 'geometry' / 'bridge_00000000.pkg').write_bytes(b'mine')
+            # the hinges moved: a new model, and the files of the old one are removed
             element['points']['finish']['position'] = [0, 0, 90]
-            get_bridges(dict(customElements=[element], cityProperties={}))
-            self.assertIn('generated for another distance', warning.call_args[0][0])
-            warning.reset_mock()
-            element['data']['fields']['state']['mesh'] = 'geometry/other.pkg'
-            get_bridges(dict(customElements=[element], cityProperties={}))
-            warning.assert_not_called()
+            element['data']['fields']['state']['mesh'] = ''
+            second, _ = self.export(root, element, road(1))
+            self.assertNotEqual(second, mesh)
+            for file in files:
+                self.assertFalse((root / file).exists(), file)
+            self.assertTrue((root / second).exists())
+            self.assertTrue((root / 'geometry' / 'bridge_00000000.pkg').exists())
 
+    def test_the_generator_of_the_editor(self):
+        # generators/bridgeMesh, as the program runs it: the values for each element, the errors as string keys
+        import subprocess
+        good = bridge_element(anchored((0, 0, 0), 1), anchored((0, 0, 80), 1), generateMesh=True)
+        bad = dict(bridge_element(anchored((0, 0, 0)), anchored((0, 0, 80)), generateMesh=True), id=6)
+        cache = Path(self.folder.name) / 'cache'
+        data = dict(self.data(good, road(1)), customElements=[good, bad], outputFolder=str(cache),
+                    generate=[dict(kind='customElement', id=5), dict(kind='customElement', id=6), dict(kind='customElement', id=7)])
+        source, output = Path(self.folder.name) / 'input.json', Path(self.folder.name) / 'output.json'
+        source.write_text(json.dumps(data))
+        subprocess.run([sys.executable, str(CORE / 'generators/bridgeMesh/generate.py'), str(CORE.parents[1] / 'python'), str(source), str(output)], check=True)
+        results = json.loads(output.read_text())['results']
+        self.assertEqual([r['element']['id'] for r in results], [5, 6, 7])
+        values = results[0]['values']
+        self.assertTrue(Path(values['mesh']).is_absolute() and Path(values['mesh']).is_file())
+        self.assertEqual(Path(values['mesh']).parent, cache / 'geometry')
+        self.assertEqual(values['length'], 40.0)
+        self.assertEqual([r.get('error') for r in results[1:]], ['BRIDGE_MESH_ERROR_NO_ROADS', 'GENERATION_ERROR_MISSING'])
+
+    def test_a_bridge_without_its_model_is_not_exported(self):
+        with patch('bridge_export.report.error') as error:
+            element = bridge_element(anchored((0, 0, 0)), anchored((0, 0, 80)), generateMesh=True)
+            with tempfile.TemporaryDirectory() as out:
+                self.export(Path(out), element)
+            self.assertIn('Attach a control of the bridge', error.call_args[0][0], 'the reason, as the string of the core')
+            error.reset_mock()
+            # not generated at all (get_bridges without the generation before it)
+            self.assertEqual(get_bridges(dict(customElements=[bridge_element(anchored((0, 0, 0)), anchored((0, 0, 80)), generateMesh=True)])), [])
+            self.assertIn('not generated', error.call_args[0][0])
 
 if __name__ == '__main__':
     unittest.main()

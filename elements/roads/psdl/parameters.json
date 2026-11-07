@@ -66,6 +66,12 @@
 			"type": "texture"
 		},
 		{
+			"name": "generateLodTexture",
+			"label": "RD_GENERATE_LOW_LOD_TEX",
+			"tooltip": "RD_GENERATE_LOW_LOD_TEX_TOOLTIP",
+			"type": "bool"
+		},
+		{
 			"name": "exportToPKG",
 			"label": "EXPORT_TO_PKG",
 			"type": "bool",

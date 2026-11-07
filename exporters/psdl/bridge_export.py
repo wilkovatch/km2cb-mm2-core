@@ -12,10 +12,11 @@ from writers.pathset_writer import MAX_PATHS
 from prop_placers import model_name
 from race_elements import races, IDENTITY, OWNER
 from route_pathset import write_routes
-from utils import state_val
+from generated_export import GENERATED_MODEL, GENERATION_ERROR
+from utils import state_bool, state_val
 
 DEFAULT_MESH = 'geometry/giz_bridge01_l.pkg'
-# the textures of the generated models, as the stock bridges (see converters/generateBridgeMesh)
+# the textures of the generated models, as the stock bridges (see generated/bridge_mesh.py)
 DEFAULT_TRUSS_TEXTURE, DEFAULT_BOTTOM_TEXTURE, DEFAULT_RAIL_TEXTURE = 'tl_bridgetruss_side_l', 'tl_bridgetruss_bot_l', 'tl_bridgetrim_l'
 STOCK_MODELS = ('giz_bridge01_l', 'giz_waterloo_l', 'giz_bridge02_l')  # with their banger data in the game, imported or not
 PREFIXES = ('time:', 'prox:', 'inactive:', 'open:')
@@ -189,6 +190,13 @@ def get_bridges(data, common_dir=None, tune_folder=None, generated=None):
                 raise ValueError('invalid placement points')
             if math.hypot(a[0] - b[0], a[2] - b[2]) < 0.001:
                 raise ValueError('the placement points need different horizontal positions')
+            # a generated model is written in the export folder before (see generated_export.py), with its banger data
+            generated_model = state_bool(state, 'generateMesh')
+            if generated_model:
+                if state_val(state, GENERATION_ERROR):
+                    raise ValueError(state_val(state, GENERATION_ERROR))
+                if not state_val(state, GENERATED_MODEL):
+                    raise ValueError('its model was not generated')
             mesh, behavior = state_val(state, 'mesh') or DEFAULT_MESH, state_val(state, 'behavior', 0)
             if not isinstance(mesh, str) or not mesh.lower().endswith('.pkg'):
                 raise ValueError('the model must be a PKG file')
@@ -215,17 +223,12 @@ def get_bridges(data, common_dir=None, tune_folder=None, generated=None):
                 if target is None or target.get('type') != 'bridge' or state_val(target['data']['fields']['state'], OWNER, ''):
                     raise ValueError('the replacement target must be a city bridge')
                 replacement = target['id']
-            if tune_folder is not None:
+            if tune_folder is not None and not generated_model:
                 ensure_tuning(model, data, common_dir, tune_folder, generated)
                 copy_city_model(model, data, tune_folder)
             if abs(a[1] - b[1]) > 0.001:
                 report.warning('the bridge ' + name + ' has unequal control heights: MM2 distorts sloped bridge frames, while the editor shows a rigid model',
                                element=name, kind='customElement')
-            if mesh == state_val(state, 'generatedMesh'):
-                length = math.hypot(a[0] - b[0], a[2] - b[2]) * (0.5 if paired else 1)
-                if abs(length - float(state_val(state, 'generatedLength', 0) or 0)) > 0.01:
-                    report.warning('the model of the bridge ' + name + ' was generated for another distance of its hinges: generate it again',
-                                   element=name, kind='customElement')
             points = [a, tuple((a[i] + b[i]) * 0.5 for i in range(3)), b] if paired else [a, b]
             result.append(dict(id=element['id'], owner=owner, replaces=replacement, name=name,
                                route=(PREFIXES[behavior] + model, [(-p[0], p[1], p[2]) for p in points], 20)))

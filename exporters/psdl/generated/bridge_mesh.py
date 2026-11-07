@@ -1,4 +1,4 @@
-"""Generates the model of a movable bridge from the roads its controls are attached to, and assigns it to the bridge.
+"""The model of a movable bridge, generated from the roads its controls are attached to (the bridge flag generateMesh).
 
 The top of the leaf is the cross section of the road (with its textures), the rest is made as the stock giz_bridge01_l
 and giz_waterloo_l: a railing on each side (a 0.25 m wide box, 1.5 m high), and below the level of the hinge a truss
@@ -11,14 +11,10 @@ The files are named after their contents, as the low LOD textures: a change give
 """
 import hashlib
 import math
-import os
 from pathlib import Path
 import struct
-import sys
 
-CORE = Path(__file__).resolve().parents[2]
-sys.path.append(str(CORE / 'exporters' / 'psdl'))
-import custom_element_conversion as cec
+from generated import GenerationError, lod_texture
 from bridge_export import generated_tuning, DEFAULT_TRUSS_TEXTURE, DEFAULT_BOTTOM_TEXTURE, DEFAULT_RAIL_TEXTURE
 from writers.pkg_writer import PKGWriter
 from utils import state_bool, state_int, state_val
@@ -96,7 +92,7 @@ def road_profile(state):
     total = float(state_val(state, 'totalWidth', 0) or 0)
     width = float(state_val(state, 'roadWidth', 0) or 0) if with_sides else total
     if total <= 0 or width <= 0 or width > total:
-        raise cec.ConversionError('BRIDGE_MESH_ERROR_WIDTHS')
+        raise GenerationError('BRIDGE_MESH_ERROR_WIDTHS')
     road = texture_name(state_val(state, 'texture1'))
     side = texture_name(state_val(state, 'texture0'))
     half_total, half_road = total * 0.5, width * 0.5
@@ -104,7 +100,7 @@ def road_profile(state):
     divider = state_int(state, 'divider') if double else 0
     half_divider = float(state_val(state, 'dividerWidth', 0) or 0) * 0.5 if divider > 0 else 0
     if half_divider >= half_road:
-        raise cec.ConversionError('BRIDGE_MESH_ERROR_WIDTHS')
+        raise GenerationError('BRIDGE_MESH_ERROR_WIDTHS')
     strips = []
     if side_width > 0:
         # the stock sidewalks have their texture coordinate from 0 inside to 1 outside
@@ -245,8 +241,9 @@ class Leaf:
                       [(u(s1), END_V_BOTTOM), (u(s0), END_V_BOTTOM), (u(s0), v(y0)), (u(s1), v(y1))])
 
 
-def build_lods(state, truss, bottom, rail, length, angle):
-    """The meshes of the model: {part: Mesh} as the stock models, the last one (VL) without railings and with the low LOD texture of the road."""
+def build_lods(state, truss, bottom, rail, length, angle, low=None):
+    """The meshes of the model: {part: Mesh} as the stock models, the last one (VL) without railings and with the low LOD
+    texture of the road (low: its name, by default the one of textureLOD)."""
     strips, half_road, edge_y = road_profile(state)
     half = half_road + RAIL_WIDTH
     leaf = Leaf(length, angle)
@@ -274,7 +271,7 @@ def build_lods(state, truss, bottom, rail, length, angle):
 
     far = Mesh()
     leaf.under(far, bottom, half, plate_y, PLATE_TILE, PLATE_ACROSS_TILE, solid=False)
-    low = texture_name(state_val(state, 'textureLOD'))
+    low = texture_name(state_val(state, 'textureLOD')) if low is None else low
     if low:
         far.face(low, [leaf.at(-half, edge_y, 1), leaf.at(half, edge_y, 1), leaf.at(half, edge_y, -1), leaf.at(-half, edge_y, -1)],
                  [(0, 0), (0, 1), (leaf.along(2 * half), 1), (leaf.along(2 * half), 0)])
@@ -337,22 +334,20 @@ def bound(mesh):
     return vertices, triangles
 
 
-def write_model(city_folder, state, truss, bottom, rail, length, angle):
-    """Writes the files of the model in the folders of the city, returns its path relative to the city."""
-    lods = build_lods(state, truss, bottom, rail, length, angle)
+def write_model(out, state, truss, bottom, rail, length, angle, low=None):
+    """Writes the files of the model in out (an OutputRoot): the PKG, its bound and its banger data (the game crashes
+    without one, see bridge_export.ensure_tuning). Returns the path of the PKG relative to out."""
+    lods = build_lods(state, truss, bottom, rail, length, angle, low)
     data = pkg_bytes(lods)
     name = 'bridge_' + hashlib.sha1(data).hexdigest()[:8]  # short: the game has a limit for the name with the behavior
-    folders = {key: os.path.join(city_folder, *key.split('/')) for key in ('geometry', 'bound', 'tune/banger')}
-    for folder in folders.values():
-        os.makedirs(folder, exist_ok=True)
-    with open(os.path.join(folders['geometry'], name + '.pkg'), 'wb') as f:
+    with open(out.path('geometry/' + name + '.pkg'), 'wb') as f:
         f.write(data)
     vertices, triangles = bound(lods['H'])
-    PKGWriter.write_bnd(None, os.path.join(folders['bound'], name + '_BOUND.bnd'), vertices, triangles, ['default'])
+    PKGWriter.write_bnd(None, out.path('bound/' + name + '_BOUND.bnd'), vertices, triangles, ['default'])
     points = [v[0] for mesh in lods.values() for s in mesh.sections.values() for v in s['vertices']]
     # the game uses Size.z as the distance of the two ends of the leaf: the mesh is longer at an angle
     size = [max(p[0] for p in points) - min(p[0] for p in points), max(p[1] for p in points) - min(p[1] for p in points), length]
-    with open(os.path.join(folders['tune/banger'], name + '.dgBangerData'), 'w', encoding='ascii', newline='\n') as f:
+    with open(out.path('tune/banger/' + name + '.dgBangerData'), 'w', encoding='ascii', newline='\n') as f:
         f.write(generated_tuning(size))
     return 'geometry/' + name + '.pkg'
 
@@ -365,37 +360,35 @@ def attached_road(point, data):
     return (road, anchor.get('insideDirection')) if road else None
 
 
-def generate(element, data):
+def low_texture(road_state, out, folders):
+    # the name of the low LOD texture of the road: generated when the road has it generated (if that fails, the VL LOD
+    # gets the textures of the top as without one)
+    if lod_texture.enabled(road_state):
+        try:
+            return texture_name(lod_texture.generate(road_state, out, folders))
+        except GenerationError:
+            return ''
+    return texture_name(state_val(road_state, 'textureLOD'))
+
+
+def generate(element, data, out, folders):
+    """Writes the model of the bridge (an element of the export JSON, data: the JSON with the roads its points are
+    attached to) in out (an OutputRoot), folders: where to find the textures. Returns the path of the PKG relative to
+    out and the length of a leaf. Raises GenerationError if the bridge can't have a model."""
     state = element['data']['fields']['state']
     start, finish = element['points']['start'], element['points']['finish']
     attached = [item for item in (attached_road(start, data), attached_road(finish, data)) if item]
     if not attached:
-        raise cec.ConversionError('BRIDGE_MESH_ERROR_NO_ROADS')
+        raise GenerationError('BRIDGE_MESH_ERROR_NO_ROADS')
     a, b = start['position'], finish['position']
     distance = math.hypot(a[0] - b[0], a[2] - b[2])
     length = distance * 0.5 if state_val(state, 'paired', True) else distance
     if length < MIN_LENGTH:
-        raise cec.ConversionError('BRIDGE_MESH_ERROR_LENGTH')
+        raise GenerationError('BRIDGE_MESH_ERROR_LENGTH')
     angle = sum(road_angle(direction, a, b) for _, direction in attached) / len(attached)
     if abs(angle) > math.radians(MAX_ANGLE):
-        raise cec.ConversionError('BRIDGE_MESH_ERROR_ANGLE')
+        raise GenerationError('BRIDGE_MESH_ERROR_ANGLE')
     road_state = max((road['data']['fields']['state'] for road, _ in attached), key=lambda s: float(state_val(s, 'totalWidth', 0) or 0))
     textures = [texture_name(state_val(state, key) or default) for key, default in (
         ('trussTexture', DEFAULT_TRUSS_TEXTURE), ('bottomTexture', DEFAULT_BOTTOM_TEXTURE), ('railTexture', DEFAULT_RAIL_TEXTURE))]
-    return write_model(data['cityFolder'], road_state, *textures, length, angle), length
-
-
-def convert(data):
-    out = cec.Output()
-    for target in data['convert']:
-        element = next((e for e in data['customElements'] if e['id'] == target['id']), None)
-        if element is None:
-            raise cec.ConversionError('CONVERSION_ERROR_MISSING')
-        path, length = generate(element, data)
-        out.updates.append({'element': {'kind': 'customElement', 'id': target['id']},
-                            'state': {'mesh': path, 'generatedMesh': path, 'generatedLength': length}})
-    return out, False
-
-
-if __name__ == '__main__':
-    cec.run(sys.argv, convert)
+    return write_model(out, road_state, *textures, length, angle, low_texture(road_state, out, folders)), length

@@ -4,19 +4,21 @@ At its lowest level of detail, the game draws a road with a single texture, whic
 
 ## Generating one
 
-Click **Generate low LOD texture**, below the textures in the **Main** tab of a road. It:
+Check **Generate low LOD texture**, below the textures in the **Main** tab of a road. When the city is exported, the exporter:
 
 - reads the road, sidewalk and divider textures and widths of the road
-- writes `texture/<road texture>_lod_<hash>.tex` in the city folder
-- sets it as the **Low LOD texture** of the road
+- writes `texture/<road texture>_lod_<hash>.tex` in the export
+- uses it for the road, in place of its **Low LOD texture**
 
-The button is enabled on **Double** roads with a road texture, because the other roads have no low LOD texture in the PSDL.
+It works on **Double** roads with a road texture, because the other roads have no low LOD texture in the PSDL. A road preset keeps the flag, like the textures.
 
 ## Things to know
 
-- **It doesn't update by itself.** Generate it again after changing the textures or widths.
-- **Equal results share one file,** and each new file counts towards the limit of textures of a city.
-- **Undo restores the old texture of the road, but the file stays.** It is packed into the `.ar` with the rest of the folder, so delete the ones you no longer use by hand.
+- **It follows the road.** Each export makes it from the current textures and widths, so there is nothing to generate again, and nothing is written in the city folder.
+- **The editor doesn't show it,** as it doesn't show a low LOD texture chosen by hand: the game uses it only far away.
+- **Equal results share one file,** and each different one counts towards the limit of textures of a city.
+- **If a texture of the road is missing,** the export warns and the road keeps its **Low LOD texture**.
 - **`_fa` versions:** when the road texture has a `_fa` version, as the stock ones do, one is written for the low LOD texture too.
+- **Bridges:** a model generated for a movable bridge on the road uses it too, for its farthest level of detail.
 
-With **MM2 archive (.ar)** the texture goes with the city. Otherwise, copy it like any other custom texture, from the `texture` folder of the city to the one of the game.
+With **MM2 archive (.ar)** the texture goes in the archive. A loose export writes it in the `texture` folder of the export. An export with both **Export PSDL** and **Export PATHSET** removes the generated files that are no longer needed (see [Where the files go](../export/layout.md)).

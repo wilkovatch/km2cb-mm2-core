@@ -1,12 +1,11 @@
-"""Small synthetic checks of the low LOD texture generator (converters/generateLodTexture)."""
-import importlib.util
+"""Small synthetic checks of the low LOD texture generator (generated/lod_texture.py) and of its export."""
 import json
 from pathlib import Path
 import struct
-import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 import numpy as np
 from PIL import Image
@@ -14,9 +13,8 @@ from PIL import Image
 CORE = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(CORE / 'exporters/psdl'))
 
-spec = importlib.util.spec_from_file_location('lod_texture', CORE / 'converters/generateLodTexture/convert.py')
-lod = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(lod)
+from generated import lod_texture as lod, OutputRoot, GenerationError
+from generated_export import GeneratedExport, MANIFEST
 
 ROAD = (10, 20, 30)
 CENTER = (250, 220, 0)
@@ -42,7 +40,7 @@ class LodTexture(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.folder = Path(self.tmp.name)
-        (self.folder / 'city' / 'texture').mkdir(parents=True)
+        (self.folder / 'city').mkdir()
         (self.folder / 'common' / 'Texture').mkdir(parents=True)
         Image.fromarray(road_image()).save(self.folder / 'common' / 'Texture' / 'Road.png')
         Image.fromarray(np.full((8, 8, 3), SIDEWALK, np.uint8)).save(self.folder / 'common' / 'Texture' / 'walk.png')
@@ -53,12 +51,16 @@ class LodTexture(unittest.TestCase):
     def tearDown(self):
         self.tmp.cleanup()
 
+    def folders(self):
+        return [str(self.folder / 'city'), str(self.folder / 'common')]
+
     def generate(self):
-        return lod.generate(self.state, str(self.folder / 'city'), [str(self.folder / 'city'), str(self.folder / 'common')])
+        # in the folder of an export (each time a new one, which computes it again)
+        return lod.generate(self.state, OutputRoot(self.folder / 'out'), self.folders())
 
     def image(self):
         # the texture written, from its top row
-        return read_tex(self.folder / 'city' / self.generate())[3][::-1]
+        return read_tex(self.folder / 'out' / self.generate())[3][::-1]
 
     def test_bands_in_proportion_and_mirrored(self):
         pixels = self.image()
@@ -72,7 +74,7 @@ class LodTexture(unittest.TestCase):
         self.assertTrue((column[56:] == SIDEWALK).all())
 
     def test_format_as_the_stock_ones(self):
-        path = self.folder / 'city' / self.generate()
+        path = self.folder / 'out' / self.generate()
         self.assertEqual(read_tex(path)[:3], (64, 64, 1))
         self.assertEqual(path.parent.name, 'texture')
 
@@ -83,7 +85,7 @@ class LodTexture(unittest.TestCase):
         second = self.generate()
         self.assertNotEqual(first, second)
         self.assertLessEqual(len(Path(second).stem) + len('_fa'), 31)
-        pixels = read_tex(self.folder / 'city' / second)[3]
+        pixels = read_tex(self.folder / 'out' / second)[3]
         # 8 of 46 m of sidewalk are about 11 pixels instead of 8
         self.assertTrue((pixels[:10, 0] == SIDEWALK).all())
 
@@ -129,21 +131,21 @@ class LodTexture(unittest.TestCase):
         self.assertFalse((self.image() == SIDEWALK).all(axis=2).any())
 
     def test_variant(self):
-        self.assertFalse((self.folder / 'city' / (self.generate()[:-4] + '_fa.tex')).exists())
+        self.assertFalse((self.folder / 'out' / (self.generate()[:-4] + '_fa.tex')).exists())
         Image.fromarray(road_image((1, 2, 3))).save(self.folder / 'common' / 'Texture' / 'road_fa.png')
         name = self.generate()
-        pixels = read_tex(self.folder / 'city' / (name[:-4] + '_fa.tex'))[3][::-1]
+        pixels = read_tex(self.folder / 'out' / (name[:-4] + '_fa.tex'))[3][::-1]
         self.assertTrue((pixels[20, 0] == (1, 2, 3)).all())
         # the sidewalk has no such version
         self.assertTrue((pixels[2, 0] == SIDEWALK).all())
 
     def test_errors(self):
         self.state['texture0'] = 'texture/none.png'
-        with self.assertRaisesRegex(lod.cec.ConversionError, 'LOD_TEXTURE_ERROR_MISSING'):
+        with self.assertRaisesRegex(GenerationError, 'LOD_TEXTURE_ERROR_MISSING'):
             self.generate()
         self.state['texture0'] = 'texture/walk.png'
         self.state['roadWidth'] = 50.0
-        with self.assertRaisesRegex(lod.cec.ConversionError, 'LOD_TEXTURE_ERROR_WIDTHS'):
+        with self.assertRaisesRegex(GenerationError, 'LOD_TEXTURE_ERROR_WIDTHS'):
             self.generate()
 
     def test_tex_source(self):
@@ -156,19 +158,48 @@ class LodTexture(unittest.TestCase):
         self.assertTrue((column[9:30] == ROAD).all())
         self.assertGreater(column[31][0], column[29][0])
 
-    def test_script(self):
-        # the whole converter, as the program runs it
-        road = {'id': 7, 'data': {'fields': {'state': self.state}}}
-        data = {'convert': [{'kind': 'road', 'id': 7}], 'roads': [road], 'cityFolder': str(self.folder / 'city'),
-                'searchFolders': [str(self.folder / 'city'), str(self.folder / 'common')]}
-        source = self.folder / 'input.json'
-        source.write_text(json.dumps(data))
-        output = self.folder / 'output.json'
-        subprocess.run([sys.executable, str(CORE / 'converters/generateLodTexture/convert.py'), str(CORE.parents[1] / 'python'), str(source), str(output)], check=True)
-        result = json.loads(output.read_text())
-        self.assertEqual(result['updates'][0]['element'], {'kind': 'road', 'id': 7})
-        self.assertTrue((self.folder / 'city' / result['updates'][0]['state']['textureLOD']).is_file())
-        self.assertIs(result['replace'], False)
+    def test_the_results_are_shared(self):
+        out = OutputRoot(self.folder / 'out')
+        first = lod.generate(self.state, out, self.folders())
+        self.assertEqual(lod.generate(dict(self.state, echo=True), out, self.folders()), first, 'what the texture does not depend on')
+        self.assertEqual(list(out.files), [first])
+        self.assertFalse(out.files[first], 'it was not there before')
+
+    def test_only_double_roads_with_the_flag(self):
+        self.assertFalse(lod.enabled(self.state))
+        self.assertTrue(lod.enabled(dict(self.state, generateLodTexture=True)))
+        self.assertFalse(lod.enabled(dict(self.state, generateLodTexture=True, isDouble=False)))
+        self.assertFalse(lod.enabled(dict(self.state, generateLodTexture=True, texture1='')))
+
+    def export(self, *states):
+        roads = [{'id': i, 'data': {'name': 'Road' + str(i), 'fields': {'state': state}}} for i, state in enumerate(states)]
+        data = {'roads': roads, 'cityFolder': str(self.folder / 'city'), 'searchFolders': self.folders()}
+        generated = GeneratedExport(self.folder / 'export', data, None)
+        generated.lod_textures()
+        generated.finish()
+        return [road['data']['fields']['state'].get('textureLOD') for road in roads]
+
+    def test_the_export(self):
+        # in the export folder, never in the one of the city; the road gets its path, as if chosen in the editor
+        flagged = dict(self.state, generateLodTexture=True, textureLOD='texture/chosen.tex')
+        other = dict(self.state, textureLOD='texture/chosen.tex')
+        first, kept = self.export(flagged, other)
+        self.assertTrue(first.startswith('texture/road_lod_'))
+        self.assertEqual(kept, 'texture/chosen.tex')
+        self.assertTrue((self.folder / 'export' / first).is_file())
+        self.assertEqual(list((self.folder / 'city').iterdir()), [])
+        self.assertEqual(json.loads((self.folder / 'export' / MANIFEST).read_text()), [first])
+        # another width: the old file stays, as the bridge models weren't exported (they can use it, see _test_bridge_mesh)
+        second, = self.export(dict(flagged, totalWidth=46.0))
+        self.assertNotEqual(first, second)
+        self.assertTrue((self.folder / 'export' / first).is_file())
+        self.assertEqual(sorted(json.loads((self.folder / 'export' / MANIFEST).read_text())), sorted([first, second]))
+
+    def test_a_failure_is_a_warning(self):
+        with patch('generated_export.report.warning') as warning:
+            path, = self.export(dict(self.state, generateLodTexture=True, texture0='texture/none.png', textureLOD='texture/chosen.tex'))
+        self.assertEqual(path, 'texture/chosen.tex')
+        self.assertIn('not found', warning.call_args[0][0], 'the text of the string key')
 
 
 if __name__ == '__main__':

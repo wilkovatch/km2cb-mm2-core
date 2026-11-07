@@ -5,7 +5,7 @@
         { "label": "", "elements": [
             { "name": "mainGroup", "width": 1.5 },
             { "name": "mesh", "width": 1.5 },
-            { "name": "convert:generateBridgeMesh", "width": 1.5 },
+            { "name": "generateMesh", "width": 1.5 },
             { "name": "trussTexture", "width": 1.5 },
             { "name": "bottomTexture", "width": 1.5 },
             { "name": "railTexture", "width": 1.5 },

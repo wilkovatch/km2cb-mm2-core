@@ -5,10 +5,10 @@
 | Option | Default | Writes |
 |---|---|---|
 | **Export prop rules** | On | `propdefs.csv`, `proprules.csv` |
-| **Export PSDL** | On | `<city>.psdl` |
+| **Export PSDL** | On | `<city>.psdl`, generated low LOD textures |
 | **Export INST** | On | `<city>.inst` |
 | **Export BAI** | On | `<city>.bai` |
-| **Export PATHSET** | On | Props, decals, race props, trains, boats, bridges, parked cars |
+| **Export PATHSET** | On | Props, decals, race props, trains, boats, bridges (with their generated models), parked cars |
 | **Export CINFO and AIMAP** | On | `.cinfo`, `.aimap` and race files |
 | **Export hudmap and race maps** | On | Hudmap files, menu images, previews |
 | **Export PKG and bound files** | On | Meshes and collisions of **Export to PKG** elements |

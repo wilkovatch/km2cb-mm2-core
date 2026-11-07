@@ -118,10 +118,14 @@ namespace Api {
             Check("a mesh that isn't there shows the fallback model, with no script errors", Bridge().generator.placements.Count == 2 && Bridge().GetCustomElementType().scriptHost.ErrorCount == errors);
             await Call("state.setParam", new { @ref = id, name = "mesh", value = "geometry/giz_bridge01_l.pkg" });
 
-            //the model generated from the roads the points are attached to
+            //the model generated from the roads the points are attached to (generators/bridgeMesh): shown from the cache of the
+            //program while editing, written in the export folder when exporting, never in the city folder
+            var generator = GeneratorCatalog.Get("bridgeMesh");
             var free = (await Call("customElement.create", new { type = "bridge", name = "Free bridge", position = V(-290, 0, z - 200) })).Value<int>();
+            await Call("state.setParam", new { @ref = free, name = "generateMesh", value = true });
             await Call("city.flush");
-            await Expect("a bridge on no road can't generate a model", "not_accepted", "elements.convert", new { elements = new[] { free }, converter = "generateBridgeMesh" });
+            Check("a bridge on no road doesn't generate a model", generator != null && !generator.IsEnabled(History.ElementRegistry.Get(free))
+                && !Operations.Generation.IsPending(History.ElementRegistry.Get(free)));
             await Call("customElement.delete", new { element = free });
             var eastRoadId = History.ElementRegistry.GetId(M.roads.First(r => r.anchorManager.GetTerrainAnchors().Any(a => a.roadEnd && Near(a.GetPoint(), new Vector3(-250, 0, z)))));
             var exported = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "km2cb_bridges_" + System.Guid.NewGuid().ToString("N") + ".json");
@@ -130,58 +134,84 @@ namespace Api {
             System.IO.File.Delete(exported);
             Check("the export tells the road a point is on", attachedPoint?["kind"]?.Value<string>() == "road" && attachedPoint["roadEnd"].Value<bool>()
                 && attachedPoint["insideDirection"].ToObject<float[]>().Length == 3 && Mathf.Abs(attachedPoint["insideDirection"][0].Value<float>() + 1) < 0.01f);
-            string Param(string name) => Bridge().state.Str(name, null);
-            string ModelFile(string folder, string suffix) => System.IO.Path.Combine(PreferencesManager.workingDirectory, folder, System.IO.Path.GetFileNameWithoutExtension(Param("mesh")) + suffix);
-            async Task Generate() {
-                await Call("elements.convert", new { elements = new[] { id }, converter = "generateBridgeMesh" });
+            //the values of the generator once it has run on the current state (it waits for the edits to stop, then runs Python)
+            async Task<JObject> Generated() {
+                var start = Time.GetTicksMsec();
+                while (Operations.Generation.IsPending(Bridge()) && Time.GetTicksMsec() - start < 30000) await Frames(1);
                 await Call("city.flush"); await Frames(2);
+                return Operations.Generation.Values(Bridge()) ?? new JObject();
             }
-            await CheckUndo("generating the model of a bridge", Generate);
-            await Call("city.flush"); await Frames(2);
-            var first = Param("mesh");
+            string Model() => (string)Operations.Generation.Values(Bridge())?["mesh"];
+            float Length() => (float?)Operations.Generation.Values(Bridge())?["length"] ?? 0;
+            //the files of the folders of the city where the old converter wrote the models
+            int CityAssets() => new[] { "geometry", "bound", "tune", "texture" }.Sum(sub => {
+                var path = System.IO.Path.Combine(PreferencesManager.workingDirectory, sub);
+                return System.IO.Directory.Exists(path) ? System.IO.Directory.GetFiles(path, "*", System.IO.SearchOption.AllDirectories).Length : 0;
+            });
+            var cityFiles = CityAssets();
+            await CheckUndo("generating the model of a bridge", async () => {
+                await Call("state.setParam", new { @ref = id, name = "generateMesh", value = true });
+                await Call("city.flush");
+            });
+            await Generated();
+            var first = Model();
+            var cache = Operations.Generation.CacheFolder().Replace('\\', '/');
             var width = History.ElementRegistry.Get<Road>(west).state.Float("totalWidth");
-            Check("the model is assigned to the bridge (" + first + ")", first.StartsWith("geometry/bridge_") && Param("generatedMesh") == first && Bridge().generator.placements.All(p => p.mesh == first && p.obj != null));
-            Check("the files of the model are in the city", System.IO.File.Exists(ModelFile("geometry", ".pkg")) && System.IO.File.Exists(ModelFile("bound", "_BOUND.bnd")) && System.IO.File.Exists(ModelFile("tune/banger", ".dgBangerData")));
-            Check("each leaf reaches the middle", NearFloat(Bridge().state.Float("generatedLength"), 40));
+            Check("the model is generated in the cache of the program (" + first + ")", first != null && first.StartsWith(cache + "/geometry/bridge_") && System.IO.File.Exists(first)
+                && Bridge().generator.placements.All(p => p.mesh == first && p.obj != null));
+            Check("the generated values are not in the state", Bridge().state.Str("generatedMesh", null) == null && Bridge().state.Str("mesh", "") == "geometry/giz_bridge01_l.pkg");
+            Check("each leaf reaches the middle", NearFloat(Length(), 40));
             Check("the model has the size of the road, with the railings", NearFloat(MeshManager.GetSize(first).Value.X, width + 0.5f) && NearFloat(MeshManager.GetSize(first).Value.Z, 40));
             CheckLeaves("generated model", new Vector3(-330, 0, z), new Vector3(-250, 0, z), 40, 0);
+            var described = (await Call("elements.get", new { @ref = id, derived = true }))["generated"];
+            Check("the API gives the values of the generator", (string)described?["values"]?["mesh"] == first && described["pending"]?.Value<bool>() == false);
             await Call("view.camera.set", new { position = V(-290, 40, z - 60), target = V(-290, 0, z) });
             await Frames(2);
-            //the button of the panel: enabled only while a point is on a road
+            //the flag in the panel
             History.UndoManager.Record("edit bridge", () => builder.SelectObject(Bridge(), true, null));
             await Frames(3);
-            var meshConverter = ((List<(EditorPanelElements.Button button, ConverterCatalog.ConverterInfo converter)>)typeof(EditorPanel)
-                .GetField("conversionButtons", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(CallBuilder<EditorPanel>("GetActivePanel")))
-                .FirstOrDefault(b => b.converter.name == "generateBridgeMesh").converter;
-            Check("the panel of the bridge has the button of the model", meshConverter != null && meshConverter.IsEnabled(Bridge()));
+            var parameters = (Dictionary<string, CityElements.Types.Parameter>)typeof(EditorPanel)
+                .GetField("parameterMap", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(builder.customElementEditorPanel);
+            Check("the panel of the bridge has the flag of the model", parameters.Values.Any(p => p.name == "generateMesh"));
             Screenshot("bridge_generated.png");
+            builder.CloseAllPanels();
+
+            //the export writes the same model (the same contents, so the same name) in the export folder
+            await Send("city.export", new { path = System.IO.Path.Combine(folder, "..", "api_export_bridge"), exporter = "psdl", flags = new Dictionary<string, bool> { ["propRules"] = false, ["psdl"] = false, ["inst"] = false, ["bai"] = false, ["pathset"] = true, ["cinfo_aimap"] = false, ["hudmap"] = false, ["pkgs"] = false } });
+            var exportRoot = System.IO.Path.GetFullPath(System.IO.Path.Combine(folder, ".."));
+            var stem = System.IO.Path.GetFileNameWithoutExtension(first);
+            Check("the export writes the model, its collision and its banger data", System.IO.File.Exists(System.IO.Path.Combine(exportRoot, "geometry", stem + ".pkg"))
+                && System.IO.File.Exists(System.IO.Path.Combine(exportRoot, "bound", stem + "_BOUND.bnd")) && System.IO.File.Exists(System.IO.Path.Combine(exportRoot, "tune", "banger", stem + ".dgBangerData")));
+            var pathset = System.IO.Path.Combine(exportRoot, "race", "api_export_bridge", "api_export_bridge_bridge.pathset");
+            Check("the exported bridge uses it", System.IO.File.Exists(pathset) && System.Text.Encoding.Latin1.GetString(System.IO.File.ReadAllBytes(pathset)).Contains(stem));
+
             await Call("state.setParam", new { @ref = id, name = "trussTexture", value = "texture/my_truss.tex" });
-            await Generate();
-            Check("the textures of the bridge go in the model", Param("mesh") != first && System.Text.Encoding.ASCII.GetString(System.IO.File.ReadAllBytes(ModelFile("geometry", ".pkg"))).Contains("my_truss"));
+            await Generated();
+            Check("the textures of the bridge go in the model", Model() != first && System.Text.Encoding.ASCII.GetString(System.IO.File.ReadAllBytes(Model())).Contains("my_truss"));
             await Call("state.setParam", new { @ref = id, name = "trussTexture", value = "" });
             await Call("state.setParam", new { @ref = eastRoadId, name = "totalWidth", value = width + 6 });
-            await Call("city.flush"); await Frames(2);
-            await Generate();
-            Check("with two different roads it fits the widest one", NearFloat(MeshManager.GetSize(Param("mesh")).Value.X, width + 6.5f));
+            await Generated();
+            Check("a change of a road gives a new model, fitting the widest road", NearFloat(MeshManager.GetSize(Model()).Value.X, width + 6.5f));
             await Call("state.setParam", new { @ref = eastRoadId, name = "totalWidth", value = width });
-            await Call("city.flush"); await Frames(2);
             //a road at an angle: the ends of the leaves along the end of the road, the model longer than the distance of its ends
             await Call("roads.movePoint", new { road = west, index = 0, position = V(-400, 0, z + 70) });
             await Call("roads.movePoint", new { road = eastRoadId, index = 1, position = V(-180, 0, z - 70) });
-            await Call("city.flush"); await Frames(2);
-            await Generate();
-            Check("at an angle the model is longer than the leaf", MeshManager.GetSize(Param("mesh")).Value.Z > Bridge().state.Float("generatedLength") + 1);
+            await Generated();
+            Check("at an angle the model is longer than the leaf", MeshManager.GetSize(Model()).Value.Z > Length() + 1);
             CheckLeaves("generated model at an angle", new Vector3(-330, 0, z), new Vector3(-250, 0, z), 40, 0);
             Screenshot("bridge_generated_angle.png");
             await Call("roads.movePoint", new { road = west, index = 0, position = V(-330, 0, z - 80) });
             await Call("roads.movePoint", new { road = eastRoadId, index = 1, position = V(-250, 0, z - 80) });
-            await Call("city.flush"); await Frames(2);
-            await Expect("a road across the bridge is refused", "converter_failed", "elements.convert", new { elements = new[] { id }, converter = "generateBridgeMesh" });
+            var refused = await Generated();
+            Check("a road across the bridge: an error, and only the control line", (string)refused["error"] == "BRIDGE_MESH_ERROR_ANGLE" && Bridge().generator.placements.Count == 0);
             await Call("roads.movePoint", new { road = west, index = 0, position = V(-400, 0, z) });
             await Call("roads.movePoint", new { road = eastRoadId, index = 1, position = V(-180, 0, z) });
-            await Call("state.setParam", new { @ref = id, name = "mesh", value = "geometry/giz_bridge01_l.pkg" });
-            await Call("city.flush"); await Frames(2);
-            CheckLeaves("the size of the mesh for another model", new Vector3(-330, 0, z), new Vector3(-250, 0, z), 30.000004f, 0);
+            await Generated();
+            Check("nothing was written in the city folder", CityAssets() == cityFiles);
+            await Call("state.setParam", new { @ref = id, name = "generateMesh", value = false });
+            await Generated();
+            Check("without the flag the generated model is gone", Operations.Generation.Values(Bridge()) == null);
+            CheckLeaves("the size of the mesh for the chosen model", new Vector3(-330, 0, z), new Vector3(-250, 0, z), 30.000004f, 0);
 
             //a road end moved or connected keeps the point
             await Call("roads.movePoint", new { road = west, index = 1, position = V(-335, 0, z) });

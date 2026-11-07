@@ -20,6 +20,7 @@ from train_export import export_trains
 from boat_export import export_boats
 from bridge_export import export_bridges
 from parked_car_export import export_parked_cars
+from generated_export import GeneratedExport
 from output_layout import OutputLayout
 from ar_packer import ArPacker
 from utils import state_bool
@@ -81,6 +82,14 @@ class Exporter:
         from race_elements import validate_ownership
         validate_ownership(data)
         self.data = data
+        # the generated files first: their paths go in the data, read by the writers as the other files
+        self.generated = GeneratedExport(self.layout.root, data, get_common_dir())
+        if self.options['psdl']:
+            with report.guarded("the low LOD textures were not generated"):
+                self.generated.lod_textures()
+        if self.options['pathset']:
+            with report.guarded("the bridge models were not generated"):
+                self.generated.bridge_models()
         self.physics_map = read_physics_map()
         self.jp = JsonProcessor(data, self.verbose)
         self.scene = Scene(self.jp.get_objects())
@@ -164,6 +173,8 @@ def main():
         exporter.read_city()
         exporter.write_city_files()
         exporter.write_other_files()
+        with report.guarded("the list of the generated files was not written"):
+            exporter.generated.finish()
 
         if options['packAr']:
             ArPacker(layout, exporter.data.get('cityFolder'), exporter.verbose).pack(ar_file)

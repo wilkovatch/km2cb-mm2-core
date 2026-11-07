@@ -1,4 +1,4 @@
-"""Generates the low LOD texture of a road from its textures and widths, and assigns it to the road.
+"""The low LOD texture of a road, generated from its textures and widths (the road flag generateLodTexture).
 
 The game draws the whole width of the road with one square texture at the lowest level of detail. The stock ones (e.g.
 r6_lo_f) show, across the road, a sidewalk, half of the road, the divider, the other half and the other sidewalk, in
@@ -14,18 +14,27 @@ import sys
 import numpy as np
 from PIL import Image
 
-CORE = Path(__file__).resolve().parents[2]
-sys.path.append(str(CORE / 'exporters' / 'psdl'))
-sys.path.append(str(CORE / 'server'))
-import custom_element_conversion as cec
+from generated import CORE, GenerationError
 from writers.tex_writer import write_image
-from texture_formats import read_file
 from utils import state_bool, state_int, state_val
+
+if str(CORE / 'server') not in sys.path:
+    sys.path.append(str(CORE / 'server'))
+from texture_formats import read_file
 
 SIZE = 64  # as the stock low LOD textures
 OVERSAMPLING = 8  # samples per side of each pixel, so that the thin lane markings fade instead of disappearing
 BASE_NAME_LENGTH = 17  # the file name with _lod_<hash> and _fa stays within 31 characters, the limit of the names of the decals
 VARIANTS = ['_fa']  # the stock road textures also have a darker version with this suffix
+# what the texture depends on: the roads with the same values share it
+INPUTS = ('hasSidewalks', 'flatSidewalk', 'roadWidth', 'totalWidth', 'divider', 'dividerWidth', 'dividerParam',
+          'texture0', 'texture1', 'texture3', 'texture4')
+
+
+def enabled(state):
+    # only the double roads have a low LOD texture (the exporter writes just the main texture of the others), and it
+    # needs their road texture
+    return state_bool(state, 'generateLodTexture') and state_bool(state, 'isDouble') and bool(state_val(state, 'texture1'))
 
 
 def road_bands(state):
@@ -38,7 +47,7 @@ def road_bands(state):
     divider = float(state_val(state, 'dividerWidth', 0)) if divider_type > 0 else 0
     half = (road - divider) * 0.5
     if half <= 0 or sidewalk < 0:
-        raise cec.ConversionError('LOD_TEXTURE_ERROR_WIDTHS')
+        raise GenerationError('LOD_TEXTURE_ERROR_WIDTHS')
     bands = []
     if sidewalk > 0:
         bands.append((sidewalk, 'texture0', 1 / sidewalk, 1, False))
@@ -135,41 +144,27 @@ def load_images(state, folders, parameters, suffix=''):
     return res
 
 
-def generate(state, city_folder, folders):
-    """Writes the texture in the texture folder of the city, returns its path relative to the city."""
+def generate(state, out, folders):
+    """Writes the texture of the road in the texture folder of out (an OutputRoot), returns its path relative to it."""
+    key = ('lodTexture',) + tuple(str(state_val(state, name)) for name in INPUTS)
+    if key in out.memo:
+        return out.memo[key]
     bands = road_bands(state)
     parameters = sorted({band[1] for band in bands})
     images = load_images(state, folders, parameters)
     if images is None:
-        raise cec.ConversionError('LOD_TEXTURE_ERROR_MISSING')
+        raise GenerationError('LOD_TEXTURE_ERROR_MISSING')
     image = compose(bands, images)
     # named after its contents: the roads with the same result share one texture, as the textures of a city are limited
     road_name = re.sub(r'[^a-z0-9_]', '_', Path(state_val(state, 'texture1')).stem.lower())[:BASE_NAME_LENGTH]
     name = road_name + '_lod_' + hashlib.sha1(image.tobytes()).hexdigest()[:6]
-    folder = os.path.join(city_folder, 'texture')
-    os.makedirs(folder, exist_ok=True)
     # the rows of the .tex files go from the bottom of the image, the stock low LOD textures have no mip levels
-    write_image(os.path.join(folder, name + '.tex'), image.transpose(Image.FLIP_TOP_BOTTOM), 1)
+    write_image(out.path('texture/' + name + '.tex'), image.transpose(Image.FLIP_TOP_BOTTOM), 1)
     for suffix in VARIANTS:
         stem, extension = os.path.splitext(state_val(state, 'texture1'))
         if find_file(stem + suffix + extension, folders) is None:
             continue
         variant = compose(bands, load_images(state, folders, parameters, suffix))
-        write_image(os.path.join(folder, name + suffix + '.tex'), variant.transpose(Image.FLIP_TOP_BOTTOM), 1)
-    return 'texture/' + name + '.tex'
-
-
-def convert(data):
-    out = cec.Output()
-    for target in data['convert']:
-        road = next((r for r in data['roads'] if r['id'] == target['id']), None)
-        if road is None:
-            raise cec.ConversionError('CONVERSION_ERROR_MISSING')
-        state = road['data']['fields']['state']
-        path = generate(state, data['cityFolder'], data['searchFolders'])
-        out.updates.append({'element': {'kind': 'road', 'id': target['id']}, 'state': {'textureLOD': path}})
-    return out, False
-
-
-if __name__ == '__main__':
-    cec.run(sys.argv, convert)
+        write_image(out.path('texture/' + name + suffix + '.tex'), variant.transpose(Image.FLIP_TOP_BOTTOM), 1)
+    out.memo[key] = 'texture/' + name + '.tex'
+    return out.memo[key]

@@ -8,6 +8,10 @@
 
 **`geometry/<city>_mesh<n>.pkg`** and **`bound/<city>_mesh<n>_BOUND.*`** are the meshes and collisions of the elements with **Export to PKG** checked. The ground type of the collisions comes from `city/materials.csv`, as explained in [Export to PKG](../advanced/export-to-pkg.md).
 
+**`texture/<road texture>_lod_<hash>.tex`** (and its `_fa` version) is the low LOD texture of the roads with **Generate low LOD texture**, made when exporting, as explained in [Low LOD textures](../advanced/low-lod-textures.md).
+
+**`geometry/bridge_<hash>.pkg`**, **`bound/bridge_<hash>_BOUND.bnd`** and **`tune/banger/bridge_<hash>.dgBangerData`** are the model, collision and banger data of the movable bridges with **Generate model from the roads**, made when exporting.
+
 ## Traffic
 
 **`city/<city>.bai`** holds the paths of the ambient traffic and pedestrians, the road rules and the cable cars. Without it, the game has no traffic and puts the player's car at the origin of the city.

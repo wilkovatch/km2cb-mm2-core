@@ -1,0 +1,7 @@
+{
+	"sources": [
+		"customElement/bridge"
+	],
+	"script": "generate.py",
+	"enabledWhen": "bridges.generatesMesh"
+}

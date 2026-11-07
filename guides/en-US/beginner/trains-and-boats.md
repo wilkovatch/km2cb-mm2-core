@@ -28,6 +28,6 @@ A cyan line shows the path the game will follow.
 
 ## Movable bridges
 
-Choose **Create > Moving objects > Movable bridge**, click the first hinge, then the opposite one, at the same height. Click the cyan point on a free road end to attach a hinge to it. To place them again, choose **Click mode > Place the points one by one**. Then choose a **Model**, or attach the controls to road ends and press **Generate model from the roads** to get one made for them. Turn **Paired leaves** off for one leaf. The bridge keeps its model size.
+Choose **Create > Moving objects > Movable bridge**, click the first hinge, then the opposite one, at the same height. Click the cyan point on a free road end to attach a hinge to it. To place them again, choose **Click mode > Place the points one by one**. Then choose a **Model**, or attach the controls to road ends and check **Generate model from the roads** to get one made for them, which follows the roads as you edit them. Turn **Paired leaves** off for one leaf. The bridge keeps its model size.
 
 Choose **Timed**, **Proximity**, **Closed** or **Open** behavior. **Preview pose** lets you inspect the closed or open bridge without changing that behavior. Place the approaches and supports separately, with no static road deck in the opening. See [Trains and boats in depth](../advanced/trains-and-boats.md) for the native limits and bridges specific to a race.

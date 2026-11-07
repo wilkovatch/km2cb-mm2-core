@@ -6,8 +6,9 @@ local M = {}
 -- and what the exporter writes for a model without banger data. An element made without a model uses the default of the exporter.
 local DEFAULT_MESH, DEFAULT_LENGTH = "geometry/giz_bridge01_l.pkg", 30.000004
 
--- the mesh is generated from the roads the controls are attached to
-function M.canGenerateMesh(_, ctx)
+-- the model is generated (generators/bridgeMesh) from the roads the controls are attached to
+function M.generatesMesh(_, ctx)
+    if ctx.element.state.generateMesh ~= true then return false end
     for _, neighbor in ipairs(ctx.neighbors) do
         if neighbor.kind == "road" then return true end
     end
@@ -23,11 +24,17 @@ function M.geometry(v, ctx)
         { points = { a, b }, color = "cyan", always = true, wideCollider = true }
     } }
     if length < 0.001 or horizontal < 0.001 then return result end
-    local mesh, modelLength = ctx.parameters.mesh, ctx.meshSizes.mesh and ctx.meshSizes.mesh.z
-    if not mesh or mesh == "" then mesh, modelLength = DEFAULT_MESH, DEFAULT_LENGTH end
-    -- a generated model for a road at an angle is longer than its Size.z, the distance of its ends from the hinge line
-    if mesh == ctx.parameters.generatedMesh and v.generatedLength > 0 then modelLength = v.generatedLength end
-    if not modelLength then return result end -- no size: only the control line
+    local mesh, modelLength
+    if ctx.parameters.generateMesh == true then
+        -- the generated model, in the cache folder of the program; a model for a road at an angle is longer than its
+        -- Size.z, the distance of its ends from the hinge line, given as length. Until it's made (or if it can't be): only the control line
+        mesh, modelLength = ctx.generated.mesh, ctx.generated.length
+        if ctx.generated.error then return result end
+    else
+        mesh, modelLength = ctx.parameters.mesh, ctx.meshSizes.mesh and ctx.meshSizes.mesh.z
+        if not mesh or mesh == "" then mesh, modelLength = DEFAULT_MESH, DEFAULT_LENGTH end
+    end
+    if not mesh or not modelLength then return result end -- no size: only the control line
     local angle = v.preview == 2 and 27 or v.preview == 1 and 0 or v.behavior == 3 and 27 or 0
     -- The closed model faces away from the opposite hinge; its negative Z extends into the opening.
     local function leaf(origin, other)

@@ -22,7 +22,7 @@ Stock MM2, and tools such as MM2 City Toolkit, can't handle PSDL files with more
 
 The export option **Cap PSDL materials to 511 (TESTING ONLY)** caps the indices, which breaks the textures above the limit. Use it only for testing. Without it, there is still a cap of 2047.
 
-Reuse textures, and delete low LOD textures you no longer use.
+Reuse textures. Generated low LOD textures count too: one for each different road.
 
 ## Reading mm2.log
 

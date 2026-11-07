@@ -70,7 +70,7 @@
 					"width": 1.5
 				},
 				{
-					"name": "convert:generateLodTexture",
+					"name": "generateLodTexture",
 					"width": 1.5
 				}
 			]
