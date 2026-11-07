@@ -19,6 +19,7 @@ No original game data is included with the core. Open or create a city using thi
 
 - Roads, intersections and terrain patches exported as PSDL rooms, with railings, prop rules, low LOD road textures and optional export as PKG meshes with their bounds
 - Ambient traffic paths (BAI), with lanes, parking, cable car lines and direction arrows in the editor
+- Visible sets of the rooms (CPVS), computed from the buildings and the ground
 - Individual props, prop lines, prop polygons, INST meshes and parked cars
 - Decals (spline and single), as in `decals.pathset`
 - Trains, boats, ducks, ferries and movable bridges
@@ -28,7 +29,7 @@ No original game data is included with the core. Open or create a city using thi
 
 ## Exporting
 
-Select the PSDL format when exporting. The exporter writes PSDL, INST, BAI, PATHSET (props, decals, parked cars, trains, boats, bridges), prop rules, PKG and bounds, CINFO and AIMAP (races, opponents, police, ambient traffic), HUD and race maps, laid out as in the game folder. Choose "MM2 archive (.ar)" to get a single archive to put in the game folder.
+Select the PSDL format when exporting. The exporter writes PSDL, CPVS, INST, BAI, PATHSET (props, decals, parked cars, trains, boats, bridges), prop rules, PKG and bounds, CINFO and AIMAP (races, opponents, police, ambient traffic), HUD and race maps, laid out as in the game folder. Choose "MM2 archive (.ar)" to get a single archive to put in the game folder.
 
 `exporters/psdl/tools` contains checkers for exported or stock files: `psdl_check.py` (room perimeters), `bai_check.py` (AI paths) and `decal_check.py` (decals).
 

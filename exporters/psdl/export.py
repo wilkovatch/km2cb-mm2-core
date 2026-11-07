@@ -25,6 +25,7 @@ from output_layout import OutputLayout
 from ar_packer import ArPacker
 from utils import state_bool
 from writers.psdl_writer import PSDLWriter
+from writers.cpvs_writer import CPVSWriter
 from writers.inst_writer import INSTWriter
 from writers.bai_writer import BAIWriter
 from writers.pathset_writer import PATHSETWriter
@@ -103,6 +104,9 @@ class Exporter:
             with report.guarded("the PSDL was not written"):
                 PSDLWriter(self.scene, psdl, o['psdl_splitNonCoplanarRoads'], o['psdl_capMaterials'],
                            state_bool(self.data.get('cityProperties'), 'assumeMM2Hook')).write()
+        if o['cpvs']:
+            with report.guarded("the CPVS was not written"):
+                CPVSWriter(self.scene, psdl, o['cpvs_accurate']).write()
         if o['inst']:
             with report.guarded("the INST was not written"):
                 INSTWriter(self.scene, psdl).write()

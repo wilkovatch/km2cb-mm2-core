@@ -10,7 +10,7 @@ The structure of the exporter (pipeline, modules, coordinate spaces, parts, the 
 
 When stashing to compare against old behaviour, stash both the builder repo and this repo. This repo keeps its own older stashes, so pop only yours.
 
-Useful tools: `exporters/psdl/tools/psdl_check.py` (perimeter spikes/slits, prop-room texture indices), `bai_check.py --lint` (BAI sanity, max 11 roads per intersection), `decal_check.py`.
+Useful tools: `exporters/psdl/tools/psdl_check.py` (perimeter spikes/slits, prop-room texture indices), `bai_check.py --lint` (BAI sanity, max 11 roads per intersection), `decal_check.py`, `cpvs_check.py` (CPVS layout against the PSDL, `--compare`, `--stock` calibration; see the CPVS notes below).
 
 Fast exporter loop without the game (from the builder folder): `-- export-json <city> --out x.json`, then run this core's `exporters/psdl/export.py <Files/python> x.json x.psdl <flags...>` directly with the builder's `python/python.exe`, one 0/1 value per flag of `exporters/psdl/settings.json`, in its order (`options.py` names the expected ones when the count is wrong). A BAI-only export of a large city takes about 3 s.
 
@@ -41,6 +41,21 @@ Facts reverse-engineered from `midtown2.exe` and the stock files. They explain w
 | PSDL perimeter spikes | Fixed in `psdl_writer` (`remove_spikes`). Lowering the area threshold is **not** the fix. Lint with `psdl_check.py` |
 
 Other limits: 511 unique textures per city. PSDL has no per-vertex UVs and max 65536 vertices. The PSDL texture count is names + 1.
+
+**CPVS** (`city/<city>.cpvs`, checked on the stock `london.cpvs` and `sf.cpvs` with `tools/cpvs_check.py`):
+
+- `PVS0`, `u32` = PSDL rooms + 2, then rooms + 1 `u32` offsets into the list data (the last one is the end). There is one list per PSDL room, in PSDL order. Each list has 2 bits per room, low bits first in each byte. Pair 0 is reserved (always 0), pair k is PSDL room k (from 1). `3` = visible; the stock files use only 0 and 3.
+- RLE: a header with the top bit set is followed by `(h & 0x7f) + 1` literal bytes. A header with the top bit clear repeats the next byte **`h & 0x7f` times, without + 1**: Dummiesman's page and its example are off by one there. With this rule, the longest stock lists decode to exactly `ceil((rooms + 1) / 4)` bytes. The stock encoder leaves out trailing zero bytes (93% of the lists are shorter), and the exporter writes them in full.
+- The stock sets are sparse and look sampled: London has a median of 52 visible rooms out of 1341, with visible rooms up to 1.7 km away. Only 60% of the pairs are symmetric, and the sets aren't closed over neighbours. Self and perimeter neighbours are visible (1340/1341 and 12460/12476). London's underground rooms (floors below -4 m, 355 of them) are visible from rooms 800 m away, even from the surface, so the stock sets aren't geometric visibility there.
+- Calibration (`cpvs_check.py --stock <psdl>`): it computes the sets from the PSDL floors, facade bounds and roofs, plus the boxes of the INST objects (bounds read from the PKGs of the stock `geometry` folder with the core's `server/mesh_formats.py`), and compares them with the stock file. Recall is the share of stock-visible pairs that are also computed visible:
+
+  | Mode | London (1341 rooms) | SF (1171 rooms) |
+  |---|---|---|
+  | fast | 80.4% recall, mean 146 visible (stock 62), 23.5 s | 86.0% recall, mean 226 (stock 82), 46.6 s |
+  | accurate (120-room sample) | 87.7%, mean 212, about 0.11 s per room | 93.1%, mean 321, about 0.24 s per room |
+
+  Recall grows with viewpoints and eye heights. A finer grid (2 m, 1 m) changes nothing. Without the London underground rooms, fast recall is 87% and accurate 92%. Most remaining misses would need an eye 30 m or more above the floor. The computed sets are 2-3 times larger than stock (they are conservative), so culling is weaker than stock.
+- Not verified in game yet: whether the game uses the camera's room or the car's, what it does without a CPVS, and FPS gains.
 
 ## Reverse-engineering setup
 

@@ -73,7 +73,7 @@ class ExportOverwrite(unittest.TestCase):
         # No common assets: the modules are already on sys.path; this path locates an empty common folder.
         argv = [str(EXPORTER / 'export.py'), str(folder / 'modules'), str(source), str(folder / 'test.psdl')]
         values = dict.fromkeys(flag_ids(), True)
-        values.update(psdl_splitNonCoplanarRoads=False, bai_accurateCulling=False, psdl_capMaterials=False, verbose=False, packAr=False)
+        values.update(psdl_splitNonCoplanarRoads=False, bai_accurateCulling=False, cpvs_accurate=False, psdl_capMaterials=False, verbose=False, packAr=False)
         values.update(flags)
         argv.extend(str(int(value)) for value in values.values())
         output = io.StringIO()
@@ -101,7 +101,7 @@ class ExportOverwrite(unittest.TestCase):
             self.run_export(directory)
             expected = self.snapshot(directory)
             # Assert coverage so an accidentally skipped writer cannot make this test pass.
-            required = {'city/test.psdl', 'city/test.inst', 'city/test.bai', 'city/test.aimap',
+            required = {'city/test.psdl', 'city/test.cpvs', 'city/test.inst', 'city/test.bai', 'city/test.aimap',
                         'city/test/props.pathset', 'city/test/decals.pathset', 'city/test/propdefs.csv', 'city/test/proprules.csv',
                         'tune/test.cinfo', 'tune/test.mmHudMap', 'geometry/test_mesh0.pkg', 'geometry/hudmap_test.pkg',
                         'bound/test_mesh0_BOUND.bnd', 'bound/test_mesh0_BOUND.bbnd', 'bound/test_mesh0_BOUND.ter',

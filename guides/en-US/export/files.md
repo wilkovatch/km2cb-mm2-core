@@ -4,6 +4,8 @@
 
 **`city/<city>.psdl`** is the city itself: the rooms with their roads, intersections, terrain, facades, roofs and railings. Its texture list comes from what you used.
 
+**`city/<city>.cpvs`** tells the game which rooms can be seen from each room, so that it draws only those (and the meshes in them). It is computed from the facades, roofs, ground and meshes of the city: a room hidden behind buildings or hills isn't drawn. If rooms appear late in a place (for example when the camera rises after a jump), export with **Accurate CPVS**.
+
 **`city/<city>.inst`** lists the static meshes (INST meshes, and elements exported to PKG), each in the room it stands on.
 
 **`geometry/<city>_mesh<n>.pkg`** and **`bound/<city>_mesh<n>_BOUND.*`** are the meshes and collisions of the elements with **Export to PKG** checked. The ground type of the collisions comes from `city/materials.csv`, as explained in [Export to PKG](../advanced/export-to-pkg.md).

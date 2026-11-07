@@ -1221,6 +1221,9 @@ class JsonProcessor:
                 else:
                     elem.name = str(index) + ',' + str(cur_block) + '_INST'
                     flags = str(get_inst_modifiers(mesh, state))
+                    # the box of the mesh (local, in the space of the program), for the CPVS
+                    if dict_mesh.get('boundsMin') is not None and dict_mesh.get('boundsMax') is not None:
+                        elem.properties['bounds'] = ','.join(str(float(c)) for c in list(dict_mesh['boundsMin']) + list(dict_mesh['boundsMax']))
                 elem.properties['original_name'] = mesh['name']
                 elem.properties['object'] = get_instance_mesh_name(dict_mesh)
                 elem.properties['flags'] = flags

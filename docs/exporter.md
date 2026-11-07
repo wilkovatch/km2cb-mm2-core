@@ -2,7 +2,7 @@
 
 > Claude Code and other AI agents were used during the development of this project and for writing its documentation, including this page.
 
-The exporter of the core (`exporters/psdl`) writes a city as the files of Midtown Madness 2: the PSDL (the city geometry), INST (objects), BAI (the paths of the ambient traffic, the pedestrians and the cable cars), PATHSET (props, decals, parked cars, trains, boats, bridges), prop rules, PKG and bound files, CINFO and AIMAP files, the hudmap and the race maps. They're written as in the game folder (`output_layout.py`), or packed in an `.ar` archive. The flags and the files are described for users in the export guide (`guides/en-US/export`). This page describes how the exporter works, for those changing it. The facts about the game (formats, limits, crashes) are in the agent notes, [Exporter workflow and engine limits](agents/exporting.md) and the topics it links.
+The exporter of the core (`exporters/psdl`) writes a city as the files of Midtown Madness 2: the PSDL (the city geometry), CPVS (the rooms visible from each room), INST (objects), BAI (the paths of the ambient traffic, the pedestrians and the cable cars), PATHSET (props, decals, parked cars, trains, boats, bridges), prop rules, PKG and bound files, CINFO and AIMAP files, the hudmap and the race maps. They're written as in the game folder (`output_layout.py`), or packed in an `.ar` archive. The flags and the files are described for users in the export guide (`guides/en-US/export`). This page describes how the exporter works, for those changing it. The facts about the game (formats, limits, crashes) are in the agent notes, [Exporter workflow and engine limits](agents/exporting.md) and the topics it links.
 
 The program runs the exporter as described in the builder's wiki (Core Python Integration): it writes the export JSON of the city and runs `export.py` with the bundled Python.
 
@@ -12,7 +12,7 @@ The program runs the exporter as described in the builder's wiki (Core Python In
 export JSON ──► JsonProcessor ──► parts (ExportedCityElement, program space)
                     │                   │
                     │                   ▼
-                    │               Scene (writer space) ──► PSDL, INST, PATHSET, decals, PKG/bounds
+                    │               Scene (writer space) ──► PSDL, CPVS, INST, PATHSET, decals, PKG/bounds
                     ▼                   │ (rooms)
              BaiNetworkBuilder ──► BaiNetwork ──────────────► BAI
                     │
@@ -42,7 +42,7 @@ JSON only ──► prop rules, trains, boats, bridges, parked cars, CINFO/AIMAP
 | `traffic/paths.py` | The paths of a procedural road (edges, curbs, lanes, sidewalks, rails) |
 | `traffic/network.py` | `BaiNetworkBuilder`: the BAI roads and intersections from the exported roads and intersections |
 | `traffic/rails.py` | The curves joining the cable car rails through an intersection (for `converters/generateRailDecals`) |
-| `writers/` | The writers of the game files: `psdl_writer`, `inst_writer`, `bai_writer`, `pathset_writer`, `decal_writer`, `pkg_writer`, `tex_writer`, with `file_io` (binary output) and `report` (warnings and errors) |
+| `writers/` | The writers of the game files: `psdl_writer`, `cpvs_writer`, `inst_writer`, `bai_writer`, `pathset_writer`, `decal_writer`, `pkg_writer`, `tex_writer`, with `file_io` (binary output) and `report` (warnings and errors) |
 | `cinfo_aimap_export.py`, `race_elements.py`, `hudmap_export.py`, `prop_rules_export.py`, `train_export.py`, `boat_export.py`, `bridge_export.py`, `parked_car_export.py`, `route_pathset.py` | The files written from the JSON |
 | `generated_export.py`, `generated/` | The generated files (road low LOD textures, bridge models), written in the export folder before the other files, their paths set in the data; `generated/` is shared with the editor's generators (`generators/` of the core), `.km2-generated.json` lists what the exports wrote |
 | `custom_element_conversion.py` | The helpers of the converters of the core (`Converter`, `Output`, `run`) |
@@ -108,6 +108,20 @@ A path is used only when the number of paths matches and each has a point per se
 
 The hudmap arrows of the one-way roads use the chains and the paths of the builder (`hudmap_export.get_arrows`).
 
+## The CPVS
+
+`writers/cpvs_writer.py` writes `city/<city>.cpvs`, the rooms visible from each room (format in the agent notes), under the `cpvs` flag, with the `FAST` or (`cpvs_accurate`) `ACCURATE` parameters. `CPVSGenerator` works on plain arrays (z up), so that `tools/cpvs_check.py --stock` can feed it a stock PSDL; `CPVSWriter.inputs` makes them from the scene:
+
+- **Rooms**: `Scene.blocks`, in the order of the PSDL. Their **floors** (the flat triangles of the road, sidewalk, crosswalk, intersection, terrain and invisible surfaces) hold the viewpoints. Their **targets** are all their surfaces, their PKG meshes and the top of the box of their INST meshes (the `bounds` property that `get_mesh_instance` takes from the mesh dictionary). A room is visible if a target is.
+- **Neighbours**: the rooms sharing a vertex (within 5 cm), always visible, as in the stock files.
+- **Occluders**: the facade bounds (`FACB`) and the ground surfaces, solid below them, and the roofs, solid down to the ground. The objects are not occluders, and neither are the facades (`FAC`, `SLIVER`: their bounds stand for them).
+
+The generator rasterizes the occluders as a height field: the highest occluder of each cell (4 m). The walls are sampled densely, the other triangles at the centres of the cells and along their edges. A cell is a **passage**, with no occluder (and so are the cells around it), when a floor at its centre is lower than a ground occluder there by more than 3 m (under a bridge, an overpass, terrain over a tunnel). The floors and the occluders are compared at the same points, so the edge of a raised block next to a street isn't a passage. The targets are the highest point of each room in cells of 8 m (if a lower point of a column is visible, the higher one is too), grouped by room and 64 m tile.
+
+For each room, the viewpoints are points of its floors, by farthest point sampling (the first near the middle; points in a cell of an occluder only if there are no others), at each eye height. From each viewpoint, rays cast around it (`cast`) keep the running maximum of the elevation `(top - eye) / distance` of the cells they cross: the horizon. The steps are one cell long up to 128 cells, then twice as long every time the distance doubles, on grids of cells twice as large where each cell is the lowest of the four below it (it hides only what they all hide). A ray stops when no target can be above its horizon, or when it leaves the city. From a viewpoint inside an occluder (under a roof), the occluders the rays start in are left out. A group of targets is skipped when its highest point, at its nearest distance, is below the lowest horizon across it (`possibly_visible`). Otherwise each target is visible if its elevation is above the lower horizon of the two rays around it, before the cell of the target and the one before it.
+
+Everything conservative goes towards more visible rooms: missed occluders, the passages, the lower of two rays, the min-pooled far grids.
+
 ## Errors
 
 The exporter reports the problems with `Files/python/ExportReport.py` of the program, through `writers/report.py` (which prints them, and raises the errors without `ExportReport`).
@@ -119,6 +133,6 @@ The exporter reports the problems with `Files/python/ExportReport.py` of the pro
 
 ## Checks
 
-- `tools/psdl_check.py` (perimeter spikes and slits, prop-room texture indices), `tools/bai_check.py` (`--lint`: the conventions of the stock files; `--derive`: the values computed again from the splines), `tools/decal_check.py`: check the game files.
+- `tools/psdl_check.py` (perimeter spikes and slits, prop-room texture indices), `tools/bai_check.py` (`--lint`: the conventions of the stock files; `--derive`: the values computed again from the splines), `tools/decal_check.py`, `tools/cpvs_check.py` (the layout against the PSDL, self and neighbours visible; `--compare`; `--stock`: the generator on a stock PSDL against its CPVS): check the game files.
 - `tools/_test_*.py`: short synthetic checks of the writers and of the files written from the JSON (`python <file>` with the program's Python).
 - The fast loop and the equivalence checks are in the agent notes ([Exporter workflow and engine limits](agents/exporting.md)).

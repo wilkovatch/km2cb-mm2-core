@@ -30,6 +30,15 @@
 			"defaultValue": true
 		},
 		{
+			"id": "cpvs",
+			"label": "EXPORT_CPVS",
+			"tooltip": "EXPORT_CPVS_TOOLTIP",
+			"enables": [
+				"cpvs_accurate"
+			],
+			"defaultValue": true
+		},
+		{
 			"id": "pathset",
 			"label": "EXPORT_PATHSET",
 			"defaultValue": true
@@ -63,6 +72,12 @@
 			"defaultValue": false
 		},
 		{
+			"id": "cpvs_accurate",
+			"label": "EXPORT_CPVS_ACCURATE",
+			"tooltip": "EXPORT_CPVS_ACCURATE_TOOLTIP",
+			"defaultValue": false
+		},
+		{
 			"id": "psdl_capMaterials",
 			"label": "EXPORT_PSDL_CAP_MATERIALS",
 			"tooltip": "EXPORT_PSDL_CAP_MATERIALS_TOOLTIP",
@@ -88,12 +103,14 @@
 			"psdl": true,
 			"inst": true,
 			"bai": true,
+			"cpvs": false,
 			"pathset": true,
 			"cinfo_aimap": true,
 			"hudmap": false,
 			"pkgs": true,
 			"psdl_splitNonCoplanarRoads": false,
 			"bai_accurateCulling": false,
+			"cpvs_accurate": false,
 			"psdl_capMaterials": false,
 			"verbose": false,
 			"packAr": false
