@@ -240,6 +240,10 @@ namespace Api {
                     await BoatSplines();
                     await ClosedSplines();
                     await SplinePlacementHighlights("movingObject");
+                } else if (focus == "rails") {
+                    await NewCity();
+                    await Roads();
+                    await Rails();
                 } else if (focus == "splines") {
                     await NewCity();
                     await Roads();
@@ -1311,22 +1315,15 @@ namespace Api {
             var pointIds = new List<int>();
             foreach (var point in p["perimeter"]) pointIds.Add(point["id"].Value<int>());
             await CheckUndo("terrain patch point added", () => Call("patches.addPerimeterPoint", new { patch, point = Pos(-720, 50) }));
-            var bm = (await Call("patches.borderMesh.add", new { patch })).Value<int>();
-            await Call("patches.borderMesh.addPoint", new { patch, borderMesh = bm, point = pointIds[1] });
-            await Call("patches.borderMesh.addPoint", new { patch, borderMesh = bm, point = pointIds[2] });
-            p = await Derived(patch);
-            Check("the border mesh has a segment", Len(p["borderMeshes"][0]["points"]) >= 2);
-            await Expect("a point not on the perimeter", "not_found", "patches.borderMesh.addPoint", new { patch, borderMesh = bm, point = 999999 });
-            var bmRef = new { patch, borderMesh = bm };
-            var bmSchema = await Call("state.schema", new { @ref = bmRef });
-            var bmType = (await Call("state.get", new { @ref = bmRef }))["type"].Value<string>();
-            var otherType = bmSchema["types"].ToObject<List<string>>().Find(t => t != bmType);
-            if (otherType != null) {
-                await CheckUndo("border mesh type", () => Call("state.setType", new { @ref = bmRef, type = otherType }));
-            } else {
-                Log("     only one border mesh type");
-            }
-            await CheckUndo("border mesh preset", () => Call("state.setParam", new { @ref = bmRef, name = ((JArray)bmSchema["parameters"]).First(x => x["type"].Value<string>() == "float")["name"].Value<string>(), value = 7.5 }));
+            //a rail (the RAILC of the room of the patch): its span follows the perimeter between its points; it's kept, so that
+            //the city is saved, loaded and exported with it
+            var rail = (await Call("customElement.create", new { type = "rail", name = "Patch rail",
+                points = new { spline = new object[] { new { terrainPoint = pointIds[1] }, new { terrainPoint = pointIds[3] } } } })).Value<int>();
+            await Call("city.flush");
+            Check("the rail follows the perimeter between its points", (History.UndoManager.GetAliveElement(rail) as CustomElement)?.splineData?.sections.Length == 3);
+            await Expect("a rail point can't be on an internal point", "invalid_operation", "customElement.insert",
+                new { element = rail, array = "spline", to = new { terrainPoint = p["internalPoints"][0]["id"].Value<int>() } });
+            await CheckUndo("rail parameter", () => Call("state.setParam", new { @ref = rail, name = "rail_height", value = 7.5 }));
             var linkPatch = (await Call("patches.create", new {
                 perimeter = new object[] { new { terrainPoint = pointIds[1] }, new { link = new[] { pointIds[1], pointIds[2] }, position = V(-650, 0, -100) }, Pos(-650, -200) }
             })).Value<int>();
@@ -1420,7 +1417,6 @@ namespace Api {
                 await CheckUndo(category + " preset delete", () => Call("presets.delete", new { category, name }));
                 Check("deleting the " + category + " preset unlinks the elements using it", await PresetOf(r) == "" && !((JArray)await Call("presets.list", new { category })).Any(x => x.Value<string>() == name));
             }
-            await Expect("terrain patch border mesh presets can't be synced", "invalid_operation", "presets.sync", new { category = "terrainPatchBorderMesh", name = "Default" });
 
             //city properties: array and custom city properties parameters
             var cityId = 0;
@@ -1946,9 +1942,8 @@ namespace Api {
             var lineId = (await Call("lines.create", new { points = new object[] { new { terrainPoint = pointId }, Pos(-700, 820) } })).Value<int>();
             await Call("elements.rename", new { @ref = patchId, name = "Attachment test patch" });
             await Call("elements.rename", new { @ref = lineId, name = "Attachment test line" });
-            await Call("patches.borderMesh.add", new { patch = patchId });
-            await Call("patches.borderMesh.addPoint", new { patch = patchId, borderMesh = 0, point = pointId });
-            await Call("patches.borderMesh.addPoint", new { patch = patchId, borderMesh = 0, point = created["points"][1].Value<int>() });
+            var railId = (await Call("customElement.create", new { type = "rail", name = "Attachment test rail",
+                points = new { spline = new object[] { new { terrainPoint = pointId }, new { terrainPoint = created["points"][1].Value<int>() } } } })).Value<int>();
 
             object Anchor(int owner, int index = 0) => new { anchor = new { of = owner, index } };
             TerrainPoint Point(int id) => History.UndoManager.GetAliveElement(id) as TerrainPoint;
@@ -1956,8 +1951,7 @@ namespace Api {
             await CheckUndo("attaching an existing shared point", () => Call("terrainPoints.attach", new { point = pointId, to = target }));
             Check("attachment keeps the shared point id and the building line follows", (await Derived(lineId))["points"][0]["id"].Value<int>() == pointId
                 && Point(pointId).anchor is TerrainAnchor && Point(pointId).GetLinks().Count == 2);
-            var patchElement = History.UndoManager.GetAliveElement(patchId) as TerrainPatch;
-            Check("a border mesh keeps the attached perimeter point", patchElement.GetBorderMesh(0).segment.Contains(Point(pointId)));
+            Check("a rail keeps the attached perimeter point", (History.UndoManager.GetAliveElement(railId) as CustomElement).HasPoint(Point(pointId)));
             await Expect("a fixed attached point cannot be moved", "invalid_operation", "terrainPoints.move", new { point = pointId, position = V(-710, 0, 710) });
             await Expect("attachment requires an anchor target", "invalid_param", "terrainPoints.attach", new { point = pointId, to = Pos(-710, 710) });
             await Expect("attachment validates the anchor index", "not_found", "terrainPoints.attach", new { point = pointId, to = Anchor(source, 99999) });
@@ -1990,7 +1984,7 @@ namespace Api {
                 ((Godot.Button)typeof(EditorPanelElements.Button).GetField("button", flags).GetValue(button)).EmitSignal(Godot.Button.SignalName.Pressed);
             }
             async Task OpenPointEditor() {
-                patchElement = History.UndoManager.GetAliveElement(patchId) as TerrainPatch;
+                var patchElement = History.UndoManager.GetAliveElement(patchId) as TerrainPatch;
                 builder.SelectObject(patchElement, true, null);
                 builder.gizmo.ClearTargets();
                 builder.gizmo.AddTarget(Point(pointId).GetObject());

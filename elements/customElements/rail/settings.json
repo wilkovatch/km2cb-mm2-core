@@ -1,0 +1,57 @@
+{
+	"presets": true,
+	"defaultPreset": {
+		"rail_type": 1,
+		"rail_height": 5.0
+	},
+	"createMenu": {
+		"direct": true
+	},
+	"spline": {
+		"curveTypes": [
+			2
+		],
+		"defaultCurveType": 2,
+		"followConnections": "dynamic",
+		"closable": true,
+		"acceptTarget": "rails.acceptTarget",
+		"ownerReference": "room",
+		"line": {
+			"color": "orange",
+			"arrowDirection": "1"
+		},
+		"variableSections": false,
+		"sectionVertices": [
+			"0",
+			"0",
+			"0",
+			"0",
+			"0",
+			"0",
+			"0"
+		],
+		"textures": [
+			"rail_texture1",
+			"rail_texture4"
+		],
+		"texturesMapping": {
+			"rail_rail_left": [
+				0
+			],
+			"rail_wall_left": [
+				0,
+				1
+			]
+		},
+		"components": [
+			{
+				"name": "rail_rail_left",
+				"condition": "rail_type = 1"
+			},
+			{
+				"name": "rail_wall_left",
+				"condition": "rail_type = 2"
+			}
+		]
+	}
+}

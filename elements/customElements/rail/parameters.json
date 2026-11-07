@@ -1,6 +1,17 @@
 {
 	"parameters": [
 		{
+			"name": "room",
+			"label": "RAIL_ROOM",
+			"tooltip": "RAIL_ROOM_TOOLTIP",
+			"type": "reference",
+			"referenceTypes": [
+				"road",
+				"intersection",
+				"terrainPatch"
+			]
+		},
+		{
 			"name": "rail_type",
 			"label": "TYPE",
 			"type": "enum",

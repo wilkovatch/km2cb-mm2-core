@@ -38,15 +38,6 @@
 					"width": 1.5
 				}
 			]
-		},
-		{
-			"label": "TP_TAB_RAIL",
-			"elements": [
-				{
-					"name": "borderMeshGroup",
-					"width": 1.5
-				}
-			]
 		}
 	]
 }

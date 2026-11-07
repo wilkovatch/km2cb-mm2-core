@@ -17,7 +17,7 @@ Verified 2026-11-06 after the move: **1567 OK, 0 failures** in the full windowed
 
 - `InheritedTypes` temporarily creates `Files/cores/MidtownMadness2/elements/roads/zzInheritTest`. If a run is killed, delete that folder by hand.
 - A run with failures has exited with 132 (SIGILL) during Godot's shutdown finalizers. Clean runs exit 0.
-- A run that stops without an error (no log, the window idle) is an API reply that never comes: `SettleProjectedSplines` (awaited by the dispatcher after each command while projected splines exist) waits until an update rebuilds no road, intersection or patch, so an element reporting a change at every update stalls it (e.g. a border mesh state never flagged unchanged). Run without `--quiet` to see the `[api-selftest]` lines up to the stuck step.
+- A run that stops without an error (no log, the window idle) is an API reply that never comes: `SettleProjectedSplines` (awaited by the dispatcher after each command while projected splines exist) waits until an update rebuilds no road, intersection or patch, so an element reporting a change at every update stalls it (e.g. an element state never flagged unchanged). Run without `--quiet` to see the `[api-selftest]` lines up to the stuck step.
 - Empty ObjectState arrays vanish on JSON re-read, so compare `[]` and missing as equal.
 - `city.exportJson` ids are indices in the manager lists, not API ids. Ids change after a reload, so re-list (or compare by name).
 - An API `Call` flushes and resets the elements' editing state, and a change closes the open editors (as before an undo). To test a GUI action with undo, run the GUI steps first, then `city.flush`, then take the snapshots (`CheckGuiUndo` in `BaiConnections`), not `CheckUndo` around them.

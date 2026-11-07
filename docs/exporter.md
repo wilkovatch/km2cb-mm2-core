@@ -67,7 +67,7 @@ A part is named `<prefix,><room>_<TYPE>`: the room (block) number, 0 for the par
 | `ROADS`, `ROADSN` | Road with sidewalks (with/without the sidewalk mesh) | `prop_rule`, `original_id`, `echo`, `warp` |
 | `ROADN` | Road without sidewalks | |
 | `ROADD`, `ROADDN` | Divided road | `divider_type`, `divider_param`, `caps` |
-| `RAIL`, `RAILC` | Road and junction tunnels | `road_name`, `is_rail`, `curved_sides`, `is_wall`, offsets and caps |
+| `RAIL`, `RAILC` | Road and junction tunnels (`RAILC` also from the `rail` elements, see below) | `road_name`, `is_rail`, `curved_sides`, `is_wall`, offsets and caps |
 | `SW`, `CW` | Sidewalk strip, crosswalk | `cap` |
 | `IS`, `BLOCK`, `NUL` | Road surface, terrain, invisible surface (triangle fans) | `no_coplanar_fix` |
 | `ROOF`, `FAC`, `FACB`, `SLIVER` | Roof, facade, facade bound, sliver | `tiling`, `u_tiling`, `v_tiling` |
@@ -77,6 +77,8 @@ A part is named `<prefix,><room>_<TYPE>`: the room (block) number, 0 for the par
 | `DECAL` | A decal strip (pairs of points across it) | `texture`, `strip_pairs` |
 
 `original_name` is the name of the element a part comes from (warnings name it), and `source` its `(kind, id)`.
+
+The `rail` custom elements (splines through perimeter points, following the perimeters between their points, see `lua/rails.lua`) become `RAILC` parts after all the rooms are known (`get_rail` in `json_processor.py`): the rail goes to the room of the element of its `room` reference (`element_blocks`, filled as the roads, intersections and patches are exported), and only its edges on that room's perimeter count (positions within 1 cm). A rail without a room (its element deleted) falls back to the room whose perimeter has each edge, an edge of two rooms going to the one on the right of the rail's direction (seen from above, a rail goes clockwise around its room, as the old patch border meshes did). Each run of consecutive edges in one room is a `RAILC` part; the edges on no room perimeter, or on a patch exported to PKG, are left out (with a warning for the first ones). The writer then flags the perimeter edges of the room the part covers. Migration 9 turned the border meshes of the patches into `rail` elements, with their patch as `room`.
 
 **Order.** The scene sorts the parts by name, keeping their order otherwise. This sets the order of the INST objects (`<index>,<room>_INST`, in lexicographic order of the index), of the PATHSET types, of the PKG groups and of the facades in a room. Within a room, the PSDL writer orders the parts by type (`PSDLWriter.block_sorted_by_type`).
 

@@ -462,6 +462,8 @@ class JsonProcessor:
             block_number = self.get_manual_block_number(state)
             if block_number > 0 and block_number in manual_blocks:
                 cur_block = manual_blocks.index(block_number) + 1
+        if parent_intersection is None:
+            self.element_blocks[('road', road['id'])] = cur_block
         has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1 #todo: change if non psdl roads will be introduced
         vps = road['data']['fields']['vertsPerSection']
         num_segments = (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
@@ -797,6 +799,7 @@ class JsonProcessor:
         block_number = self.get_manual_block_number(state)
         if block_number > 0 and block_number in manual_blocks:
             cur_block = manual_blocks.index(block_number) + 1
+        self.element_blocks[('intersection', intersection['id'])] = cur_block
         block = []
         if not state_bool(instance_state, 'exportToPKG'):
             self.get_psdl_intersection(res, intersection, manual_blocks, state, block, mesh, cur_block)
@@ -847,6 +850,7 @@ class JsonProcessor:
         block_number = self.get_manual_block_number(state)
         if block_number > 0 and block_number in manual_blocks:
             cur_block = manual_blocks.index(block_number) + 1
+        self.element_blocks[('terrainPatch', patch['id'])] = cur_block
         split_parts = self.get_split_submeshes(patch['data']['mesh'])
         elem = ExportedCityElement()
         elem.indices = split_parts[0]['indices']
@@ -870,20 +874,95 @@ class JsonProcessor:
 
         if to_pkg:
             res.append(self.get_mesh(patch['data']['mesh'], cur_block, 'VL', patch['data']['name']))
-        if not to_pkg:
-            # rails
-            rails = patch['borderMeshes']
-            if len(rails) > 0:
-                for i in range(len(rails)):
-                    r = rails[i]
-                    r_vertices = []
-                    r_indices = []
-                    for j in range(len(r['segment'])):
-                        r_vertices.append(r['segment'][j])
-                        r_vertices.append(np.add(r['segment'][j], (0.0, 1.0, 0.0)))
-                        if j < len(r['segment']) - 1:
-                            r_indices.extend(self.get_section_indices_rev(0, 2, j))
-                    self.get_junction_rail(res, r['fields']['state'], r_vertices, r_indices, cur_block, patch)
+            self.pkg_blocks.add(cur_block)  # no rails (see get_rail)
+
+    # Rails: the RAILC attributes of the rooms, from the rail custom elements. A rail is a spline through perimeter points
+    # of its room (the terrain patch, road or intersection of its "room" reference), and goes in the room of that element.
+    # Without a room (e.g. the room deleted), each of its edges goes to the room whose perimeter has it; an edge shared by
+    # two rooms (e.g. between a patch and a road) goes to the one on the side of the rail: seen from above, a rail goes
+    # clockwise around its room (as the editor draws it, on the outside)
+
+    RAIL_TOLERANCE = 0.01
+
+    def rail_point_index(self, perimeter, p):
+        for i, v in enumerate(perimeter):
+            if abs(v[0] - p[0]) < self.RAIL_TOLERANCE and abs(v[1] - p[1]) < self.RAIL_TOLERANCE and abs(v[2] - p[2]) < self.RAIL_TOLERANCE:
+                return i
+        return -1
+
+    def rail_edge_block(self, a, b):
+        # the index of the room of the edge from a to b, -1 if no room has it
+        candidates = [i for i in range(len(self.block_perimeters)) if self.rail_edge_in_block(i, a, b)]
+        if len(candidates) <= 1:
+            return candidates[0] if candidates else -1
+        dx, dz = b[0] - a[0], b[2] - a[2]
+        length = math.hypot(dx, dz)
+        if length > 1e-6:
+            # the room is on the right of the direction (the opposite of the localRight of the components)
+            probe = ((a[0] + b[0]) * 0.5 + dz / length * 0.1, (a[1] + b[1]) * 0.5, (a[2] + b[2]) * 0.5 - dx / length * 0.1)
+            for i in candidates:
+                if self.is_point_in_block(self.block_perimeters[i][0], probe, self.block_perimeters_bounds[i]):
+                    return i
+        return candidates[0]
+
+    def rail_edge_in_block(self, index, a, b):
+        # the edge from a to b is on the perimeter of the room at the index
+        for perimeter in self.block_perimeters[index][0]:
+            ia = self.rail_point_index(perimeter, a)
+            ib = self.rail_point_index(perimeter, b) if ia != -1 else -1
+            if ib != -1 and (abs(ia - ib) == 1 or abs(ia - ib) == len(perimeter) - 1):
+                return True
+        return False
+
+    def rail_room(self, state):
+        # the room of the element of the "room" reference of a rail, 0 if none
+        room = state.get('room')
+        if not isinstance(room, dict):
+            return 0
+        return self.element_blocks.get((room.get('kind'), room.get('id')), 0)
+
+    def get_rail(self, res, element):
+        data = element.get('data') or {}
+        state = (data.get('fields') or {}).get('state') or {}
+        name = data.get('name', 'rail')
+        if state_int(state, 'rail_type') <= 0:
+            return
+        rail_state = dict(state)
+        rail_state.setdefault('rail_height', 0.0)
+        points = [tuple(section['center']) for section in (element.get('spline') or {}).get('sections') or []]
+        if len(points) < 2:
+            report.warning('the rail ' + name + ' has less than two points, it is not exported', element=report.element_name(name))
+            return
+        # the runs of consecutive edges in the same room
+        runs = []
+        outside = 0
+        room = self.rail_room(state)
+        for a, b in zip(points, points[1:]):
+            if room > 0:
+                block = room if self.rail_edge_in_block(room - 1, a, b) else 0
+            else:
+                block = self.rail_edge_block(a, b) + 1
+            if block <= 0:
+                outside += 1
+                continue
+            if block in self.pkg_blocks:
+                continue
+            if runs and runs[-1][0] == block and runs[-1][1][-1] == a:
+                runs[-1][1].append(b)
+            else:
+                runs.append((block, [a, b]))
+        if outside > 0:
+            report.warning(str(outside) + ' edges of the rail ' + name + ' are not on the perimeter of a room, they are not exported',
+                           element=report.element_name(name))
+        for block, run in runs:
+            vertices = []
+            indices = []
+            for j, p in enumerate(run):
+                vertices.append(np.array(p))
+                vertices.append(np.add(p, (0.0, 1.0, 0.0)))
+                if j < len(run) - 1:
+                    indices.extend(self.get_section_indices_rev(0, 2, j))
+            self.get_junction_rail(res, rail_state, vertices, indices, block, element)
 
     def get_roof(self, res, submesh, cur_block, tex, obj_name):
         if len(submesh['submeshes']) > 0 and len(submesh['submeshes'][0]['indices']) > 0:
@@ -1270,6 +1349,8 @@ class JsonProcessor:
         # intersection, int block)]
         self.exported_roads = {}
         self.traffic_intersections = []
+        self.pkg_blocks = set()  # the rooms of the terrain patches exported to PKG
+        self.element_blocks = {}  # {(kind, id): room} of the roads, intersections and terrain patches (the rooms of the rails)
         self.traffic = BaiNetworkBuilder(self.data, self.exported_roads, self.traffic_intersections, self.road_has_sidewalks, self.road_has_divider)
         return manual_blocks
 
@@ -1322,6 +1403,12 @@ class JsonProcessor:
         for line in data['buildingLines']:
             if self.verbose: print("exporting " + line['data']['name'])
             self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line), line['id'])
+
+        print("processing rails...")
+        for element in data.get('customElements') or []:
+            if element.get('type') == 'rail':
+                self.guarded_element(res, (element.get('data') or {}).get('name', 'rail'), 'customElement',
+                                     lambda e=element: self.get_rail(res, e), element['id'])
 
         print("processing traffic...")
         with report.guarded("the traffic was not exported"):

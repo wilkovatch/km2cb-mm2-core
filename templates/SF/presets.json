@@ -20,6 +20,16 @@
         }
       }
     ],
+    "customElement/rail": [
+      {
+        "name": "Default",
+        "type": "rail",
+        "rail_type": 1,
+        "rail_height": 5.0,
+        "rail_texture4": "texture/kl_rahrock_l.tex",
+        "rail_texture1": "texture/kl_rahrock_l.tex"
+      }
+    ],
     "roadPropRule": [
       {
         "name": "Default",
@@ -12389,16 +12399,6 @@
         "name": "Default",
         "fixBound": false,
         "hudmapCategory": 0
-      }
-    ],
-    "terrainPatchBorderMesh": [
-      {
-        "type": "psdl",
-        "rail_type": 1,
-        "rail_height": 5.0,
-        "rail_texture4": "texture/kl_rahrock_l.tex",
-        "rail_texture1": "texture/kl_rahrock_l.tex",
-        "name": "Default"
       }
     ],
     "buildingBlock": [

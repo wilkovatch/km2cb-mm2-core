@@ -628,23 +628,12 @@ namespace History {
                 }
                 Close();
 
-                //terrain patch editor and border mesh
+                //terrain patch editor
                 TerrainPatch patch = null;
-                foreach (var p in M.patches) if (ElementSnapshot.IsAlive(p)) { patch = p; if (p.GetBorderMeshCount() > 0) break; }
+                foreach (var p in M.patches) if (ElementSnapshot.IsAlive(p)) { patch = p; break; }
                 if (patch != null) {
-                    var patchPanel = Panel<EditorPanels.TerrainPatchEditorPanel>("terrainPatchEditorPanel");
                     builder.SelectObject(patch, true, null);
                     await CheckRestore("terrain patch editor", () => { UndoManager.Touch(patch); FieldStatus.SetValue(patch, "2", "state.properties.smooth"); }, Chain);
-                    if (patch.GetBorderMeshCount() == 0) {
-                        UndoManager.Record("add border mesh", () => { UndoManager.Touch(patch); Invoke(patchPanel, "AddBorderMesh"); });
-                        M.FlagAsChanged();
-                        await Frames(6);
-                    }
-                    if (patch.GetBorderMeshCount() > 0 && patchPanel.OpenBorderMesh(0) != null) {
-                        await CheckRestore("border mesh panel", () => { UndoManager.Touch(patch); FieldStatus.SetValue(patch, "3", "state.properties.smooth"); }, Chain);
-                    } else {
-                        Log("     no border mesh to open");
-                    }
                     Close();
                 }
 

@@ -19,6 +19,7 @@ The scratch city folder must be new for creation scenarios. Logs and screenshots
 | `roads`, `creation`, `dependencies` | Roads, deferred API creation, shared points and attachment dependencies |
 | `customElementPresets`, `listLabels`, `independentPoints` | Custom element presets, list-only labels and inline point storage |
 | `splines`, `splineState`, `projection` | Decals and rails, curve components, spline instance values, history, reload and surface projection |
+| `rails` | The `rail` elements (room perimeter railings): accepted targets, spans following the perimeters and road anchors, loops, reversing, history and export |
 | `propPlacers`, `parkedCar` | Spline/polygon props, core callbacks and guides; single parked cars and native parked rows |
 | `bridges` | Native preview modes/models, road-end attachments, mesh generation, race replacements, history and reload |
 | `trains`, `boats`, `arrows`, `trafficLanes` | Native route previews, custom road curves, closed loops and direction/traffic geometry |

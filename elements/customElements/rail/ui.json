@@ -1,12 +1,16 @@
 {
-	"label": "PSDL_COMPATIBLE",
+	"label": "CREATE_RAIL",
 	"menuWidth": 1.5,
 	"tabs": [
 		{
-			"label": "TP_TAB_RAIL",
+			"label": "",
 			"elements": [
 				{
 					"name": "mainGroup",
+					"width": 1.5
+				},
+				{
+					"name": "room",
 					"width": 1.5
 				},
 				{
@@ -23,6 +27,14 @@
 				},
 				{
 					"name": "rail_texture4",
+					"width": 1.5
+				},
+				{
+					"name": "splineGroup",
+					"width": 1.5
+				},
+				{
+					"name": "pointsGroup",
 					"width": 1.5
 				}
 			]
