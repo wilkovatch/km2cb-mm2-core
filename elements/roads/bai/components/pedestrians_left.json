@@ -1,0 +1,15 @@
+{
+	"trafficLanes": [
+		{
+			"type": "0",
+			"condition": "not disableLeftPedestrians",
+			"bounds": [
+				"v5",
+				"v6"
+			],
+			"lanes": [
+				0.5
+			]
+		}
+	]
+}

@@ -7,6 +7,7 @@ from writers.inst_writer import INST_LANDMARK, INST_BANGER, INST_SIMPLE_COLLISIO
 from writers import report
 from psdl_parts import ExportedCityElement, get_tex
 from traffic.network import BaiNetworkBuilder, is_seamless
+from traffic.rooms import RoomFinder
 from decals import export_decals
 
 
@@ -225,6 +226,72 @@ class JsonProcessor:
             'div_caps': div_caps,
             'div_param': div_param
         }
+
+    def get_geometryless_bai_sections(self, fields):
+        # the sections of the BAI of a road without geometry (the bai road type), as get_road_sections_layout gives them
+        # from the mesh of a psdl road, from its section vertices: the ones of the type (v0 to v6, as in the psdl type:
+        # outer edge, curb and divider of the right side, centre, then the left side), from the left of the road to its
+        # right (without the sidewalk height of a psdl road: the curbs are at the height of the outer edges)
+        state = fields['state']
+        n = fields.get('sectionVertexCount', 0) or 0
+        vertices = fields.get('sectionVertices') or []
+        if n < 7:
+            return []
+        if self.road_has_sidewalks(state, fields['runtimeState']):
+            order = [6, 5] + ([4, 2] if self.road_has_divider(state) else []) + [1, 0]
+        else:
+            order = [5] + ([4, 2] if self.road_has_divider(state) else []) + [1]
+        return [[vertices[i * n + j] for j in order] for i in range(len(vertices) // n)]
+
+    def get_geometryless_road(self, road):
+        # a road without geometry (only its traffic): no parts and no room of its own, its rooms are the ones it lies
+        # over (found once all the rooms are known, see resolve_traffic_rooms)
+        self.exported_roads[road['id']] = {'elem': None, 'road': road, 'block': None, 'rooms': None,
+                                           'bai_sections': self.get_geometryless_bai_sections(road['data']['fields'])}
+
+    def resolve_traffic_rooms(self):
+        # the rooms of the roads and intersections without geometry, the ones they lie over: a road in the rooms of its
+        # sections, an intersection in the one of its centre (one already used by another BAI intersection gets a
+        # warning: the game finds the first intersection of a room, before its roads); one over no room is left out of
+        # the BAI, with a warning
+        rooms = RoomFinder(self)
+        for road_id in list(self.exported_roads):
+            rec = self.exported_roads[road_id]
+            if rec['block'] is not None:
+                continue
+            road_rooms = []
+            for section in rec['bai_sections']:
+                room = rooms.room_of(np.mean(np.array(section, dtype=float), axis=0))
+                if room > 0 and room not in road_rooms:
+                    road_rooms.append(room)
+            name = rec['road']['data']['name']
+            if len(road_rooms) == 0:
+                if len(rec['bai_sections']) > 0:
+                    report.warning('the road ' + name + ' has no geometry and is not over any room, it is left out of the BAI',
+                                   element=name, kind='road')
+                del self.exported_roads[road_id]
+                continue
+            rec['block'] = road_rooms[0]
+            rec['rooms'] = road_rooms
+        used = set(obj[2] for obj in self.traffic_intersections if obj[2] is not None)
+        resolved = []
+        for obj in self.traffic_intersections:
+            surface, intersection, block = obj
+            if block is not None:
+                resolved.append(obj)
+                continue
+            name = intersection['data']['name']
+            room = rooms.room_of(intersection['center'])
+            if room == 0:
+                report.warning('the intersection ' + name + ' has no geometry and is not over any room, it is left out of the BAI',
+                               element=name, kind='intersection')
+                continue
+            if room in used:
+                report.warning('the intersection ' + name + ' has no geometry and is over a room with another BAI intersection: '
+                               'the game finds only the first one of a room', element=name, kind='intersection')
+            used.add(room)
+            resolved.append([surface, intersection, room])
+        self.traffic_intersections[:] = resolved
 
     def get_psdl_prop_rule(self, prop_rule):
         # the number of the psdl prop rule of a road (its psdl props containers), None if it has none
@@ -452,6 +519,9 @@ class JsonProcessor:
                  parent_intersection = None):
         if state_bool(instance_state, 'doNotExport'):
             return
+        if road['data']['fields'].get('geometryless') and parent_intersection is None:
+            self.get_geometryless_road(road)
+            return
         state = road['data']['fields']['state']
         runtime_state = road['data']['fields']['runtimeState']
         block_perimeters = self.block_perimeters
@@ -653,7 +723,10 @@ class JsonProcessor:
         traffic_added = False
         cur_part_types = intersection['data']['fields']['partsInfo']
         roadsJ = intersection['roads']
-        sortOrder = intersection['data']['fields']['sortOrder']
+        # the junctions are between the roads with geometry (the ones without it are left out of the surface)
+        geometry_order = intersection['data']['fields'].get('geometrySortOrder')
+        if geometry_order is None:
+            geometry_order = intersection['data']['fields']['sortOrder']
         for i in range(len(submeshes)):
             p = submeshes[i]
             mat_id = mesh['submeshes'][i]['materialId']
@@ -666,8 +739,8 @@ class JsonProcessor:
                 typ = cur_part_types[i]
                 cur_junction = -1
             if typ == 'junction_1': #rail
-                road1I = sortOrder[cur_junction]
-                road0I = sortOrder[(cur_junction + 1) if (cur_junction + 1) < len(roadsJ) else 0]
+                road1I = geometry_order[cur_junction]
+                road0I = geometry_order[(cur_junction + 1) if (cur_junction + 1) < len(geometry_order) else 0]
                 road0 = self.data['roads'][roadsJ[road0I]]
                 road1 = self.data['roads'][roadsJ[road1I]]
                 rs = self.get_junction_rail_state(road0, road1, intersection)
@@ -792,6 +865,11 @@ class JsonProcessor:
         state = intersection['data']['fields']['state']
         instance_state = intersection['data']['fields']['instanceState']
         if state['type'] != 'psdl' or is_seamless(intersection):
+            return
+        if intersection['data']['fields'].get('geometryless'):
+            # only roads without geometry: no parts, in the room it lies over (see resolve_traffic_rooms)
+            if len(intersection['roads']) > 0:
+                self.traffic_intersections.append([None, intersection, None])
             return
         block_perimeters = self.block_perimeters
         mesh = intersection['data']['mesh']
@@ -1414,6 +1492,7 @@ class JsonProcessor:
 
         print("processing traffic...")
         with report.guarded("the traffic was not exported"):
+            self.resolve_traffic_rooms()
             self.network = self.traffic.build()
         if traffic_only:
             return res

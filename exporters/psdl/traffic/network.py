@@ -42,8 +42,9 @@ def is_seamless(intersection):
 
 
 def surface_height(elem, x, z, default):
-    # the height of the highest triangle of a mesh at (x, z), default if there is none
-    if len(elem.indices) < 3:
+    # the height of the highest triangle of a mesh at (x, z), default if there is none (or no mesh: an intersection
+    # without geometry)
+    if elem is None or len(elem.indices) < 3:
         return default
     v = np.array(elem.vertices, dtype=float)
     tri = np.array(elem.indices).reshape(-1, 3)
@@ -61,8 +62,9 @@ def surface_height(elem, x, z, default):
 
 
 class BaiNetworkBuilder:
-    # records: the exported roads, {road id: {'road': road, 'block': its room, 'bai_sections': the sections of its mesh
-    # used by the BAI}}; intersections: the exported intersections, [(surface part, intersection, its room)]
+    # records: the exported roads, {road id: {'road': road, 'block': its room, 'rooms': all its rooms (a road without
+    # geometry, in the rooms it lies over), 'bai_sections': the sections of its mesh used by the BAI}}; intersections: the
+    # exported intersections, [(surface part (None without geometry), intersection, its room)]
     def __init__(self, data, records, intersections, road_has_sidewalks, road_has_divider):
         self.data = data
         self.records = records
@@ -114,6 +116,11 @@ class BaiNetworkBuilder:
             'cable_car': state_bool(r_state, 'cableCarLine'),
             'cable_car_offset': cable_car_offset(r_state)
         }
+
+    def rooms(self, road_id):
+        # the rooms of an exported road: its own, or the ones it lies over without geometry
+        rec = self.records[road_id]
+        return rec.get('rooms') or [rec['block']]
 
     def has_bai_geometry(self, road_id):
         return road_id in self.records and self.paths(road_id) is not None
@@ -197,9 +204,9 @@ class BaiNetworkBuilder:
         for road_id, reverse in chain:
             p = self.paths(road_id, reverse)
             paths = p if paths is None else paths.joined(p)
-            block = self.records[road_id]['block']
-            if block not in rooms:
-                rooms.append(block)
+            for block in self.rooms(road_id):
+                if block not in rooms:
+                    rooms.append(block)
         r_state = self.records[first_id]['road']['data']['fields']['state']
         road = BaiRoad(names, rooms, paths)
         # the right side of the BAI is the left one of the road in the program (see paths.py)

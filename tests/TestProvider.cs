@@ -7,7 +7,7 @@ namespace MidtownMadness2.Tests {
         public IReadOnlyList<CoreTestSuiteInfo> suites { get; } = new[] {
             new CoreTestSuiteInfo {
                 name = "api",
-                focuses = new[] { "bridges", "customElements", "instMesh", "heightmapScale", "independentPoints", "unicode", "listLabels", "mapLabels", "races", "arrows", "trafficLanes", "meshTextures", "meshPreviews", "projection", "customElementPresets", "trains", "boats", "splines", "rails", "menus", "propPlacers", "parkedCar", "splineState", "incremental", "creation", "roads", "dependencies", "meshSelection", "meshBenchmark" }
+                focuses = new[] { "bridges", "customElements", "instMesh", "heightmapScale", "independentPoints", "unicode", "listLabels", "mapLabels", "races", "arrows", "trafficLanes", "meshTextures", "meshPreviews", "projection", "customElementPresets", "trains", "boats", "splines", "rails", "menus", "propPlacers", "parkedCar", "splineState", "incremental", "creation", "roads", "geometrylessRoads", "dependencies", "meshSelection", "meshBenchmark" }
             },
             new CoreTestSuiteInfo {
                 name = "undo",

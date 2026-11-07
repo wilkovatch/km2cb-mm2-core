@@ -278,6 +278,9 @@ namespace Api {
                 } else if (focus == "roads") {
                     await NewCity();
                     await Roads();
+                } else if (focus == "geometrylessRoads") {
+                    await NewCity();
+                    await GeometrylessRoads();
                 } else if (focus == "dependencies") {
                     await NewCity();
                     await Roads();

@@ -1,0 +1,430 @@
+{
+	"parameters": [
+		{
+			"name": "isDouble",
+			"label": "RD_DOUBLE",
+			"type": "bool",
+			"defaultValue": true
+		},
+		{
+			"name": "hasSidewalks",
+			"label": "RD_SW",
+			"type": "bool",
+			"defaultValue": true
+		},
+		{
+			"name": "totalWidth",
+			"label": "RD_TOTAL_WIDTH",
+			"placeholder": "WIDTH_PH",
+			"type": "float",
+			"defaultValue": 14.0
+		},
+		{
+			"name": "roadWidth",
+			"label": "RD_RD_WIDTH",
+			"placeholder": "WIDTH_PH",
+			"type": "float",
+			"defaultValue": 10.0
+		},
+		{
+			"name": "forwardLanes",
+			"label": "RD_FW_LANES",
+			"placeholder": "LANES_PH",
+			"type": "int",
+			"defaultValue": 1
+		},
+		{
+			"name": "backwardLanes",
+			"label": "RD_BW_LANES",
+			"placeholder": "LANES_PH",
+			"type": "int",
+			"defaultValue": 1
+		},
+		{
+			"name": "forwardLanesSpace",
+			"label": "RD_FW_LANES_SZ",
+			"placeholder": "SIZE_PH",
+			"type": "float"
+		},
+		{
+			"name": "backwardLanesSpace",
+			"label": "RD_BW_LANES_SZ",
+			"placeholder": "SIZE_PH",
+			"type": "float"
+		},
+		{
+			"name": "forwardPark",
+			"label": "RD_FW_PK_LANE",
+			"type": "bool"
+		},
+		{
+			"name": "backwardPark",
+			"label": "RD_BW_PK_LANE",
+			"type": "bool"
+		},
+		{
+			"name": "forwardParkWidth",
+			"label": "RD_FW_PK_LANE_W",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "backwardParkWidth",
+			"label": "RD_BW_PK_LANE_W",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "pedestrianStreet",
+			"label": "RD_PEDESTRIAN",
+			"type": "bool"
+		},
+		{
+			"name": "disableTraffic",
+			"label": "RD_NO_TRAFFIC",
+			"type": "bool"
+		},
+		{
+			"name": "disableRightPedestrians",
+			"label": "RD_NO_RIGHT_PED",
+			"type": "bool"
+		},
+		{
+			"name": "disableLeftPedestrians",
+			"label": "RD_NO_LEFT_PED",
+			"type": "bool"
+		},
+		{
+			"name": "freeway",
+			"label": "RD_FREEWAY",
+			"tooltip": "RD_FREEWAY_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarLine",
+			"label": "RD_CABLE_CAR",
+			"tooltip": "RD_CABLE_CAR_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarOffset",
+			"label": "RD_CABLE_CAR_OFFSET",
+			"placeholder": "RD_CABLE_CAR_OFFSET_PH",
+			"tooltip": "RD_CABLE_CAR_OFFSET_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "start_rule",
+			"label": "RD_START_RULE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_START_RULE_FIFO",
+				"RD_START_RULE_LIGHTS",
+				"RD_START_RULE_ALWAYS_STOP",
+				"RD_START_RULE_NEVER_STOP"
+			],
+			"instanceSpecific": true
+		},
+		{
+			"name": "end_rule",
+			"label": "RD_END_RULE",
+			"type": "enum",
+			"enumLabels": [
+				"RD_START_RULE_FIFO",
+				"RD_START_RULE_LIGHTS",
+				"RD_START_RULE_ALWAYS_STOP",
+				"RD_START_RULE_NEVER_STOP"
+			],
+			"instanceSpecific": true
+		},
+		{
+			"name": "divider",
+			"label": "BAI_RD_DIVIDER",
+			"type": "enum",
+			"enumLabels": [
+				"RD_D_T_NONE",
+				"BAI_RD_DIVIDED"
+			],
+			"tooltip": "BAI_RD_DIVIDER_TOOLTIP"
+		},
+		{
+			"name": "dividerWidth",
+			"label": "RD_DIV_W",
+			"placeholder": "WIDTH_PH",
+			"type": "float"
+		},
+		{
+			"name": "startTrafficLight",
+			"label": "RD_START_TRAFFIC_LIGHT",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "trafficLight",
+				"allowCustomModel": false,
+				"defaultModel": {
+					"dynamic": true,
+					"options": [
+						"_GLOBAL_trafficLight1",
+						"_GLOBAL_trafficLight2"
+					],
+					"index": "startTrafficLight_meshIndex"
+				},
+				"condition": "startTrafficLightCondition",
+				"basePosition": "startTrafficLightBasePosition",
+				"baseRotation": "startTrafficLightBaseRotation",
+				"allowPosition": [
+					true,
+					true,
+					true
+				],
+				"allowRotation": [
+					false,
+					true,
+					false
+				],
+				"allowScale": [
+					false,
+					false,
+					false
+				]
+			}
+		},
+		{
+			"name": "endTrafficLight",
+			"label": "RD_END_TRAFFIC_LIGHT",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "trafficLight",
+				"allowCustomModel": false,
+				"defaultModel": {
+					"dynamic": true,
+					"options": [
+						"_GLOBAL_trafficLight1",
+						"_GLOBAL_trafficLight2"
+					],
+					"index": "endTrafficLight_meshIndex"
+				},
+				"condition": "endTrafficLightCondition",
+				"basePosition": "endTrafficLightBasePosition",
+				"baseRotation": "endTrafficLightBaseRotation",
+				"allowPosition": [
+					true,
+					true,
+					true
+				],
+				"allowRotation": [
+					false,
+					true,
+					false
+				],
+				"allowScale": [
+					false,
+					false,
+					false
+				]
+			}
+		},
+		{
+			"name": "trafficLightOnOppositeRoad",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD",
+			"tooltip": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "startTrafficLightRoadIdxAdj",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_ADJ_START",
+			"tooltip": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_ADJ_TOOLTIP",
+			"type": "int",
+			"instanceSpecific": true
+		},
+		{
+			"name": "startTrafficLightOppInv",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_INV_START",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "endTrafficLightOppInv",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_INV_END",
+			"type": "bool",
+			"instanceSpecific": true
+		},
+		{
+			"name": "startTrafficLightInOffset",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_IN_OFFSET_START",
+			"tooltip": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_IN_OFFSET_TOOLTIP",
+			"type": "float",
+			"instanceSpecific": false
+		},
+		{
+			"name": "endTrafficLightInOffset",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_IN_OFFSET_END",
+			"tooltip": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_IN_OFFSET_TOOLTIP",
+			"type": "float",
+			"instanceSpecific": false
+		},
+		{
+			"name": "endTrafficLightRoadIdxAdj",
+			"label": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_ADJ_END",
+			"tooltip": "RD_TRAFFIC_LIGHT_OPPOSITE_ROAD_ADJ_TOOLTIP",
+			"type": "int",
+			"instanceSpecific": true
+		},
+		{
+			"name": "swapTrafficLights",
+			"label": "RD_TRAFFIC_LIGHT_SWAP",
+			"tooltip": "RD_TRAFFIC_LIGHT_SWAP_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "doNotExport",
+			"label": "DO_NOT_EXPORT",
+			"tooltip": "DO_NOT_EXPORT_TOOLTIP",
+			"type": "bool",
+			"instanceSpecific": true
+		}
+	],
+	"loopVariables": [
+		"i"
+	],
+	"staticDefinitions": [
+		{
+			"name": "trueDivWidth",
+			"type": "float",
+			"value": "if(divider=0, 0, dividerWidth)"
+		},
+		{
+			"name": "totalWidthI",
+			"type": "float",
+			"value": "totalWidth"
+		},
+		{
+			"name": "hasSidewalksOrShoulders",
+			"type": "bool",
+			"value": "isDouble and hasSidewalks"
+		},
+		{
+			"name": "hasRealSidewalks",
+			"type": "bool",
+			"value": "hasSidewalksOrShoulders"
+		},
+		{
+			"name": "roadWidthT",
+			"type": "float",
+			"value": "if(hasSidewalksOrShoulders, roadWidth, totalWidthI)"
+		},
+		{
+			"name": "hasRealDivider",
+			"type": "bool",
+			"value": "isDouble and divider > 0"
+		},
+		{
+			"name": "canBeSimplified",
+			"type": "bool",
+			"value": "true"
+		},
+		{
+			"name": "hVal",
+			"type": "float",
+			"value": "0"
+		},
+		{
+			"name": "realBwParkW",
+			"type": "float",
+			"value": "if(backwardPark, backwardParkWidth, 0)"
+		},
+		{
+			"name": "realFwParkW",
+			"type": "float",
+			"value": "if(forwardPark, forwardParkWidth, 0)"
+		},
+		{
+			"name": "cableCarOffsetI",
+			"type": "float",
+			"value": "if(cableCarOffset > 0, cableCarOffset, 2.5)"
+		},
+		{
+			"name": "cableCarGap",
+			"type": "float",
+			"value": "if(cableCarLine, cableCarOffsetI * 2, 0)"
+		},
+		{
+			"name": "startTrafficLightCondition",
+			"type": "bool",
+			"script": "trafficLight.startCondition"
+		},
+		{
+			"name": "endTrafficLightCondition",
+			"type": "bool",
+			"script": "trafficLight.endCondition"
+		},
+		{
+			"name": "startTrafficLight_meshIndex",
+			"type": "int",
+			"script": "trafficLight.startMeshIndex"
+		},
+		{
+			"name": "endTrafficLight_meshIndex",
+			"type": "int",
+			"script": "trafficLight.endMeshIndex"
+		}
+	],
+	"dynamicDefinitions": [
+		{
+			"name": "h",
+			"type": "vec3",
+			"value": "localUp * hVal"
+		}
+	],
+	"lateDefinitions": [
+		{
+			"category": "common",
+			"definitions": [
+				{
+					"name": "startTrafficLightPosition",
+					"type": "vec3",
+					"value": "if(swapTrafficLights, v0_0, v6_0)"
+				},
+				{
+					"name": "endTrafficLightPosition",
+					"type": "vec3",
+					"value": "if(swapTrafficLights, v6_1, v0_1)"
+				},
+				{
+					"name": "invertedStartTrafficLightPosition",
+					"type": "vec3",
+					"value": "if(swapTrafficLights, v6_0, v0_0)"
+				},
+				{
+					"name": "invertedEndTrafficLightPosition",
+					"type": "vec3",
+					"value": "if(swapTrafficLights, v0_1, v6_1)"
+				}
+			]
+		},
+		{
+			"category": "trafficLights",
+			"definitions": [
+				{
+					"name": "startTrafficLightBasePosition",
+					"type": "vec3",
+					"script": "trafficLight.startPosition"
+				},
+				{
+					"name": "endTrafficLightBasePosition",
+					"type": "vec3",
+					"script": "trafficLight.endPosition"
+				},
+				{
+					"name": "startTrafficLightBaseRotation",
+					"type": "vec3",
+					"script": "trafficLight.startRotation"
+				},
+				{
+					"name": "endTrafficLightBaseRotation",
+					"type": "vec3",
+					"script": "trafficLight.endRotation"
+				}
+			]
+		}
+	]
+}

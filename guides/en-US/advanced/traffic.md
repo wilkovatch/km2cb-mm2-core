@@ -13,6 +13,16 @@ In the **Traffic** tab of a road:
 
 Level roads get the flat flag of the BAI file by themselves.
 
+## BAI-only roads
+
+A road of type **BAI-only road** has no geometry: only its traffic lanes and pedestrian paths, exported to the BAI file. Use it where the ground is made by something else, such as terrain patches or meshes exported to PKG, and you still want ambient traffic there.
+
+- It has the **Traffic** tab of the PSDL roads, and the widths that place the lanes: total width, road width, sidewalks (where the pedestrians walk), two-way and the divider.
+- It is drawn as its line and its traffic lanes. Click the line to select it.
+- At an intersection it doesn't change the surface of the other roads. An intersection where all the roads are BAI-only has no surface at all.
+- In the BAI file it belongs to the rooms under it. Lay it over the surfaces of other elements. A BAI-only road or intersection that is over no room is left out of the BAI, with a warning.
+- The game finds only the first intersection of a room. An intersection with only BAI-only roads that is in the room of another intersection gets a warning. Give each one a surface of its own under it, such as a small terrain patch.
+
 ## Intersections
 
 - More than 11 roads at an intersection crash the game's traffic code. The exporter warns, and splits such an intersection into a ring of smaller ones for the traffic.

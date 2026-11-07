@@ -1,0 +1,61 @@
+{
+	"localDefinitions": [
+		{
+			"name": "ccDivGap",
+			"type": "float",
+			"value": "max(0, cableCarGap - 0.5*trueDivWidth)"
+		}
+	],
+	"trafficLanes": [
+		{
+			"type": "if(pedestrianStreet, 0, 1)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, -1, 1))",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"v1-h+localRight*(realBwParkW+backwardLanesSpace)",
+				"v2-h-localRight*ccDivGap"
+			],
+			"lanes": {
+				"for": "i; 0; forwardLanes",
+				"value": "(i+0.5)/forwardLanes"
+			}
+		},
+		{
+			"type": "if(pedestrianStreet, 0, 2)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, 1, -1))",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"v5-h-localRight*(realFwParkW+forwardLanesSpace)",
+				"v4-h+localRight*ccDivGap"
+			],
+			"lanes": {
+				"for": "i; 0; backwardLanes",
+				"value": "(i+0.5)/backwardLanes"
+			}
+		},
+		{
+			"type": "3",
+			"arrowDirection": "if(_GLOBAL_driveOnLeft, -1, 1)",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				0.0
+			]
+		},
+		{
+			"type": "4",
+			"arrowDirection": "if(_GLOBAL_driveOnLeft, 1, -1)",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				1.0
+			]
+		}
+	]
+}

@@ -1,0 +1,96 @@
+{
+	"localDefinitions": [
+		{
+			"name": "totLanes",
+			"type": "float",
+			"value": "forwardLanes+backwardLanes"
+		},
+		{
+			"name": "trafV0",
+			"type": "vec3",
+			"value": "v1-h+localRight*(realBwParkW+backwardLanesSpace)"
+		},
+		{
+			"name": "trafV1",
+			"type": "vec3",
+			"value": "v5-h-localRight*(realFwParkW+forwardLanesSpace)"
+		},
+		{
+			"name": "ccSplit",
+			"type": "bool",
+			"value": "cableCarLine and forwardLanes > 0 and backwardLanes > 0"
+		},
+		{
+			"name": "fwTrafV1",
+			"type": "vec3",
+			"value": "if(ccSplit, v3-h-localRight*cableCarGap, trafV1)"
+		},
+		{
+			"name": "bwTrafV1",
+			"type": "vec3",
+			"value": "if(ccSplit, v3-h+localRight*cableCarGap, trafV0)"
+		},
+		{
+			"name": "fwLanesDiv",
+			"type": "float",
+			"value": "if(ccSplit, forwardLanes, totLanes)"
+		},
+		{
+			"name": "bwLanesDiv",
+			"type": "float",
+			"value": "if(ccSplit, backwardLanes, totLanes)"
+		}
+	],
+	"trafficLanes": [
+		{
+			"type": "if(pedestrianStreet, 0, 1)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, -1, 1))",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"trafV0",
+				"fwTrafV1"
+			],
+			"lanes": {
+				"for": "i; 0; forwardLanes",
+				"value": "(i+0.5)/fwLanesDiv"
+			}
+		},
+		{
+			"type": "if(pedestrianStreet, 0, 2)",
+			"arrowDirection": "if(pedestrianStreet, 0, if(_GLOBAL_driveOnLeft, 1, -1))",
+			"condition": "not disableTraffic",
+			"bounds": [
+				"trafV1",
+				"bwTrafV1"
+			],
+			"lanes": {
+				"for": "i; 0; backwardLanes",
+				"value": "(i+0.5)/bwLanesDiv"
+			}
+		},
+		{
+			"type": "3",
+			"arrowDirection": "if(_GLOBAL_driveOnLeft, -1, 1)",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				0.0
+			]
+		},
+		{
+			"type": "4",
+			"arrowDirection": "if(_GLOBAL_driveOnLeft, 1, -1)",
+			"condition": "cableCarLine",
+			"bounds": [
+				"v3-h-localRight*cableCarOffsetI",
+				"v3-h+localRight*cableCarOffsetI"
+			],
+			"lanes": [
+				1.0
+			]
+		}
+	]
+}

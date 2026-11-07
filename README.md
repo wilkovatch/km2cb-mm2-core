@@ -18,7 +18,7 @@ No original game data is included with the core. Open or create a city using thi
 ## Features
 
 - Roads, intersections and terrain patches exported as PSDL rooms, with railings, prop rules, low LOD road textures and optional export as PKG meshes with their bounds
-- Ambient traffic paths (BAI), with lanes, parking, cable car lines and direction arrows in the editor
+- Ambient traffic paths (BAI), with lanes, parking, cable car lines and direction arrows in the editor, and BAI-only roads for traffic over other surfaces
 - Visible sets of the rooms (CPVS), computed from the buildings and the ground
 - Individual props, prop lines, prop polygons, INST meshes and parked cars
 - Decals (spline and single), as in `decals.pathset`
