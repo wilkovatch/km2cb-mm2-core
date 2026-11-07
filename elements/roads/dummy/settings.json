@@ -8,7 +8,7 @@
 	"projectAll": false,
 	"lpf": 0,
 	"adjustLowPolyWidth": false,
-	"makeCoplanar": true,
+	"postProcess": "coplanar.postProcess",
 	"variableSections": false,
 	"rollRequires": "assumeMM2Hook",
 	"sectionVertices": [

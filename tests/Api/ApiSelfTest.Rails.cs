@@ -166,6 +166,8 @@ namespace Api {
                 History.UndoManager.Record("start rail placement", () => CallBuilder<object>("StartCustomElementCreation", "rail", "CREATE_CUSTOM_ELEMENT"));
                 await Frames(1);
                 Click(PointOf(sharedIds[0]).GetObject(), PointOf(sharedIds[0]).GetPoint(), "first rail point on two rooms");
+                await Frames(2);
+                Screenshot("rail_room_menu.png");
                 var choices = placer.ownerChoices;
                 Check("a click on a point of two rooms asks which one", placer.GetElement() == null && choices?.Count == 2
                     && choices.Contains(History.UndoManager.GetAliveElement(roadA)) && choices.Contains(History.UndoManager.GetAliveElement(sharedPatch)));

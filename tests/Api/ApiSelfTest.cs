@@ -267,6 +267,7 @@ namespace Api {
                 } else if (focus == "splineState") {
                     await NewCity();
                     await SplineInstanceState();
+                    await SectionPostProcessing();
                 } else if (focus == "incremental") {
                     await NewCity();
                     await IncrementalUpdates();
@@ -332,6 +333,7 @@ namespace Api {
                     await MapLabels();
                     await Bridges();
                     await SplineInstanceState();
+                    await SectionPostProcessing();
                     await UnicodeCityRoundTrip();
                 }
             } catch (Abort e) {

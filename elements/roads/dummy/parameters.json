@@ -302,12 +302,19 @@
 			"label": "RD_TRAFFIC_LIGHT_SWAP",
 			"tooltip": "RD_TRAFFIC_LIGHT_SWAP_TOOLTIP",
 			"type": "bool"
-		}
-	],
-	"internalParametersSettings": [
+		},
 		{
 			"name": "makeCoplanar",
-			"enabled": true
+			"label": "RD_MAKE_COPLANAR",
+			"tooltip": "RD_COPLANAR_TOOLTIP",
+			"type": "bool",
+			"instanceSpecific": true,
+			"reuseInNewRoads": true,
+			"defaultValue": true
+		},
+		{
+			"name": "pointPlaneTreshold",
+			"type": "float"
 		}
 	],
 	"loopVariables": [

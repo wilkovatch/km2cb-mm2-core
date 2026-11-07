@@ -20,8 +20,10 @@ namespace Api {
             var settings = type.typeData.settings;
             var panel = Field<EditorPanels.RoadEditorPanel>(builder, "roadEditorPanel");
 
-            //the defaults come from the settings of the type
-            Check("the core sets the defaults of the psdl roads", settings.segments == 10 && settings.project && settings.makeCoplanar && settings.defaultCurveType == 0);
+            //the defaults come from the settings of the type (makeCoplanar: from the default value of the parameter of the core)
+            var coplanarParameter = type.parameterContainer.parameters.FirstOrDefault(p => p.name == "makeCoplanar");
+            Check("the core sets the defaults of the psdl roads", settings.segments == 10 && settings.project && settings.defaultCurveType == 0
+                && coplanarParameter != null && coplanarParameter.instanceSpecific && coplanarParameter.reuseInNewRoads && coplanarParameter.defaultValue is true);
             var oldSegments = settings.segments;
             Road defaultRoad;
             try {
@@ -41,7 +43,7 @@ namespace Api {
             await Call("state.setBuiltin", new { @ref = id, name = "lpf", value = 2 });
             await Call("state.setBuiltin", new { @ref = id, name = "hermiteTension", value = 0.25f });
             await Call("state.setBuiltin", new { @ref = id, name = "project", value = false });
-            await Call("state.setBuiltin", new { @ref = id, name = "makeCoplanar", value = false });
+            await Call("state.setParam", new { @ref = id, name = "makeCoplanar", value = false });
             await Call("state.setParam", new { @ref = id, name = "warp", value = true });
             bool Kept() => Road().instanceState.Int("curveType") == 1 && Road().instanceState.Int("lpf") == 2 && Road().instanceState.Float("hermiteTension") == 0.25f
                 && !Road().instanceState.Bool("project") && !Road().instanceState.Bool("makeCoplanar") && Road().instanceState.Bool("warp");
@@ -136,14 +138,6 @@ namespace Api {
             source.SetInt("curveType", 3);
             limited.ReuseSplineValues(source);
             Check("a curve type the type doesn't allow falls back to its default", limited.instanceState.Int("curveType") == settings.defaultCurveType);
-            var internalSettings = type.parameterContainer.internalParametersSettings;
-            try {
-                type.parameterContainer.internalParametersSettings = new[] { new CityElements.Types.InternalParameterSettings { name = "makeCoplanar", enabled = false } };
-                source = new ObjectState();
-                source.SetBool("makeCoplanar", !settings.makeCoplanar);
-                limited.ReuseSplineValues(source);
-                Check("makeCoplanar is not taken by a type hiding it", limited.instanceState.Bool("makeCoplanar") == settings.makeCoplanar);
-            } finally { type.parameterContainer.internalParametersSettings = internalSettings; }
             limited.Delete();
             M.FlagAsChanged();
 

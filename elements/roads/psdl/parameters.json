@@ -552,12 +552,19 @@
 			"tooltip": "DO_NOT_EXPORT_TOOLTIP",
 			"type": "bool",
 			"instanceSpecific": true
-		}
-	],
-	"internalParametersSettings": [
+		},
 		{
 			"name": "makeCoplanar",
-			"enabled": true
+			"label": "RD_MAKE_COPLANAR",
+			"tooltip": "RD_COPLANAR_TOOLTIP",
+			"type": "bool",
+			"instanceSpecific": true,
+			"reuseInNewRoads": true,
+			"defaultValue": true
+		},
+		{
+			"name": "pointPlaneTreshold",
+			"type": "float"
 		}
 	],
 	"loopVariables": [
