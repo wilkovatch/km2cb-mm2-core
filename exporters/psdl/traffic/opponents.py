@@ -6,7 +6,8 @@
 # (if there is none, the waypoint is left undefined). The opponent doesn't search for a route: from a waypoint to the
 # next one it follows the road joining their intersections, if a single road joins them, otherwise it drives straight
 # to the centre of the next intersection, through whatever is in the way (the stock races do it on purpose to take
-# shortcuts through parks). On a circuit, after the last waypoint it goes on to the second one.
+# shortcuts through parks). On a circuit, after the last waypoint a remaining lap goes on to the second one, so the
+# last waypoint is on the intersection of the first one (behind the start), as in the stock circuits.
 #
 # Positions are in the coordinates of the program (x, y up, z).
 
@@ -36,6 +37,7 @@ class Leg:
         self.outside = outside  # metres of a straight leg out of the rooms of the city
         self.facades = facades  # facades crossed by a straight leg
         self.first_problem = first_problem  # where a blocked leg first hits something
+        self.lap = False  # the leg of an open circuit from its last waypoint back to the second one
 
 
 class Issue:
@@ -156,8 +158,9 @@ class OpponentMap:
         kind = BLOCKED if (facades > 0 or outside > 0) else STRAIGHT
         return Leg(kind, label_a, label_b, [a, b], outside=outside, facades=facades, first_problem=first)
 
-    def check(self, start, waypoints, circuit=False):
-        # start: the position of the car, waypoints: the positions of the waypoints, the last one being the finish
+    def check(self, start, waypoints, laps=1):
+        # start: the position of the car, waypoints: the positions of the waypoints, the last one being the finish,
+        # laps: the laps of a circuit (more than one adds the leg from the last waypoint back to the second one)
         res = OpponentRoute()
         rows = [np.asarray(start, dtype=float)] + [np.asarray(p, dtype=float) for p in waypoints]
         labels = ['start'] + ['waypoint ' + str(i + 1) for i in range(len(waypoints))]
@@ -216,9 +219,21 @@ class OpponentMap:
             legs.append(leg_end(0, 1, nodes[0], True))
             for k in range(len(nodes) - 1):
                 legs.append(leg_between(k + 1, k + 2, nodes[k], nodes[k + 1]))
-            if circuit and len(nodes) > 1:
-                # after the last waypoint the next lap goes on to the second one
-                legs.append(leg_between(len(nodes), 2, nodes[-1], nodes[1]) if nodes[-1] is not nodes[0] else None)
+            if laps > 1 and len(nodes) > 1 and nodes[-1] is not nodes[0]:
+                # after the last waypoint the next lap goes on to the second one: the stock circuits end on the
+                # intersection of the first waypoint, so that it continues along the first leg. Otherwise the opponent
+                # circles at the last waypoint until the final lap (seen in game without a road to the second one; with
+                # one, unverified), so the leg is drawn but the open loop is the error
+                lap = leg_between(len(nodes), 2, nodes[-1], nodes[1])
+                if lap is not None:
+                    lap.lap = True
+                    legs.append(lap)
+                if nodes[-1] is not None and nodes[0] is not None:
+                    res.issues.append(Issue('error', 'opponent_circuit_open',
+                                            'the ' + labels[len(nodes)] + ' (the last one before the finish) is not on the intersection of '
+                                            'the waypoint 1: on a circuit the opponent goes back to the waypoint 2 after it at every lap, '
+                                            'so it circles there until the final lap. Put the waypoint 1 on the intersection behind the '
+                                            'start and end the loop on it with another waypoint before the finish', rows[len(nodes)], lap))
             legs.append(leg_end(len(nodes), len(nodes) + 1, nodes[-1], False))
         else:
             legs.append(self.straight(rows[0], rows[-1], labels[0], labels[-1]))
@@ -234,6 +249,8 @@ class OpponentMap:
             if leg is None:
                 continue
             res.legs.append(leg)
+            if leg.lap:
+                continue  # reported as opponent_circuit_open
             if leg.kind == STRAIGHT:
                 res.issues.append(Issue('warning', 'opponent_leg_straight',
                                         why(leg) + ': the opponent leaves the roads and drives straight', leg.points[0], leg))

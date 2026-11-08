@@ -15,6 +15,10 @@
         "acceptTarget": "opponents.acceptTarget",
         "intersectionTargets": true,
         "targetsHint": "OPPONENT_WAYPOINTS_HINT",
+        "pointsList": {
+            "label": "OPPONENT_WAYPOINT_LIST",
+            "lastItemLabel": "OPPONENT_FINISH"
+        },
         "line": {
             "color": "yellow",
             "always": true,

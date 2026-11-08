@@ -41,7 +41,8 @@ def validate_ownership(data):
             report.error('Prop has no valid race container: ' + mesh['name'], element=mesh['name'], kind='meshInstance')
 
 
-def opponents(data, race, professional):
+def opponents(data, race, professional, fallback=True):
+    # fallback: without professional opponents, the professional race has the amateur ones
     owner = state_val(race, IDENTITY, '')
     result = []
     if owner:
@@ -59,9 +60,23 @@ def opponents(data, race, professional):
     # Also accept old export-JSON inputs used by external scripts and saved fixtures.
     legacy = state_val(race, 'opponents_professional' if professional else 'opponents', {}) or {}
     result.extend(state_val(legacy, 'opponents', []) or [])
-    if professional and not result:
+    if professional and not result and fallback:
         return opponents(data, race, False)
     return result
+
+
+def opponent_laps(data, race, race_id, professional):
+    # the most laps an opponent of a difficulty drives (1 outside circuits): the professional laps, also for the
+    # amateur opponents when they are in the professional race too (see opponents)
+    if not race_id.startswith('circuit'):
+        return 1
+    laps_a = int(state_val(race, 'laps', 0) or 0)
+    laps_p = int(state_val(race, 'laps_professional', laps_a) or 0)
+    if professional:
+        return laps_p
+    if not opponents(data, race, True, fallback=False):
+        return max(laps_a, laps_p)
+    return laps_a
 
 
 def write_props(scene, data, layout):
@@ -152,7 +167,8 @@ def check_opponents(data, jp, parts, targets=None, summary=False, errors=True):
         pos = state_val(model, 'localPosition', {'x': 0, 'y': 0, 'z': 0})
         start = (pos['x'], pos['y'], pos['z'])
         waypoints = [p['position'] for p in (element.get('points') or {}).get('spline') or []]
-        route = city.check(start, waypoints, circuit=race_id.startswith('circuit'))
+        laps = opponent_laps(data, race, race_id, bool(state_val(state, 'difficulty', 0)))
+        route = city.check(start, waypoints, laps=laps)
         for issue in route.issues:
             kwargs = dict(element=name, kind='customElement', code=issue.code,
                           position=[float(c) for c in issue.position])

@@ -29,8 +29,14 @@ The first click places the opponent's starting car. Later clicks draw the route 
 The game doesn't look for a way between two waypoints. It follows a road only from one intersection to the next one, so:
 
 - Put a waypoint **on every intersection** the opponent goes through, including those where it goes straight on. The waypoints go only on the centers of the intersections, which are shown while you add them, and they follow the intersections when you move them. A waypoint in the middle of a road would be ignored by the game.
-- The last waypoint is the finish. It can be anywhere, best on the road after the last intersection. To add a waypoint once the finish is placed, select the finish and use the click mode **Add before selected**.
+- The last point of the route is the finish, not a waypoint. It can be anywhere, best on the road after the last intersection. To add a waypoint once the finish is placed, select the finish (in the city or in the **Waypoints** list of the panel, which shows what each point is on) and use the click mode **Add before selected**.
 - Between two waypoints that are not on neighboring intersections, the opponent leaves the roads and drives straight to the next one, through whatever is in the way. This is fine for a shortcut across an open square, but not through buildings.
+- In a circuit race with more than one lap, after the last waypoint before the finish the opponent goes back to the **second** waypoint, not the first: the first one is used only at the start of the first lap. If the last waypoint is not on the intersection of the first one, the opponent circles around the last waypoint until the final lap. Close the loop as the original races do:
+  1. Put the start on the road leaving an intersection, and the **first waypoint on that intersection**, behind the start.
+  2. Add the waypoints of the lap, around to that same intersection: the **last waypoint is on the intersection of the first one** (click the first waypoint to add it, with **Add before selected** on the finish).
+  3. Put the finish after it, on the road of the start.
+
+  For example, with the start on the road from intersection A to B, a lap A, B, C, D, A is the route **A, B, C, D, A, finish**.
 
 **Check opponent routes**, in the panel of the race or of an opponent, finds these problems without exporting. It lists them, and draws over the city the way each opponent will go: green along the roads, orange where it drives straight, red where it hits a building or leaves the city. Select a problem and press **Zoom to it** to see where it is. The export lists the same problems as warnings.
 

@@ -110,13 +110,25 @@ class OpponentRouteTest(unittest.TestCase):
     def test_circuit_goes_on_to_the_second_waypoint(self):
         city, nodes = grid_city()
         # last waypoint = the first one: nothing more to check
-        res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)], circuit=True)
+        res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)], laps=2)
         self.assertEqual([leg.kind for leg in res.legs], [ROAD, ROAD, ROAD, ROAD])
-        # last waypoint elsewhere: the next lap goes from it to the second waypoint (here along a road)
-        res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (200.0, 0.0, 0.0)], circuit=True)
+        self.assertEqual(res.issues, [])
+        # last waypoint elsewhere: the next lap goes from it to the second waypoint (here along a road), drawn, but the
+        # open loop is an error (the opponent circles at the last waypoint in game)
+        res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (200.0, 0.0, 0.0)], laps=2)
         self.assertEqual(len(res.legs), 5)
         self.assertEqual(res.legs[3].kind, ROAD)
         self.assertEqual((res.legs[3].start, res.legs[3].end), ('waypoint 3', 'waypoint 2'))
+        self.assertEqual([(i.level, i.code) for i in res.issues], [('error', 'opponent_circuit_open')])
+        self.assertIs(res.issues[0].leg, res.legs[3])
+        # without a road to the second waypoint either: the same error, not a straight leg as well
+        res = city.check((0.0, 0.0, 0.0), [(100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)], laps=2)
+        self.assertEqual([i.code for i in res.issues if i.code != 'opponent_leg_straight' or i.leg.lap], ['opponent_circuit_open'])
+        self.assertTrue(any(leg.lap and leg.kind == STRAIGHT for leg in res.legs))
+        # a single lap never goes back
+        res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (200.0, 0.0, 0.0)], laps=1)
+        self.assertEqual(len(res.legs), 4)
+        self.assertNotIn(('waypoint 3', 'waypoint 2'), [(leg.start, leg.end) for leg in res.legs])
 
 
 def stock_map(city_folder, name):
@@ -229,7 +241,8 @@ class StockOpponentsTest(unittest.TestCase):
             random.Random(1).shuffle(files)
             for path in files[:STOCK_SAMPLE]:
                 rows = read_opp(path)
-                res = city.check(rows[0], rows[1:], circuit=path.name.startswith('circuit'))
+                # the stock circuits have several laps
+                res = city.check(rows[0], rows[1:], laps=2 if path.name.startswith('circuit') else 1)
                 kinds = ''.join({ROAD: 'r', STRAIGHT: 's', BLOCKED: 'B'}[leg.kind] for leg in res.legs)
                 if verbose:
                     print(name, path.name, kinds, [(i.code, i.message) for i in res.issues if i.level == 'error'])

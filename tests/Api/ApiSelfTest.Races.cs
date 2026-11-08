@@ -188,6 +188,15 @@ namespace Api {
             Check("the intersections are shown and picked while the waypoints are added", ((Handle)crossings[2].point).IsHandleActive() && (placer.GetLayerMasks()[0] & (1 << 9)) != 0);
             Check("the anchors of the roads and intersections aren't shown (only the finish could go there)",
                 Operations.Anchors.GetAll(M).Where(a => !a.IsDeleted()).All(a => !GO.GetEnabled(a.GetObject())));
+            Handle HandleOf(Node3D node) => GameEngine.Scriptable.Cast<Handle>(node);
+            //(the intersection of the second waypoint was restored by undo: the one it is on now)
+            Intersection CenterOf(int i) => ((IntersectionAnchor)Wp(i).anchor).intersection;
+            float onCenter = new[] { 0, 1, 2 }.Max(i => HandleOf(Wp(i).GetObject()).HandleScale.X);
+            Check("the waypoints on the intersections are drawn over their handles, the hover marker over both",
+                new[] { 0, 1, 2 }.All(i => HandleOf(Wp(i).GetObject()).HandleScale.X > HandleOf(CenterOf(i).point).HandleScale.X)
+                && Actions.Helpers.GetAnchorInfo(CenterOf(1).point, Vector3.Zero).size > onCenter
+                && Actions.Helpers.GetAnchorInfo(Wp(1).GetObject(), Vector3.Zero) is var overPoint && overPoint.size > onCenter
+                && overPoint.pos == GO.GetPosition(CenterOf(1).point));
             await Call("view.camera.set", new { position = V(700, 160, 520), target = V(720, 0, 610) });
             await Frames(3); Screenshot("opponent_waypoints_placement.png");
             var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
@@ -209,14 +218,61 @@ namespace Api {
             placer.placementMode = ElementPlacer.CustomElementPlacer.PlacementMode.InsertPoint;
             placer.atStart = true; //before the selected point, the finish
             builder.gizmo.ClearTargets(); builder.gizmo.AddTarget(Wp(3).GetObject());
-            History.UndoManager.Record("waypoint before the finish", () => placer.PlaceAt(OnIntersection(crossings[2])));
+            History.UndoManager.Record("waypoint next to one on the same intersection", () => placer.PlaceAt(OnIntersection(crossings[2])));
             M.ProcessUpdate();
-            Check("a click on an intersection adds a waypoint on it before the finish", Spline().items.Count == 5 && On(Wp(3), crossings[2]) && GO.IsNull(Wp(4).anchor));
+            Check("a click on the intersection of the waypoint before adds nothing (a leg of length zero)", Spline().items.Count == 4 && !builder.AlertActive());
+            builder.gizmo.ClearTargets(); builder.gizmo.AddTarget(Wp(3).GetObject());
+            History.UndoManager.Record("waypoint before the finish", () => placer.PlaceAt(OnIntersection(crossings[0])));
+            M.ProcessUpdate();
+            Check("a click on an intersection adds a waypoint on it before the finish", Spline().items.Count == 5 && On(Wp(3), crossings[0]) && GO.IsNull(Wp(4).anchor));
             History.UndoManager.Record("free waypoint before the finish", () => placer.PlaceAt(ground));
             Check("a click on the ground before the finish adds nothing, and tells where the waypoints go", Spline().items.Count == 5 && Alert() == StringManager.GetOrKey("OPPONENT_WAYPOINTS_HINT"));
             CloseAlert();
             builder.PerformUndo(); await Frames(2);
             Check("undo removes the clicked waypoint", Spline().items.Count == 4);
+            // a real click on the first waypoint before the selected finish: another waypoint on its intersection (the end
+            // of the loop of a circuit), not the selection of the first waypoint
+            builder.gizmo.ClearTargets(); builder.gizmo.AddTarget(Wp(3).GetObject());
+            await Call("view.camera.set", new { position = V(600, 120, 540), target = V(600, 0, 600) });
+            await Frames(4);
+            var first = Wp(0);
+            var cam = GetViewport().GetCamera3D();
+            var screen = cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(first.GetPoint()));
+            GameEngine.Input.WarpMouse(GetViewport(), screen);
+            await Frames(3);
+            Input.ParseInputEvent(new InputEventMouseMotion { Position = screen, GlobalPosition = screen });
+            await Frames(2);
+            Input.ParseInputEvent(new InputEventMouseButton { ButtonIndex = MouseButton.Left, Pressed = true, Position = screen, GlobalPosition = screen });
+            await Frames(2);
+            Input.ParseInputEvent(new InputEventMouseButton { ButtonIndex = MouseButton.Left, Pressed = false, Position = screen, GlobalPosition = screen });
+            await Frames(4);
+            M.ProcessUpdate();
+            Check("a click on the waypoint of an intersection adds another waypoint on it, before the selected finish", Spline().items.Count == 5
+                && On(Wp(3), crossings[0]) && Wp(3) != first && Wp(0) == first && GO.IsNull(Wp(4).anchor));
+            Check("the click doesn't also select the first waypoint (the opponent panel stays, in the same click mode)", builder.customElementEditorPanel.ActiveSelf()
+                && builder.terrainClick.modifier == placer && placer.placementMode == ElementPlacer.CustomElementPlacer.PlacementMode.InsertPoint
+                && (builder.gizmo.mainTargetRoot == null || GameEngine.Scriptable.FindRecursive<TerrainPoint>(builder.gizmo.mainTargetRoot) != first));
+            // the list of the waypoints: what they are on, the finish, the selected one
+            var pointsList = PreviewField<EditorPanelElements.ScrollList>(builder.customElementEditorPanel, "pointsList");
+            builder.gizmo.ClearTargets(); builder.gizmo.AddTarget(Wp(1).GetObject());
+            await Frames(2);
+            var listed = pointsList == null ? null : PreviewField<List<string>>(pointsList, "strings");
+            Log("  waypoint list: " + (listed == null ? "none" : string.Join(" | ", listed)) + " (selected " + pointsList?.Selected + ", gizmo on "
+                + (builder.gizmo.mainTargetRoot == null ? "nothing" : Spline().items.FindIndex(n => ((CustomElements.PointLeaf)n).point == GameEngine.Scriptable.FindRecursive<TerrainPoint>(builder.gizmo.mainTargetRoot)).ToString())
+                + ", placement " + placer.placementMode + ", click modifier " + (builder.terrainClick.modifier == placer) + ")");
+            Check("the waypoint list names the intersections and the finish, and highlights the selected waypoint", listed != null && listed.Count == 5
+                && listed[0].Contains(Api.CityApi.GetName(crossings[0])) && listed[3].Contains(Api.CityApi.GetName(crossings[0]))
+                && listed[4].EndsWith("(" + StringManager.Get("OPPONENT_FINISH") + ")") && pointsList.Selected == 1);
+            await Frames(2); Screenshot("opponent_waypoint_list.png");
+            pointsList?.SetValue(2);
+            await Frames(2);
+            Check("a waypoint chosen in the list is selected", builder.gizmo.mainTargetRoot != null
+                && GameEngine.Scriptable.FindRecursive<TerrainPoint>(builder.gizmo.mainTargetRoot) == Wp(2) && pointsList.Selected == 2);
+            builder.PerformUndo(); await Frames(2);
+            Check("undo removes the waypoint added on the intersection of the first one, and the list follows", Spline().items.Count == 4
+                && PreviewField<List<string>>(pointsList, "strings").Count == 4);
+            await Expect("a waypoint next to one on the same intersection", "invalid_operation", "customElement.insert",
+                new { element = id, array = "spline", index = 1, to = At(crossings[0]) });
             var other = (await Call("customElement.create", Create(At(crossings[0]), Pos(650, 640)))).Value<int>();
             var otherElement = (CustomElement)History.ElementRegistry.Get(other);
             var shared = ((CustomElements.PointLeaf)((CustomElements.PointList)otherElement.points.Get("spline")).items[0]).point;

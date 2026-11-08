@@ -166,16 +166,16 @@ class CinfoAimapExporter:
         weather_p = state_val(race, "weather_professional", weather_a)
 
         num_laps_a = state_val(race, "laps", 0)
-        num_laps_p = state_val(race, "laps", num_laps_a)
+        num_laps_p = state_val(race, "laps_professional", num_laps_a)
 
         time_limit_a = state_val(race, "timeLimit", 0)
-        time_limit_p = state_val(race, "timeLimit", time_limit_a)
+        time_limit_p = state_val(race, "timeLimit_professional", time_limit_a)
 
         traffic_density_a = state_val(race, "trafficDensity", 0)
-        traffic_density_p = state_val(race, "trafficDensity", traffic_density_a)
+        traffic_density_p = state_val(race, "trafficDensity_professional", traffic_density_a)
 
         ped_density_a = state_val(race, "pedestriansDensity", 0)
-        ped_density_p = state_val(race, "pedestriansDensity", ped_density_a)
+        ped_density_p = state_val(race, "pedestriansDensity_professional", ped_density_a)
 
         return ",".join([
             "none",                            # Description (unused?)
@@ -194,7 +194,7 @@ class CinfoAimapExporter:
             str(weather_p),                    # ProWeather
             str(len(opponents_p)),             # ProOpponents
             "1",                               # ProCops (always 1?)
-            str(traffic_density_a),            # ProAmbient
+            str(traffic_density_p),            # ProAmbient
             str(ped_density_p),                # ProPeds
             str(num_laps_p),                   # ProNumLaps
             str(time_limit_p),                 # ProTimeLimit

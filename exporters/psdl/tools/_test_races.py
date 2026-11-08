@@ -21,7 +21,7 @@ from _test_prop_placers import read_paths, line
 from prop_placers import export_prop_placer
 from scene import Scene
 from writers.pathset_writer import PATHSETWriter
-from race_elements import opponents, write_props, validate_ownership
+from race_elements import opponents, opponent_laps, write_props, validate_ownership
 from output_layout import OutputLayout
 from cinfo_aimap_export import CinfoAimapExporter
 from ar_packer import ArPacker
@@ -77,6 +77,29 @@ class Races(unittest.TestCase):
         race = data['cityProperties']['circuitRaces'][0]
         self.assertEqual(saved['lowLevelElements'][0]['points']['spline'], [])
         self.assertEqual(opponents(data, race, True), opponents(data, race, False))
+
+    def test_professional_settings_are_exported(self):
+        race = dict(checkpoints=[], timeOfDay=1, timeOfDay_professional=2, weather=0, weather_professional=3,
+                    trafficDensity=0.25, trafficDensity_professional=0.75, pedestriansDensity=0.5, pedestriansDensity_professional=1.0,
+                    laps=2, laps_professional=4, timeLimit=60, timeLimit_professional=90)
+        with tempfile.TemporaryDirectory() as directory:
+            row = CinfoAimapExporter(SimpleNamespace(data=dict(customElements=[])), False).export_race(directory, race, 'circuit0').split(',')
+        # TimeOfDay, Weather, Ambient, Peds, NumLaps, TimeLimit and their Pro columns
+        self.assertEqual([row[i] for i in (2, 3, 6, 7, 8, 9)], ['1', '0', '0.25', '0.5', '2', '60'])
+        self.assertEqual([row[i] for i in (12, 13, 16, 17, 18, 19)], ['2', '3', '0.75', '1.0', '4', '90'])
+
+    def test_opponent_laps(self):
+        def element(difficulty):
+            return dict(type='opponent', data=dict(name='o', fields=dict(state=dict(_propertyContainerId='r', difficulty=difficulty))))
+        race = dict(_elementContainerId='r', laps=1, laps_professional=3)
+        amateur_only = dict(customElements=[element(0)])
+        both = dict(customElements=[element(0), element(1)])
+        # without professional opponents the amateur ones drive the professional laps too
+        self.assertEqual(opponent_laps(amateur_only, race, 'circuit0', False), 3)
+        self.assertEqual(opponent_laps(both, race, 'circuit0', False), 1)
+        self.assertEqual(opponent_laps(both, race, 'circuit0', True), 3)
+        self.assertEqual(opponent_laps(both, race, 'race0', True), 1)
+        self.assertEqual(opponent_laps(both, dict(_elementContainerId='r', laps=2), 'circuit0', True), 2)
 
     def test_normal_migration_backup_and_repeat(self):
         with tempfile.TemporaryDirectory() as directory:
