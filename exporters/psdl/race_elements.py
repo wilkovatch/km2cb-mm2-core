@@ -160,8 +160,9 @@ def check_opponents(data, jp, parts, targets=None, summary=False, errors=True):
                 kwargs['overlay'] = overlay([issue.leg])
             (report.error if issue.level == 'error' and errors else report.warning)(issue.message, **kwargs)
         if summary:
-            errors = sum(1 for i in route.issues if i.level == 'error')
-            text = ('reaches the finish' if errors == 0 else 'gets stuck or goes astray (' + str(errors) + (' errors)' if errors > 1 else ' error)'))
+            # not errors (the parameter), which the next opponents still use
+            count = sum(1 for i in route.issues if i.level == 'error')
+            text = ('reaches the finish' if count == 0 else 'gets stuck or goes astray (' + str(count) + (' errors)' if count > 1 else ' error)'))
             straight = sum(1 for leg in route.legs if leg.kind != 'road')
             if straight > 0:
                 text += ', ' + str(straight) + (' legs' if straight > 1 else ' leg') + ' off the roads'

@@ -83,6 +83,159 @@ namespace Api {
             } finally { panel.Destroy(); }
         }
 
+        //an intersection at each position (two BAI-only roads, which have no geometry over the ground), for the waypoints of
+        //the opponents, which go only on intersections (lua/opponents.lua)
+        async Task<List<Intersection>> WaypointIntersections(params Vector3[] at) {
+            var res = new List<Intersection>();
+            foreach (var p in at) {
+                waypointIntersections.Add(p);
+                var road = (await Call("roads.create", new { type = "bai", points = new[] { Pos(p.X, p.Z - 30), Pos(p.X, p.Z) } })).Value<int>();
+                await Call("roads.create", new { type = "bai", points = new object[] { new { roadEnd = new { road, end = "end" } }, Pos(p.X + 30, p.Z) } });
+                res.Add(IntersectionNear(p));
+            }
+            return res;
+        }
+
+        readonly List<Vector3> waypointIntersections = new();
+
+        //deletes the roads of WaypointIntersections (found by position: the ids change on reload), whose BAI warnings (they
+        //are over no room) would be in the checks of the whole city
+        async Task RemoveWaypointIntersections() {
+            foreach (var p in waypointIntersections) {
+                var intersection = M.intersections.FirstOrDefault(i => !i.IsDeleted() && new Vector2(GO.GetPosition(i.point).X - p.X, GO.GetPosition(i.point).Z - p.Z).Length() < 0.5f);
+                if (intersection == null) continue;
+                foreach (var road in intersection.roads.ToList()) await Call("roads.delete", new { road = History.ElementRegistry.GetId(road) });
+            }
+            waypointIntersections.Clear();
+            M.ProcessUpdate();
+        }
+
+        Intersection IntersectionNear(Vector3 p) => M.intersections.First(i => !i.IsDeleted() && new Vector2(GO.GetPosition(i.point).X - p.X, GO.GetPosition(i.point).Z - p.Z).Length() < 0.5f);
+
+        //a click on the center of an intersection
+        static GameEngine.Raycast.RaycastHit OnIntersection(Intersection i) => new GameEngine.Raycast.RaycastHit { collider = i.point, point = GO.GetPosition(i.point) };
+
+        static object At(Intersection i) => new { intersection = History.ElementRegistry.GetId(i) };
+
+        //the waypoints of the opponents go on the centers of the intersections, all but the last one (the finish), which
+        //goes anywhere (lua/opponents.lua, intersectionTargets): API targets, insertion, reversing, attaching, the
+        //intersections moved and deleted, undo, the clicks, the check and reload
+        async Task OpponentIntersectionWaypoints() {
+            Log("opponent waypoints on intersections");
+            var city = M.GetDummy<CityProperties>();
+            var param = TP.GetCitySettings()["city"].typeData.parametersInfo.parameters.First(p => p.name == "checkpointRaces");
+            History.UndoManager.Record("add race", () => {
+                History.UndoManager.Touch(city);
+                Operations.States.AddArrayElement(city.state, param);
+                M.FlagAsChanged();
+            });
+            M.ProcessUpdate();
+            var race = city.state.Array<ObjectState>("checkpointRaces")[^1];
+            var owner = PC.EnsureId(race);
+            PC.Sync(M);
+            var amateur = PC.EnsureId(race.State("policeCars"));
+            var crossings = await WaypointIntersections(new Vector3(600, 0, 600), new Vector3(700, 0, 600), new Vector3(800, 0, 600));
+            object Create(params object[] spline) => new { type = "opponent", name = "Waypoints", propertyContainer = amateur, points = new { spline } };
+            await Expect("a waypoint off the intersections", "invalid_operation", "customElement.create", Create(Pos(650, 600), Pos(660, 620)));
+            var id = (await Call("customElement.create", Create(At(crossings[0]), Pos(650, 620)))).Value<int>();
+            var e = (CustomElement)History.ElementRegistry.Get(id);
+            CustomElements.PointList Spline() => (CustomElements.PointList)e.points.Get("spline");
+            TerrainPoint Wp(int i) => ((CustomElements.PointLeaf)Spline().items[i]).point;
+            bool On(TerrainPoint p, Intersection i) => p.anchor is IntersectionAnchor a && a.intersection == i && p.GetPoint().DistanceTo(GO.GetPosition(i.point)) < 0.01f;
+            Check("a waypoint goes on the center of an intersection, the finish anywhere", On(Wp(0), crossings[0]) && GO.IsNull(Wp(1).anchor));
+            Check("the other types don't accept the intersections", !Operations.PointTargets.Allows(TP.GetCustomElementTypes()["rail"], crossings[0].point));
+            await Expect("a point after a free finish", "invalid_operation", "customElement.insert", new { element = id, array = "spline", to = At(crossings[1]) });
+            await Expect("a free waypoint before the finish", "invalid_operation", "customElement.insert", new { element = id, array = "spline", index = 1, to = Pos(640, 640) });
+            await Call("customElement.insert", new { element = id, array = "spline", index = 1, to = At(crossings[1]) });
+            Check("a waypoint can be inserted before the finish", Spline().items.Count == 3 && On(Wp(1), crossings[1]));
+            await Expect("reversing would make the free finish a waypoint", "invalid_operation", "customElement.reverse", new { element = id });
+            await Expect("a waypoint can't leave its intersection", "invalid_operation", "customElement.movePoint", new { element = id, path = "spline.0", position = V(610, 0, 610) });
+            await Expect("a waypoint can't be detached", "invalid_operation", "customElement.detachPoint", new { element = id, path = "spline.0" });
+            await Call("customElement.attachPoint", new { element = id, path = "spline.2", to = At(crossings[2]) });
+            Check("the finish can go on an intersection too", On(Wp(2), crossings[2]));
+            await Call("customElement.insert", new { element = id, array = "spline", to = Pos(850, 620) });
+            Check("after a finish on an intersection, a new finish can follow", Spline().items.Count == 4 && GO.IsNull(Wp(3).anchor));
+            var info = await Call("elements.get", new { @ref = id, derived = true });
+            Check("the API reports the intersection of a waypoint", info["derived"]?["points"]?["spline"]?[1]?["intersection"]?.Value<int>() == History.ElementRegistry.GetId(crossings[1])
+                && info["derived"]["points"]["spline"][3]["intersection"].Type == JTokenType.Null);
+            // the intersection moved: its waypoint follows (and back with undo)
+            await Call("intersections.move", new { intersection = History.ElementRegistry.GetId(crossings[1]), position = V(700, 0, 650) });
+            M.FlagAsChanged(); M.ProcessUpdate();
+            Check("a waypoint follows its intersection", On(Wp(1), crossings[1]) && Wp(1).GetPoint().Z > 640);
+            await Call("history.undo"); M.ProcessUpdate();
+            Check("undo moves the waypoint back with its intersection", On(Wp(1), crossings[1]) && Mathf.Abs(Wp(1).GetPoint().Z - 600) < 0.01f);
+            var check = await Call("elements.check", new { check = "validateOpponents", elements = new[] { new { id } } });
+            Check("the check finds the waypoints on intersections", !((JArray)check["items"]).Any(i => i["code"]?.Value<string>() == "opponent_waypoint_not_intersection"));
+            // a deleted intersection leaves its waypoint free where it was, undo attaches it again
+            var where = Wp(1).GetPoint();
+            await Call("intersections.delete", new { intersection = History.ElementRegistry.GetId(crossings[1]) });
+            M.FlagAsChanged(); M.ProcessUpdate();
+            Check("a deleted intersection leaves its waypoint free where it was", (GO.IsNull(Wp(1).anchor) || Wp(1).anchor.IsDeleted()) && Wp(1).GetPoint().DistanceTo(where) < 0.01f);
+            await Call("history.undo"); M.FlagAsChanged(); M.ProcessUpdate();
+            var restored = IntersectionNear(new Vector3(700, 0, 600));
+            Check("undo attaches the waypoint to the intersection again", On(Wp(1), restored));
+            // the clicks: an intersection (shown while the points are added), not the ground after a free finish
+            builder.CloseAllPanels();
+            ArrayObject.activeElements["race"] = race;
+            ArrayObject.activeElements["raceDifficulty"] = race.State("policeCars");
+            builder.NotifyVisibilityChange(); M.ProcessUpdate();
+            builder.SelectObject(e);
+            var placer = builder.customElementPlacer;
+            placer.placementMode = ElementPlacer.CustomElementPlacer.PlacementMode.AppendPoint;
+            placer.arrayPath = "spline";
+            M.ProcessUpdate(); await Frames(2);
+            placer.UpdateAnchorVisibility(true);
+            Check("the intersections are shown and picked while the waypoints are added", ((Handle)crossings[2].point).IsHandleActive() && (placer.GetLayerMasks()[0] & (1 << 9)) != 0);
+            Check("the anchors of the roads and intersections aren't shown (only the finish could go there)",
+                Operations.Anchors.GetAll(M).Where(a => !a.IsDeleted()).All(a => !GO.GetEnabled(a.GetObject())));
+            await Call("view.camera.set", new { position = V(700, 160, 520), target = V(720, 0, 610) });
+            await Frames(3); Screenshot("opponent_waypoints_placement.png");
+            var flags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+            string Alert() {
+                var alert = typeof(CityBuilderMenuBar).GetField("alert", flags).GetValue(builder);
+                if (alert == null || !builder.AlertActive()) return null;
+                var root = (Control)alert.GetType().GetField("root", flags).GetValue(alert);
+                return root.GetNode<Label>("Message").Text;
+            }
+            void CloseAlert() {
+                var alert = typeof(CityBuilderMenuBar).GetField("alert", flags).GetValue(builder);
+                if (alert != null && builder.AlertActive()) alert.GetType().GetMethod("Close", flags).Invoke(alert, null);
+            }
+            var ground = new GameEngine.Raycast.RaycastHit { collider = builder.helper, point = new Vector3(870, 0, 640) };
+            History.UndoManager.Record("waypoint after a free finish", () => placer.PlaceAt(ground));
+            Check("a click after a free finish adds nothing, and tells where the waypoints go", Spline().items.Count == 4 && Alert() == StringManager.GetOrKey("OPPONENT_WAYPOINTS_HINT"));
+            await Frames(3); Screenshot("opponent_waypoints_refused.png");
+            CloseAlert();
+            placer.placementMode = ElementPlacer.CustomElementPlacer.PlacementMode.InsertPoint;
+            placer.atStart = true; //before the selected point, the finish
+            builder.gizmo.ClearTargets(); builder.gizmo.AddTarget(Wp(3).GetObject());
+            History.UndoManager.Record("waypoint before the finish", () => placer.PlaceAt(OnIntersection(crossings[2])));
+            M.ProcessUpdate();
+            Check("a click on an intersection adds a waypoint on it before the finish", Spline().items.Count == 5 && On(Wp(3), crossings[2]) && GO.IsNull(Wp(4).anchor));
+            History.UndoManager.Record("free waypoint before the finish", () => placer.PlaceAt(ground));
+            Check("a click on the ground before the finish adds nothing, and tells where the waypoints go", Spline().items.Count == 5 && Alert() == StringManager.GetOrKey("OPPONENT_WAYPOINTS_HINT"));
+            CloseAlert();
+            builder.PerformUndo(); await Frames(2);
+            Check("undo removes the clicked waypoint", Spline().items.Count == 4);
+            var other = (await Call("customElement.create", Create(At(crossings[0]), Pos(650, 640)))).Value<int>();
+            var otherElement = (CustomElement)History.ElementRegistry.Get(other);
+            var shared = ((CustomElements.PointLeaf)((CustomElements.PointList)otherElement.points.Get("spline")).items[0]).point;
+            await Call("customElement.insert", new { element = id, array = "spline", index = 3, to = new { terrainPoint = History.ElementRegistry.GetId(shared) } });
+            Check("a waypoint of another opponent stands for its intersection (the point isn't shared)", Spline().items.Count == 5 && On(Wp(3), crossings[0]) && Wp(3) != shared);
+            await Call("customElement.delete", new { element = other });
+            await Call("customElement.remove", new { element = id, array = "spline", index = 3 });
+            builder.CloseAllPanels();
+            // reload: the waypoints are still on their intersections
+            await Call("city.save"); await Call("city.reload");
+            M.ProcessUpdate();
+            e = M.customElements.First(x => x.TypeName == "opponent" && x.Name == "Waypoints");
+            Check("reload keeps the waypoints on their intersections", On(Wp(0), IntersectionNear(new Vector3(600, 0, 600))) && On(Wp(1), IntersectionNear(new Vector3(700, 0, 600)))
+                && On(Wp(2), IntersectionNear(new Vector3(800, 0, 600))) && GO.IsNull(Wp(3).anchor));
+            ArrayObject.activeElements["race"] = null;
+            ArrayObject.activeElements["raceDifficulty"] = null;
+            builder.NotifyVisibilityChange(); M.ProcessUpdate();
+        }
+
         //the check of the opponent routes (checks/validateOpponents): a square of four roads, an opponent driving around
         //it and one cutting across it (a straight leg out of the rooms), checked through the API and the panel buttons
         async Task OpponentRouteCheck() {
@@ -104,9 +257,11 @@ namespace Api {
             var owner = PC.EnsureId(race);
             PC.Sync(M);
             var amateur = PC.EnsureId(race.State("policeCars"));
+            //the waypoints on the intersections at their positions, the finish (the last one) free
             async Task<int> Opponent(string name, float[] start, params float[][] waypoints) {
+                var spline = waypoints.Select((p, i) => i < waypoints.Length - 1 ? At(IntersectionNear(new Vector3(p[0], p[1], p[2]))) : new { position = p }).ToArray();
                 var id = (await Call("customElement.create", new { type = "opponent", name, propertyContainer = amateur,
-                    points = new { spline = waypoints.Select(p => new { position = p }).ToArray() } })).Value<int>();
+                    points = new { spline } })).Value<int>();
                 await Call("state.import", new { @ref = id, values = new { carModel = new { meshPath = "geometry/vpbug.pkg",
                     localPosition = new { x = start[0], y = start[1], z = start[2] }, localRotation = new { x = 0f, y = 0f, z = 0f } } } });
                 return id;
@@ -334,14 +489,15 @@ namespace Api {
             ArrayObject.activeElements["race"] = race;
             ArrayObject.activeElements["raceDifficulty"] = race.State("policeCars");
             builder.NotifyVisibilityChange(); M.ProcessUpdate();
+            var crossings = await WaypointIntersections(new Vector3(-90,0,-100), new Vector3(-60,0,-140));
             History.UndoManager.Record("start opponent", () => CallBuilder<object>("StartCustomElementCreation", "opponent", "CREATE_CUSTOM_ELEMENT"));
             var hit = new GameEngine.Raycast.RaycastHit { collider = builder.helper, point = new Vector3(-100,0,-100) };
             History.UndoManager.Record("place start car", () => builder.customElementPlacer.PlaceAt(hit));
             M.FlagAsChanged(); await Frames(2);
             var opponent = builder.customElementPlacer.GetElement();
-            foreach (var point in new[] { new Vector3(-90,0,-100), new Vector3(-80,0,-90), new Vector3(-70,0,-80) }) {
-                hit.point = point;
-                History.UndoManager.Record("waypoint", () => builder.customElementPlacer.PlaceAt(hit));
+            hit.point = new Vector3(-70,0,-80); //the finish
+            foreach (var click in new[] { OnIntersection(crossings[0]), OnIntersection(crossings[1]), hit }) {
+                History.UndoManager.Record("waypoint", () => builder.customElementPlacer.PlaceAt(click));
                 await Frames(2);
             }
             Check("the opponent has its waypoints", opponent.GetAllPoints().Count == 3);
@@ -436,6 +592,7 @@ namespace Api {
             Check("police placement selects both difficulty targets", race.State("policeCars")?.Array<ObjectState>("policeCars")?.Length == 1 && race.State("policeCars_professional")?.Array<ObjectState>("policeCars")?.Length == 1);
             builder.CloseAllPanels();
             Select(race);
+            var crossing = (await WaypointIntersections(new Vector3(-90,0,-100)))[0];
             History.UndoManager.Record("start opponent", () => CallBuilder<object>("StartCustomElementCreation", "opponent", "CREATE_CUSTOM_ELEMENT"));
             Check("opponent draft opens before placement", builder.customElementEditorPanel.IsOpen() && builder.customElementPlacer.GetElement() == null);
             Check("opponent draft exposes the car model before placement", builder.customElementPlacer.creationState.State("carModel") != null);
@@ -465,16 +622,21 @@ namespace Api {
             builder.CloseAllPanels(); builder.SelectObject(opponent);
             builder.customElementPlacer.placementMode = ElementPlacer.CustomElementPlacer.PlacementMode.AppendPoint;
             builder.customElementPlacer.arrayPath = "spline";
-            hit.point = new Vector3(-90,0,-100);
-            History.UndoManager.Record("first waypoint", () => builder.customElementPlacer.PlaceAt(hit));
+            History.UndoManager.Record("first waypoint", () => builder.customElementPlacer.PlaceAt(OnIntersection(crossing)));
             hit.point = new Vector3(-80,0,-90);
             History.UndoManager.Record("second waypoint", () => builder.customElementPlacer.PlaceAt(hit));
             M.FlagAsChanged(); M.ProcessUpdate();
             Check("subsequent clicks append low-poly waypoint controls", opponent.GetAllPoints().Count == 2 && opponent.state.Int("curveType") == 2 && PC.Owner(opponent.state) == owner);
             var start = opponent.state.State("carModel").Vector3("localPosition");
-            GO.SetPosition(opponent.GetAllPoints()[0].GetObject(), new Vector3(-85,3,-100));
+            GO.SetPosition(opponent.GetAllPoints()[1].GetObject(), new Vector3(-85,3,-100)); //the finish (the other one is on its intersection)
             M.FlagAsChanged(); M.ProcessUpdate();
             Check("waypoint edits preserve the independent starting car", opponent.state.State("carModel").Vector3("localPosition") == start);
+            car = opponent.FindParametricObject("carModel", new());
+            History.UndoManager.Record("click edited opponent car", () => CallBuilder<bool>("SelectCityPropertiesObject", car));
+            Check("clicking the car of the edited opponent opens its transform editor", transformPanel.IsOpen() && transformPanel.instance == car);
+            typeof(EditorPanels.TransformPropertiesEditorPanel).GetMethod("BackToParent", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).Invoke(transformPanel, null);
+            Check("back from the car returns to its opponent editor with clickable points", builder.customElementEditorPanel.IsOpen() && builder.customElementEditorPanel.GetElement() == opponent
+                && builder.terrainClick.modifier == builder.customElementPlacer);
             builder.CloseAllPanels();
             foreach (var type in new[] { "propLine", "propLine", "propPolygon" }) {
                 Select(race);

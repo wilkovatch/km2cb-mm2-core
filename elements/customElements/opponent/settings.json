@@ -12,6 +12,9 @@
             2
         ],
         "defaultCurveType": 2,
+        "acceptTarget": "opponents.acceptTarget",
+        "intersectionTargets": true,
+        "targetsHint": "OPPONENT_WAYPOINTS_HINT",
         "line": {
             "color": "yellow",
             "always": true,

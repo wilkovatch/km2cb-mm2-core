@@ -28,8 +28,8 @@ The first click places the opponent's starting car. Later clicks draw the route 
 
 The game doesn't look for a way between two waypoints. It follows a road only from one intersection to the next one, so:
 
-- Put a waypoint **on every intersection** the opponent goes through, including those where it goes straight on. A waypoint in the middle of a road is ignored by the game, and the opponent goes astray.
-- The last waypoint is the finish. It can be anywhere, best on the road after the last intersection.
+- Put a waypoint **on every intersection** the opponent goes through, including those where it goes straight on. The waypoints go only on the centers of the intersections, which are shown while you add them, and they follow the intersections when you move them. A waypoint in the middle of a road would be ignored by the game.
+- The last waypoint is the finish. It can be anywhere, best on the road after the last intersection. To add a waypoint once the finish is placed, select the finish and use the click mode **Add before selected**.
 - Between two waypoints that are not on neighboring intersections, the opponent leaves the roads and drives straight to the next one, through whatever is in the way. This is fine for a shortcut across an open square, but not through buildings.
 
 **Check opponent routes**, in the panel of the race or of an opponent, finds these problems without exporting. It lists them, and draws over the city the way each opponent will go: green along the roads, orange where it drives straight, red where it hits a building or leaves the city. Select a problem and press **Zoom to it** to see where it is. The export lists the same problems as warnings.

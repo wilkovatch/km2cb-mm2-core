@@ -455,6 +455,7 @@
 	"BRIDGE_PREVIEW_TOOLTIP": "Editor only. Previewing another pose does not change the exported bridge or its behavior.",
 	"BRIDGE_REPLACES": "Replace city bridge (race only)",
 	"BRIDGE_REPLACES_TOOLTIP": "For a race-owned bridge, pick the city bridge to replace in that race: it is hidden while the race is selected. Leave empty to add another bridge. The other city bridges remain in that race.",
+	"OPPONENT_WAYPOINTS_HINT": "Put a waypoint on every intersection the opponent drives through: the game needs them there, so the waypoints go only on the centers of the intersections. The last one is the finish and goes anywhere. To add one after it, select the finish and use the click mode \"Add before selected\".",
 	"BRIDGE_PLACEMENT_HINT": "Click the first hinge, then the opposite one: a cyan free road end attaches the hinge to it. Click mode > Place the points one by one places them again. Models keep their original size. Leave the moving deck clear of static roads. Import MM2 game assets for the stock models.",
 	"RACE_BRIDGES": "Bridges",
 	"BRIDGES_CREATE_HINT": "To add one, use Create > Moving objects > Movable bridge"
