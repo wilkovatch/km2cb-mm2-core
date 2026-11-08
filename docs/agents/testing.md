@@ -28,7 +28,7 @@ Verified 2026-11-06 after the move: **1567 OK, 0 failures** in the full windowed
 - Independent points have no registry ID; whole-city undo snapshots capture them through their owner, rather than reporting them as unregistered elements.
 - The existing-city terrain mode checks no-op strokes without undoing older history, and requires one history entry for each actual brush stroke.
 - Rotation checks use the native 15-degree headings (315, 60, 300, 120 and 270 degrees for their fixture directions), rather than the stale non-multiple expectations from the old test.
-- Split-mode clicks grab the test window's focus and send explicit motion/button coordinates after the long geometry checks, so they don't use a cursor left over another window.
+- Split-mode clicks send explicit motion/button coordinates after the long geometry checks, so they don't depend on where the virtual cursor was left.
 
 ### `selftest undo <folder> [--mode new|props|ui|split|load|drag|dropdown]` (`tests/Undo/UndoSelfTest.cs`)
 
@@ -38,17 +38,17 @@ Writes `undo_selftest.log` and restores `LastCity`.
 |---|---|---|
 | `new` (default) | creates one | 198 passing checks, 0 failures. The default fixture is now 2048 m, as in split mode: a 512 m fixture put the bumpy-terrain edit outside the heightmap and caused cascading history failures |
 | `split` | creates one | 0 failures, ~50 s. **Must run windowed.** `SplitModeTest` is flaky on window geometry, so rerun once before blaming a change |
-| `drag` | creates one | numeric field middle-drag, 0 failures, ~15 s. Captures the real mouse, so a moving mouse can fail the Shift check; rerun once |
+| `drag` | creates one | numeric field middle-drag, 0 failures, ~15 s |
 | `dropdown` | creates one | dropdown keys/wheel, 0 failures, ~10 s |
-| `height` | creates one | placement height (Shift + mouse movement), hidden terrain placement and snapping toggle, 30 OK, 0 failures, ~20 s. **Must run windowed.** Moves the real mouse, so rerun once before blaming a change |
-| `guide` | creates one | the guides (`UndoSelfTestGuide.cs`): Markdown parser, **all the guides of the installed cores** (chapters, links, images), refused links, panel navigation, move/resize/minimize, input. 142 OK, 0 failures, ~10 s. **Must run windowed.** Moves the real mouse. Saves frames in `guide_fixtures` next to the log: look at them after a change to the renderer, the checks can't see the layout |
+| `height` | creates one | placement height (Shift + mouse movement), hidden terrain placement and snapping toggle, 30 OK, 0 failures, ~20 s. **Must run windowed.** |
+| `guide` | creates one | the guides (`UndoSelfTestGuide.cs`): Markdown parser, **all the guides of the installed cores** (chapters, links, images), refused links, panel navigation, move/resize/minimize, input. 142 OK, 0 failures, ~10 s. **Must run windowed.** Saves frames in `guide_fixtures` next to the log: look at them after a change to the renderer, the checks can't see the layout |
 | `ui`, `load`, `props` | **a copy** of an existing city | the old test city is gone; use a copy of the api self-test city (`<scratch>/api/city`) or ask the maintainer for one |
 
 Load/ui modes catch bugs that the scratch city misses. Reproduce user-reported bugs on a copy of a real city.
 
 Simulating input in self-tests:
 
-- `Input.ActionPress` does **not** work for clicks (the await continuations run after `_Process`), and `InputEventAction` counts as consumed by the UI. Use `WarpMouse` + `Input.ParseInputEvent(new InputEventMouseButton { ButtonIndex = Left, Pressed = true, Position/GlobalPosition = mouse })`, then release.
+- `Input.ActionPress` does **not** work for clicks (the await continuations run after `_Process`), and `InputEventAction` counts as consumed by the UI. Use `GameEngine.Input.WarpMouse(GetViewport(), mouse)` + `Input.ParseInputEvent(new InputEventMouseButton { ButtonIndex = Left, Pressed = true, Position/GlobalPosition = mouse })`, then release.
 - Terrain modifiers need `Input.ActionPress("Select")` to apply.
 - Panel buttons: reflection on `EditorPanelElements.Button`'s private `button`, then `EmitSignal(Pressed)` (goes through the undo recording). Reflection doesn't find a base class's private fields through the derived type, so use `typeof(Base).GetField`.
 - Panels may be rebuilt when an element is selected: read panel fields after `SelectObject`.

@@ -3,9 +3,9 @@
 The C# API and undo scenarios live here and are compiled on demand by the builder. No compiled test files are committed. Run commands from a built builder source checkout, with the .NET SDK available:
 
 ```text
-<godot console executable> --path . --resolution 1152x648 -- selftest api <new scratch folder> --core MidtownMadness2
-<godot console executable> --path . --resolution 1152x648 -- selftest api <new scratch folder> --core MidtownMadness2 --focus parkedCar
-<godot console executable> --path . --resolution 1152x648 -- selftest undo <new scratch folder> --core MidtownMadness2 --mode new
+python Tests/run_in_background.py "<godot console executable>" --path . --resolution 1152x648 -- selftest api <new scratch folder> --core MidtownMadness2
+python Tests/run_in_background.py "<godot console executable>" --path . --resolution 1152x648 -- selftest api <new scratch folder> --core MidtownMadness2 --focus parkedCar
+python Tests/run_in_background.py "<godot console executable>" --path . --resolution 1152x648 -- selftest undo <new scratch folder> --core MidtownMadness2 --mode new
 ```
 
 The scratch city folder must be new for creation scenarios. Logs and screenshots are written next to it. Program settings are restored by the generic runner. Use a window for rendered, picking and mouse/keyboard checks. Follow the builder's rule to ask before multi-minute suites. This documentation was written with Claude Code and other AI agents.
@@ -44,6 +44,6 @@ The restored `parkedCar` group tests authored heights and manual **Project to gr
 | `guide` | Guide parsing/content/links and the panel's navigation, geometry and input; writes `guide_fixtures` screenshots |
 | `props`, `ui`, `load`, `selection` | A disposable copy of an existing city: prop selection history, editor restoration, terrain undo and selection cleanup |
 
-Input modes move the real mouse. Keep the window at the documented resolution and rerun once when external input interferes. Existing-city scenarios must identify their own fixture objects rather than depend on old registry IDs.
+Input modes move a simulated cursor (the builder's `GameEngine.Input`), not the user's, and the window ignores the real keyboard and mouse. Launch windowed runs through the builder's `Tests/run_in_background.py` so the window doesn't take the focus. Keep the window at the documented resolution. Existing-city scenarios must identify their own fixture objects rather than depend on old registry IDs.
 
 The pre-move baselines were one API prop-count failure and 35 undo failures. The API assertion now counts only exportable prop-line/polygon fixtures, excluding unrelated custom-road previews. The undo failure began with a terrain edit outside the former 512 m fixture; creation uses 2048 m and checks the edit bounds. See [agent test notes](../docs/agents/testing.md) for detailed fixture pitfalls and validation evidence, and the builder's [Core Testing](../../../../wiki/Core-Testing.md) for the provider contract.

@@ -222,7 +222,7 @@ namespace History {
         }
 
         async Task MouseMove(Vector2 to) {
-            builder.GetViewport().WarpMouse(to);
+            GameEngine.Input.WarpMouse(builder.GetViewport(), to);
             Input.ParseInputEvent(new InputEventMouseMotion { Position = to, GlobalPosition = to });
             await Frames(2);
         }

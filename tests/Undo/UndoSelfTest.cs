@@ -1462,7 +1462,7 @@ namespace History {
             Check("split: the lines along the roads are shown while placing a road", hovered != null);
             if (hovered == null) return;
             var point = hovered.splitLine.Resolve(hovered.curvePoints[hovered.curvePoints.Count / 2]).Value.point;
-            GetViewport().WarpMouse(cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(point)));
+            GameEngine.Input.WarpMouse(GetViewport(), cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(point)));
             await Frames(10);
             var placer = (ElementPlacer.RoadPlacer)builder.terrainClick.modifier;
             Check("split: the edited road has no line", !GO.GetEnabled(placer.GetRoad().splitLine));
@@ -1497,19 +1497,18 @@ namespace History {
             GO.LookAt(cam, point);
             await Frames(6);
             var screen = cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(point));
-            GetWindow().GrabFocus();
-            GetViewport().WarpMouse(screen);
+            GameEngine.Input.WarpMouse(GetViewport(), screen);
             await Frames(6);
             Input.ParseInputEvent(new InputEventMouseMotion { Position = screen, GlobalPosition = screen });
             //what the click handling sees under the cursor
-            var ray = GameEngine.Raycast.GetRayFromScreen(cam, GetViewport().GetMousePosition());
+            var ray = GameEngine.Raycast.GetRayFromScreen(cam, GameEngine.Input.MousePosition(GetViewport()));
             var underCursor = "";
             foreach (var mask in Placer().GetLayerMasks()) {
                 var found = GameEngine.Raycast.DoRaycast(builder.helper, ray.origin, ray.direction, out var hit, 100000f, mask);
                 underCursor += (found ? hit.collider?.Name.ToString() : "-") + " ";
             }
             var onUI = (bool)typeof(TerrainClick).GetMethod("OnUI", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(builder.terrainClick, null);
-            Log("  split mode: under the cursor " + underCursor + "(mouse " + GetViewport().GetMousePosition() + ", on UI " + onUI + ", near axis " + GameEngine.Gizmo.IsNearAxis() + ")");
+            Log("  split mode: under the cursor " + underCursor + "(mouse " + GameEngine.Input.MousePosition(GetViewport()) + ", on UI " + onUI + ", near axis " + GameEngine.Gizmo.IsNearAxis() + ")");
             var oldEnd = road.endIntersection;
             var roadsBefore = AliveRoads();
             var before = Snapshot();
@@ -1702,8 +1701,7 @@ namespace History {
             GO.LookAt(cam, point);
             await Frames(6);
             var screen = cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(point));
-            GetWindow().GrabFocus();
-            GetViewport().WarpMouse(screen);
+            GameEngine.Input.WarpMouse(GetViewport(), screen);
             await Frames(6);
             Input.ParseInputEvent(new InputEventMouseMotion { Position = screen, GlobalPosition = screen });
             var count = road.points.Count;
@@ -1750,9 +1748,9 @@ namespace History {
             await Frames(6);
 
             async Task<Vector3?> Click(Vector3 point) {
-                GetViewport().WarpMouse(cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(point)));
+                GameEngine.Input.WarpMouse(GetViewport(), cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(point)));
                 await Frames(3);
-                var mouse = GetViewport().GetMousePosition();
+                var mouse = GameEngine.Input.MousePosition(GetViewport());
                 var ray = GameEngine.Raycast.GetRayFromScreen(cam, mouse);
                 var onGround = GameEngine.Raycast.DoRaycast(builder.helper, ray.origin, ray.direction, out var hit, 100000f, 1 << 3);
                 InputEventMouseButton Event(bool pressed) => new InputEventMouseButton {
@@ -1899,11 +1897,11 @@ namespace History {
             await Frames(6);
             Vector2 Screen(Vector3 p) => cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(p));
             async Task Move(Vector3 p) {
-                GetViewport().WarpMouse(Screen(p));
+                GameEngine.Input.WarpMouse(GetViewport(), Screen(p));
                 await Frames(3);
             }
             async Task Button(bool pressed) {
-                var mouse = GetViewport().GetMousePosition();
+                var mouse = GameEngine.Input.MousePosition(GetViewport());
                 Input.ParseInputEvent(new InputEventMouseButton { ButtonIndex = MouseButton.Left, Pressed = pressed, Position = mouse, GlobalPosition = mouse });
                 await Frames(4);
             }
@@ -1945,9 +1943,9 @@ namespace History {
             var count = M.meshes.Count;
             //A parallel ray, a ray pointing away from the plane and UI crossings keep the last heading.
             var action = builder.terrainClick.modifier;
-            action.UpdatePlacementRotation(GetViewport().GetMousePosition(), position + Vector3.Up * 10, Vector3.Right, false, () => M.FlagAsChanged());
-            action.UpdatePlacementRotation(GetViewport().GetMousePosition(), position + Vector3.Up * 10, Vector3.Up, false, () => M.FlagAsChanged());
-            action.UpdatePlacementRotation(GetViewport().GetMousePosition(), position + new Vector3(10, 10, 0), Vector3.Down, true, () => M.FlagAsChanged());
+            action.UpdatePlacementRotation(GameEngine.Input.MousePosition(GetViewport()), position + Vector3.Up * 10, Vector3.Right, false, () => M.FlagAsChanged());
+            action.UpdatePlacementRotation(GameEngine.Input.MousePosition(GetViewport()), position + Vector3.Up * 10, Vector3.Up, false, () => M.FlagAsChanged());
+            action.UpdatePlacementRotation(GameEngine.Input.MousePosition(GetViewport()), position + new Vector3(10, 10, 0), Vector3.Down, true, () => M.FlagAsChanged());
             Check("rotation: invalid plane rays and UI crossings keep the heading", GO.GetRotation(mesh).DistanceTo(rotation) < 0.01f);
             await Button(false);
             await Move(position + new Vector3(0, 0, -40));
@@ -1962,7 +1960,7 @@ namespace History {
             builder.CloseAllPanels();
             builder.terrainClick.modifier = meshPlacer;
             await Move(new Vector3(-50, 0, -30));
-            var mouseStart = GetViewport().GetMousePosition();
+            var mouseStart = GameEngine.Input.MousePosition(GetViewport());
             PlacementHeight.BeginHold(new Vector3(-50, 0, -30), mouseStart);
             PlacementHeight.Update(cam, mouseStart - new Vector2(0, 60));
             PlacementHeight.EndHold();
@@ -2130,7 +2128,7 @@ namespace History {
             Vector2 Screen(Vector3 p) => cam.UnprojectPosition(GameEngine.Vector3.DecodePosition(p));
             void Send(InputEvent @event) => Input.ParseInputEvent(@event);
             async Task MoveTo(Vector2 pos) {
-                GetViewport().WarpMouse(pos);
+                GameEngine.Input.WarpMouse(GetViewport(), pos);
                 await Frames(2);
             }
             async Task Shift(bool pressed) {
@@ -2144,7 +2142,7 @@ namespace History {
                 await Frames(2);
             }
             async Task Button(MouseButton button, bool shift = false) {
-                var mouse = GetViewport().GetMousePosition();
+                var mouse = GameEngine.Input.MousePosition(GetViewport());
                 Send(new InputEventMouseButton { ButtonIndex = button, Pressed = true, Position = mouse, GlobalPosition = mouse, ShiftPressed = shift });
                 await Frames(2);
                 Send(new InputEventMouseButton { ButtonIndex = button, Pressed = false, Position = mouse, GlobalPosition = mouse, ShiftPressed = shift });
@@ -2415,7 +2413,7 @@ namespace History {
             var popup = dropdown.GetPopup();
             void Send(InputEvent @event) => Input.ParseInputEvent(@event);
             async Task Click(Vector2 pos) {
-                Input.WarpMouse(pos);
+                GameEngine.Input.WarpMouse(GetViewport(), pos);
                 await Frames(2);
                 Send(new InputEventMouseButton { ButtonIndex = MouseButton.Left, Pressed = true, Position = pos, GlobalPosition = pos, ButtonMask = MouseButtonMask.Left });
                 await Frames(1);
@@ -2459,7 +2457,7 @@ namespace History {
             if (!popup.Visible) return;
             var cameraTransform = camera.GlobalTransform;
             var listPos = popup.Position + popup.Size / 2;
-            Input.WarpMouse(listPos);
+            GameEngine.Input.WarpMouse(GetViewport(), listPos);
             await Frames(3);
             for (int i = 0; i < 5; i++) {
                 foreach (var pressed in new[] { true, false }) {
@@ -2505,7 +2503,7 @@ namespace History {
             void Send(InputEvent @event) => Input.ParseInputEvent(@event);
             async Task Drag(LineEdit field, Vector2 motion, int count, bool shift = false, bool cancel = false, bool ctrl = false) {
                 var pos = field.GetGlobalRect().GetCenter();
-                Input.WarpMouse(pos);
+                GameEngine.Input.WarpMouse(GetViewport(), pos);
                 await Frames(2);
                 Send(new InputEventMouseButton { ButtonIndex = MouseButton.Middle, Pressed = true, Position = pos, GlobalPosition = pos, ButtonMask = MouseButtonMask.Middle });
                 await Frames(2);
@@ -2536,7 +2534,7 @@ namespace History {
             var count = UndoCount();
             var pressed = false;
             var pos0 = segments.GetGlobalRect().GetCenter();
-            Input.WarpMouse(pos0);
+            GameEngine.Input.WarpMouse(GetViewport(), pos0);
             await Frames(2);
             Send(new InputEventMouseButton { ButtonIndex = MouseButton.Middle, Pressed = true, Position = pos0, GlobalPosition = pos0, ButtonMask = MouseButtonMask.Middle });
             await Frames(2);
@@ -2550,7 +2548,7 @@ namespace History {
             Log("segments: " + segments0 + " -> " + segments1 + " (field '" + segments.Text + "')");
             Check("dragging right increases an integer field and its value", segments1 > segments0 && segments.Text == segments1.ToString());
             Check("the drag is a single undo step (" + (UndoCount() - count) + " new entries)", UndoCount() == count + 1);
-            Check("the mouse is visible again after the drag", Input.MouseMode == Input.MouseModeEnum.Visible);
+            Check("the mouse is visible again after the drag", GameEngine.Input.MouseMode == Input.MouseModeEnum.Visible);
             var after = Snapshot();
             UndoManager.Undo();
             await Frames(6);

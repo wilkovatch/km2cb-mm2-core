@@ -134,7 +134,7 @@ namespace Api {
                         GO.GetPosition(preview).DistanceTo(expected + (multiple ? Vector3.Up * .1f : Vector3.Zero)) < .002f);
                     var previous = M.meshes.ToHashSet();
                     var mouse = new Vector2(550, 350);
-                    var oldMouse = GetViewport().GetMousePosition();
+                    var oldMouse = GameEngine.Input.MousePosition(GetViewport());
                     var oldUiEnabled = builder.terrainClick.uiEnabled;
                     var applied = false;
                     void ClickFrame() {
@@ -143,7 +143,7 @@ namespace Api {
                         History.UndoManager.Record("prop preview click", () => placer.Apply(hits));
                     }
                     builder.terrainClick.uiEnabled = false;
-                    GetViewport().WarpMouse(mouse);
+                    GameEngine.Input.WarpMouse(GetViewport(), mouse);
                     await Frames(2);
                     GetTree().ProcessFrame += ClickFrame;
                     try {
@@ -153,7 +153,7 @@ namespace Api {
                         GetTree().ProcessFrame -= ClickFrame;
                         Input.ParseInputEvent(new InputEventMouseButton { ButtonIndex = MouseButton.Left, Pressed = false, Position = mouse, GlobalPosition = mouse });
                         builder.terrainClick.uiEnabled = oldUiEnabled;
-                        GetViewport().WarpMouse(oldMouse);
+                        GameEngine.Input.WarpMouse(GetViewport(), oldMouse);
                     }
                     var created = M.meshes.Where(m => !previous.Contains(m)).ToArray();
                     try {
