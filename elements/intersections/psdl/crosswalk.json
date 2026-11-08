@@ -1,0 +1,22 @@
+{
+	"staticDefinitions": [
+		{
+			"name": "cwAdjLen",
+			"type": "float",
+			"value": "max(1, round(cwWidth / cwSize))"
+		}
+	],
+	"textures": [
+		"crosswalkTexture"
+	],
+	"texturesMapping": {
+		"crosswalk": [
+			0
+		]
+	},
+	"components": [
+		{
+			"name": "crosswalk"
+		}
+	]
+}
