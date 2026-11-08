@@ -6,7 +6,7 @@ Choose **MM2 archive (.ar)** as the file type to get a single file. It is a zip 
 
 The archive contains:
 
-- The exported files, with the same layout as a loose export
+- The exported files, with the same layout as a loose export, named after **Exported city file name** (or the name of the archive, when it is empty)
 - The `geometry` and `texture` folders of the city, with your custom meshes and textures
 
 If a custom file has the same name as an exported file, the exported file wins. Placeholder files and the `.km2-*` lists are left out.

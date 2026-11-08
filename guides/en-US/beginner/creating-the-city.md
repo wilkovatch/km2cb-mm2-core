@@ -22,7 +22,7 @@ Open **Edit → City properties**. For now, the **Info** and **AIMAP** tabs are 
 In **Info**:
 
 - **City name** is the name shown in the game menus.
-- **Exported city file name** is the file name suggested when you export.
+- **Exported city file name** is the file name suggested when you export, and the internal name of the city in an `.ar` archive.
 
 In **AIMAP**:
 

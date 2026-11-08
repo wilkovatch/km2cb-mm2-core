@@ -180,6 +180,27 @@ class ExportOverwrite(unittest.TestCase):
             for path, payload in previews.items():
                 self.assertEqual(payload, path.read_bytes())
 
+    def archive_names(self, directory, file_name):
+        data = city()
+        data['cityProperties']['cityFileName'] = file_name
+        self.run_export(directory, data, packAr=True)
+        with zipfile.ZipFile(Path(directory) / 'test.ar') as stream:
+            return set(stream.namelist())
+
+    def test_archive_contents_use_the_exported_city_file_name(self):
+        # the archive keeps the chosen name, the city inside it is named after the city properties
+        with tempfile.TemporaryDirectory() as directory:
+            names = self.archive_names(directory, 'mycity')
+            self.assertIn('city/mycity.psdl', names)
+            self.assertIn('race/mycity/mycity_parkedcar.pathset', names)
+            self.assertIn('tune/mycity.cinfo', names)
+            self.assertFalse([name for name in names if 'test' in name.lower()], names)
+
+    def test_invalid_exported_city_file_name_falls_back_to_the_archive_name(self):
+        with tempfile.TemporaryDirectory() as directory:
+            names = self.archive_names(directory, '../bad')
+            self.assertIn('city/test.psdl', names)
+
 
 if __name__ == '__main__':
     unittest.main()

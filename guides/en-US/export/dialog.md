@@ -18,7 +18,7 @@ See [Archive or loose files](archive.md) to help you choose.
 
 ## The name
 
-The name of the file you choose becomes the **internal name** of the city: every file is named after it, as in `city/<city>.psdl`. **Exported city file name** in the **Info** tab of the city properties sets the name suggested here. The name shown in the game comes from **City name**, in the same tab.
+The **internal name** of the city names every file, as in `city/<city>.psdl`. For loose files it is the name of the file you choose. In an archive it is **Exported city file name**, in the **Info** tab of the city properties, so the archive itself can have any name; when that field is empty, the name of the archive is used. **Exported city file name** also sets the name suggested here. The name shown in the game comes from **City name**, in the same tab.
 
 ## What is in this guide
 

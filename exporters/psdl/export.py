@@ -23,7 +23,7 @@ from parked_car_export import export_parked_cars
 from generated_export import GeneratedExport
 from output_layout import OutputLayout
 from ar_packer import ArPacker
-from utils import state_bool
+from utils import state_bool, state_val
 from writers.psdl_writer import PSDLWriter
 from writers.cpvs_writer import CPVSWriter
 from writers.inst_writer import INSTWriter
@@ -70,19 +70,37 @@ def read_physics_map():
     return res
 
 
+def archive_city_name(data, ar_file):
+    # the name of the city inside an .ar archive (city/<name>.psdl, race/<name>, ...): the exported city file name of
+    # the city properties if set, as the game finds the city by it, otherwise the name of the archive
+    name = str(state_val(data.get('cityProperties'), 'cityFileName', '') or '').strip()
+    if name.lower().endswith('.psdl'):
+        name = name[:-5]
+    if name != '' and (name != os.path.basename(name) or any(c in name for c in '<>:"/\\|?*') or name in ('.', '..')
+                       or any(ord(c) < 32 for c in name)):
+        report.warning("the exported city file name \"" + name + "\" is not a valid file name, the city in the archive is named after the archive")
+        name = ''
+    return name if name != '' else os.path.splitext(os.path.basename(ar_file))[0]
+
+
 class Exporter:
-    def __init__(self, options, layout):
+    def __init__(self, options):
         self.options = options
-        self.layout = layout
+        self.layout = None
         self.verbose = options['verbose']
 
-    def read_city(self):
+    def read_data(self):
+        # the export JSON of the program, read before the layout is chosen (its city name may come from it)
         data = DecodeExportedJson.DecodeExportedJson().decode_json(self.options.input_json)
         if ExportReport is not None:
             ExportReport.init(data)
         from race_elements import validate_ownership
         validate_ownership(data)
         self.data = data
+
+    def read_city(self, layout):
+        self.layout = layout
+        data = self.data
         # the generated files first: their paths go in the data, read by the writers as the other files
         self.generated = GeneratedExport(self.layout.root, data, get_common_dir())
         if self.options['psdl']:
@@ -165,16 +183,17 @@ def main():
     chosen = os.path.abspath(options.output)
     staging = None
     try:
+        exporter = Exporter(options)
+        exporter.read_data()
         if options['packAr']:
             ar_file = os.path.splitext(chosen)[0] + ".ar"
             staging = tempfile.mkdtemp(prefix='km2_ar_')
-            layout = OutputLayout(os.path.join(staging, os.path.splitext(os.path.basename(chosen))[0] + ".psdl"))
+            layout = OutputLayout(os.path.join(staging, archive_city_name(exporter.data, ar_file) + ".psdl"))
         else:
             layout = OutputLayout(chosen)
         layout.dir('city')
 
-        exporter = Exporter(options, layout)
-        exporter.read_city()
+        exporter.read_city(layout)
         exporter.write_city_files()
         exporter.write_other_files()
         with report.guarded("the list of the generated files was not written"):
