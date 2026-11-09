@@ -18,19 +18,11 @@
 					"width": 0.75
 				},
 				{
-					"name": "blockNumber",
-					"width": 0.75
-				},
-				{
 					"name": "mergeWithConnected",
 					"width": 1.5
 				},
 				{
 					"name": "invisible",
-					"width": 1.5
-				},
-				{
-					"name": "exportToPKG",
 					"width": 1.5
 				},
 				{
@@ -42,6 +34,14 @@
 		{
 			"label": "TP_TAB_ADVANCED",
 			"elements": [
+				{
+					"name": "blockNumber",
+					"width": 1.5
+				},
+				{
+					"name": "exportToPKG",
+					"width": 1.5
+				},
 				{
 					"name": "forceBottom",
 					"width": 1.5

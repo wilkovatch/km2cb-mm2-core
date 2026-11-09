@@ -25,7 +25,7 @@ The exporter removes the thin spikes that can form in a perimeter, for example a
 ## Choosing the room
 
 - **Merge with other connected patches** on a terrain patch shares a room with the connected patches that also have it set.
-- **Room number** overrides the automatic choice, when it is greater than 0. Be careful using it together with railings.
+- **Room number**, in the **Advanced** tab of roads, intersections and terrain patches, overrides the automatic choice, when it is greater than 0. Be careful using it together with railings.
 - **Perimeter-only room** makes a patch part of a room's perimeter, with nothing drawn.
 
 ## Rooms on top of each other

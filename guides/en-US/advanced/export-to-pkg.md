@@ -1,6 +1,6 @@
 # Export to PKG
 
-Check **Export to PKG** on a road, intersection, terrain patch or building line to export it as a mesh instead of PSDL geometry. It saves PSDL vertices, and allows shapes that the PSDL can't have.
+Check **Export to PKG**, in the **Advanced** tab of a road, intersection, terrain patch or building line, to export it as a mesh instead of PSDL geometry. It saves PSDL vertices, and allows shapes that the PSDL can't have.
 
 ## What happens
 

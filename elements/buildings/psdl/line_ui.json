@@ -23,10 +23,6 @@
 					"width": 1.5
 				},
 				{
-					"name": "exportToPKG",
-					"width": 1.5
-				},
-				{
 					"name": "hudmapCategory",
 					"width": 1.5
 				}
@@ -37,6 +33,15 @@
 			"elements": [
 				{
 					"name": "loopGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "BL_TAB_ADVANCED",
+			"elements": [
+				{
+					"name": "exportToPKG",
 					"width": 1.5
 				}
 			]

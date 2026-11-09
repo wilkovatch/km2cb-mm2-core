@@ -16,7 +16,12 @@
 				{
 					"name": "assumeMM2Hook",
 					"width": 1.5
-				},
+				}
+			]
+		},
+		{
+			"label": "CP_SKY",
+			"elements": [
 				{
 					"name": "skyMesh",
 					"width": 1.5

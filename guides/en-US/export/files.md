@@ -45,7 +45,7 @@
 
 **`city/<city>.aimap`** and **`race/<city>/roam.aimap`** hold the settings of the traffic and pedestrians, and those of free roaming.
 
-**`city/<city>.sky`** names the sky dome of the city, with its height and rotation speed (the **Sky** properties in the **Info** tab of the city properties). Without it the game shows a black sky.
+**`city/<city>.sky`** names the sky dome of the city, with its height and rotation speed (the properties in the **Sky** tab of the city properties). Without it the game shows a black sky.
 
 Each race has these files in **`race/<city>/`**:
 

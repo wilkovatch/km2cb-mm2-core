@@ -26,10 +26,6 @@
 					"width": 0.5
 				},
 				{
-					"name": "exportToPKG",
-					"width": 1.5
-				},
-				{
 					"name": "hudmapCategory",
 					"width": 1.5
 				},
@@ -51,11 +47,7 @@
 				},
 				{
 					"name": "applyHeightAnyway",
-					"width": 0.75
-				},
-				{
-					"name": "blockNumber",
-					"width": 0.75
+					"width": 1.5
 				},
 				{
 					"name": "texture1",
@@ -347,6 +339,14 @@
 		{
 			"label": "RD_TAB_ADVANCED",
 			"elements": [
+				{
+					"name": "blockNumber",
+					"width": 1.5
+				},
+				{
+					"name": "exportToPKG",
+					"width": 1.5
+				},
 				{
 					"name": "rail_forceBottom",
 					"width": 1.5

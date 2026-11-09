@@ -9,12 +9,13 @@ The panel of a **PSDL compatible** road has these tabs:
 
 | Tab | What it sets |
 |---|---|
-| **Main** | Widths, sidewalks, textures, and export options |
+| **Main** | Widths, sidewalks, textures, and the main export options |
 | **Inters.** | Crosswalks and how the road meets its intersections |
 | **Traffic** | Lanes, parking, traffic rules and traffic lights |
 | **Divider** | The divider down the middle of the road |
 | **Props** | Things placed along the road |
 | **Railing** | Railings, walls and galleries |
+| **Advanced** | Room number, **Export to PKG** and the bottom wall |
 
 ## Widths and textures
 

@@ -36,10 +36,6 @@
 				{
 					"name": "applyHeightAnyway",
 					"width": 0.75
-				},
-				{
-					"name": "blockNumber",
-					"width": 0.75
 				}
 			]
 		},
@@ -182,6 +178,15 @@
 			"elements": [
 				{
 					"name": "propsGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "RD_TAB_ADVANCED",
+			"elements": [
+				{
+					"name": "blockNumber",
 					"width": 1.5
 				}
 			]
