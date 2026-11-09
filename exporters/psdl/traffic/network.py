@@ -249,7 +249,10 @@ class BaiNetworkBuilder:
             if not self.has_bai_geometry(road_id):
                 return (None, 'the road ' + self.road_name(road_id) + ' is not exported or has no traffic geometry')
         for road_id in intersection['roads']:
-            block = self.records[road_id]['block']
+            # the room of the road at the joint (the last one at its end, for a road exported as several rooms)
+            rooms = self.rooms(road_id)
+            at_end = self.records[road_id]['road']['endIntersectionId'] == intersection['id']
+            block = rooms[-1] if at_end else rooms[0]
             if block not in used_blocks:
                 return ((None, intersection, block), None)
         return (None, 'the rooms of both roads are already used by other intersections')

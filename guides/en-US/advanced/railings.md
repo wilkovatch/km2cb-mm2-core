@@ -8,6 +8,8 @@ Go to the **Railing** tab of the road and set the properties. The options are **
 
 The **Continue** checkboxes at the bottom of the tab say whether the railing goes on across each neighboring intersection, separately for the left and right side at each end.
 
+Pieces of road drawn through an intersection have no railings, as in the editor.
+
 ## Along the edges of a room
 
 A **Rail** puts a railing or a wall on edges of a room: the perimeter of a terrain patch, or the sides of a road or intersection.

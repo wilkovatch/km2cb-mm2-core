@@ -36,7 +36,12 @@ class GeneratedExport:
 
     def lod_textures(self):
         self.passes.add('lod')
-        roads = [r for r in self.data.get('roads') or [] if not r.get('ghost') and state_bool(r['data']['fields']['state'], 'generateLodTexture')]
+        # the roads, and the pieces of road through the intersections (with the state of the road they continue)
+        candidates = list(self.data.get('roads') or [])
+        for intersection in self.data.get('intersections') or []:
+            if not intersection.get('ghost'):
+                candidates += intersection.get('roadsThrough') or []
+        roads = [r for r in candidates if not r.get('ghost') and state_bool(r['data']['fields']['state'], 'generateLodTexture')]
         if not roads:
             return
         from generated import lod_texture  # it needs Pillow and numpy, the city may not need them

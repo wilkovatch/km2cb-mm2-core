@@ -15,11 +15,6 @@
 			"reuseInNewRoads": true
 		},
 		{
-			"name": "flatSidewalk",
-			"label": "RD_SW_SHOULDERS",
-			"type": "bool"
-		},
-		{
 			"name": "applyHeightAnyway",
 			"label": "RD_LOWER_WO_SW",
 			"tooltip": "RD_LOWER_WO_SW_TOOLTIP",
@@ -329,7 +324,7 @@
 		{
 			"name": "applyHeightAnywayI",
 			"type": "bool",
-			"value": "(not throughIntersection and applyHeightAnyway) or (throughIntersection and (not flatSidewalk or applyHeightAnyway))"
+			"value": "applyHeightAnyway or (throughIntersection and hasSidewalks)"
 		},
 		{
 			"name": "hasSidewalksI",
@@ -337,24 +332,14 @@
 			"value": "hasSidewalks and not throughIntersection"
 		},
 		{
-			"name": "hasSidewalksOrShoulders",
+			"name": "hasRealSidewalks",
 			"type": "bool",
 			"value": "hasSidewalksI"
 		},
 		{
-			"name": "hasRealSidewalks",
-			"type": "bool",
-			"value": "hasSidewalksOrShoulders and not flatSidewalk"
-		},
-		{
-			"name": "hasShoulders",
-			"type": "bool",
-			"value": "hasSidewalksOrShoulders and flatSidewalk"
-		},
-		{
 			"name": "roadWidthT",
 			"type": "float",
-			"value": "if(hasSidewalksOrShoulders, roadWidth, totalWidthI)"
+			"value": "if(hasRealSidewalks, roadWidth, totalWidthI)"
 		},
 		{
 			"name": "hasElevatedTop",
@@ -374,12 +359,12 @@
 		{
 			"name": "singleSwWidth",
 			"type": "float",
-			"value": "if(hasSidewalksOrShoulders, (totalWidthI - roadWidth) * 0.5, 0)"
+			"value": "if(hasRealSidewalks, (totalWidthI - roadWidth) * 0.5, 0)"
 		},
 		{
 			"name": "texWidth",
 			"type": "float",
-			"value": "if(hasSidewalksOrShoulders, roadWidth, totalWidthI) * 0.5"
+			"value": "if(hasRealSidewalks, roadWidth, totalWidthI) * 0.5"
 		},
 		{
 			"name": "swAdjLen",
@@ -399,7 +384,7 @@
 		{
 			"name": "hVal",
 			"type": "float",
-			"value": "if(hasShoulders, applyHeightAnywayI * 0.15, max(hasSidewalksI, applyHeightAnywayI) * 0.15)"
+			"value": "max(hasSidewalksI, applyHeightAnywayI) * 0.15"
 		},
 		{
 			"name": "sidewalkHeight",

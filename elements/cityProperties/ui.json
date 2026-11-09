@@ -16,6 +16,22 @@
 				{
 					"name": "assumeMM2Hook",
 					"width": 1.5
+				},
+				{
+					"name": "skyMesh",
+					"width": 1.5
+				},
+				{
+					"name": "skyHeight",
+					"width": 1.5
+				},
+				{
+					"name": "skyCameraHeightFactor",
+					"width": 1.5
+				},
+				{
+					"name": "skyRotationSpeed",
+					"width": 1.5
 				}
 			]
 		},

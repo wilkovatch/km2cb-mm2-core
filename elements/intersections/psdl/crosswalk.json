@@ -3,7 +3,7 @@
 		{
 			"name": "cwAdjLen",
 			"type": "float",
-			"value": "max(1, round(cwWidth / cwSize))"
+			"value": "if(cwSize > 0, max(1, round(cwWidth / cwSize)), 1)"
 		}
 	],
 	"textures": [

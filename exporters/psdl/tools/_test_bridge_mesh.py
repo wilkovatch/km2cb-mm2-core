@@ -76,8 +76,6 @@ class Generator(unittest.TestCase):
         self.assertEqual(sorted({s.y0 for s in strips}), [-0.15, 0.0], 'and the road 0.15 below it')
         road_strips = [s for s in strips if s.texture == 'road']
         self.assertEqual([(s.s0, s.s1, s.v0, s.v1) for s in road_strips], [(-4.0, 0.0, 1, 0), (0.0, 4.0, 0, 1)], 'the center in the top row of the texture')
-        self.assertEqual(gen.road_profile(dict(ROAD, flatSidewalk=True))[2], 0.0)
-        self.assertEqual(gen.road_profile(dict(ROAD, flatSidewalk=True, applyHeightAnyway=True))[2], -0.15)
         strips, half, edge = gen.road_profile(dict(ROAD, isDouble=False, hasSidewalks=False, totalWidth=7.0))
         self.assertEqual(([(s.s0, s.s1, s.v0, s.v1) for s in strips], half, edge), ([(-3.5, 3.5, 1, 0)], 3.5, 0.0))
 

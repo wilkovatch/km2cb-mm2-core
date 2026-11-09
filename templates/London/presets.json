@@ -1638,7 +1638,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": null,
@@ -1709,7 +1708,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": true,
         "echo": false,
         "propRule": null,
@@ -1780,7 +1778,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": null,
@@ -1851,7 +1848,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -2017,7 +2013,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": null,
@@ -2088,7 +2083,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -2254,7 +2248,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -2420,7 +2413,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -2610,7 +2602,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -2762,7 +2753,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -2928,7 +2918,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -3092,7 +3081,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -3258,7 +3246,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -3424,7 +3411,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -3614,7 +3600,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -3780,7 +3765,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -3996,7 +3980,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": {
@@ -4160,7 +4143,6 @@
         "backwardPark": false,
         "forwardParkWidth": 0.0,
         "backwardParkWidth": 0.0,
-        "flatSidewalk": false,
         "pedestrianStreet": false,
         "echo": false,
         "propRule": null,

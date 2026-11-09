@@ -15,7 +15,7 @@ The other folders are created next to the `city` folder. So if you export into a
 
 | Folder | Files |
 |---|---|
-| `city/` | `<city>.psdl`, `<city>.inst`, `<city>.bai`, `<city>.aimap` |
+| `city/` | `<city>.psdl`, `<city>.inst`, `<city>.bai`, `<city>.aimap`, `<city>.sky` |
 | `city/<city>/` | `props.pathset`, `decals.pathset`, `proprules.csv`, `propdefs.csv` |
 | `tune/` | `<city>.cinfo`, `<city>.mmHudMap` |
 | `race/<city>/` | `roam.aimap`, the files of each race, and the train, boat and parked car paths |

@@ -307,6 +307,23 @@ class CinfoAimapExporter:
         csvfile.writelines(line + '\n' for line in lines)
         csvfile.close()
 
+    def export_sky(self, layout, p):
+        # city/<city>.sky: "<model> <height> <camera height factor> <rotation speed>" (read with "%s %f %f %f" by
+        # 0x464cb0; without the file the game draws no sky). The dome is drawn at camera height * factor + height and
+        # turns by speed * time radians (0x464f90, 0x465150); stock: "sky_dome 0 0.95 0.005" (SF), sky_dome_l (London)
+        def number(name, default):
+            value = state_val(p, name, None)
+            try:
+                return float(value) if value is not None and value != '' else default
+            except (TypeError, ValueError):
+                report.warning('the city property ' + name + ' is not a number, ' + str(default) + ' is used')
+                return default
+        mesh = state_val(p, 'skyMesh', None)
+        model = Path(mesh).stem if mesh else 'sky_dome'
+        values = [number('skyHeight', 0.0), number('skyCameraHeightFactor', 0.95), number('skyRotationSpeed', 0.005)]
+        with open(layout.dir('city') + layout.city_name + '.sky', 'w', newline='') as sky:
+            sky.write(model + ' ' + ' '.join('%g' % v for v in values) + '\r\n')
+
     def export_cinfo_aimap(self, layout):
         # layout: the OutputLayout of the export (see output_layout.py)
         self.filename = layout.psdl
@@ -350,6 +367,8 @@ class CinfoAimapExporter:
         ]
         cinfo.writelines(line + '\n' for line in cinfo_lines)
         cinfo.close()
+
+        self.export_sky(layout, p)
 
         # write the aimaps
         racesubfolder = layout.dir('race')

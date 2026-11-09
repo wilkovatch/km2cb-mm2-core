@@ -10,6 +10,11 @@ from traffic.network import BaiNetworkBuilder, is_seamless
 from traffic.rooms import RoomFinder
 from decals import export_decals
 
+# The game draws a road room of many sections broken (no road texture, missing divider walls; seen in game on a
+# 110-section room, while 57 sections looked right; stock rooms have at most 15). Longer PSDL roads are exported as
+# several rooms (JsonProcessor.split_long_road)
+MAX_ROAD_SECTIONS = 40
+
 
 def get_inst_modifiers(mesh, state):
     # the modifiers of the INST record of a mesh instance, warning about the combinations that don't work
@@ -107,15 +112,20 @@ class JsonProcessor:
     def road_has_divider(self, state):
         return state_bool(state, 'isDouble') and state_int(state, 'divider') > 0
 
-    def road_has_sidewalks_or_shoulders(self, state, runtime_state):
+    def road_has_sidewalks(self, state, runtime_state):
         has_sidewalks_i = state_bool(state, 'hasSidewalks') and not state_bool(runtime_state, 'throughIntersection')
         return has_sidewalks_i and state_bool(state, 'isDouble')
 
-    def road_has_sidewalks(self, state, runtime_state):
-        return self.road_has_sidewalks_or_shoulders(state, runtime_state) and not state_bool(state, 'flatSidewalk')
-
-    def road_has_shoulders(self, state, runtime_state):
-        return self.road_has_sidewalks_or_shoulders(state, runtime_state) and state_bool(state, 'flatSidewalk')
+    def road_section_count(self, road, mesh, state, vps):
+        # the sections of the mesh of a road: the cap vertices of its components (divider ends, wall ends) come after
+        # them, so their count is the one of the section vertices of the road when it has them
+        fields = road['data']['fields']
+        per_section = fields.get('sectionVertexCount') or 0
+        section_vertices = fields.get('sectionVertices') or []
+        if per_section > 0 and len(section_vertices) >= 2 * per_section and len(section_vertices) // per_section * vps <= len(mesh['vertices']):
+            return len(section_vertices) // per_section
+        has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1
+        return (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
 
     def road_has_rail(self, state):
         return state_int(state, 'rail_type') > 0 and (state_bool(state, 'rail_hasLeft') or state_bool(state, 'rail_hasRight'))
@@ -157,10 +167,8 @@ class JsonProcessor:
     def get_road_sections_layout(self, state, runtime_state):
         # the vertices of each mesh section used by the psdl road (and by the BAI), and the psdl road kind
         section_verts = []
-        shoulder_1_section_verts = []
-        shoulder_2_section_verts = []
         cur_v = 0
-        sw_skip = (2 if self.road_has_shoulders(state, runtime_state) else 3) if self.road_has_sidewalks(state, runtime_state) else 0
+        sw_skip = 3 if self.road_has_sidewalks(state, runtime_state) else 0
         div_skip = 0
         num_tex = 0
         div_type = None
@@ -189,9 +197,6 @@ class JsonProcessor:
             if sw_skip == 3:
                 section_verts.append(cur_v)
                 cur_v += 1
-            elif sw_skip == 2:
-                shoulder_1_section_verts.append(cur_v)
-                shoulder_1_section_verts.append(cur_v + 1)
             cur_v += sw_skip
             section_verts.append(cur_v)
             cur_v += 1
@@ -206,9 +211,6 @@ class JsonProcessor:
             if sw_skip == 3:
                 section_verts.append(cur_v)
                 cur_v += 1
-            elif sw_skip == 2:
-                shoulder_2_section_verts.append(cur_v - 2)
-                shoulder_2_section_verts.append(cur_v - 1)
         else:
             elem_name = 'ROADN'
             num_tex = 1
@@ -218,8 +220,6 @@ class JsonProcessor:
         section_verts.reverse() #they're reversed compared to the psdl requirements
         return {
             'section_verts': section_verts,
-            'shoulder_1_section_verts': shoulder_1_section_verts,
-            'shoulder_2_section_verts': shoulder_2_section_verts,
             'elem_name': elem_name,
             'num_tex': num_tex,
             'div_type': div_type,
@@ -293,6 +293,12 @@ class JsonProcessor:
             resolved.append([surface, intersection, room])
         self.traffic_intersections[:] = resolved
 
+    def has_psdl_props(self, prop_rule):
+        # whether a road prop rule has psdl props containers on its sides
+        if type(prop_rule) is not dict:
+            return False
+        return any(state_val(state_val(prop_rule, side), 'type') == 'psdl' for side in ('left', 'right'))
+
     def get_psdl_prop_rule(self, prop_rule):
         # the number of the psdl prop rule of a road (its psdl props containers), None if it has none
         if type(prop_rule) is not dict:
@@ -323,11 +329,13 @@ class JsonProcessor:
                       instance_state,
                       has_start_intersection,
                       has_end_intersection,
-                      res):
+                      res,
+                      open_start=False,
+                      open_end=False):
+        # open_start/open_end: the start/end of the part is a joint with another part of the same road (split_long_road),
+        # without caps on the divider and the rails
         layout = self.get_road_sections_layout(state, runtime_state)
         section_verts = layout['section_verts']
-        shoulder_1_section_verts = layout['shoulder_1_section_verts']
-        shoulder_2_section_verts = layout['shoulder_2_section_verts']
         elem_name = layout['elem_name']
         num_tex = layout['num_tex']
         div_type = layout['div_type']
@@ -344,11 +352,7 @@ class JsonProcessor:
                     comma = ',' if i < 5 else ''
                     textures += self.get_tex(state['texture' + str(i)]) + comma
         vertices = []
-        shoulder_1_vertices = []
-        shoulder_2_vertices = []
         indices = []
-        shoulder_1_indices = []
-        shoulder_2_indices = []
         for i in range(num_segments):
             # the road mesh
             for j in section_verts:
@@ -357,19 +361,6 @@ class JsonProcessor:
                 for j in range(len(section_verts) - 1):
                     sec_indices = self.get_section_indices_rev(j, len(section_verts), i)
                     indices.extend(sec_indices)
-            # the shoulders (if present)
-            for j in shoulder_1_section_verts:
-                shoulder_1_vertices.append(mesh['vertices'][i * vps + j])
-            if i < num_segments - 1:
-                for j in range(len(shoulder_1_section_verts) - 1):
-                    sec_indices = self.get_section_indices(j, len(shoulder_1_section_verts), i)
-                    shoulder_1_indices.extend(sec_indices)
-            for j in shoulder_2_section_verts:
-                shoulder_2_vertices.append(mesh['vertices'][i * vps + j])
-            if i < num_segments - 1:
-                for j in range(len(shoulder_2_section_verts) - 1):
-                    sec_indices = self.get_section_indices(j, len(shoulder_2_section_verts), i)
-                    shoulder_2_indices.extend(sec_indices)
         elem = ExportedCityElement()
         elem.indices = indices
         elem.vertices = vertices
@@ -381,36 +372,27 @@ class JsonProcessor:
             rule = self.get_psdl_prop_rule(prop_rule)
             if rule is not None:
                 elem.properties['prop_rule'] = rule
+        elif parent_intersection is None and self.has_psdl_props(prop_rule):
+            # the game places the props of a prop rule along the sidewalks of a room only
+            report.warning('the road ' + og_name + ' has PSDL props but no sidewalks, where the game places them: they '
+                           'are not exported (use another props type, such as Custom line)', element=og_name, kind='road')
 
         if state['echo']: elem.properties['echo'] = '1'
         if state_bool(instance_state, 'warp'): elem.properties['warp'] = '1'
         if div_type is not None: elem.properties['divider_type'] = str(div_type)
-        if div_caps is not None: elem.properties['caps'] = str(div_caps)
+        if div_caps is not None:
+            # 1 = start cap, 2 = end cap, 3 = both
+            div_caps = str((0 if open_start else 1) + (0 if open_end else 2))
+            elem.properties['caps'] = div_caps
         if div_param is not None: elem.properties['divider_param'] = str(div_param)
         elem.mat = textures
         self.cur_road_key += 1
         elem.properties['original_id'] = 'r' + str(self.cur_road_key)
         res.append(elem)
 
-        if len(shoulder_1_vertices) > 0:
-            s_elem = ExportedCityElement()
-            s_elem.indices = shoulder_1_indices
-            s_elem.vertices = shoulder_1_vertices
-            s_elem.name = str(cur_block) + '_BLOCK'
-            s_elem.mat = self.get_tex(state['texture0'])
-            s_elem.properties['original_name'] = og_name + ' [shoulder]'
-            res.append(s_elem)
-
-        if len(shoulder_2_vertices) > 0:
-            s_elem = ExportedCityElement()
-            s_elem.indices = shoulder_2_indices
-            s_elem.vertices = shoulder_2_vertices
-            s_elem.name = str(cur_block) + '_BLOCK'
-            s_elem.mat = self.get_tex(state['texture0'])
-            s_elem.properties['original_name'] = og_name + ' [shoulder]'
-            res.append(s_elem)
-
-        if self.road_has_rail(state):
+        if parent_intersection is not None:
+            pass  # a piece of road through an intersection has no rails (rail_typeI of the road type)
+        elif self.road_has_rail(state):
             def rail_val(state, name, default):
                 return state_val(state, 'rail_' + name, default)
             def rail_bool(state, name, extra_condition = True):
@@ -430,10 +412,10 @@ class JsonProcessor:
             rl_elem.properties['has_right'] = rail_bool(state, 'hasRight')
             rl_elem.properties['is_wall'] = rail_equals(state, 'type', 2)
             rl_elem.properties['is_flat_gallery'] = rail_equals(state, 'type', 3)
-            rl_elem.properties['cap_start_left'] = rail_bool_inv(instance_state, 'continueLeftOnStartIntersection', has_start_intersection)
-            rl_elem.properties['cap_end_left'] = rail_bool_inv(instance_state, 'continueLeftOnEndIntersection', has_end_intersection)
-            rl_elem.properties['cap_start_right'] = rail_bool_inv(instance_state, 'continueRightOnStartIntersection', has_start_intersection)
-            rl_elem.properties['cap_end_right'] = rail_bool_inv(instance_state, 'continueRightOnEndIntersection', has_end_intersection)
+            rl_elem.properties['cap_start_left'] = '0' if open_start else rail_bool_inv(instance_state, 'continueLeftOnStartIntersection', has_start_intersection)
+            rl_elem.properties['cap_end_left'] = '0' if open_end else rail_bool_inv(instance_state, 'continueLeftOnEndIntersection', has_end_intersection)
+            rl_elem.properties['cap_start_right'] = '0' if open_start else rail_bool_inv(instance_state, 'continueRightOnStartIntersection', has_start_intersection)
+            rl_elem.properties['cap_end_right'] = '0' if open_end else rail_bool_inv(instance_state, 'continueRightOnEndIntersection', has_end_intersection)
             rl_elem.properties['is_curved_gallery'] = rail_equals(state, 'type', 4)
             rl_elem.properties['offset_start_left'] = rail_bool(state, 'offsetStartLeft')
             rl_elem.properties['offset_end_left'] = rail_bool(state, 'offsetEndLeft')
@@ -478,7 +460,7 @@ class JsonProcessor:
                 indices.append(2 * i + 3)
                 indices.append(2 * i + 2)
         else:
-            sw_skip = (2 if self.road_has_shoulders(state, runtime_state) else 3) if self.road_has_sidewalks(state, runtime_state) else 0
+            sw_skip = 3 if self.road_has_sidewalks(state, runtime_state) else 0
             for i in range(num_segments):
                 psdl_block.append(mesh['vertices'][i * vps])
                 psdl_block.append(mesh['vertices'][i * vps + sw_skip])
@@ -507,6 +489,34 @@ class JsonProcessor:
         else:
             return {"nul": {"indices": indices, "vertices": psdl_block}, "pkg": elem_pkg}
 
+    def split_long_road(self, res, road, mesh, num_segments, runtime_state, state, vps, og_name, prop_rule,
+                        instance_state, has_start_intersection, has_end_intersection):
+        # a PSDL road with more than MAX_ROAD_SECTIONS sections, exported as consecutive rooms of at most that many
+        # sections, sharing the section at each joint (the game draws a long road room broken, see MAX_ROAD_SECTIONS);
+        # the BAI keeps a single road through all the rooms. Returns the part of the first room
+        pieces = math.ceil((num_segments - 1) / (MAX_ROAD_SECTIONS - 1))
+        bounds = [round(k * (num_segments - 1) / pieces) for k in range(pieces + 1)]
+        report.warning('the road ' + og_name + ' has ' + str(num_segments) + ' sections: it is exported as ' + str(pieces)
+                       + ' rooms of at most ' + str(MAX_ROAD_SECTIONS) + ' sections (the game draws longer road rooms '
+                       'broken); split the road to choose where', element=og_name, kind='road')
+        rooms = []
+        first = None
+        for k in range(pieces):
+            a, b = bounds[k], bounds[k + 1]
+            n = b - a + 1
+            piece_mesh = {'vertices': mesh['vertices'][a * vps:(b + 1) * vps]}
+            block = len(self.block_perimeters) + 1
+            elem = self.get_psdl_road(piece_mesh, n, None, runtime_state, state, vps, block, og_name, prop_rule,
+                                      instance_state, has_start_intersection, has_end_intersection, res,
+                                      open_start=k > 0, open_end=k < pieces - 1)
+            first = first or elem
+            perimeter = [piece_mesh['vertices'][i * vps] for i in range(n)]
+            perimeter += [piece_mesh['vertices'][(i + 1) * vps - 1] for i in range(n - 1, -1, -1)]
+            self.add_block_perimeter(perimeter, 0)
+            rooms.append(block)
+        self.element_rooms[('road', road['id'])] = rooms
+        return first
+
     def get_road(self,
                  res,
                  road,
@@ -534,9 +544,8 @@ class JsonProcessor:
                 cur_block = manual_blocks.index(block_number) + 1
         if parent_intersection is None:
             self.element_blocks[('road', road['id'])] = cur_block
-        has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1 #todo: change if non psdl roads will be introduced
         vps = road['data']['fields']['vertsPerSection']
-        num_segments = (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
+        num_segments = self.road_section_count(road, mesh, state, vps)
         prop_rule = state_val(state, 'propRule')
 
         #get the block
@@ -548,7 +557,13 @@ class JsonProcessor:
             # the other block side (road backward, from end to start)
             block.append(mesh['vertices'][(i + 1) * vps - 1])
 
-        if state['type'] == 'psdl' and not state_bool(instance_state, 'exportToPKG'):
+        is_psdl = state['type'] == 'psdl' and not state_bool(instance_state, 'exportToPKG')
+        split = (is_psdl and parent_intersection is None and in_block is None and num_segments > MAX_ROAD_SECTIONS
+                 and cur_block == len(block_perimeters) + 1)
+        if split:
+            elem = self.split_long_road(res, road, mesh, num_segments, runtime_state, state, vps, og_name, prop_rule,
+                                        instance_state, has_start_intersection, has_end_intersection)
+        elif is_psdl:
             elem = self.get_psdl_road(mesh,
                                       num_segments,
                                       parent_intersection,
@@ -580,9 +595,13 @@ class JsonProcessor:
             # the BAI uses the vertices of the psdl road sections (also for the roads exported to pkg)
             bai_verts = self.get_road_sections_layout(state, runtime_state)['section_verts']
             bai_sections = [[mesh['vertices'][i * vps + j] for j in bai_verts] for i in range(num_segments)]
-            self.exported_roads[road['id']] = {'elem': elem, 'road': road, 'block': cur_block, 'bai_sections': bai_sections}
+            self.exported_roads[road['id']] = {'elem': elem, 'road': road, 'block': cur_block,
+                                               'rooms': self.element_rooms.get(('road', road['id'])),
+                                               'bai_sections': bai_sections}
 
-        if in_block is None:
+        if split:
+            pass  # the rooms of the parts are already added
+        elif in_block is None:
             if cur_block == len(block_perimeters) + 1:
                 self.add_block_perimeter(block, 0)
             else:
@@ -744,7 +763,11 @@ class JsonProcessor:
                 road0 = self.data['roads'][roadsJ[road0I]]
                 road1 = self.data['roads'][roadsJ[road1I]]
                 rs = self.get_junction_rail_state(road0, road1, intersection)
-                if rs is not None:
+                # a corner of no length (the mouths of the two roads meet at a point, as between roads diverging
+                # without crosswalks) has no edge to put a rail on
+                flat = [(vx[0], vx[2]) for vx in p['vertices']]
+                degenerate = len(flat) == 0 or max(math.dist(flat[0], q) for q in flat) < 0.01
+                if rs is not None and not degenerate:
                     self.get_junction_rail(res, rs, p['vertices'], p['indices'], cur_block, intersection)
             elif typ == 'junction_0': #sidewalk
                 elem = ExportedCityElement()
@@ -807,9 +830,8 @@ class JsonProcessor:
         state = road['data']['fields']['state']
         mesh = road['data']['mesh']
         og_name = parent_intersection['data']['name']
-        has_no_caps = (not self.road_has_divider(state)) or state['divider'] == 1 #todo: change if non psdl roads will be introduced
         vps = road['data']['fields']['vertsPerSection']
-        num_segments = (len(mesh['vertices']) - (0 if has_no_caps else 8)) // vps
+        num_segments = self.road_section_count(road, mesh, state, vps)
         return self.get_pkg_road(mesh,
                                  road,
                                  road['data']['fields']['runtimeState'],
@@ -992,12 +1014,17 @@ class JsonProcessor:
                 return True
         return False
 
-    def rail_room(self, state):
-        # the room of the element of the "room" reference of a rail, 0 if none
+    def rail_rooms(self, state):
+        # the rooms of the element of the "room" reference of a rail (several for a long road, see split_long_road),
+        # [] if none
         room = state.get('room')
         if not isinstance(room, dict):
-            return 0
-        return self.element_blocks.get((room.get('kind'), room.get('id')), 0)
+            return []
+        key = (room.get('kind'), room.get('id'))
+        if key in self.element_rooms:
+            return self.element_rooms[key]
+        block = self.element_blocks.get(key, 0)
+        return [block] if block > 0 else []
 
     def get_rail(self, res, element):
         data = element.get('data') or {}
@@ -1014,10 +1041,10 @@ class JsonProcessor:
         # the runs of consecutive edges in the same room
         runs = []
         outside = 0
-        room = self.rail_room(state)
+        rooms = self.rail_rooms(state)
         for a, b in zip(points, points[1:]):
-            if room > 0:
-                block = room if self.rail_edge_in_block(room - 1, a, b) else 0
+            if rooms:
+                block = next((room for room in rooms if self.rail_edge_in_block(room - 1, a, b)), 0)
             else:
                 block = self.rail_edge_block(a, b) + 1
             if block <= 0:
@@ -1429,6 +1456,7 @@ class JsonProcessor:
         self.traffic_intersections = []
         self.pkg_blocks = set()  # the rooms of the terrain patches exported to PKG
         self.element_blocks = {}  # {(kind, id): room} of the roads, intersections and terrain patches (the rooms of the rails)
+        self.element_rooms = {}  # {(kind, id): [rooms]} of the roads exported as several rooms (split_long_road)
         self.traffic = BaiNetworkBuilder(self.data, self.exported_roads, self.traffic_intersections, self.road_has_sidewalks, self.road_has_divider)
         return manual_blocks
 

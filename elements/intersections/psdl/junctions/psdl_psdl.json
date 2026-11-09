@@ -26,18 +26,6 @@
 		},
 		{
 			"fromStart": true,
-			"name": "hasShoulders",
-			"type": "bool",
-			"newName": "A_hasShoulders"
-		},
-		{
-			"fromStart": false,
-			"name": "hasShoulders",
-			"type": "bool",
-			"newName": "B_hasShoulders"
-		},
-		{
-			"fromStart": true,
 			"name": "sidewalkHeight",
 			"type": "vec3",
 			"newName": "A_swh"
@@ -418,9 +406,6 @@
 		"intersectionSidewalk": [
 			0
 		],
-		"intersectionShoulder": [
-			0
-		],
 		"rail_rail_left": [
 			1
 		],
@@ -435,11 +420,7 @@
 	"components": [
 		{
 			"name": "intersectionSidewalk",
-			"condition": "(A_hasRealSidewalks or B_hasRealSidewalks) and not (A_hasShoulders and B_hasShoulders)"
-		},
-		{
-			"name": "intersectionShoulder",
-			"condition": "A_hasShoulders and B_hasShoulders"
+			"condition": "A_hasRealSidewalks or B_hasRealSidewalks"
 		},
 		{
 			"name": "rail_rail_left",

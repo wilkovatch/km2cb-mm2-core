@@ -99,7 +99,7 @@
 		"roadWidth": "roadWidthT",
 		"height": "hVal",
 		"canBeSimplified": "canBeSimplified",
-		"hasSidewalks": "hasSidewalksOrShoulders"
+		"hasSidewalks": "hasRealSidewalks"
 	},
 	"components": [
 		{

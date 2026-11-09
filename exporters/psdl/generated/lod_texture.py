@@ -27,7 +27,7 @@ OVERSAMPLING = 8  # samples per side of each pixel, so that the thin lane markin
 BASE_NAME_LENGTH = 17  # the file name with _lod_<hash> and _fa stays within 31 characters, the limit of the names of the decals
 VARIANTS = ['_fa']  # the stock road textures also have a darker version with this suffix
 # what the texture depends on: the roads with the same values share it
-INPUTS = ('hasSidewalks', 'flatSidewalk', 'roadWidth', 'totalWidth', 'divider', 'dividerWidth', 'dividerParam',
+INPUTS = ('hasSidewalks', 'roadWidth', 'totalWidth', 'divider', 'dividerWidth', 'dividerParam',
           'texture0', 'texture1', 'texture3', 'texture4')
 
 
@@ -39,10 +39,10 @@ def enabled(state):
 
 def road_bands(state):
     """The bands across the road: (width, texture parameter, tiles along the road per meter, tiles across, flipped)."""
-    # as the road type: without real sidewalks the texture covers only the road (the shoulders are not part of it)
+    # as the road type: without sidewalks the texture covers the whole width
     has_sidewalks = state_bool(state, 'hasSidewalks')
     road = float(state_val(state, 'roadWidth' if has_sidewalks else 'totalWidth', 0))
-    sidewalk = (float(state_val(state, 'totalWidth', 0)) - road) * 0.5 if has_sidewalks and not state_bool(state, 'flatSidewalk') else 0
+    sidewalk = (float(state_val(state, 'totalWidth', 0)) - road) * 0.5 if has_sidewalks else 0
     divider_type = state_int(state, 'divider')
     divider = float(state_val(state, 'dividerWidth', 0)) if divider_type > 0 else 0
     half = (road - divider) * 0.5

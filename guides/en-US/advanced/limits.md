@@ -6,6 +6,7 @@
 |---|---|---|
 | Lanes per side of a road | 4 | Drops the extra lanes, warns |
 | Roads at a traffic intersection | 11 | Splits the intersection, warns |
+| Sections of a road room | About 40 (longer rooms lose their road texture and walls in the game) | Exports a longer road as several rooms, warns. Split the road yourself to choose where |
 | Different textures in the city | 511 in stock MM2 | Warns (see below) |
 | Texture index of a room with prop rules | Below 255 | Reorders them, or drops the props and warns |
 | Different INST objects | About 600 | Warns above 597 |
@@ -35,7 +36,9 @@ Reuse textures. Generated low LOD textures count too: one for each different roa
 | Exception at `0045da58` after "Placing props along road segments" (or "Invalid command" without the hook) | A room with a prop rule uses a texture index of 255 or more | Reduce the textures, or the rooms with prop rules |
 | Exception at `004a48d8` after "Loading objects...", then `memMemoryAllocator::FindHeap failed` | Too many different objects | Export fewer elements to PKG, reuse meshes |
 | A crash in the ambient traffic (around `0053a0d2`) | An intersection with more than 11 roads | Reduce the roads there |
-| A crash at `005440c5`, in the update of lane vehicles | The cause isn't known yet | |
+| A crash at `005440c5`, in the update of lane vehicles, often with `memMemoryAllocator::FindHeap failed` | One known cause: a car on a **Freeway** road keeps its lane number when it turns into the next freeway road, so a freeway road with fewer lanes than the one before it overflows | Give the same number of lanes to all the freeway roads that lead into each other, or turn **Freeway** off on the narrower ones (ramps) |
+| The game freezes when Cruise starts, with no message | The game picks the start of the player at a random traffic intersection, and tries again forever while it has a **Freeway** or **Pedestrian street** road | Keep at least one intersection with only ordinary roads |
+| The sky is black | The city has no `city/<city>.sky` file (exports from versions without it) | Export again with **Export CINFO and AIMAP** |
 | `ERROR: Opp: ..., Point - ..., Is not a intersection.` | A waypoint of an opponent is not on an intersection: the game ignores it | Put it on the intersection (**Attach to point/anchor/segment** in the panel of the opponent, then click the intersection). **Check opponent routes** finds them |
 | `ERROR: Point - ..., Is not in a cull room.` | A point of an opponent (start, waypoint or finish) is outside of every room | Move it onto a road or an intersection |
 

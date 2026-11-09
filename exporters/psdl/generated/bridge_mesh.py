@@ -81,12 +81,9 @@ def divider_strips(state, road_y, half, road):
 def road_profile(state):
     """The top of the road from left to right, as its type builds it: (strips, half of the total width, height of its edges)."""
     double = state_bool(state, 'isDouble')
-    flat = state_bool(state, 'flatSidewalk')
     with_sides = double and state_bool(state, 'hasSidewalks')
-    sidewalks = with_sides and not flat
-    shoulders = with_sides and flat
-    apply_height = state_bool(state, 'applyHeightAnyway')
-    raised = apply_height if shoulders else state_bool(state, 'hasSidewalks') or apply_height
+    sidewalks = with_sides
+    raised = state_bool(state, 'hasSidewalks') or state_bool(state, 'applyHeightAnyway')
     road_y = -CURB_HEIGHT if raised else 0.0
     edge_y = 0.0 if sidewalks else road_y
     total = float(state_val(state, 'totalWidth', 0) or 0)

@@ -104,6 +104,8 @@ A path is used only when the number of paths matches and each has a point per se
 
 **Network** (`traffic/network.py`, `BaiNetworkBuilder.build`):
 
+- **Sections of a road** (`road_section_count`): the cap vertices of the components of a road (divider and wall ends) come after its sections in the mesh, so the count is the one of its section vertices (`sectionVertices`, `sectionVertexCount`) when it has them (from the vertex count without the 8 divider cap vertices otherwise). Counting the wall caps as a section made the editor lanes (one point per section) not match, and the BAI lanes were spread evenly instead.
+- **Long roads** (`split_long_road`, more than `MAX_ROAD_SECTIONS` sections) are exported as several rooms, but stay a single BAI road: their record lists all the rooms (`rooms`), and a two-road intersection at one of their ends goes in the room at that end.
 - **Seamless intersections** (two roads joined without a surface): roads with the same layout and the same section at the joint are a single BAI road through the rooms of all of them (a *chain*, `chains`); other ones get a two-road intersection in the room of one of the roads, where the vehicles never stop (rule 3).
 - A chain becomes a BAI road only if it has a BAI intersection at both ends.
 - **Roads and intersections without geometry** (`get_geometryless_road`, and the intersections whose roads are all without geometry, `fields.geometryless`) have no parts and no room of their own. `resolve_traffic_rooms` runs just before the network (also with `traffic_only`), once every room perimeter is known. It gives a road the rooms under the centres of its sections (`traffic/rooms.py`, `RoomFinder`, as the game finds the room of a position), and an intersection the room under its centre (its surface part is `None`). One over no room is left out with a warning, and so are the chains ending on it. An intersection in the room of another BAI intersection gets a warning, because the game finds the first one of a room. In a mixed intersection, the junctions (the `junction_1.N` rails) are between the roads of `fields.geometrySortOrder`, while `fields.sortOrder` lists all the roads for the BAI.
@@ -133,7 +135,7 @@ Everything conservative goes towards more visible rooms: missed occluders, the p
 
 The exporter reports the problems with `Files/python/ExportReport.py` of the program, through `writers/report.py` (which prints them, and raises the errors without `ExportReport`).
 
-- Every `Warning:` is a warning of the report, with the element when its name is known (`original_name` of the parts, without the `[shoulder]`-like suffix: `report.element_name`).
+- Every `Warning:` is a warning of the report, with the element when its name is known (`original_name` of the parts, without the `[rail]`-like suffix: `report.element_name`).
 - `JsonProcessor.guarded_element` exports each road, intersection, terrain patch, building line, mesh instance and prop placer on its own: one that fails is reported and left out, with what it had added (its parts and its BAI records).
 - The PSDL writer writes a room that fails (e.g. a perimeter error) empty, so that the other rooms keep their index, and goes on.
 - Each file is written even if one before it failed (`report.guarded`), and the export fails at the end if there were errors.

@@ -298,19 +298,14 @@
 			"value": "totalWidth"
 		},
 		{
-			"name": "hasSidewalksOrShoulders",
+			"name": "hasRealSidewalks",
 			"type": "bool",
 			"value": "isDouble and hasSidewalks"
 		},
 		{
-			"name": "hasRealSidewalks",
-			"type": "bool",
-			"value": "hasSidewalksOrShoulders"
-		},
-		{
 			"name": "roadWidthT",
 			"type": "float",
-			"value": "if(hasSidewalksOrShoulders, roadWidth, totalWidthI)"
+			"value": "if(hasRealSidewalks, roadWidth, totalWidthI)"
 		},
 		{
 			"name": "hasRealDivider",

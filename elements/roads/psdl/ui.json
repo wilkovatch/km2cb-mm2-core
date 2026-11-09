@@ -43,15 +43,11 @@
 				},
 				{
 					"name": "hasSidewalks",
-					"width": 0.5
-				},
-				{
-					"name": "flatSidewalk",
-					"width": 0.5
+					"width": 0.75
 				},
 				{
 					"name": "isDouble",
-					"width": 0.5
+					"width": 0.75
 				},
 				{
 					"name": "applyHeightAnyway",

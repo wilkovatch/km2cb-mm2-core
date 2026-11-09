@@ -66,5 +66,6 @@
     }
   ],
   "trafficLight1": "geometry/sp_traflitsingle_ped_l.pkg",
-  "trafficLight2": "geometry/sp_traflitsingle_ped_l.pkg"
+  "trafficLight2": "geometry/sp_traflitsingle_ped_l.pkg",
+  "skyMesh": "geometry/sky_dome_l.pkg"
 }

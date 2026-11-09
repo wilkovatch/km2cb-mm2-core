@@ -96,12 +96,6 @@
 		"doubleRoad": [
 			0
 		],
-		"shoulder_left": [
-			0
-		],
-		"shoulder_right": [
-			0
-		],
 		"sidewalk_left": [
 			0
 		],
@@ -125,7 +119,7 @@
 		"canBeSimplified": "canBeSimplified",
 		"startCrosswalkTex": "textureCW0",
 		"endCrosswalkTex": "textureCW1",
-		"hasSidewalks": "hasSidewalksOrShoulders"
+		"hasSidewalks": "hasRealSidewalks"
 	},
 	"components": [
 		{
@@ -133,16 +127,8 @@
 			"condition": "hasRealSidewalks"
 		},
 		{
-			"name": "shoulder_right",
-			"condition": "hasShoulders"
-		},
-		{
 			"name": "doubleRoad",
 			"condition": "true"
-		},
-		{
-			"name": "shoulder_left",
-			"condition": "hasShoulders"
 		},
 		{
 			"name": "sidewalk_left",

@@ -70,6 +70,22 @@
 	],
 	"propsLines": [
 		{
+			"containerName": "right",
+			"condition": "not hasRealSidewalks and not throughIntersection",
+			"bounds": [
+				"v1-h+localRight",
+				"v0-h"
+			]
+		},
+		{
+			"containerName": "left",
+			"condition": "not hasRealSidewalks and not throughIntersection",
+			"bounds": [
+				"v5-h-localRight",
+				"v6-h"
+			]
+		},
+		{
 			"containerName": "rightParking",
 			"condition": "forwardPark and forwardParkWidth > 0",
 			"bounds": [
@@ -187,12 +203,6 @@
 		"doubleRoad": [
 			1
 		],
-		"shoulder_left": [
-			0
-		],
-		"shoulder_right": [
-			0
-		],
 		"sidewalk_left": [
 			0
 		],
@@ -223,16 +233,12 @@
 		"canBeSimplified": "canBeSimplified",
 		"startCrosswalkTex": "textureCW0",
 		"endCrosswalkTex": "textureCW1",
-		"hasSidewalks": "hasSidewalksOrShoulders"
+		"hasSidewalks": "hasRealSidewalks"
 	},
 	"components": [
 		{
 			"name": "sidewalk_right",
 			"condition": "hasRealSidewalks"
-		},
-		{
-			"name": "shoulder_right",
-			"condition": "hasShoulders"
 		},
 		{
 			"name": "doubleRoad",
@@ -245,10 +251,6 @@
 		{
 			"name": "singleRoad",
 			"condition": "not isDouble"
-		},
-		{
-			"name": "shoulder_left",
-			"condition": "hasShoulders"
 		},
 		{
 			"name": "sidewalk_left",

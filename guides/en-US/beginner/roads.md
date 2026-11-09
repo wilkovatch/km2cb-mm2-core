@@ -22,6 +22,8 @@ In **Main**, set **Total width** and **Road width**: the difference between them
 
 The sidewalks of the game are always 15 cm high.
 
+For a highway, leave out the sidewalks (or keep them thin, as the stock San Francisco freeway) and paint the shoulders on the road texture. The game places **PSDL prop rule** props only on sidewalks: on a road without sidewalks, the left and right rules run along its edges, for other prop types such as **Custom line** (see [Props and meshes](props-and-meshes.md)).
+
 ## Lanes
 
 In the **Traffic** tab, set **Forward lanes** and **Backward lanes**. The game supports at most **4 lanes per side**: extra lanes are dropped, with a warning in the export log.

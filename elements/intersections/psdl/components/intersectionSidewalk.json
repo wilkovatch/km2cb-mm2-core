@@ -13,7 +13,7 @@
 		{
 			"name": "percent",
 			"type": "float",
-			"value": "zAdj/totalLengthAdj"
+			"value": "if(totalLengthAdj > 0, zAdj/totalLengthAdj, 0)"
 		},
 		{
 			"name": "swh",
@@ -28,7 +28,7 @@
 		{
 			"name": "zSw",
 			"type": "float",
-			"value": "z * 2 * max(1, round(totalLength/magnitude(v1_0-v0_0)))/totalLength"
+			"value": "if(totalLength > 0, z * 2 * max(1, round(totalLength/magnitude(v1_0-v0_0)))/totalLength, 0)"
 		},
 		{
 			"name": "uv0U",

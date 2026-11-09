@@ -909,12 +909,13 @@ class PSDLWriter:
         # Generic block and intersection
         sl = self.temp_shorts_list
         trifansflag = 6
-        if self.block_flags[bi].f4 == 0:
-            if bp.geo.type == "IS":
-                self.block_flags[bi].f5 = 1
-                trifansflag = 5
-            else:
-                self.block_flags[bi].f3 = 1
+        if bp.geo.type == "IS":
+            # the surface of an intersection, also with pieces of road through it (a ROADN piece sets the road flag
+            # f4: see process_block_parts)
+            self.block_flags[bi].f5 = 1
+            trifansflag = 5
+        elif self.block_flags[bi].f4 == 0:
+            self.block_flags[bi].f3 = 1
         blockminy = float('inf')
         blockmaxy = float('-inf')
         vert_num = len(bp.geo.vertices)
@@ -1337,7 +1338,6 @@ class PSDLWriter:
 
     def preprocess_part_railc(self, bi, bp):
         # Junction tunnel/railing
-        sl = self.temp_shorts_list
         verts0 = []
         reverse_indices = {}
         vert_count = len(bp.geo.vertices)
@@ -1559,6 +1559,11 @@ class PSDLWriter:
             elif typ == "SLIVER":
                 self.process_part_sliver(b, bi, bp, bpi, last)
             self.shorts_lists.append(self.temp_shorts_list)
+        if any(bp.geo.type == "IS" for bp in b):
+            # a room with an intersection surface is an intersection room (flag 16, not the road flag 8 set by the
+            # pieces of road through it): the game finds the intersections by it (e.g. where Cruise starts)
+            self.block_flags[bi].f5 = 1
+            self.block_flags[bi].f4 = 0
 
     def block_sorted_by_type(self, order, b):
         b2 = []

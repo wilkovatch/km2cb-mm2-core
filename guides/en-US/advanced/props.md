@@ -4,7 +4,7 @@
 
 | Source | Type | Exported as |
 |---|---|---|
-| Left or right rule of a road | **PSDL prop rule** | A prop rule of the game (`propdefs.csv`, `proprules.csv`) |
+| Left or right rule of a road | **PSDL prop rule** | A prop rule of the game (`propdefs.csv`, `proprules.csv`). Only on roads with sidewalks: the game places them along the sidewalks, so on a road without sidewalks they are not exported, with a warning. Use **Custom line** there: without sidewalks the left and right rules run along the edges of the road |
 | Other rules of a road, such as middle | Any | Individual props in `props.pathset` |
 | Left or right rule | Any other type | Individual props in `props.pathset` |
 | **Prop line** | **Pathset line** | One native path in `props.pathset` |

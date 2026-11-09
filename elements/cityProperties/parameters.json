@@ -86,6 +86,33 @@
 			"type": "mesh"
 		},
 		{
+			"name": "skyMesh",
+			"label": "CP_SKY_MESH",
+			"tooltip": "CP_SKY_MESH_TOOLTIP",
+			"type": "mesh"
+		},
+		{
+			"name": "skyHeight",
+			"label": "CP_SKY_HEIGHT",
+			"placeholder": "CP_SKY_HEIGHT_PH",
+			"tooltip": "CP_SKY_HEIGHT_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "skyCameraHeightFactor",
+			"label": "CP_SKY_CAMERA_HEIGHT_FACTOR",
+			"placeholder": "CP_SKY_CAMERA_HEIGHT_FACTOR_PH",
+			"tooltip": "CP_SKY_CAMERA_HEIGHT_FACTOR_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "skyRotationSpeed",
+			"label": "CP_SKY_ROTATION_SPEED",
+			"placeholder": "CP_SKY_ROTATION_SPEED_PH",
+			"tooltip": "CP_SKY_ROTATION_SPEED_TOOLTIP",
+			"type": "float"
+		},
+		{
 			"name": "circuitRaces",
 			"label": "CP_CIRCUIT",
 			"type": "array",

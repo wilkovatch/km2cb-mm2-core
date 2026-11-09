@@ -10,7 +10,7 @@
 | **Export BAI** | On | `<city>.bai` |
 | **Export CPVS** | On | `<city>.cpvs` |
 | **Export PATHSET** | On | Props, decals, race props, trains, boats, bridges (with their generated models), parked cars |
-| **Export CINFO and AIMAP** | On | `.cinfo`, `.aimap` and race files |
+| **Export CINFO and AIMAP** | On | `.cinfo`, `.aimap`, `.sky` and race files |
 | **Export hudmap and race maps** | On | Hudmap files, menu images, previews |
 | **Export PKG and bound files** | On | Meshes and collisions of **Export to PKG** elements |
 

@@ -71,7 +71,7 @@ def has_errors():
     return _report is not None and _report.has_errors()
 
 
-# the name of the element of an original_name property (without the part, e.g. "Road 3 [shoulder]" -> "Road 3")
+# the name of the element of an original_name property (without the part, e.g. "Road 3 [rail]" -> "Road 3")
 def element_name(original_name):
     if not original_name:
         return None

@@ -45,7 +45,7 @@ class LodTexture(unittest.TestCase):
         Image.fromarray(road_image()).save(self.folder / 'common' / 'Texture' / 'Road.png')
         Image.fromarray(np.full((8, 8, 3), SIDEWALK, np.uint8)).save(self.folder / 'common' / 'Texture' / 'walk.png')
         Image.fromarray(np.full((8, 8, 3), DIVIDER, np.uint8)).save(self.folder / 'common' / 'Texture' / 'grass.png')
-        self.state = {'isDouble': True, 'hasSidewalks': True, 'flatSidewalk': False, 'totalWidth': 40.0, 'roadWidth': 30.0,
+        self.state = {'isDouble': True, 'hasSidewalks': True, 'totalWidth': 40.0, 'roadWidth': 30.0,
                       'divider': 0, 'texture0': 'texture/walk.png', 'texture1': 'texture/road.png'}
 
     def tearDown(self):
@@ -124,10 +124,6 @@ class LodTexture(unittest.TestCase):
     def test_no_sidewalks(self):
         self.state.update({'hasSidewalks': False, 'totalWidth': 30.0})
         del self.state['texture0']
-        self.assertFalse((self.image() == SIDEWALK).all(axis=2).any())
-
-    def test_shoulders_are_not_part_of_it(self):
-        self.state['flatSidewalk'] = True
         self.assertFalse((self.image() == SIDEWALK).all(axis=2).any())
 
     def test_variant(self):
