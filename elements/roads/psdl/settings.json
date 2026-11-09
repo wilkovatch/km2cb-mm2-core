@@ -294,7 +294,7 @@
 		},
 		{
 			"name": "rail_wall_bottom",
-			"condition": "rail_typeI = 2 and rail_hasLeft and rail_hasRight"
+			"condition": "(rail_typeI = 2 and rail_hasLeft and rail_hasRight) or (rail_forceBottom and not throughIntersection)"
 		}
 	]
 }

@@ -8,6 +8,8 @@ Go to the **Railing** tab of the road and set the properties. The options are **
 
 The **Continue** checkboxes at the bottom of the tab say whether the railing goes on across each neighboring intersection, separately for the left and right side at each end.
 
+With walls on both sides, the game also draws the bottom wall under the road (with the **Ground texture**), the underside of an elevated road. **Force bottom wall** (in the **Advanced** tab of the road) draws it in the other cases too (a wall on one side only, no walls, a railing or a gallery): it stops at the edge of the road on the sides without a wall. The game can't draw it there, so it is exported as a PKG mesh (one for each room of the road), which counts towards the [limit of different objects](limits.md). Terrain patches have the same option in their **Advanced** tab, with its own texture, e.g. for a patch between two elevated roads. These meshes are written without normals, so that the light of the game doesn't shade them, as the rest of the road.
+
 Pieces of road drawn through an intersection have no railings, as in the editor.
 
 ## Along the edges of a room

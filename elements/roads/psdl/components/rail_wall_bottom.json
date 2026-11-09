@@ -1,6 +1,16 @@
 {
 	"localDefinitions": [
 		{
+			"name": "wallL",
+			"type": "bool",
+			"value": "rail_typeI = 2 and rail_hasLeft"
+		},
+		{
+			"name": "wallR",
+			"type": "bool",
+			"value": "rail_typeI = 2 and rail_hasRight"
+		},
+		{
 			"name": "right",
 			"type": "vec3",
 			"value": "localRight*rail_height/3"
@@ -38,18 +48,18 @@
 		{
 			"name": "rRight",
 			"type": "vec3",
-			"value": "-right+offR"
+			"value": "if(wallR, -right+offR, vec3(0,0,0))"
 		},
 		{
 			"name": "lRight",
 			"type": "vec3",
-			"value": "right+offL"
+			"value": "if(wallL, right+offL, vec3(0,0,0))"
 		}
 	],
 	"mainMesh": {
 		"vertices": [
-			"v6+lRight-localUp-offL",
-			"v0+rRight-localUp-offR",
+			"v6+lRight-localUp-if(wallL, offL, vec3(0,0,0))",
+			"v0+rRight-localUp-if(wallR, offR, vec3(0,0,0))",
 		],
 		"uvs": [
 			"vec2(rlPos, 1)",

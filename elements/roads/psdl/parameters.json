@@ -307,6 +307,13 @@
 		},
 		{
 			"container": "rail",
+			"name": "forceBottom",
+			"label": "RD_RL_FORCE_BOTTOM",
+			"tooltip": "RD_RL_FORCE_BOTTOM_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"container": "rail",
 			"name": "height",
 			"label": "HEIGHT",
 			"placeholder": "HEIGHT_PH",

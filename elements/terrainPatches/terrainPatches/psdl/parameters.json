@@ -50,6 +50,18 @@
 				"HUDMAP_CATEGORY_ROAD",
 				"HUDMAP_CATEGORY_HIDDEN"
 			]
+		},
+		{
+			"name": "forceBottom",
+			"label": "TP_FORCE_BOTTOM",
+			"tooltip": "TP_FORCE_BOTTOM_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "bottomTexture",
+			"label": "TP_BOTTOM_TEX",
+			"placeholder": "TEXTURE_PH",
+			"type": "texture"
 		}
 	],
 	"staticDefinitions": [

@@ -38,6 +38,19 @@
 					"width": 1.5
 				}
 			]
+		},
+		{
+			"label": "TP_TAB_ADVANCED",
+			"elements": [
+				{
+					"name": "forceBottom",
+					"width": 1.5
+				},
+				{
+					"name": "bottomTexture",
+					"width": 1.5
+				}
+			]
 		}
 	]
 }

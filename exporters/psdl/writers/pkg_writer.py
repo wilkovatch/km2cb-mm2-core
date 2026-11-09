@@ -42,6 +42,10 @@ class PKGGroup:
         self.pivot = (0.0, 0.0, 0.0)
         self.mesh = None
         self.bound_mesh = None
+        # its normals all facing up: lit as the top of the city, whatever the faces face (e.g. the bottom walls under the
+        # roads, black when lit facing down). Writing no normals (vertex format 0x102, as the hudmap pkg) also left them
+        # black, and the cloud shadows of the game spread over the screen from such meshes (seen in game, 2026-11-09)
+        self.unlit = False
 
 
 class PKGGroups:
@@ -81,6 +85,7 @@ class PKGGroups:
                 report.warning("pkg " + group.stem + " has no visible mesh or no block, skipped")
                 continue
             group.mesh = visible[0].mesh_data()
+            group.unlit = visible[0].properties.get("unlit") == "1"
             if sum(len(s[0]) for s in group.mesh["submeshes"]) == 0:
                 report.warning("pkg " + group.stem + " has no polygons, skipped")
                 continue
@@ -175,7 +180,7 @@ class PKGWriter:
             file.write_uint32(len(s["vertices"]))
             for i in range(len(s["vertices"])):
                 file.write_vec3(s["vertices"][i])
-                file.write_vec3(s["normals"][i])
+                file.write_vec3((0.0, 0.0, 1.0) if group.unlit else s["normals"][i])  # (scene space: index 2 is up)
                 uv = s["uvs"][i]
                 file.write_float(uv[0])
                 file.write_float(1.0 - uv[1])

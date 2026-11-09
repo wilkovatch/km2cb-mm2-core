@@ -489,6 +489,47 @@ class JsonProcessor:
         else:
             return {"nul": {"indices": indices, "vertices": psdl_block}, "pkg": elem_pkg}
 
+    def forced_bottom(self, res, mesh, state, vps, num_segments, sections, cur_block, og_name):
+        # the bottom wall of a road with "Force bottom wall" (rail_forceBottom) where the PSDL tunnel doesn't draw it
+        # (it does only for walls on both sides), as a PKG mesh in the room of the road (sections: the first and last
+        # section of the room for a road exported as several rooms, None for the whole road). Its triangles are the last
+        # submesh of the road: the one of the last texture slot (rail_texture5), used only by the bottom wall
+        if not state_bool(state, 'rail_forceBottom'):
+            return
+        if state_int(state, 'rail_type') == 2 and state_bool(state, 'rail_hasLeft') and state_bool(state, 'rail_hasRight'):
+            return
+        submeshes = mesh.get('submeshes') or []
+        if not submeshes:
+            return
+        bottom = submeshes[-1]
+        texture = state_val(state, 'rail_texture5', None)
+        if not texture or self.get_mesh_mat(bottom['materialId']) != self.get_tex(texture):
+            report.warning('the bottom wall of the road ' + og_name + ' was not exported: it has no ground texture',
+                           element=og_name, kind='road')
+            return
+        first, last = sections if sections is not None else (0, num_segments - 1)
+        indices = bottom['indices']
+        kept = []
+        for t in range(0, len(indices) - 2, 3):
+            tri = indices[t:t + 3]
+            if all(i < num_segments * vps and first <= i // vps <= last for i in tri):
+                kept.extend(tri)
+        if not kept:
+            return
+        used = sorted(set(kept))
+        remap = {old: new for new, old in enumerate(used)}
+
+        def pick(values):
+            return [values[i] for i in used] if values is not None and len(values) == len(mesh['vertices']) else None
+        part = {'vertices': pick(mesh['vertices']), 'normals': pick(mesh.get('normals')),
+                'uvs': pick(mesh.get('uvs')) or [(0, 0)] * len(used),
+                'submeshes': [{'materialId': bottom['materialId'], 'indices': [remap[i] for i in kept]}]}
+        if part['normals'] is None:
+            part['normals'] = [(0.0, 1.0, 0.0)] * len(used)
+        elem = self.get_mesh(part, cur_block, 'VL', og_name + ' [bottom]')
+        elem.properties['unlit'] = '1'  # lit as if facing up (see PKGWriter)
+        res.append(elem)
+
     def split_long_road(self, res, road, mesh, num_segments, runtime_state, state, vps, og_name, prop_rule,
                         instance_state, has_start_intersection, has_end_intersection):
         # a PSDL road with more than MAX_ROAD_SECTIONS sections, exported as consecutive rooms of at most that many
@@ -509,6 +550,7 @@ class JsonProcessor:
             elem = self.get_psdl_road(piece_mesh, n, None, runtime_state, state, vps, block, og_name, prop_rule,
                                       instance_state, has_start_intersection, has_end_intersection, res,
                                       open_start=k > 0, open_end=k < pieces - 1)
+            self.forced_bottom(res, mesh, state, vps, num_segments, (a, b), block, og_name)
             first = first or elem
             perimeter = [piece_mesh['vertices'][i * vps] for i in range(n)]
             perimeter += [piece_mesh['vertices'][(i + 1) * vps - 1] for i in range(n - 1, -1, -1)]
@@ -577,6 +619,8 @@ class JsonProcessor:
                                       has_start_intersection,
                                       has_end_intersection,
                                       res)
+            if parent_intersection is None:
+                self.forced_bottom(res, mesh, state, vps, num_segments, None, cur_block, og_name)
         else: #non psdl road, export to pkg
             elem = self.get_pkg_road(mesh,
                                      road,
@@ -975,6 +1019,17 @@ class JsonProcessor:
         if to_pkg:
             res.append(self.get_mesh(patch['data']['mesh'], cur_block, 'VL', patch['data']['name']))
             self.pkg_blocks.add(cur_block)  # no rails (see get_rail)
+        elif state_bool(state, 'forceBottom') and state_val(state, 'bottomTexture', None):
+            # the bottom wall under the patch (the underside of the patch type: the last submesh of its mesh), which the
+            # PSDL can't draw: an unlit PKG mesh in the room of the patch
+            mesh = patch['data']['mesh']
+            if len(mesh.get('submeshes') or []) >= 2:
+                bottom = mesh['submeshes'][-1]
+                part = {'vertices': mesh['vertices'], 'normals': mesh.get('normals'), 'uvs': mesh.get('uvs'),
+                        'submeshes': [bottom]}
+                elem = self.get_mesh(part, cur_block, 'VL', patch['data']['name'] + ' [bottom]')
+                elem.properties['unlit'] = '1'
+                res.append(elem)
 
     # Rails: the RAILC attributes of the rooms, from the rail custom elements. A rail is a spline through perimeter points
     # of its room (the terrain patch, road or intersection of its "room" reference), and goes in the room of that element.

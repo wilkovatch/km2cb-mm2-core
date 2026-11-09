@@ -8,7 +8,7 @@
 
 **`city/<city>.inst`** lists the static meshes (INST meshes, and elements exported to PKG), each in the room it stands on.
 
-**`geometry/<city>_mesh<n>.pkg`** and **`bound/<city>_mesh<n>_BOUND.*`** are the meshes and collisions of the elements with **Export to PKG** checked. The ground type of the collisions comes from `city/materials.csv`, as explained in [Export to PKG](../advanced/export-to-pkg.md).
+**`geometry/<city>_mesh<n>.pkg`** and **`bound/<city>_mesh<n>_BOUND.*`** are the meshes and collisions of the elements with **Export to PKG** checked, and of the bottom walls of the roads with **Force bottom wall** where the game doesn't draw them. The ground type of the collisions comes from `city/materials.csv`, as explained in [Export to PKG](../advanced/export-to-pkg.md).
 
 **`texture/<road texture>_lod_<hash>.tex`** (and its `_fa` version) is the low LOD texture of the roads with **Generate low LOD texture**, made when exporting, as explained in [Low LOD textures](../advanced/low-lod-textures.md).
 
