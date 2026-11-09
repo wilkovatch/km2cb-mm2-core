@@ -1,0 +1,32 @@
+{
+	"label": null,
+	"parameters": [
+		{
+			"name": "spot",
+			"label": "CNR_SPOT",
+			"type": "objectInstance",
+			"objectInstanceSettings": {
+				"type": "cnrSpot",
+				"defaultModel": {
+					"model": "geometry/wpobj_gold.pkg"
+				},
+				"allowCustomModel": false,
+				"allowPosition": [
+					true,
+					true,
+					true
+				],
+				"allowRotation": [
+					false,
+					false,
+					false
+				],
+				"allowScale": [
+					false,
+					false,
+					false
+				]
+			}
+		}
+	]
+}

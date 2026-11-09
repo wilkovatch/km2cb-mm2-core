@@ -1,3 +1,4 @@
+import os
 import shutil
 from pathlib import Path
 from utils import state_val, state_bool, state_vector, state_vector_scale
@@ -247,6 +248,30 @@ class CinfoAimapExporter:
         aimap.close()
         shutil.copy(aimapfilename, aimapfilename + "_p")
 
+    def export_cnr_spots(self, racesubfolder, data):
+        # the candidate spots of the gold, bank and hideout of Cops & Robbers (multicopwaypoints.csv): each round the
+        # game puts each of them on a random row half of the time, and on a random road the other half. It picks the
+        # row as rand % (count - 1) and ignores files with fewer than 3 rows, so the last spot is repeated until every
+        # spot can be picked and there are at least 3 rows
+        filename = racesubfolder + "/multicopwaypoints.csv"
+        spots = state_val(state_val(data, "cnrSpots", {}), "spots", [])
+        positions = [state_vector(state_val(s, "spot", {}), "localPosition") for s in spots if state_val(s, "spot", None) is not None]
+        if not positions:
+            if os.path.exists(filename):
+                os.remove(filename) # from an earlier export with spots
+            return
+        with report.guarded("the Cops & Robbers spots were not checked"):
+            from traffic.rooms import RoomFinder
+            rooms = RoomFinder(self.json_processor)
+            for i, pos in enumerate(positions):
+                if rooms.room_of((pos["x"], pos["y"], pos["z"])) == 0:
+                    report.warning("Cops & Robbers spot " + str(i + 1) + " is not over any room of the city; the game can't put the gold there")
+        rows = positions + [positions[-1]] * max(1, 3 - len(positions))
+        lines = ["x,y,z,a,poly count,frane rate,state changes,texture changes,msg"]
+        lines += [",".join([str(-pos["x"]), str(pos["y"]), str(pos["z"]), "0", "0", "0", "0", "0", ""]) for pos in rows]
+        with open(filename, 'w', newline='') as f:
+            f.writelines(line + '\n' for line in lines)
+
     def export_city_aimap(self, filename, data):
         aimapfilename = str(Path(filename).with_suffix('.aimap'))
         aimap = open(aimapfilename, 'w', newline='')
@@ -376,6 +401,8 @@ class CinfoAimapExporter:
         self.export_city_aimap(layout.psdl, p)
 
         self.export_roam_aimap(racesubfolder, p)
+
+        self.export_cnr_spots(racesubfolder, p)
 
         blitzdata = []
         for i in range(len(blitz_races)):

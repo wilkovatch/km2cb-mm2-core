@@ -43,3 +43,11 @@ The game doesn't look for a way between two waypoints. It follows a road only fr
 ## Free roaming
 
 Police cars for free roaming are set with **Edit police cars** in the **AIMAP** tab of the city properties. While you edit them, **Create → Police car** adds to those instead.
+
+## Cops & Robbers
+
+In the multiplayer Cops & Robbers mode, each round places the gold, the bank and the hideout. Choose where they can go with **Edit Cops & Robbers spots** in the **Cops & Robbers** tab of the city properties. While you edit them, **Create → Cops & Robbers spot** adds a spot where you click.
+
+The game places each of the three on one of your spots half of the time, and on a random road the other half, as in the stock cities. Without spots, they always go on random roads. Put the spots on roads or other places a car can reach, inside the city: the export warns about a spot that is not over any part of the city.
+
+The spots are shown with the gold model, `wpobj_gold.pkg`, when it's in the `geometry` folder of your game files.

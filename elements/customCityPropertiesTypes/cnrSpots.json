@@ -1,0 +1,32 @@
+{
+	"label": null,
+	"exclusiveEditing": {
+		"enabled": true,
+		"category": "race"
+	},
+	"parameters": [
+		{
+			"name": "spots",
+			"label": "CNR_SPOTS",
+			"type": "array",
+			"arrayProperties": {
+				"maxElements": -1,
+				"customCityPropertiesType": "cnrSpot",
+				"hint": "CNR_SPOTS_CREATE_HINT",
+				"hideAddButton": true
+			}
+		}
+	],
+	"elementContainer": {
+		"category": "race",
+		"types": [],
+		"commands": [
+			{
+				"label": "CREATE_CNR_SPOT",
+				"path": "spots"
+			}
+		],
+		"editLabel": "EDIT_CNR_SPOTS",
+		"deselectLabel": "HIDE_CNR_SPOTS"
+	}
+}

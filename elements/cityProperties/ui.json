@@ -101,6 +101,15 @@
 			]
 		},
 		{
+			"label": "CP_CNR",
+			"elements": [
+				{
+					"name": "cnrSpots",
+					"width": 1.5
+				}
+			]
+		},
+		{
 			"label": "CP_HUDMAP",
 			"elements": [
 				{

@@ -863,6 +863,32 @@ namespace Api {
             M.ProcessUpdate();
             Check("the hide entry deselects the roam police cars", ArrayObject.activeElements["race"] == null);
 
+            //the Cops & Robbers spots: the same kind of container, with their own entries
+            var cnrParam = TP.GetCitySettings()["city"].typeData.parametersInfo.parameters.First(p => p.name == "cnrSpots");
+            ObjectState cnr = null;
+            History.UndoManager.Record("ensure cnr spots", () => {
+                History.UndoManager.Touch(city);
+                cnr = Operations.States.EnsureCustomCityProperties(city.state, cnrParam);
+            });
+            Select(cnr);
+            M.ProcessUpdate();
+            entries = Containers();
+            Check("cnr spots use their own menu labels", Has(entries, StringManager.Get("EDIT_CNR_SPOTS")) && Has(entries, StringManager.Get("HIDE_CNR_SPOTS")) && !Has(entries, editPolice));
+            create = Create();
+            Check("cnr spots expose the spot entry only", Has(create, StringManager.Get("CREATE_CNR_SPOT")) && !Has(create, StringManager.Get("CREATE_RACE_POLICE")) && !Has(create, StringManager.Get("CREATE_RACE_CHECKPOINT")));
+            var spotsBefore = cnr.Array<ObjectState>("spots")?.Length ?? 0;
+            Press(create, StringManager.Get("CREATE_CNR_SPOT"));
+            History.UndoManager.Record("place cnr spot", () => builder.arrayPointPlacer.PlaceAt(new Vector3(-113,0,-113)));
+            M.ProcessUpdate();
+            Check("the spot goes in the cnr spots", (cnr.Array<ObjectState>("spots")?.Length ?? 0) == spotsBefore + 1);
+            History.UndoManager.Undo(); await Frames(2);
+            cnr = PC.Active("race")?.state;
+            Check("undo removes the cnr spot and keeps the selection", cnr != null && (cnr.Array<ObjectState>("spots")?.Length ?? 0) == spotsBefore);
+            builder.CloseAllPanels();
+            Press(Containers(), StringManager.Get("HIDE_CNR_SPOTS"));
+            M.ProcessUpdate();
+            Check("the hide entry deselects the cnr spots", ArrayObject.activeElements["race"] == null);
+
             Select(PC.Find(PC.EnsureId(race)).state); M.ProcessUpdate();
             Press(Containers(), editRace); await Frames(1);
             var racePanel = OpenPanel();

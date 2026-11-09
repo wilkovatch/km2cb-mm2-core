@@ -169,5 +169,45 @@ class Races(unittest.TestCase):
             self.assertEqual((root/'race/test/custom.pathset').read_bytes(), b'keep')
 
 
+class CnrSpots(unittest.TestCase):
+    @staticmethod
+    def city(count):
+        spots = [dict(spot=dict(meshPath='geometry/wpobj_gold.pkg', localPosition=dict(x=float(i + 1), y=2.0, z=-float(i + 1))))
+                 for i in range(count)]
+        return dict(cnrSpots=dict(spots=spots))
+
+    def export(self, directory, count, room=1):
+        # without the PSDL blocks every position is out of the rooms: room_of is patched to the given room
+        jp = SimpleNamespace(data={}, block_perimeters=[], block_perimeters_bounds=[])
+        with patch('traffic.rooms.RoomFinder.room_of', return_value=room), patch('cinfo_aimap_export.report.warning') as warning:
+            CinfoAimapExporter(jp, False).export_cnr_spots(directory, self.city(count))
+        path = Path(directory)/'multicopwaypoints.csv'
+        rows = path.read_text().splitlines()[1:] if path.exists() else None
+        return rows, warning
+
+    def test_rows_padding_and_mirror(self):
+        with tempfile.TemporaryDirectory() as directory:
+            # the game never picks the last row and ignores files with fewer than 3 rows
+            for count, expected in ((1, 3), (2, 3), (4, 5)):
+                rows, warning = self.export(directory, count)
+                self.assertEqual(len(rows), expected, count)
+                xs = [float(r.split(',')[0]) for r in rows]
+                self.assertEqual(xs[:count], [-float(i + 1) for i in range(count)])
+                self.assertTrue(all(x == xs[count - 1] for x in xs[count:]))
+                self.assertEqual(rows[0], '-1.0,2.0,-1.0,0,0,0,0,0,')
+                warning.assert_not_called()
+
+    def test_no_spots_removes_the_old_file(self):
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertIsNotNone(self.export(directory, 2)[0])
+            self.assertIsNone(self.export(directory, 0)[0])
+
+    def test_spots_out_of_the_rooms_are_reported(self):
+        with tempfile.TemporaryDirectory() as directory:
+            rows, warning = self.export(directory, 2, room=0)
+            self.assertEqual(len(rows), 3)
+            self.assertEqual(warning.call_count, 2)
+
+
 if __name__ == '__main__':
     unittest.main()

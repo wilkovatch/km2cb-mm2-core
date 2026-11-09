@@ -140,6 +140,13 @@
 			}
 		},
 		{
+			"name": "cnrSpots",
+			"label": "EDIT_CNR_SPOTS",
+			"tooltip": "CNR_SPOTS_TOOLTIP",
+			"type": "customCityProperties",
+			"customCityPropertiesType": "cnrSpots"
+		},
+		{
 			"name": "hudmapMetersPerPixel",
 			"label": "CP_HUDMAP_METERS_PER_PIXEL",
 			"placeholder": "CP_HUDMAP_METERS_PER_PIXEL_PH",
