@@ -7,7 +7,9 @@
 # next one it follows the road joining their intersections, if a single road joins them, otherwise it drives straight
 # to the centre of the next intersection, through whatever is in the way (the stock races do it on purpose to take
 # shortcuts through parks). On a circuit, after the last waypoint a remaining lap goes on to the second one, so the
-# last waypoint is on the intersection of the first one (behind the start), as in the stock circuits.
+# last waypoint is on the intersection of the first one (behind the start), as in the stock circuits. Past a waypoint
+# the opponent steers toward the start of the next leg until it faces it, so a waypoint where it has to turn back (or
+# where the next road starts behind it) makes it circle there.
 #
 # Positions are in the coordinates of the program (x, y up, z).
 
@@ -20,6 +22,12 @@ from .rooms import RoomFinder
 STRAIGHT_STEP = 2.0
 STRAIGHT_MARGIN = 3.0
 FACADE_CLEARANCE = 1.0
+# the sharpest turn from a road to a road at a waypoint (degrees) between the direction the opponent arrives in and the
+# one it leaves in, and the widest angle between the direction it arrives in and the start of the next road (90: behind
+# it). The stock races reach 106 and 68 (180 waypoints of 10 sampled OPP files, no U-turns); a waypoint of a test city
+# turning by 153 onto a road starting at 129 made the opponent circle there in game
+TURN_MAX = 135.0
+AIM_MAX = 90.0
 
 # what an opponent does on a leg
 ROAD = 'road'  # follows a road
@@ -68,6 +76,34 @@ def _centre_line(road, from_start):
     right, left = road.paths.right.curb, road.paths.left.curb
     points = [(np.asarray(a, dtype=float) + np.asarray(b, dtype=float)) * 0.5 for a, b in zip(right, left)]
     return points if from_start else list(reversed(points))
+
+
+def _flat(v):
+    v = np.asarray(v, dtype=float)
+    return np.array([v[0], v[2]])
+
+
+def _angle(a, b):
+    na, nb = np.linalg.norm(a), np.linalg.norm(b)
+    if na < 1e-6 or nb < 1e-6:
+        return None
+    return float(np.degrees(np.arccos(np.clip(np.dot(a, b) / (na * nb), -1.0, 1.0))))
+
+
+def waypoint_turn(incoming, outgoing):
+    # the turn at the waypoint between two legs: (the angle between the directions the opponent arrives and leaves in,
+    # the angle between the direction it arrives in and the start of the next leg), in degrees, None where a leg is
+    # too short to tell. After the waypoint the game steers the car toward the start of the next leg (the first point
+    # of its lane) until it faces it, then follows the road
+    p, q = incoming.points, outgoing.points
+    if len(p) < 2 or len(q) < 2:
+        return None, None
+    arrive = _flat(p[-1]) - _flat(p[-2])
+    leave = _flat(q[1]) - _flat(q[0])
+    aim = _flat(q[0]) - _flat(p[-1])
+    if np.linalg.norm(aim) < 1.0:
+        aim = leave
+    return _angle(arrive, leave), _angle(arrive, aim)
 
 
 class OpponentMap:
@@ -219,6 +255,31 @@ class OpponentMap:
             legs.append(leg_end(0, 1, nodes[0], True))
             for k in range(len(nodes) - 1):
                 legs.append(leg_between(k + 1, k + 2, nodes[k], nodes[k + 1]))
+            # the turns at the waypoints between two of these legs, and on a closed circuit the one at the last
+            # waypoint into the next lap (along the leg from the first waypoint to the second one). Only from a road
+            # to a road: a straight leg ends at the centre of the intersection and the car aims at the centre of the
+            # next one, so the angles would mean nothing (stock races have sharp turns next to straight legs)
+            turns = [(k, legs[k - 1], legs[k]) for k in range(2, len(nodes))]
+            if laps > 1 and len(nodes) > 2 and nodes[-1] is nodes[0]:
+                turns.append((len(nodes), legs[-1], legs[1]))
+            for k, incoming, outgoing in turns:
+                if incoming is None or outgoing is None or incoming.road is None or outgoing.road is None:
+                    continue
+                turn, aim = waypoint_turn(incoming, outgoing)
+                sharp = turn is not None and turn > TURN_MAX
+                behind = aim is not None and aim > AIM_MAX
+                if not sharp and not behind:
+                    continue
+                if sharp:
+                    what = 'the opponent turns back by %.0f degrees onto %s' % (turn, road_label(outgoing.road))
+                    if behind:
+                        what += ', which starts behind it'
+                else:
+                    what = '%s starts behind the opponent (%.0f degrees from its direction)' % (road_label(outgoing.road), aim)
+                res.issues.append(Issue('error', 'opponent_turn_too_sharp',
+                                        'at the ' + labels[k] + ' ' + what + ': it circles there instead of going on (the '
+                                        'stock races turn by up to about 110 degrees at a waypoint). Route it through '
+                                        'another intersection so that it does not turn back', rows[k], outgoing))
             if laps > 1 and len(nodes) > 1 and nodes[-1] is not nodes[0]:
                 # after the last waypoint the next lap goes on to the second one: the stock circuits end on the
                 # intersection of the first waypoint, so that it continues along the first leg. Otherwise the opponent

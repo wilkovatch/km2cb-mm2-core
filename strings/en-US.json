@@ -401,7 +401,7 @@
 	"GENERATE_RAIL_DECALS": "Generate rail decals",
 	"GENERATE_RAIL_DECALS_TOOLTIP": "Create editable tram rail connections across this intersection. Delete previous decals manually before regenerating.",
 	"CHECK_OPPONENTS": "Check opponent routes",
-	"CHECK_OPPONENTS_TOOLTIP": "Check whether the opponents reach the finish as the game drives them: each waypoint must be on an intersection and a single road must join consecutive ones, otherwise the opponent drives straight through whatever is in the way. On a circuit, the last waypoint must be on the intersection of the first one. The routes are drawn over the city while the results are shown.",
+	"CHECK_OPPONENTS_TOOLTIP": "Check whether the opponents reach the finish as the game drives them: each waypoint must be on an intersection and a single road must join consecutive ones, otherwise the opponent drives straight through whatever is in the way. It must not turn back at a waypoint (a U-turn or a hairpin turn). On a circuit, the last waypoint must be on the intersection of the first one. The routes are drawn over the city while the results are shown.",
 	"LOD_TEXTURE_ERROR_MISSING": "The road and sidewalk textures of the road are needed to generate the low LOD texture, but were not found",
 	"LOD_TEXTURE_ERROR_WIDTHS": "The widths of the road leave no space for the lanes or the sidewalks",
 	"CREATE_TRAIN": "Train",

@@ -22,9 +22,12 @@ from traffic.opponents import OpponentMap, ROAD, STRAIGHT, BLOCKED
 STOCK_SAMPLE = 6  # OPP files per city
 
 
-def straight_road(name, a, b, room):
-    # a road from the intersection a to b (a straight line of 3 sections)
-    pts = [a.centre + (b.centre - a.centre) * t for t in (0.0, 0.5, 1.0)]
+def straight_road(name, a, b, room, pts=None):
+    # a road from the intersection a to b (a straight line of 3 sections, unless pts gives its centre line)
+    if pts is None:
+        pts = [a.centre + (b.centre - a.centre) * t for t in (0.0, 0.5, 1.0)]
+    else:
+        pts = [np.array(q, dtype=float) for q in pts]
     side = BaiSide(pts, pts, [pts])
     road = BaiRoad(name, [room], RoadPaths(side, side))
     road.start.intersection, road.end.intersection = a, b
@@ -55,7 +58,49 @@ def grid_city():
     return OpponentMap(room_of, net, facades), nodes
 
 
+TURN = 'opponent_turn_too_sharp'
+
+
+def turns_city():
+    # I1 (100, 0) reached from I0 (0, 0), with roads on to I2 (a quarter turn), I3 (back by 153 degrees) and I4 (a
+    # quarter turn, but its end on I1 is 30 m behind a car coming from I0, as on a road without geometry)
+    net = BaiNetwork()
+    centres = ((0.0, 0.0), (100.0, 0.0), (100.0, 100.0), (20.0, 40.0), (100.0, -100.0))
+    nodes = [net.add_intersection(BaiIntersection('I' + str(k), 1 + 2 * k, np.array([x, 0.0, z])))
+             for k, (x, z) in enumerate(centres)]
+    for k, (a, b) in enumerate(((0, 1), (1, 2), (1, 3))):
+        net.add_road(straight_road('R' + str(k), nodes[a], nodes[b], 2 + 2 * k))
+    net.add_road(straight_road('R3', nodes[1], nodes[4], 8, pts=((70.0, 0.0, -30.0), (90.0, 0.0, -60.0), (100.0, 0.0, -100.0))))
+
+    def room_of(p):
+        for node in nodes:
+            if np.hypot(p[0] - node.centre[0], p[2] - node.centre[2]) < 10.0:
+                return node.room
+        return 2
+    return OpponentMap(room_of, net), [tuple(n.centre) for n in nodes]
+
+
 class OpponentRouteTest(unittest.TestCase):
+    def test_sharp_turns(self):
+        city, c = turns_city()
+        res = city.check(c[0], [c[0], c[1], c[2], c[2]])
+        self.assertEqual(res.issues, [])
+        # back by 153 degrees at the waypoint 2
+        res = city.check(c[0], [c[0], c[1], c[3], c[3]])
+        self.assertEqual([(i.code, tuple(i.position)) for i in res.issues], [(TURN, c[1])])
+        self.assertIn('turns back by 153 degrees onto R2', res.issues[0].message)
+        self.assertIs(res.issues[0].leg.road, city.network.roads[2])
+        self.assertFalse(res.ok())
+        # a quarter turn onto a road starting behind the car
+        res = city.check(c[0], [c[0], c[1], c[4], c[4]])
+        self.assertEqual([i.code for i in res.issues], [TURN])
+        self.assertIn('R3 starts behind the opponent (135 degrees', res.issues[0].message)
+        # a U-turn, and on a closed circuit the U-turn at the last waypoint into the next lap too
+        res = city.check(c[0], [c[0], c[1], c[0], c[0]], laps=1)
+        self.assertEqual([(i.code, tuple(i.position)) for i in res.issues], [(TURN, c[1])])
+        res = city.check(c[0], [c[0], c[1], c[0], c[0]], laps=2)
+        self.assertEqual([(i.code, tuple(i.position)) for i in res.issues], [(TURN, c[1]), (TURN, c[0])])
+
     def test_road_legs(self):
         city, nodes = grid_city()
         res = city.check((0.0, 0.0, -0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (195.0, 0.0, 0.0)])
@@ -109,10 +154,11 @@ class OpponentRouteTest(unittest.TestCase):
 
     def test_circuit_goes_on_to_the_second_waypoint(self):
         city, nodes = grid_city()
-        # last waypoint = the first one: nothing more to check
+        # last waypoint = the first one: nothing more to check (but the turns, U-turns on this row of intersections,
+        # see test_sharp_turns)
         res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)], laps=2)
         self.assertEqual([leg.kind for leg in res.legs], [ROAD, ROAD, ROAD, ROAD])
-        self.assertEqual(res.issues, [])
+        self.assertEqual([i.code for i in res.issues if i.code != TURN], [])
         # last waypoint elsewhere: the next lap goes from it to the second waypoint (here along a road), drawn, but the
         # open loop is an error (the opponent circles at the last waypoint in game)
         res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (200.0, 0.0, 0.0)], laps=2)
@@ -123,7 +169,8 @@ class OpponentRouteTest(unittest.TestCase):
         self.assertIs(res.issues[0].leg, res.legs[3])
         # without a road to the second waypoint either: the same error, not a straight leg as well
         res = city.check((0.0, 0.0, 0.0), [(100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (0.0, 0.0, 0.0), (0.0, 0.0, 0.0)], laps=2)
-        self.assertEqual([i.code for i in res.issues if i.code != 'opponent_leg_straight' or i.leg.lap], ['opponent_circuit_open'])
+        self.assertEqual([i.code for i in res.issues if i.code != TURN and (i.code != 'opponent_leg_straight' or i.leg.lap)],
+                         ['opponent_circuit_open'])
         self.assertTrue(any(leg.lap and leg.kind == STRAIGHT for leg in res.legs))
         # a single lap never goes back
         res = city.check((0.0, 0.0, 0.0), [(0.0, 0.0, 0.0), (100.0, 0.0, 0.0), (200.0, 0.0, 0.0), (200.0, 0.0, 0.0)], laps=1)

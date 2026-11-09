@@ -28,6 +28,7 @@ A **warning** means the export finished, but something may not work in the game.
 | A cable car line without ends | Leave it open, or add a dead end |
 | Decal points outside of the rooms | Move them onto a room |
 | An opponent waypoint is not on an intersection, or no single road joins two waypoints | Put a waypoint on every intersection of the route. See [Races](../beginner/races.md) |
+| An opponent turns back at a waypoint, or the next road starts behind it | Route it through another intersection, so that it doesn't make a U-turn or a hairpin turn. See [Races](../beginner/races.md) |
 | On a circuit, the last waypoint before the finish is not on the intersection of the first waypoint | End the lap on the intersection of the first waypoint, with a waypoint before the finish. See [Races](../beginner/races.md) |
 | Parked cars on a slope above 5 degrees | Move them to flatter ground |
 | More than 192 paths | Use fewer prop lines, or parked car rows |
