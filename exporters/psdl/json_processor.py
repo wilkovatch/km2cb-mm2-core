@@ -417,10 +417,10 @@ class JsonProcessor:
             rl_elem.properties['cap_start_right'] = '0' if open_start else rail_bool_inv(instance_state, 'continueRightOnStartIntersection', has_start_intersection)
             rl_elem.properties['cap_end_right'] = '0' if open_end else rail_bool_inv(instance_state, 'continueRightOnEndIntersection', has_end_intersection)
             rl_elem.properties['is_curved_gallery'] = rail_equals(state, 'type', 4)
-            rl_elem.properties['offset_start_left'] = rail_bool(state, 'offsetStartLeft')
-            rl_elem.properties['offset_end_left'] = rail_bool(state, 'offsetEndLeft')
-            rl_elem.properties['offset_start_right'] = rail_bool(state, 'offsetStartRight')
-            rl_elem.properties['offset_end_right'] = rail_bool(state, 'offsetEndRight')
+            rl_elem.properties['offset_start_left'] = '0' if open_start else rail_bool(state, 'offsetStartLeft')
+            rl_elem.properties['offset_end_left'] = '0' if open_end else rail_bool(state, 'offsetEndLeft')
+            rl_elem.properties['offset_start_right'] = '0' if open_start else rail_bool(state, 'offsetStartRight')
+            rl_elem.properties['offset_end_right'] = '0' if open_end else rail_bool(state, 'offsetEndRight')
             rl_elem.properties['curved_sides'] = '0' #todo
             rl_elem.properties['is_rail'] = rail_equals(state, 'type', 1)
             rl_elem.properties['height'] = str(int(rail_val(state, 'height', 0.0) * 256.0))
@@ -1020,7 +1020,7 @@ class JsonProcessor:
             res.append(self.get_mesh(patch['data']['mesh'], cur_block, 'VL', patch['data']['name']))
             self.pkg_blocks.add(cur_block)  # no rails (see get_rail)
         elif state_bool(state, 'forceBottom') and state_val(state, 'bottomTexture', None):
-            # the bottom wall under the patch (the underside of the patch type: the last submesh of its mesh), which the
+            # the bottom wall under the patch (made by the geometry script of the patch type: the last submesh of its mesh), which the
             # PSDL can't draw: an unlit PKG mesh in the room of the patch
             mesh = patch['data']['mesh']
             if len(mesh.get('submeshes') or []) >= 2:
