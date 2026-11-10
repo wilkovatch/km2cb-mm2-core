@@ -619,6 +619,26 @@ namespace Api {
             M.ProcessUpdate();
             Check("connected release keeps the moved junction", GO.GetPosition(junction.point).DistanceTo(junctionBefore) > 1);
 
+            //A corner of a terrain patch dragged with the gizmo: only what shares or follows it is updated.
+            var corner = unrelatedPatch.GetPerimeterPointsComponents()[2];
+            var cornerTarget = corner.GetPoint() + new Vector3(6, 0, 4);
+            var cornerUpdates = M.cityUpdateCount;
+            var attachedPatchVertices = GameEngine.Mesh.GetVertices(attachedPatch.generator.m);
+            untouchedPatchVertices = GameEngine.Mesh.GetVertices(unrelatedPatch.generator.m);
+            M.BeginInteractiveRoadEdit(new Node3D[] { corner.GetObject() });
+            GO.SetPosition(corner.GetObject(), cornerTarget);
+            M.FlagAsChanged();
+            CheckPreview();
+            Check("terrain point drag rebuilds only its patch and skips city passes", M.lastRoadUpdateVisits == (0, 0) && M.cityUpdateCount == cornerUpdates
+                && M.lastInteractiveDependencyVisits == (1, 0, 0)
+                && !untouchedPatchVertices.SequenceEqual(GameEngine.Mesh.GetVertices(unrelatedPatch.generator.m))
+                && attachedPatchVertices.SequenceEqual(GameEngine.Mesh.GetVertices(attachedPatch.generator.m)));
+            M.EndInteractiveRoadEdit();
+            M.ProcessUpdate();
+            Check("terrain point release keeps the moved corner", corner.GetPoint().DistanceTo(cornerTarget) < 0.001f);
+            M.BeginInteractiveRoadEdit(new Node3D[] { chainedPoint.GetObject() });
+            Check("custom element points keep full updates", !M.ProcessInteractiveRoadEdit());
+
             var connectedBefore = GO.GetPosition(samples[2].points[^1]);
             var patchBefore = attachedPatch.GetPerimeterPointsComponents()[0].GetPoint();
             var buildingBefore = attachedLine.GetPointsComponents()[0].GetPoint();

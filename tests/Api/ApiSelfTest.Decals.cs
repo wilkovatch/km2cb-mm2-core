@@ -621,7 +621,7 @@ namespace Api {
             var previous = roads.Select(r => r.state.Bool("cableCarLine")).ToArray();
             History.UndoManager.Record("edit rail intersection", () => builder.SelectObject(intersection.geo, true, null));
             var panel = CallBuilder<EditorPanel>("GetActivePanel");
-            var buttons = (List<(EditorPanelElements.Button button, ConverterCatalog.ConverterInfo converter)>)typeof(EditorPanel)
+            var buttons = (List<(EditorPanelElements.Button button, CoreElementTool converter)>)typeof(EditorPanel)
                 .GetField("conversionButtons", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(panel);
             var railButton = buttons.FirstOrDefault(b => b.converter.name == "generateRailDecals").button;
             Check("the intersection panel exposes the rail-generation action", railButton != null);
