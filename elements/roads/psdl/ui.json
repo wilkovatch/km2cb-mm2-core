@@ -164,6 +164,21 @@
 					"width": 0.75
 				},
 				{
+					"name": "cableCarRails",
+					"width": 0.75,
+					"enabledWhen": "cableCars.roadAvailable"
+				},
+				{
+					"name": "cableCarRailWidth",
+					"width": 0.75,
+					"enabledWhen": "cableCars.roadOptionsAvailable"
+				},
+				{
+					"name": "cableCarRailTexture",
+					"width": 1.5,
+					"enabledWhen": "cableCars.roadOptionsAvailable"
+				},
+				{
 					"name": "start_rule",
 					"width": 1.5
 				},

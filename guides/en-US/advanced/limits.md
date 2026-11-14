@@ -6,6 +6,7 @@
 |---|---|---|
 | Lanes per side of a road | 4 | Drops the extra lanes, warns |
 | Roads at a traffic intersection | 11 | Splits the intersection, warns |
+| Cable car roads at an intersection | 1 (end of a line), 2 or 4: with 3 or more than 4 the cable cars jump back along their road | Warns (see [Cable cars](cable-cars.md)) |
 | Sections of a road room | About 40 (longer rooms lose their road texture and walls in the game) | Exports a longer road as several rooms, warns. Split the road yourself to choose where |
 | Different textures in the city | 511 in stock MM2 | Warns (see below) |
 | Texture index of a room with prop rules | Below 255 | Reorders them, or drops the props and warns |

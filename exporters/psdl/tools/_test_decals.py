@@ -150,6 +150,25 @@ class DecalTests(unittest.TestCase):
         export_single_decal(processor, decal, res)
         self.assertEqual(res, [])
 
+    def test_extra_decals_export(self):
+        # the strips of the extras of the roads and intersections (lua/cableCars.lua): a part per strip, with its pairs;
+        # the ghosts (replaced elements) and the strips without two pairs are left out
+        from decals import export_extra_decals
+        pairs = [[0, 0, 0], [2, 0, 0], [0, 0, 4], [2, 0, 4], [0, 0, 8], [2, 0, 8]]
+        extras = [dict(name='cableCarRails', export=dict(decals=[dict(texture='texture/r4i_rails_f.tex', pairs=pairs),
+                                                                  dict(texture='texture/r4i_rails_f.tex', pairs=pairs[:2])]))]
+        data = dict(roads=[dict(data=dict(name='Road 1', fields=dict(extras=extras))),
+                           dict(ghost=True, data=dict(name='Road 2', fields=dict(extras=extras)))],
+                    intersections=[dict(data=dict(name='Intersection 1', fields=dict(extras=[dict(name='other', export={})])))])
+        processor = SimpleNamespace(data=data, get_tex=lambda tex: tex.split('/')[-1])
+        res = []
+        export_extra_decals(processor, res)
+        self.assertEqual(len(res), 1)
+        self.assertEqual(res[0].properties['texture'], 'r4i_rails_f')
+        self.assertEqual(res[0].properties['original_name'], 'Road 1 (cableCarRails)')
+        self.assertEqual(res[0].properties['strip_pairs'], '1')
+        self.assertEqual(len(res[0].vertices), 6)
+
     def test_city_import_creates_editable_splines_and_reports_width_loss(self):
         sys.path.insert(0, str(CORE / 'scripts/importCity'))
         from _test_import_city import write_psdl

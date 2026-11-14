@@ -34,14 +34,14 @@ JSON only ──► prop rules, trains, boats, bridges, parked cars, CINFO/AIMAP
 | `export.py` | The entry point: the steps above (`Exporter`) |
 | `options.py` | The arguments: the `Files/python` folder, the input JSON, the chosen file, then a 0/1 value for each flag of `settings.json`, in its order (the program passes them so) |
 | `json_processor.py` | The procedural elements as parts: the PSDL roads and their sections, intersections, terrain patches, buildings, mesh instances; the blocks (rooms) and their perimeters |
-| `decals.py` | The decals (`decal`, `decalSingle`) as `DECAL` parts |
+| `decals.py` | The decals (`decal`, `decalSingle`, and the `export.decals` of the extras of the roads and intersections: the cable car rails) as `DECAL` parts |
 | `prop_placers.py` | The prop lines and polygons as `PTH` parts |
 | `psdl_parts.py` | `ExportedCityElement` and the helpers for the sections of the parts |
 | `scene.py` | `Scene`: the parts in the space of the writers, the rooms |
 | `traffic/model.py` | The BAI: `BaiNetwork`, `BaiRoad`, `BaiSide`, `BaiRoadEnd`, `BaiIntersection` |
 | `traffic/paths.py` | The paths of a procedural road (edges, curbs, lanes, sidewalks, rails) |
 | `traffic/network.py` | `BaiNetworkBuilder`: the BAI roads and intersections from the exported roads and intersections |
-| `traffic/rails.py` | The curves joining the cable car rails through an intersection (for `converters/generateRailDecals`) |
+| `traffic/rails.py` | The rules of the game for the cable cars through an intersection (next road, curve), as `lua/cableCars.lua` draws the rail decals; used by `tools/cable_car_rails_check.py` |
 | `traffic/opponents.py` | The route of the race opponents as the game drives it, on the BAI network (for `checks/validateOpponents` and the warnings of the AIMAP export, see `docs/agents/races-and-state.md`) |
 | `traffic/rooms.py` | `RoomFinder`: the room of a position as the game finds it (for the opponents and the roads and intersections without geometry) |
 | `writers/` | The writers of the game files: `psdl_writer`, `cpvs_writer`, `inst_writer`, `bai_writer`, `pathset_writer`, `decal_writer`, `pkg_writer`, `tex_writer`, with `file_io` (binary output) and `report` (warnings and errors) |

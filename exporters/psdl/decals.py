@@ -1,5 +1,5 @@
-# The decals (custom elements decal and decalSingle) as the DECAL parts written to decals.pathset (see
-# writers/decal_writer.py): pairs of points across the strip, as the editor evaluates them.
+# The decals (custom elements decal and decalSingle, and the extras of the roads and intersections) as the DECAL parts
+# written to decals.pathset (see writers/decal_writer.py): pairs of points across the strip, as the editor evaluates them.
 
 import math
 import os
@@ -82,6 +82,30 @@ def export_decals(jp, res):
                 report.warning('the decal ' + name + ' has an invalid strip cross-section, it is not exported')
                 continue
             res.append(strip_part(name, texture, [tuple(v) for section in piece for v in section['vertices']]))
+
+
+def export_extra_decals(jp, res):
+    # the decals made by the extras of the roads and intersections (the cable car rails, lua/cableCars.lua): in the data
+    # each extra gives the exporters (export.decals), the texture and the pairs of points across each strip (not lifted),
+    # written as the pieces of the spline decals
+    for kind in ('roads', 'intersections'):
+        for element in jp.data.get(kind) or []:
+            if element.get('ghost'):
+                continue
+            data = element.get('data') or {}
+            name = data.get('name', kind)
+            for extra in (data.get('fields') or {}).get('extras') or []:
+                export = extra.get('export') or {}
+                for decal in (export.get('decals') if isinstance(export, dict) else None) or []:
+                    texture = texture_name(jp, decal.get('texture'))
+                    pairs = decal.get('pairs') or []
+                    if not texture or len(texture) > DECAL_MAX_TEXTURE_NAME:
+                        report.warning('the ' + extra.get('name', 'extra') + ' decals of ' + name
+                                       + ' have a missing or overlong texture name, they are not exported')
+                        break
+                    if len(pairs) < 4 or len(pairs) % 2:
+                        continue
+                    res.append(strip_part(name + ' (' + extra.get('name', 'extra') + ')', texture, [tuple(p) for p in pairs]))
 
 
 def export_single_decal(jp, decal, res):

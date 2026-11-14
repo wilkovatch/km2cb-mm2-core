@@ -126,7 +126,7 @@ namespace Api {
                 var previousPosition = Vec(previousCamera["position"]);
                 await Call("view.camera.set", new { position = SplinePosition(previousPosition), target = SplinePosition(previousPosition + Vec(previousCamera["forward"])) });
             }
-            await RailDecalGeneration();
+            await CableCarRailExtras();
             await LodTextureGeneration();
         }
 
@@ -611,40 +611,99 @@ namespace Api {
             }
         }
 
-        async Task RailDecalGeneration() {
-            var intersection = M.intersections.First(i => !i.IsDeleted() && !Operations.CustomElements.IsGhost(i) && i.roads.Count >= 2);
-            var converter = ConverterCatalog.Get("generateRailDecals");
-            var iid = History.ElementRegistry.GetId(intersection);
-            var center = GO.GetPosition(intersection.point);
-            var extra = (await Call("roads.create", new { points = new object[] { new { intersection = iid }, new { position = SplinePosition(center + new Vector3(100, 0, 100)) } } })).Value<int>();
+        //the cable car rail decals: the extras of the psdl roads and intersections (lua/cableCars.lua, the generic extras of
+        //the builder), on a crossing of two lines: the strips along the roads stop where the cars leave them, the ones
+        //across the intersection follow the cars, with squares where the rails cross
+        async Task CableCarRailExtras() {
+            float x0 = 1400, z0 = -1400;
+            var ns = (await Call("roads.create", new { points = new[] { Pos(x0, z0 - 80), Pos(x0, z0 + 80) } })).Value<int>();
+            await Call("roads.create", new { points = new object[] { Pos(x0 - 80, z0), new { roadMiddle = new { road = ns, near = V(x0, 0, z0) } } } });
+            var joint = (await Derived(ns))["endIntersection"].Value<int>();
+            await Call("roads.create", new { points = new object[] { Pos(x0 + 80, z0), new { intersection = joint } } });
+            var intersection = (Intersection)History.UndoManager.GetAliveElement(joint);
             var roads = intersection.roads.Distinct().ToArray();
-            var previous = roads.Select(r => r.state.Bool("cableCarLine")).ToArray();
-            History.UndoManager.Record("edit rail intersection", () => builder.SelectObject(intersection.geo, true, null));
+            Check("the cable car crossing has 4 roads", roads.Length == 4);
+
+            //the flag of the intersection is available with 2 or 4 cable car roads only
+            History.UndoManager.Record("edit cable car intersection", () => builder.SelectObject(intersection.geo, true, null));
             var panel = CallBuilder<EditorPanel>("GetActivePanel");
-            var buttons = (List<(EditorPanelElements.Button button, CoreElementTool converter)>)typeof(EditorPanel)
-                .GetField("conversionButtons", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(panel);
-            var railButton = buttons.FirstOrDefault(b => b.converter.name == "generateRailDecals").button;
-            Check("the intersection panel exposes the rail-generation action", railButton != null);
+            var fields = (System.Collections.IList)typeof(EditorPanel)
+                .GetField("conditionalFields", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).GetValue(panel);
+            EditorPanelElement railsField = null;
+            foreach (var f in fields) {
+                var t = (System.Runtime.CompilerServices.ITuple)f;
+                if ((string)t[1] == "cableCars.intersectionAvailable") railsField = (EditorPanelElement)t[0];
+            }
+            Check("the intersection panel has the cable car rails flag", railsField != null);
             for (int count = 0; count <= roads.Length; count++) {
-                History.UndoManager.Record("rail test flags", () => {
+                History.UndoManager.Record("cable car test flags", () => {
                     for (int i = 0; i < roads.Length; i++) {
                         History.UndoManager.Touch(roads[i]); roads[i].state.SetBool("cableCarLine", i < count);
                     }
                     M.FlagAsChanged();
                 });
                 M.ProcessUpdate();
-                Check("rail generator availability with " + count + " tram roads", converter.IsEnabled(intersection) == (count >= 2));
-                Check("rail button availability with " + count + " tram roads", railButton != null && railButton.GetInteractable() == (count >= 2));
+                panel.UpdateConversionButtons();
+                Check("cable car rails flag availability with " + count + " cable car roads", railsField != null && railsField.GetInteractable() == (count == 2 || count == 4));
             }
-            await Call("city.flush");
-            await CheckUndo("generating independent intersection rail decals", () => Call("elements.convert", new { elements = new[] { iid }, converter = "generateRailDecals" }));
-            var generated = M.customElements.Where(e => !e.IsDeleted() && e.TypeName == "decal" && e.state.Str("texture").Contains("r4i_rails_f")).ToList();
-            Check("rail decals are editable independent elements", generated.Count >= 2 && generated.All(e => e.source == null && e.container == null) && !Operations.CustomElements.IsGhost(intersection));
-            var ids = (JArray)await Call("elements.convert", new { elements = new[] { iid }, converter = "generateRailDecals" });
-            Check("repeated rail generation appends another set", ids.Count == generated.Count);
-            foreach (var id in ids.Values<int>()) await Call("customElement.delete", new { element = id });
-            for (int i = 0; i < roads.Length; i++) await Call("state.setParam", new { @ref = History.ElementRegistry.GetId(roads[i]), name = "cableCarLine", value = previous[i] });
-            await Call("roads.delete", new { road = extra });
+            builder.CloseAllPanels();
+
+            List<Dictionary<string, object>> Decals(ElementExtras extras) {
+                var res = new List<Dictionary<string, object>>();
+                foreach (var (name, export) in extras.built) {
+                    if (name == "cableCarRails" && export is Dictionary<string, object> e && e.TryGetValue("decals", out var d) && d is List<object> list) {
+                        res.AddRange(list.Cast<Dictionary<string, object>>());
+                    }
+                }
+                return res;
+            }
+            //the middle of a pair of a decal (negative: from the end)
+            Vector3 Pair(Dictionary<string, object> decal, int index) {
+                var pairs = (List<object>)decal["pairs"];
+                Vector3 P(int i) { var v = (List<object>)pairs[i]; return new Vector3((float)(double)v[0], (float)(double)v[1], (float)(double)v[2]); }
+                if (index < 0) index += pairs.Count / 2;
+                return (P(2 * index) + P(2 * index + 1)) / 2;
+            }
+            foreach (var road in roads) await Call("state.setParam", new { @ref = History.ElementRegistry.GetId(road), name = "cableCarRails", value = true });
+            Check("each cable car road has two rail strips", roads.All(r => Decals(r.generator.extras).Count == 2));
+            Check("an intersection without its flag has no rails", Decals(intersection.generator.extras).Count == 0);
+            var fullEnds = roads.SelectMany(r => Decals(r.generator.extras)).Select(d => (Pair(d, 0), Pair(d, -1))).ToList();
+            await CheckUndo("turning on the cable car rails of an intersection", () => Call("state.setParam", new { @ref = joint, name = "cableCarRails", value = true }));
+            var decals = Decals(intersection.generator.extras);
+            var rails = decals.Where(d => (string)d["texture"] == "texture/r4i_rails_f.tex").ToList();
+            var squares = decals.Where(d => (string)d["texture"] == "texture/r4i_railsX_f.tex").ToList();
+            //4 paths, each one cut by the 2 rails of the other line
+            Check("the rails of a crossing are cut by the crossing squares", rails.Count == 12 && squares.Count == 4);
+            var ends = roads.SelectMany(r => Decals(r.generator.extras)).SelectMany(d => new[] { Pair(d, 0), Pair(d, -1) }).ToList();
+            //the paths start where the cars leave the roads (the rails arriving there are shortened)
+            var starts = rails.Select(d => Pair(d, 0)).Count(p => ends.Any(e => e.DistanceTo(p) < 0.05f));
+            Check("the paths through the intersection start on the shortened rails of the roads", starts == 4);
+            var shortened = fullEnds.Count(f => !ends.Any(e => e.DistanceTo(f.Item1) < 0.01f) || !ends.Any(e => e.DistanceTo(f.Item2) < 0.01f));
+            Check("one rail of each road is shortened at the intersection", shortened == 4);
+            if (DisplayServer.GetName() != "headless") {
+                var previousCamera = await Call("view.camera.get");
+                var center = GO.GetPosition(intersection.point);
+                await Call("view.camera.set", new { position = SplinePosition(center + new Vector3(0, 45, -12)), target = SplinePosition(center) });
+                await Frames(3); Screenshot("cable_car_rails.png");
+                await Call("view.camera.set", new { position = previousCamera["position"], target = SplinePosition(Vec(previousCamera["position"]) + Vec(previousCamera["forward"])) });
+            }
+
+            await Call("state.setParam", new { @ref = joint, name = "cableCarHideCrossings", value = true });
+            decals = Decals(intersection.generator.extras);
+            Check("the crossing squares can be left out", decals.Count == 4 && decals.All(d => (string)d["texture"] == "texture/r4i_rails_f.tex"));
+            var exported = System.IO.Path.Combine(folder, "..", "api_cable_car_rails.json");
+            await Call("city.exportJson", new { path = exported });
+            var json = JObject.Parse(System.IO.File.ReadAllText(exported));
+            var exportedDecals = json["intersections"].SelectMany(i => (i["data"]?["fields"]?["extras"] as JArray) ?? new JArray())
+                .Where(e => (string)e["name"] == "cableCarRails").SelectMany(e => (e["export"]?["decals"] as JArray) ?? new JArray()).ToList();
+            Check("the rail decals of the intersection are exported", exportedDecals.Count == 4 && exportedDecals.All(d => ((JArray)d["pairs"]).Count >= 4));
+            System.IO.File.Delete(exported);
+
+            await Call("state.setParam", new { @ref = joint, name = "cableCarRails", value = false });
+            Check("turning off the flag removes the rails of the intersection", Decals(intersection.generator.extras).Count == 0);
+            ends = roads.SelectMany(r => Decals(r.generator.extras)).SelectMany(d => new[] { Pair(d, 0), Pair(d, -1) }).ToList();
+            Check("the rails of the roads reach the intersection again", fullEnds.All(f => ends.Any(e => e.DistanceTo(f.Item1) < 0.01f) && ends.Any(e => e.DistanceTo(f.Item2) < 0.01f)));
+            //the roads stay, with their rail decals, for the export checks of the full suite
         }
 
         async Task SplineComponents() {

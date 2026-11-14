@@ -369,6 +369,11 @@ class BAIWriter:
                 line_of[find(i)] = find(ends[0])
             if len(ends) == 1:
                 line_ends.add(ends[0])
+            elif len(ends) == 3 or len(ends) > 4:
+                # the cable cars go on only with 2 or 4 cable car roads (traffic/rails.py, next_tram_road)
+                report.warning("the intersection " + str(intersection.name) + " has " + str(len(ends)) + " cable car roads,"
+                               + " MM2 cable cars go on only through intersections with 2 or 4 of them (otherwise"
+                               + " they jump back to the start of their road)")
         lines = {}
         for road in cable_roads:
             lines.setdefault(find(road.index), []).append(road)

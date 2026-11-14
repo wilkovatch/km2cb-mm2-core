@@ -21,7 +21,7 @@ No original game data is included with the core. Open or create a city using thi
 - Ambient traffic paths (BAI), with lanes, parking, cable car lines and direction arrows in the editor, and BAI-only roads for traffic over other surfaces
 - Visible sets of the rooms (CPVS), computed from the buildings and the ground
 - Individual props, prop lines, prop polygons, INST meshes and parked cars
-- Decals (spline and single), as in `decals.pathset`
+- Decals (spline and single), as in `decals.pathset`, and cable car rail decals drawn by the roads and intersections along the paths of the cars
 - Trains, boats, ducks, ferries and movable bridges
 - Races (checkpoints, police cars, opponents and race props for each difficulty), with a check of the opponent routes as the game drives them
 - HUD map and race menu maps, with map labels

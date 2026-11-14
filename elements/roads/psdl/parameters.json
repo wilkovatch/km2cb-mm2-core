@@ -186,6 +186,26 @@
 			"type": "float"
 		},
 		{
+			"name": "cableCarRails",
+			"label": "RD_CABLE_CAR_RAILS",
+			"tooltip": "RD_CABLE_CAR_RAILS_TOOLTIP",
+			"type": "bool"
+		},
+		{
+			"name": "cableCarRailWidth",
+			"label": "CABLE_CAR_RAIL_WIDTH",
+			"placeholder": "CABLE_CAR_RAIL_WIDTH_PH",
+			"tooltip": "CABLE_CAR_RAIL_WIDTH_TOOLTIP",
+			"type": "float"
+		},
+		{
+			"name": "cableCarRailTexture",
+			"label": "CABLE_CAR_RAIL_TEXTURE",
+			"placeholder": "CABLE_CAR_RAIL_TEXTURE_PH",
+			"tooltip": "CABLE_CAR_RAIL_TEXTURE_TOOLTIP",
+			"type": "texture"
+		},
+		{
 			"name": "start_rule",
 			"label": "RD_START_RULE",
 			"type": "enum",

@@ -1977,8 +1977,9 @@ namespace Api {
             TerrainPoint Point(int id) => History.UndoManager.GetAliveElement(id) as TerrainPoint;
             var target = Anchor(source);
             await CheckUndo("attaching an existing shared point", () => Call("terrainPoints.attach", new { point = pointId, to = target }));
+            //the point is shared by the patch, the building line and the rail
             Check("attachment keeps the shared point id and the building line follows", (await Derived(lineId))["points"][0]["id"].Value<int>() == pointId
-                && Point(pointId).anchor is TerrainAnchor && Point(pointId).GetLinks().Count == 2);
+                && Point(pointId).anchor is TerrainAnchor && Point(pointId).GetLinks().Count == 3);
             Check("a rail keeps the attached perimeter point", (History.UndoManager.GetAliveElement(railId) as CustomElement).HasPoint(Point(pointId)));
             await Expect("a fixed attached point cannot be moved", "invalid_operation", "terrainPoints.move", new { point = pointId, position = V(-710, 0, 710) });
             await Expect("attachment requires an anchor target", "invalid_param", "terrainPoints.attach", new { point = pointId, to = Pos(-710, 710) });
@@ -2072,7 +2073,7 @@ namespace Api {
             await OpenPointEditor();
             var beforeDetach = Point(pointId).GetPoint();
             Press("detachPointButton");
-            Check("the detach button preserves position, sharing and enables movement", Point(pointId).anchor == null && Point(pointId).GetLinks().Count == 2
+            Check("the detach button preserves position, sharing and enables movement", Point(pointId).anchor == null && Point(pointId).GetLinks().Count == 3
                 && Point(pointId).GetPoint().DistanceTo(beforeDetach) < 0.01f && Field<EditorPanelElement>("pointPositionField").GetInteractable());
             panel.GetType().GetMethod("EndHandleEditing", flags).Invoke(panel, null);
             Check("returning to the patch editor keeps the detached point movable", builder.gizmo.transformType == RuntimeGizmos.TransformType.Move);
@@ -3179,7 +3180,7 @@ road(-750)
                 if (M.customElements.Any(e => e.TypeName == "decal" && !e.IsDeleted())) {
                     var decalNames = await ExportDecalNames(format);
                     Check("the decals are exported", decalNames != null && decalNames.Contains("decal_zigzag_l"));
-                    Check("the generated rail decals are exported", decalNames != null && decalNames.Contains("r4i_rails_f"));
+                    Check("the cable car rail decals are exported", decalNames != null && decalNames.Contains("r4i_rails_f"));
                     if (M.customElements.Any(e => e.TypeName == "decalSingle" && !e.IsDeleted())) {
                         Check("the single decals are exported", decalNames != null && decalNames.Contains("decal_x_inter_l"));
                     }

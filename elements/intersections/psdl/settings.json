@@ -4,6 +4,13 @@
 	"roadStartCrosswalkTexture": "startCrosswalkTex",
 	"roadEndCrosswalkTexture": "endCrosswalkTex",
 	"minimizeSubmeshes": false,
+	"extras": [
+		{
+			"name": "cableCarRails",
+			"condition": "cableCarRails",
+			"geometry": "cableCars.intersection"
+		}
+	],
 	"extraTerrainPieces": [
 		{
 			"name": "wall",

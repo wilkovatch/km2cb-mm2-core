@@ -22,7 +22,7 @@
 
 **`city/<city>/props.pathset`** has the individual props, and the native paths of **Pathset line** prop lines.
 
-**`city/<city>/decals.pathset`** has the decals.
+**`city/<city>/decals.pathset`** has the decals, also the cable car rail decals of the roads and intersections.
 
 **`city/<city>/propdefs.csv`** and **`proprules.csv`** are the prop rules of the game, from **PSDL prop rule** on the left and right sides of roads.
 

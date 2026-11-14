@@ -10,10 +10,6 @@
 					"width": 1.5
 				},
 				{
-					"name": "convert:generateRailDecals",
-					"width": 1.5
-				},
-				{
 					"name": "echo",
 					"width": 0.75
 				},
@@ -36,6 +32,36 @@
 				{
 					"name": "texture2",
 					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "IS_TAB_RAILS",
+			"elements": [
+				{
+					"name": "cableCarRails",
+					"width": 0.75,
+					"enabledWhen": "cableCars.intersectionAvailable"
+				},
+				{
+					"name": "cableCarRailWidth",
+					"width": 0.75,
+					"enabledWhen": "cableCars.intersectionOptionsAvailable"
+				},
+				{
+					"name": "cableCarRailTexture",
+					"width": 1.5,
+					"enabledWhen": "cableCars.intersectionOptionsAvailable"
+				},
+				{
+					"name": "cableCarHideCrossings",
+					"width": 1.5,
+					"enabledWhen": "cableCars.intersectionOptionsAvailable"
+				},
+				{
+					"name": "cableCarCrossingTexture",
+					"width": 1.5,
+					"enabledWhen": "cableCars.crossingOptionsAvailable"
 				}
 			]
 		},

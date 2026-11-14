@@ -235,6 +235,13 @@
 		"endCrosswalkTex": "textureCW1",
 		"hasSidewalks": "hasRealSidewalks"
 	},
+	"extras": [
+		{
+			"name": "cableCarRails",
+			"condition": "cableCarRails and cableCarLine",
+			"geometry": "cableCars.road"
+		}
+	],
 	"components": [
 		{
 			"name": "sidewalk_right",

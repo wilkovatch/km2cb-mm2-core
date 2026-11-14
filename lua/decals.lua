@@ -1,17 +1,5 @@
 local M = {}
 
-function M.canGenerateRails(_, ctx)
-    local count = 0
-    local seen = {}
-    for _, road in ipairs(ctx.neighbors) do
-        if road.kind == "road" and road.state.cableCarLine and not seen[road.id] then
-            seen[road.id] = true
-            count = count + 1
-        end
-    end
-    return count >= 2
-end
-
 -- Single decal: a quad as the strips of the spline decals (the first pair of vertices at the start, U 1 then 0), as wide
 -- as the scale X of the point and as long as its scale Z, rotated by the point (the euler angles are applied as Z, X, Y
 -- in program coordinates), 0.01 m above it. V at the far pair is the length in tiles, rounded as the game does.

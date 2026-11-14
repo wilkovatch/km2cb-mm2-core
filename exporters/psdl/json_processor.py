@@ -8,7 +8,7 @@ from writers import report
 from psdl_parts import ExportedCityElement, get_tex
 from traffic.network import BaiNetworkBuilder, is_seamless
 from traffic.rooms import RoomFinder
-from decals import export_decals
+from decals import export_decals, export_extra_decals
 
 # The game draws a road room of many sections broken (no road texture, missing divider walls; seen in game on a
 # 110-section room, while 57 sections looked right; stock rooms have at most 15). Longer PSDL roads are exported as
@@ -1583,6 +1583,7 @@ class JsonProcessor:
         print("processing decals...")
         with report.guarded("the decals were not exported"):
             export_decals(self, res)
+            export_extra_decals(self, res)
 
         # Sort order of INST meshes can matter for rendering when transparent objects are involved, here the current order gets preserved
         sorted_meshes = sorted(data['meshInstances'], key=lambda mesh: mesh['name'])
