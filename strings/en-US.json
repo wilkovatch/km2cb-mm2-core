@@ -359,7 +359,7 @@
 	"MAP_LABEL_TEXT_TOOLTIP": "The text of the label (shown in upper case)",
 	"MAP_LABEL_SIZE": "Size",
 	"MAP_LABEL_SIZE_PH": "6.75",
-	"MAP_LABEL_SIZE_TOOLTIP": "Text size in pixels of the race maps (242x184 images), 6.75 if not set. Roam-map names use 75% of this size.",
+	"MAP_LABEL_SIZE_TOOLTIP": "Text size in pixels of the race maps (242x184 images) at the default hudmap scale of 5.5 meters per pixel, 6.75 if not set. Roam-map names use 75% of this size. The size follows the hudmap meters per pixel, like the label previews: at 2.75 meters per pixel the names on the menu maps are half as big.",
 	"MAP_LABEL_ANGLE": "Angle",
 	"MAP_LABEL_ANGLE_TOOLTIP": "The rotation of the text in degrees (counterclockwise)",
 	"MAP_LABEL_MAPS": "Shown on",

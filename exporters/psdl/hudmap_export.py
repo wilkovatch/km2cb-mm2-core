@@ -740,7 +740,10 @@ class HudmapExporter:
     def write_race_map(self, shapes, rect, name, labels, markers=None):
         size = (RACE_MAP_RECT[2] - RACE_MAP_RECT[0], RACE_MAP_RECT[3] - RACE_MAP_RECT[1])
         image = self.render(shapes, rect, size, outline=False)
-        self.draw_labels(image, rect, labels, ROAM_LABEL_SCALE if name == 'roam' else 1)
+        # the label size is in hudmap pixels (the editor preview and the labels preview follow the meters per pixel),
+        # so it is the size in race map pixels only at the default scale
+        density = self.meters_per_pixel / DEFAULT_METERS_PER_PIXEL
+        self.draw_labels(image, rect, labels, (ROAM_LABEL_SCALE if name == 'roam' else 1) * density)
         self.draw_markers(image, rect, markers or [])
         res = self.get_frame()
         res.paste(image, RACE_MAP_RECT[:2])

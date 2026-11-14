@@ -327,6 +327,22 @@ class HudmapTests(unittest.TestCase):
             preview = Image.open(Path(folder) / 'test_hudmap_labels_preview.png')
             self.assertIsNone(ImageChops.difference(original, preview).getbbox())
 
+    def test_menu_map_labels_follow_the_hudmap_scale(self):
+        # the label previews are in hudmap pixels, the menu maps must keep the same proportion at any meters per pixel
+        widths = {}
+        for mpp in (5.5, 2.75):
+            with tempfile.TemporaryDirectory() as folder:
+                plain = exporter(folder, [], hudmapMetersPerPixel=mpp)
+                plain.export_race_maps(shapes())
+                with Image.open(Path(folder) / 'jpg/test_maproam.jpg') as image:
+                    background = image.convert('L')
+                e = exporter(folder, [label('MMMMMMMMMMMMMMMM', size=14)], hudmapMetersPerPixel=mpp)
+                e.export_race_maps(shapes())
+                with Image.open(Path(folder) / 'jpg/test_maproam.jpg') as image:
+                    ink = ImageChops.difference(image.convert('L'), background).point(lambda v: 255 if v > 24 else 0).getbbox()
+                widths[mpp] = ink[2] - ink[0]
+        self.assertAlmostEqual(widths[2.75] / widths[5.5], 0.5, delta=0.08)
+
     # One-way arrows
 
     def arrow_exporter(self, roads, chains=None, hudmap_mpp=1, **props):

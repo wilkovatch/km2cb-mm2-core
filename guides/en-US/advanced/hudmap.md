@@ -58,7 +58,7 @@ A bridge that belongs to a race is drawn only on the map of that race, instead o
 
 Opening the **Hudmap** tab, its list of labels or a label selects the Hudmap container, and all labels appear in the city. They stay visible until you deselect the container from the blue menu, or switch to another tab of the city properties.
 
-- **Size** is in pixels of the race maps, 6.75 by default. Labels on the roam map are 75% of this.
+- **Size** is in pixels of the race maps at the default 5.5 **Meters per pixel**, 6.75 by default. Labels on the roam map are 75% of this. Like the previews, the size follows **Meters per pixel**: at 2.75 the labels of the menu maps are half as big, so raise their size to keep them readable.
 - **Shown on** chooses between all the maps, the roam map and the race maps.
 - **Label font** sets a custom `.ttf` or `.otf` font for the exported maps. The default is the bundled Liberation Sans Bold, which is similar to the stock style.
 - The **Labels** color affects only the exported maps.
