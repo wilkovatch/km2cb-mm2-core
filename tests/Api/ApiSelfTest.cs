@@ -257,6 +257,9 @@ namespace Api {
                     await SingleDecalReload();
                     await SplinePlacementHighlights("decal");
                     await ExportDecalNames("psdl");
+                } else if (focus == "editingTools") {
+                    await NewCity();
+                    await EditingTools();
                 } else if (focus == "menus") {
                     await NewCity();
                     await Submenus();
