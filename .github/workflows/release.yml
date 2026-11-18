@@ -1,8 +1,8 @@
 # Tags a release of the core whenever a push to main changes the files installed by the city builder
 # (changes to the tests, the developer documentation, the README and the workflows alone are ignored; the guides count).
 # The tag is v<version>-<short commit hash>, with <version> taken from settings.json, like the city builder's releases.
-# It is an annotated tag whose message is the changelog (the commits since the previous release, version number
-# increases excluded): the city builder installs and updates cores to their latest release tag and shows these messages
+# It is an annotated tag whose message is the changelog (the first line of the messages of the commits since the previous
+# release, version number increases excluded): the city builder installs and updates cores to their latest release tag and shows these messages
 # as the changelog, so only plain git is needed and no release page is created.
 name: Tag release
 
@@ -63,7 +63,8 @@ jobs:
             ! grep -Evq '^[+-][[:space:]]*"version"[[:space:]]*:[[:space:]]*"[^"]*",?[[:space:]]*$' <<< "$lines"
           }
           changes=$(git log $RANGE --no-merges --format='%h' -- "${paths[@]}" | while read -r commit; do
-            is_version_bump "$commit" || git log -1 --format='- %s (%h)' "$commit"
+            # only the first line of the message (%s would join the lines of a first paragraph without a blank line after it)
+            is_version_bump "$commit" || printf -- '- %s (%s)\n' "$(git log -1 --format=%B "$commit" | head -n 1)" "$(git log -1 --format=%h "$commit")"
           done)
           echo "${changes:-- No changes to the core files}" > notes.txt
           cat notes.txt
