@@ -13943,11 +13943,70 @@
     "buildingLine": [
       {
         "type": "psdl",
-        "frontOnly": false,
         "invertDirection": false,
         "loop": false,
+        "uMult": -0.25,
+        "vMult": -0.25,
+        "Name": "Default",
+        "name": "Default",
+        "fixBound": false,
+        "hudmapCategory": 0
+      }
+    ],
+    "polygonalBuilding": [
+      {
+        "type": "psdl",
         "height": 28.0,
         "roofTex": "texture/sw_roof_tar01_s.tex",
+        "individualSides": false,
+        "sideState": {
+          "type": "psdl",
+          "hasGroundFloor": true,
+          "groundFloor": {
+            "minHeight": 5.185,
+            "Slices": [
+              {
+                "bottom": 1,
+                "middle": 0,
+                "top": 1,
+                "Width": 4.995,
+                "Repetitions": 1
+              }
+            ]
+          },
+          "lowUpperFloorsCount": 0,
+          "highUpperFloorsCount": 0,
+          "upperFloors": [
+            {
+              "height": 3.799,
+              "Slices": [
+                {
+                  "block": 2,
+                  "Width": 3.683,
+                  "Repetitions": 1
+                }
+              ]
+            }
+          ],
+          "blockDict": [
+            {
+              "type": "texture",
+              "assetName": "texture/sf_base_white07b_1s_5_l.tex",
+              "listName": "sf_base_white07b_1s_5_l"
+            },
+            {
+              "type": "sliver",
+              "assetName": "texture/sf_gsliver01_4_f.tex",
+              "listName": "sf_gsliver01_4_f"
+            },
+            {
+              "type": "texture",
+              "assetName": "texture/sf_win_brickred04_2s_4_l.tex",
+              "listName": "sf_win_brickred04_2s_4_l"
+            }
+          ],
+          "name": ""
+        },
         "uMult": -0.25,
         "vMult": -0.25,
         "Name": "Default",

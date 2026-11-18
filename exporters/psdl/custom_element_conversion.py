@@ -78,7 +78,7 @@ class Converter:
         data = self.data
         self.original_ids = {}
         maps = {}
-        for kind in ('roads', 'intersections', 'terrainPatches', 'buildingLines'):
+        for kind in ('roads', 'intersections', 'terrainPatches', 'buildingLines', 'polygonalBuildings'):
             maps[kind] = {}
             for i, e in enumerate(data.get(kind) or []):
                 maps[kind][e['id']] = i

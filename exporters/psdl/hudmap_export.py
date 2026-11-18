@@ -428,10 +428,11 @@ class HudmapExporter:
                 self.add_mesh(shapes, patch['data'].get('mesh'), element_category(state), 'ground')
         for line in self.data.get('buildingLines') or []:
             line_category = element_category(line['data']['fields']['state'])
-            self.add_mesh(shapes, line.get('roof'), line_category, 'building', False)
             for building in line.get('buildings') or []:
                 category = element_category(building['data']['fields']['state'])
                 self.add_mesh(shapes, building.get('roof'), line_category if category == 'auto' else category, 'building', False)
+        for building in self.data.get('polygonalBuildings') or []:
+            self.add_mesh(shapes, building.get('roof'), element_category(building['data']['fields']['state']), 'building', False)
         for instance in self.data.get('meshInstances') or []:
             self.add_mesh_instance(shapes, instance)
         for element in self.data.get('customElements') or []:

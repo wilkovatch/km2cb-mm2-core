@@ -1,0 +1,41 @@
+{
+	"label": "PSDL_COMPATIBLE",
+	"menuWidth": 1.5,
+	"tabs": [
+		{
+			"label": "PB_TAB_SIDES",
+			"elements": [
+				{
+					"name": "mainGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "BL_TAB_PROPERTIES",
+			"elements": [
+				{
+					"name": "propertiesGroup",
+					"width": 1.5
+				},
+				{
+					"name": "fixBound",
+					"width": 1.5
+				},
+				{
+					"name": "hudmapCategory",
+					"width": 1.5
+				}
+			]
+		},
+		{
+			"label": "BL_TAB_ADVANCED",
+			"elements": [
+				{
+					"name": "exportToPKG",
+					"width": 1.5
+				}
+			]
+		}
+	]
+}

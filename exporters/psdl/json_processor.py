@@ -1244,41 +1244,32 @@ class JsonProcessor:
                 min_p = p
         return (min_p, min_i)
 
-    def get_building(self, res, building, obj_name, front_only, both_sides_parent):
+    def get_building(self, res, building, obj_name):
         state = building['data']['fields']['state']
-        block_perimeters = self.block_perimeters
         curve = building['spline']
         curve_n = building['splineActualNormals']
 
         #find the block(s)
-        both_sides = (front_only and both_sides_parent) or state_bool(state, 'fixBound')
+        both_sides = state_bool(state, 'fixBound')
         primary_both_sides = both_sides
-        fallback_point = None
-        depth = 1 if front_only else state['depth']
-        if front_only and len(curve) > 2:
-            center_point = [0,0,0]
-            for point in curve:
-                center_point = np.add(center_point, point)
-            center_point /= len(curve)
+        depth = state['depth']
+        mid_front = np.add(curve[0], curve[-1]) * 0.5
+        mid_front_2, min_i = self.closest_point_to_curve(mid_front, curve)
+        if min_i >= 0:
+            mid_front = mid_front_2
+        mid_dir = np.add(curve_n[0], curve_n[-1])
+        mid_dir /= np.linalg.norm(mid_dir)
+        center_point = mid_front + 0.5 * depth * mid_dir
+        block = self.find_block(center_point)
+        # for the converters: where the block is looked for first, and from where the front one (see below)
+        fallback_point = mid_front - mid_dir
+        if block < 0: # try front instead of back (e.g. on road without terrain behind)
+            both_sides = False
+            center_point = mid_front - mid_dir
             block = self.find_block(center_point)
-        else:
-            mid_front = np.add(curve[0], curve[-1]) * 0.5
-            mid_front_2, min_i = self.closest_point_to_curve(mid_front, curve)
-            if min_i >= 0:
-                mid_front = mid_front_2
-            mid_dir = np.add(curve_n[0], curve_n[-1])
-            mid_dir /= np.linalg.norm(mid_dir)
-            center_point = mid_front + 0.5 * depth * mid_dir
-            block = self.find_block(center_point)
-            # for the converters: where the block is looked for first, and from where the front one (see below)
-            fallback_point = mid_front - mid_dir
-            if block < 0: # try front instead of back (e.g. on road without terrain behind)
-                both_sides = False
-                center_point = mid_front - mid_dir
-                block = self.find_block(center_point)
         if block < 0 and self.ignore_blocks:
             block = 0
-        primary_point = center_point if fallback_point is None else mid_front + 0.5 * depth * mid_dir
+        primary_point = mid_front + 0.5 * depth * mid_dir
         if block >= 0:
             block += 1
             n_res = len(res)
@@ -1291,8 +1282,7 @@ class JsonProcessor:
             # the blocks around it)
             for part in res[n_res:]:
                 part.properties['locate'] = ','.join(str(float(c)) for c in primary_point)
-                if fallback_point is not None:
-                    part.properties['locate_front'] = ','.join(str(float(c)) for c in fallback_point)
+                part.properties['locate_front'] = ','.join(str(float(c)) for c in fallback_point)
                 if primary_both_sides and part.part_type() == 'FACB':
                     part.properties['both_sides'] = '1'
 
@@ -1326,20 +1316,68 @@ class JsonProcessor:
             res.append(elem)
             res.append(bnd)
         else:
-            if line['roof'] is not None:
-                block = self.get_block_from_line_points(line)
-                if block < 0 and self.ignore_blocks:
-                    block = 0
-                if block >= 0 and 'roof' in line:
-                    roof_tex = state_val(state, 'roofTex', '')
-                    n_res = len(res)
-                    self.get_roof(res, line['roof'], block + 1, roof_tex, line['data']['name'])
-                    if len(line['linePoints']) > 0:
-                        center = np.mean(np.array(line['linePoints'], dtype=float), axis=0)
-                        for part in res[n_res:]:
-                            part.properties['locate'] = ','.join(str(float(c)) for c in center)
             for building in line['buildings']:
-                self.get_building(res, building, line['data']['name'], state_bool(state, 'frontOnly'), state_bool(state, 'fixBound'))
+                self.get_building(res, building, line['data']['name'])
+
+    @staticmethod
+    def polygon_inside_point(building):
+        # the center of the largest triangle of the roof, inside the outline also when it is concave (the mean of the
+        # points without a roof), at the height of the points
+        points = np.array(building['points'], dtype=float)
+        mean = np.mean(points, axis=0)
+        roof = building.get('roof')
+        if roof is None or not roof.get('submeshes'):
+            return mean
+        vertices = roof['vertices']
+        indices = roof['submeshes'][0]['indices']
+        best, best_area = None, 0.0
+        for t in range(0, len(indices) - 2, 3):
+            a, b, c = (np.array(vertices[i], dtype=float) for i in indices[t:t + 3])
+            area = abs((b[0] - a[0]) * (c[2] - a[2]) - (b[2] - a[2]) * (c[0] - a[0]))
+            if area > best_area:
+                best, best_area = (a + b + c) / 3.0, area
+        if best is None:
+            return mean
+        return np.array([best[0], np.min(points[:, 1]), best[2]])
+
+    def get_polygonal_building(self, res, building):
+        # a building on the closed outline through its points (it can be concave): its walls are buildings with only the
+        # front side, the roof covers the outline, all in the block of a point inside it (see polygon_inside_point)
+        state = building['data']['fields']['state']
+        instance_state = building['data']['fields']['instanceState']
+        name = building['data']['name']
+        if len(building.get('walls') or []) < 3:
+            report.warning('polygonal building ' + name + ' has no area, skipped', element=name, kind='polygonalBuilding')
+            return
+        if building.get('selfIntersecting'):
+            report.warning('the outline of the polygonal building ' + name + ' crosses itself', element=name, kind='polygonalBuilding')
+        center = self.polygon_inside_point(building)
+        block = self.find_block(center)
+        if block < 0 and self.ignore_blocks:
+            block = 0
+        if block < 0:
+            report.warning('polygonal building ' + name + ' is outside of every block, skipped', element=name, kind='polygonalBuilding')
+            return
+        block += 1
+        if state['type'] != 'psdl' or state_bool(instance_state, 'exportToPKG'):
+            if building['data']['mesh'] is None or building['data']['collider'] is None:
+                report.warning('polygonal building ' + name + ' has no mesh, skipped', element=name, kind='polygonalBuilding')
+                return
+            res.append(self.get_mesh(building['data']['mesh'], block, 'VL', name))
+            res.append(self.get_mesh(building['data']['collider'], block, 'BND', name, self.cur_mesh_idx - 1))
+            return
+        both_sides = state_bool(state, 'fixBound')
+        n_res = len(res)
+        if building['roof'] is not None:
+            self.get_roof(res, building['roof'], block, state_val(state, 'roofTex', ''), name)
+        for wall in building['walls']:
+            if wall['front'] is not None:
+                self.get_building_side(res, block, both_sides, wall['front'], name)
+        # where the block of the building is found (for the converters)
+        for part in res[n_res:]:
+            part.properties['locate'] = ','.join(str(float(c)) for c in center)
+            if both_sides and part.part_type() == 'FACB':
+                part.properties['both_sides'] = '1'
 
     def does_ray_intersect_segment(self, point, direction, p1, p2):
         v1 = np.subtract(point, p1)
@@ -1527,6 +1565,8 @@ class JsonProcessor:
             self.get_patch(res, element, manual_blocks)
         elif kind == 'buildingLine':
             self.get_building_line(res, element)
+        elif kind == 'polygonalBuilding':
+            self.get_polygonal_building(res, element)
         for part in res:
             part.source = (kind, element['id'])
         return res
@@ -1566,6 +1606,12 @@ class JsonProcessor:
         for line in data['buildingLines']:
             if self.verbose: print("exporting " + line['data']['name'])
             self.guarded_element(res, line['data']['name'], 'buildingLine', lambda: self.get_building_line(res, line), line['id'])
+
+        print("processing polygonal buildings...")
+        for building in data.get('polygonalBuildings') or []:
+            if self.verbose: print("exporting " + building['data']['name'])
+            self.guarded_element(res, building['data']['name'], 'polygonalBuilding',
+                                 lambda b=building: self.get_polygonal_building(res, b), building['id'])
 
         print("processing rails...")
         for element in data.get('customElements') or []:

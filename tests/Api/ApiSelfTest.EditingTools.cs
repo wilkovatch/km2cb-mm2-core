@@ -284,9 +284,24 @@ namespace Api {
                 Check("a click on the top of the building selects its top", hit.Count > 0 && hit["collider"].As<Node3D>() == heightHandle);
                 var seen = GO.GetPosition(heightHandle);
                 await Call("view.camera.set", new { position = new[] { seen.X - 40, seen.Y + 30, seen.Z - 60 }, target = new[] { seen.X, seen.Y - 5, seen.Z } });
+                var spaceBefore = gizmo.space;
                 gizmo.ClearTargets();
                 gizmo.AddTarget(heightHandle);
                 await Frames(3); Screenshot("building_size_sides.png");
+                Check("the gizmo moves the top only up and down", gizmo.posAxesAllowed.SequenceEqual(new[] { false, true, false })
+                    && !gizmo.rotAxesAllowed.Any(a => a) && !gizmo.scaleAxesAllowed.Any(a => a) && gizmo.space == RuntimeGizmos.TransformSpace.Local);
+                gizmo.ClearTargets();
+                gizmo.AddTarget(depthHandle);
+                await Frames(2);
+                var towardsBack = GameEngine.Vector3.DecodePosition(GO.GetPosition(depthHandle) - new Vector3(GO.GetPosition(heightHandle).X, GO.GetPosition(depthHandle).Y, GO.GetPosition(heightHandle).Z)).Normalized();
+                Check("the gizmo moves the back only towards and away from the front", gizmo.posAxesAllowed.SequenceEqual(new[] { true, false, false })
+                    && gizmo.space == RuntimeGizmos.TransformSpace.Local && depthHandle.GlobalBasis.X.Normalized().Dot(towardsBack) > 0.999f);
+                var backCenter = GameEngine.Vector3.DecodePosition(GO.GetPosition(depthHandle));
+                var backHit = gizmo.GetWorld3D().DirectSpaceState.IntersectRay(PhysicsRayQueryParameters3D.Create(backCenter + towardsBack * 50, backCenter - towardsBack * 0.5f, gizmo.selectionMask));
+                Check("a click on the turned back of the building selects it", backHit.Count > 0 && backHit["collider"].As<Node3D>() == depthHandle);
+                gizmo.ClearTargets();
+                await Frames(2);
+                Check("the space of the gizmo comes back with another target", gizmo.space == spaceBefore);
                 await Drag(heightHandle, () => GO.SetPosition(heightHandle, GO.GetPosition(heightHandle) + new Vector3(3, 7, 0)));
                 Check("moving the top handle sets the height, and only that", Mathf.Abs(building.state.Float("height") - (height + 7)) < 0.01f
                     && Mathf.Abs(building.state.Float("depth") - depth) < 0.01f && Mathf.Abs(GO.GetPosition(heightHandle).Y - building.height) < 0.01f);

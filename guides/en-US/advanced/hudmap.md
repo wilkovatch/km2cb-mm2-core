@@ -31,7 +31,7 @@ What each element draws as:
 | Roads, intersections | Road, or grass or water by their texture |
 | Terrain patches | Ground, or grass or water by their texture |
 | Perimeter-only patches | Not drawn |
-| Roofs of building lines | Buildings |
+| Roofs of the buildings of the building lines and of the polygonal buildings | Buildings |
 | Movable bridges | Road |
 | Mesh instances | Not drawn |
 

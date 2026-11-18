@@ -1,12 +1,6 @@
 {
 	"parameters": [
 		{
-			"name": "fixBound",
-			"label": "FIX_BOUND",
-			"tooltip": "FIX_BOUND_TOOLTIP",
-			"type": "bool"
-		},
-		{
 			"name": "exportToPKG",
 			"label": "EXPORT_TO_PKG",
 			"type": "bool",

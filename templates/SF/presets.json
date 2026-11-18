@@ -12370,11 +12370,70 @@
     "buildingLine": [
       {
         "type": "psdl",
-        "frontOnly": false,
         "invertDirection": false,
         "loop": false,
+        "uMult": -0.25,
+        "vMult": -0.25,
+        "Name": "Default",
+        "name": "Default",
+        "fixBound": false,
+        "hudmapCategory": 0
+      }
+    ],
+    "polygonalBuilding": [
+      {
+        "type": "psdl",
         "height": 21.375,
         "roofTex": "texture/nl_coitrock_f.tex",
+        "individualSides": false,
+        "sideState": {
+          "type": "psdl",
+          "hasGroundFloor": true,
+          "groundFloor": {
+            "minHeight": 2.877,
+            "Slices": [
+              {
+                "bottom": 1,
+                "middle": 0,
+                "top": 1,
+                "Width": 3.996,
+                "Repetitions": 1
+              }
+            ]
+          },
+          "lowUpperFloorsCount": 0,
+          "highUpperFloorsCount": 0,
+          "upperFloors": [
+            {
+              "height": 6.16,
+              "Slices": [
+                {
+                  "block": 2,
+                  "Width": 5.867,
+                  "Repetitions": 1
+                }
+              ]
+            }
+          ],
+          "blockDict": [
+            {
+              "type": "texture",
+              "assetName": "texture/mf_soma_shop01_door_4_f.tex",
+              "listName": "mf_soma_shop01_door_4_f"
+            },
+            {
+              "type": "sliver",
+              "assetName": "texture/sf_gsliver04_4_f.tex",
+              "listName": "sf_gsliver04_4_f"
+            },
+            {
+              "type": "texture",
+              "assetName": "texture/sf_3s_win06_6_f.tex",
+              "listName": "sf_3s_win06_6_f"
+            }
+          ],
+          "name": ""
+        },
         "uMult": -0.25,
         "vMult": -0.25,
         "Name": "Default",

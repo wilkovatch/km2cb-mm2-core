@@ -21,7 +21,7 @@ JSON only ──► prop rules, trains, boats, bridges, parked cars, CINFO/AIMAP
 ```
 
 1. `export.py` reads the arguments (`options.py`), decodes the JSON and checks the race ownership (`race_elements.validate_ownership`), then writes the generated files (`generated_export.py`: low LOD textures under `psdl`, bridge models under `pathset`) and puts their paths in the data.
-2. `JsonProcessor.get_objects` turns each element of the city into **parts** (`psdl_parts.ExportedCityElement`): roads, intersections, terrain patches, building lines, decals (`decals.py`), mesh instances and prop placers (`prop_placers.py`). The roads and intersections also register what the BAI needs (`exported_roads`, `traffic_intersections`), and the BAI network is built after them (see [The BAI](#the-bai)). `get_objects(traffic_only=True)` stops there, for the checks that need only the network and the room perimeters (`checks/validateOpponents`).
+2. `JsonProcessor.get_objects` turns each element of the city into **parts** (`psdl_parts.ExportedCityElement`): roads, intersections, terrain patches, building lines, polygonal buildings (`get_polygonal_building`: the roof and the facades of the walls, in the block of the center of the largest triangle of the roof, which is inside the outline also when it is concave; an outline crossing itself is reported), decals (`decals.py`), mesh instances and prop placers (`prop_placers.py`). The roads and intersections also register what the BAI needs (`exported_roads`, `traffic_intersections`), and the BAI network is built after them (see [The BAI](#the-bai)). `get_objects(traffic_only=True)` stops there, for the checks that need only the network and the room perimeters (`checks/validateOpponents`).
 3. `scene.Scene` converts the parts once to the space of the writers (see [Coordinates](#coordinates)) and finds the rooms.
 4. The writers (`writers/`) write the files from the scene. Each one is guarded (see [Errors](#errors)), so the others are written even if one fails.
 5. The other files are written from the JSON directly (or the processor): prop rules, the PATHSETs of the city routes, CINFO and AIMAP, hudmap and race maps.
@@ -137,7 +137,7 @@ Everything conservative goes towards more visible rooms: missed occluders, the p
 The exporter reports the problems with `Files/python/ExportReport.py` of the program, through `writers/report.py` (which prints them, and raises the errors without `ExportReport`).
 
 - Every `Warning:` is a warning of the report, with the element when its name is known (`original_name` of the parts, without the `[rail]`-like suffix: `report.element_name`).
-- `JsonProcessor.guarded_element` exports each road, intersection, terrain patch, building line, mesh instance and prop placer on its own: one that fails is reported and left out, with what it had added (its parts and its BAI records).
+- `JsonProcessor.guarded_element` exports each road, intersection, terrain patch, building line, polygonal building, mesh instance and prop placer on its own: one that fails is reported and left out, with what it had added (its parts and its BAI records).
 - The PSDL writer writes a room that fails (e.g. a perimeter error) empty, so that the other rooms keep their index, and goes on.
 - Each file is written even if one before it failed (`report.guarded`), and the export fails at the end if there were errors.
 

@@ -260,6 +260,9 @@ namespace Api {
                 } else if (focus == "editingTools") {
                     await NewCity();
                     await EditingTools();
+                } else if (focus == "polygonalBuildings") {
+                    await NewCity();
+                    await PolygonalBuildings();
                 } else if (focus == "menus") {
                     await NewCity();
                     await Submenus();
@@ -1440,10 +1443,11 @@ namespace Api {
             await SetParam(blockRef, "listName", "api test changed");
             await CheckUndo("building block preset sync", () => Call("presets.sync", new { category = "buildingBlock", name = "api test block" }));
             Check("presets.sync gives the block preset to the blocks linked to it", (await Call("state.getParam", new { @ref = blockRef, name = "listName" }))?.Value<string>() == savedListName);
-            var savedLineHeight = await Param(line, "height");
-            await SetParam(line, "height", savedLineHeight + 7.5);
+            async Task<bool> Inverted() => (await Call("state.getParam", new { @ref = line, name = "invertDirection" })).Value<bool>();
+            var savedInverted = await Inverted();
+            await SetParam(line, "invertDirection", !savedInverted);
             await CheckUndo("building line preset sync", () => Call("presets.sync", new { category = "buildingLine", name = "api test line" }));
-            Check("presets.sync gives the line preset to the lines linked to it", await Param(line, "height") == savedLineHeight && await PresetOf(line) == "api test line");
+            Check("presets.sync gives the line preset to the lines linked to it", await Inverted() == savedInverted && await PresetOf(line) == "api test line");
             foreach (var (category, name, r) in new (string, string, object)[] { ("buildingBlock", "api test block", blockRef), ("buildingSide", "api test side", sideRef), ("building", "api test building", buildingRef), ("buildingLine", "api test line", line) }) {
                 await CheckUndo(category + " preset delete", () => Call("presets.delete", new { category, name }));
                 Check("deleting the " + category + " preset unlinks the elements using it", await PresetOf(r) == "" && !((JArray)await Call("presets.list", new { category })).Any(x => x.Value<string>() == name));

@@ -24,7 +24,7 @@ To make a building with no real ground floor, like most stock buildings, set the
 
 Each facade has a collision surface in the game. If cars can sometimes drive through a building, check **Fix bound by duplicating it** in its panel, which also adds the surface to the room in front. Use it only where needed.
 
-On a building line, it only applies when **Front only** is checked.
+On a polygonal building, it applies to all its walls.
 
 ## Which room?
 
