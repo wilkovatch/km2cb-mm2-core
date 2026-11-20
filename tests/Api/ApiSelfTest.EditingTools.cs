@@ -49,6 +49,52 @@ namespace Api {
             Check("the side shared by position is removed", (await Perimeter(left)).Count == 6);
             var far = (await Call("patches.create", new { perimeter = new[] { Pos(400, 0), Pos(450, 0), Pos(450, 50) } })).Value<int>();
             await Expect("patches without a shared side can't be merged", "invalid_operation", "patches.merge", new { patch = left, other = far });
+            //a split along a line through positions inside the patch, and polygons carved out of it
+            TerrainPatch Patch(int id) => Element<TerrainPatch>(id);
+            float Area(TerrainPatch tp) {
+                var points = tp.GetPerimeterPoints();
+                var res = 0f;
+                for (int i = 0; i < points.Count; i++) res += points[i].X * points[(i + 1) % points.Count].Z - points[(i + 1) % points.Count].X * points[i].Z;
+                return res / 2;
+            }
+            //the parts cover the whole patch, all turning as it did, without overlapping
+            bool Covers(float area, params TerrainPatch[] parts) => parts.All(part => part != null && Mathf.Sign(Area(part)) == Mathf.Sign(area))
+                && Mathf.Abs(parts.Sum(Area) - area) < 0.5f;
+            var block = await Call("patches.create", new { perimeter = new[] { Pos(0, 400), Pos(100, 400), Pos(100, 500), Pos(0, 500) }, internalPoints = new[] { Pos(50, 410), Pos(50, 470) }, details = true });
+            var blockId = block["id"].Value<int>();
+            var bp = block["points"].Select(x => x.Value<int>()).ToList();
+            var blockArea = Area(Patch(blockId));
+            await Expect("a line through a position outside the patch can't split it", "invalid_operation", "patches.split", new { patch = blockId, from = bp[0], to = bp[2], through = new[] { V(150, 0, 450) }, onGround = true });
+            await Expect("a line crossing itself can't split it", "invalid_operation", "patches.split", new { patch = blockId, from = bp[0], to = bp[1], through = new[] { V(80, 0, 450), V(20, 0, 450) }, onGround = true });
+            var bent = 0;
+            await CheckUndo("patch split along a line", async () => bent = (await Call("patches.split", new { patch = blockId, from = bp[0], to = bp[1], through = new[] { V(50, 0, 430) }, onGround = true })).Value<int>());
+            var bentPoints = Patch(bent)?.GetPerimeterPointsComponents();
+            Check("a line through a position can join two points next to each other: the new patch gets the triangle, sharing the free point", bentPoints != null && bentPoints.Count == 3
+                && bentPoints[0] == PointOf(bp[0]) && bentPoints[1] == PointOf(bp[1]) && Near(bentPoints[2].GetPoint(), 50, 430) && GO.IsNull(bentPoints[2].anchor)
+                && bentPoints[2].GetLinks().Count == 2 && (await Perimeter(blockId)).SequenceEqual(new[] { bp[1], bp[2], bp[3], bp[0], History.ElementRegistry.GetId(bentPoints[2]) }));
+            Check("the internal points go to the patch they are in, the two patches cover the old one", Patch(bent).GetInternalPointsComponents().Count == 1
+                && Patch(blockId).GetInternalPointsComponents().Count == 1 && Covers(blockArea, Patch(blockId), Patch(bent)));
+            await Call("history.undo");
+            await Expect("a polygon crossing the perimeter can't be carved", "invalid_operation", "patches.carve", new { patch = blockId, outline = new[] { V(40, 0, 440), V(140, 0, 440), V(40, 0, 460) }, onGround = true });
+            await Expect("a polygon of two points can't be carved", "invalid_operation", "patches.carve", new { patch = blockId, outline = new[] { V(40, 0, 440), V(60, 0, 440) }, onGround = true });
+            JToken carved = null;
+            await CheckUndo("polygon carved", async () => carved = await Call("patches.carve", new { patch = blockId, outline = new[] { V(40, 0, 440), V(60, 0, 440), V(60, 0, 460), V(40, 0, 460) }, onGround = true }));
+            var polygon = Patch(carved["polygon"].Value<int>());
+            var ring = Patch(carved["ring"].Value<int>());
+            Check("the polygon is carved in a new patch of free points, shared with the ring around it", polygon != null && polygon.GetPerimeterPointCount() == 4
+                && polygon.GetPerimeterPointsComponents().All(q => GO.IsNull(q.anchor) && q.GetLinks().Count >= 2) && polygon.GetInternalPointsComponents().Count == 0);
+            Check("the ring is split in two along two cuts to points of the perimeter, the three patches cover the old one", ring != null
+                && Patch(blockId).GetPerimeterPointCount() + ring.GetPerimeterPointCount() == 12 && Covers(blockArea, Patch(blockId), polygon, ring)
+                && new[] { bp[0], bp[1], bp[2], bp[3] }.All(q => PointOf(q).GetLinks().Count >= 1)
+                && Patch(blockId).GetInternalPointsComponents().Count + ring.GetInternalPointsComponents().Count == 2);
+            await Call("history.undo");
+            JToken touching = null;
+            await CheckUndo("polygon carved from a point of the perimeter", async () => touching = await Call("patches.carve", new { patch = blockId, at = bp[0], outline = new[] { V(40, 0, 420), V(20, 0, 450) }, onGround = true }));
+            var fromCorner = Patch(touching["polygon"].Value<int>());
+            Check("a polygon from a point of the perimeter needs one cut: the point is shared by the three patches", fromCorner != null && fromCorner.GetPerimeterPointCount() == 3
+                && fromCorner.GetPerimeterPointsComponents()[0] == PointOf(bp[0]) && PointOf(bp[0]).GetLinks().Count == 3
+                && Covers(blockArea, Patch(blockId), fromCorner, Patch(touching["ring"].Value<int>())));
+            await Call("history.undo");
 
             // Building lines
             var lineInfo = await Call("lines.create", new { points = new[] { Pos(0, 200), Pos(50, 200), Pos(100, 200), Pos(150, 200) }, dividing = new[] { 1, 2 }, details = true });
@@ -160,7 +206,7 @@ namespace Api {
             Check("a click on a segment of the edited patch inserts a free point on it", withCorner.Count == 4 && GO.IsNull(withCorner[2].anchor) && Near(withCorner[2].GetPoint(), 550, 25));
             Check("a click elsewhere is not an insertion", Operations.TerrainPatches.InsertOnClickedSegment(Element<TerrainPatch>(source), null, Vector3.Zero) == null);
             //Split: the two places of the perimeter clicked next, points or positions on its sides
-            Check("the patch editor has the split and merge buttons", Shown() == patchPanel && ButtonOf(patchPanel, "TP_SPLIT") != null && ButtonOf(patchPanel, "TP_MERGE") != null);
+            Check("the patch editor has the split and merge buttons", Shown() == patchPanel && ButtonOf(patchPanel, "TP_SPLIT") != null && ButtonOf(patchPanel, "TP_MERGE_PATCH") != null);
             var patchCount = M.patches.Count;
             var outlinePicker = builder.outlinePicker;
             await Press(patchPanel, "TP_SPLIT");
@@ -179,7 +225,7 @@ namespace Api {
                 && cut.Count == 4 && cut[3] == withCorner[0] && GO.IsNull(cut[0].anchor) && Near(cut[0].GetPoint(), onSide.position.X, onSide.position.Z)
                 && splitOff.GetPerimeterPointCount() == 3 && splitOff.GetPerimeterPointsComponents().Contains(cut[0]));
             //Merge with...: the next click on a patch sharing a side, outlined in green under the mouse
-            await Press(patchPanel, "TP_MERGE");
+            await Press(patchPanel, "TP_MERGE_PATCH");
             Check("the merge button starts a pick over the editor of the patch", builder.elementPicker.IsActive() && Shown() == patchPanel && patchPanel.GetPatch() == Element<TerrainPatch>(source)
                 && ListHighlight.suspended);
             //what is picked along a line across the side the two patches share: one patch, then the other, never the
@@ -212,6 +258,38 @@ namespace Api {
             Check("the picked patch is merged into the edited one", M.patches.Count == patchCount && Element<TerrainPatch>(source).GetPerimeterPointCount() == 5 && Shown() == patchPanel);
             await Call("history.undo"); await Call("history.undo");
             Check("merge and split are one undo step each", M.patches.Count == patchCount && Element<TerrainPatch>(source).GetPerimeterPointCount() == 4);
+            //the split line can go through places inside the patch, and end back on its first place to carve a polygon
+            var square = (await Call("patches.create", new { perimeter = new[] { Pos(700, 300), Pos(800, 300), Pos(800, 400), Pos(700, 400) } })).Value<int>();
+            var squareArea = Area(Patch(square));
+            await Edit(Patch(square));
+            patchCount = M.patches.Count;
+            await Press(patchPanel, "TP_SPLIT");
+            ElementPlacer.OutlinePicker.Place Free(float x, float z) => ElementPlacer.OutlinePicker.FreePlace(new Vector3(x, 0, z));
+            Check("a free place outside the patch is not accepted", outlinePicker.IsActive() && !outlinePicker.Pick(Free(850, 350)));
+            Check("a line starts on a free place inside it, and goes on through others", outlinePicker.Pick(Free(730, 330)) && outlinePicker.Pick(Free(770, 330))
+                && outlinePicker.Pick(Free(770, 370)) && outlinePicker.IsActive());
+            Check("a place making the line cross itself is not accepted", !outlinePicker.Pick(Free(750, 320)));
+            Check("a line started inside doesn't end on the perimeter", !outlinePicker.Pick(outlinePicker.PlaceNear(new Vector3(800, 0, 350))));
+            Check("Ctrl+Z removes the last place", outlinePicker.RemoveLast() && outlinePicker.Picked.Count == 2 && outlinePicker.IsActive());
+            Check("picking the first place again carves the polygon", outlinePicker.Pick(Free(770, 370)) && outlinePicker.Pick(Free(730, 370))
+                && outlinePicker.Pick(outlinePicker.Picked[0]) && !outlinePicker.IsActive());
+            M.ProcessUpdate(); await Frames(2);
+            Check("the polygon and the other half of the ring are new patches, the editor stays on the patch", M.patches.Count == patchCount + 2 && Shown() == patchPanel
+                && patchPanel.GetPatch() == Patch(square) && M.patches[M.patches.Count - 2].GetPerimeterPointCount() == 4
+                && Covers(squareArea, Patch(square), M.patches[M.patches.Count - 2], M.patches[M.patches.Count - 1]));
+            await Call("view.camera.set", new { position = new[] { 750f, 140f, 260f }, target = new[] { 750f, 0f, 350f } });
+            await Frames(3); Screenshot("patch_carved.png");
+            await Call("history.undo");
+            Check("the carve is one undo step", M.patches.Count == patchCount && Patch(square).GetPerimeterPointCount() == 4);
+            await Edit(Patch(square));
+            await Press(patchPanel, "TP_SPLIT");
+            var squarePoints = Patch(square).GetPerimeterPointsComponents();
+            Check("a line from a point of the perimeter through a free place to the next point is a split", outlinePicker.Pick(outlinePicker.PlaceNear(squarePoints[0].GetPoint()))
+                && outlinePicker.Pick(Free(750, 340)) && outlinePicker.IsActive() && outlinePicker.Pick(outlinePicker.PlaceNear(squarePoints[1].GetPoint())) && !outlinePicker.IsActive());
+            M.ProcessUpdate(); await Frames(2);
+            Check("the patch is split along the line", M.patches.Count == patchCount + 1 && M.patches[M.patches.Count - 1].GetPerimeterPointCount() == 3
+                && Patch(square).GetPerimeterPointCount() == 5 && Covers(squareArea, Patch(square), M.patches[M.patches.Count - 1]));
+            await Call("history.undo");
 
             //the eyedropper: the element of the open editor gets the properties of the element clicked
             await Call("state.setBuiltin", new { @ref = far, name = "smooth", value = 5 });
