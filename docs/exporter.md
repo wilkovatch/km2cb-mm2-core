@@ -42,6 +42,7 @@ JSON only ──► prop rules, trains, boats, bridges, parked cars, CINFO/AIMAP
 | `traffic/paths.py` | The paths of a procedural road (edges, curbs, lanes, sidewalks, rails) |
 | `traffic/network.py` | `BaiNetworkBuilder`: the BAI roads and intersections from the exported roads and intersections |
 | `traffic/rails.py` | The rules of the game for the cable cars through an intersection (next road, curve), as `lua/cableCars.lua` draws the rail decals; used by `tools/cable_car_rails_check.py` |
+| `traffic/ambient.py` | The rules of the game for the ambient cars at an intersection (next road and lane, curve, left-hand traffic), on the BAI roads as written (`Route` of the BAI writer); used by `checks/trafficPaths`, see `docs/agents/psdl-and-bai.md` |
 | `traffic/opponents.py` | The route of the race opponents as the game drives it, on the BAI network (for `checks/validateOpponents` and the warnings of the AIMAP export, see `docs/agents/races-and-state.md`) |
 | `traffic/rooms.py` | `RoomFinder`: the room of a position as the game finds it (for the opponents and the roads and intersections without geometry) |
 | `writers/` | The writers of the game files: `psdl_writer`, `cpvs_writer`, `inst_writer`, `bai_writer`, `pathset_writer`, `decal_writer`, `pkg_writer`, `tex_writer`, with `file_io` (binary output) and `report` (warnings and errors) |

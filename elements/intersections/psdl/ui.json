@@ -32,6 +32,10 @@
 				{
 					"name": "texture2",
 					"width": 1.5
+				},
+				{
+					"name": "check:trafficPaths",
+					"width": 1.5
 				}
 			]
 		},

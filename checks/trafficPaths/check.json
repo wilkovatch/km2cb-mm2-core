@@ -1,0 +1,8 @@
+{
+	"label": "CHECK_TRAFFIC_PATHS",
+	"tooltip": "CHECK_TRAFFIC_PATHS_TOOLTIP",
+	"sources": [
+		"intersection"
+	],
+	"script": "check.py"
+}
