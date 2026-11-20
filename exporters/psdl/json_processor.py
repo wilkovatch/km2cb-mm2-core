@@ -817,7 +817,12 @@ class JsonProcessor:
                 elem = ExportedCityElement()
                 sw_indices = []
                 sw_vertices = []
-                if state_bool(state, 'fixSidewalksUV'):
+                # the road-style sections need the same sections on the two sides of the sidewalk (not where its outer side
+                # has other segments, see sidewalksMatch in the builder's ExportGeometry)
+                sides_match = intersection['data']['fields'].get('sidewalksMatch')
+                road_style = state_bool(state, 'fixSidewalksUV') and (sides_match is None or cur_junction < 0
+                    or cur_junction >= len(sides_match) or sides_match[cur_junction])
+                if road_style:
                     for j in range(len(p['vertices']) - 4, -1, -4):
                         for n in range(3):
                             sw_vertices.append(p['vertices'][j])
@@ -833,7 +838,7 @@ class JsonProcessor:
                 elem.indices = sw_indices
                 elem.vertices = sw_vertices
                 elem.properties['original_name'] = intersection['data']['name']
-                if state_bool(state, 'fixSidewalksUV'):
+                if road_style:
                     elem.name = str(cur_block) + '_ROADS'
                     tex0 = self.get_tex(state_val(state, 'texture0'))
                     elem.mat = tex0 + ',' + tex0 + ',' + tex0

@@ -2109,7 +2109,7 @@ namespace History {
             await Button(true);
             System.AppDomain.CurrentDomain.FirstChanceException -= OnException;
             await Button(false);
-            Check("rotation: clicking an intersection selects it", Shown() is EditorPanels.IntersectionEditorPanel panel && panel.intersection == intersection && builder.terrainClick.modifier == null);
+            Check("rotation: clicking an intersection selects it", Shown() is EditorPanels.IntersectionEditorPanel panel && panel.intersection == intersection && builder.terrainClick.modifier is ElementPlacer.SidewalkPicker);
             Check("rotation: clicking an intersection throws nothing", !clickThrew);
             builder.CloseAllPanels();
         }

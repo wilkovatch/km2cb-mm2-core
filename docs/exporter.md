@@ -70,7 +70,7 @@ A part is named `<prefix,><room>_<TYPE>`: the room (block) number, 0 for the par
 | `ROADN` | Road without sidewalks | |
 | `ROADD`, `ROADDN` | Divided road | `divider_type`, `divider_param`, `caps` |
 | `RAIL`, `RAILC` | Road and junction tunnels (`RAILC` also from the `rail` elements, see below) | `road_name`, `is_rail`, `curved_sides`, `is_wall`, offsets and caps |
-| `SW`, `CW` | Sidewalk strip, crosswalk | `cap` |
+| `SW`, `CW` | Sidewalk strip, crosswalk. An intersection sidewalk is a `SW` strip (outer, inner pairs), or a `ROADS` part with `fixSidewalksUV` (road-style UV), only where its two sides have the same sections (`fields.sidewalksMatch` of the junction): with different inner and outer segments the strip repeats vertices (degenerate quads, as `forcedStraight` already makes) | `cap` |
 | `IS`, `BLOCK`, `NUL` | Road surface, terrain, invisible surface (triangle fans) | `no_coplanar_fix` |
 | `ROOF`, `FAC`, `FACB`, `SLIVER` | Roof, facade, facade bound, sliver | `tiling`, `u_tiling`, `v_tiling` |
 | `INST` | A mesh instance (position, rotation, scale) | `object`, `flags` |

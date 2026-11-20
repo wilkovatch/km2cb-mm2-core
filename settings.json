@@ -4,7 +4,7 @@
 	"coreVersion": 10,
 	"coreFeatureVersion": 8,
 	"programVersion": 5,
-	"featureVersion": 5,
+	"featureVersion": 6,
 	"surfaceProjectionTerrainFallbackOnly": true,
 	"customTextureFormats": [
 		"tex"

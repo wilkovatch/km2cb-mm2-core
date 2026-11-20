@@ -36,6 +36,24 @@
 			]
 		},
 		{
+			"label": "IS_TAB_SIDEWALKS",
+			"elements": [
+				{
+					"name": "sidewalksGroup",
+					"width": 1.5
+				},
+				{
+					"name": "fixSidewalksUV",
+					"width": 1.5,
+					"enabledWhen": "sidewalks.roadStyleUVAvailable"
+				},
+				{
+					"name": "sidewalkListGroup",
+					"width": 1.5
+				}
+			]
+		},
+		{
 			"label": "IS_TAB_RAILS",
 			"elements": [
 				{
@@ -74,10 +92,6 @@
 				},
 				{
 					"name": "exportToPKG",
-					"width": 1.5
-				},
-				{
-					"name": "fixSidewalksUV",
 					"width": 1.5
 				}
 			]

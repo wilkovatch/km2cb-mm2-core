@@ -289,6 +289,9 @@ namespace Api {
                 } else if (focus == "geometrylessRoads") {
                     await NewCity();
                     await GeometrylessRoads();
+                } else if (focus == "intersectionSidewalks") {
+                    await NewCity();
+                    await IntersectionSidewalks();
                 } else if (focus == "dependencies") {
                     await NewCity();
                     await Roads();
@@ -313,6 +316,7 @@ namespace Api {
                     await TerrainAndBuildings();
                     await Anchors();
                     await Heights();
+                    await IntersectionSidewalks();
                     await States();
                     ArrayListMoveButtons();
                     await ArrayPoints();
