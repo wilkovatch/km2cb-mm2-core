@@ -31,9 +31,20 @@ class INSTWriter:
         self.scene = scene
         self.filepath = filepath
 
+    def written_room(self, block, name):
+        # whether the block of an instance is a room of the PSDL: else its record would be in room 0, which crashes the
+        # game, so it is left out
+        if self.scene.block_index(block) >= 0:
+            return True
+        report.error('the INST object ' + name + ' is in the block ' + str(block) + ', which is not a room of the PSDL, '
+                     + 'it is left out (room 0 crashes the game)', element=report.element_name(name))
+        return False
+
     def process_inst_elem(self, obj):
-        rot = obj.euler()
         pr = obj.properties
+        if not self.written_room(obj.block, pr.get("original_name") or pr["object"]):
+            return
+        rot = obj.euler()
         scalex = obj.scale[0]
         scalez = obj.scale[2] #TODO: fix name (this is the vertical)
         scaley = obj.scale[1]
@@ -46,6 +57,8 @@ class INSTWriter:
 
     def process_pkg_group(self, group):
         # the pkg is in coordinates relative to its pivot
+        if not self.written_room(group.block, group.stem):
+            return
         self.export_elem([0, 0, 0], 1, 1, 1, group.pivot, group.block, group.stem, inst_modifiers(0, INST_LANDMARK))
 
     def export_elem(self, rot, scalex, scaley, scalez, origo, iblock, obj_name, flags, axes=None):

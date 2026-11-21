@@ -24,6 +24,7 @@ A **warning** means the export finished, but something may not work in the game.
 | Rooms with props use a high texture index | Reduce the textures, or the rooms with prop rules |
 | More than 511 texture references | Reuse textures. See [Limits](../advanced/limits.md) |
 | More than 597 different objects in the INST file | Export fewer elements to PKG, and reuse meshes |
+| An INST mesh is not over any room | Move it onto a room, or put an invisible terrain patch under it. See [Props and meshes](../beginner/props-and-meshes.md) |
 | Extra lanes dropped | Use at most 4 lanes per side |
 | A cable car line without ends | Leave it open, or add a dead end |
 | Decal points outside of the rooms | Move them onto a room |

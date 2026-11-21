@@ -118,6 +118,41 @@ class Writer(unittest.TestCase):
         second = 5 + len('group') + 1 + 8 + 12
         self.assertEqual(struct.unpack_from('<HH', data, second), (1, 0x2007))
 
+    def test_blocks_that_are_not_rooms_are_left_out(self):
+        # a record in room 0 crashes the game
+        with tempfile.TemporaryDirectory() as folder:
+            path = pathlib.Path(folder) / 'test.inst'
+            writer = INSTWriter.__new__(INSTWriter)
+            writer.file = BinaryFileHelper(str(path), 'wb')
+            writer.object_names = set()
+            writer.scene = SimpleNamespace(block_index=lambda block: 0 if block == 1 else -1)
+            part = SimpleNamespace(block=7, properties=dict(object='mesh', original_name='Mesh 1'))
+            with patch('writers.inst_writer.report.error') as error:
+                writer.process_inst_elem(part)
+                writer.process_pkg_group(SimpleNamespace(pivot=(0, 0, 0), block=3, stem='group'))
+            writer.file.close()
+            self.assertEqual(path.read_bytes(), b'')
+        self.assertEqual(error.call_count, 2)
+
+
+class MeshInstances(unittest.TestCase):
+    def test_outside_of_the_rooms_is_skipped_with_a_warning(self):
+        processor = json_processor.JsonProcessor.__new__(json_processor.JsonProcessor)
+        processor.data = dict(meshDict={0: dict(name='meshes/box.obj', boundsMin=(0, 0, 0), boundsMax=(1, 1, 1))})
+        mesh = dict(type='instMesh', name='Mesh 1', settings=dict(type='instMesh', instLandmark=True),
+                    reference=dict(meshId=0, position=(1.0, 2.0, 3.0), rotation=(0, 0, 0, 1), scale=(1, 1, 1)))
+        res = []
+        with patch.object(processor, 'find_block', return_value=-1), patch.object(json_processor.report, 'warning') as warning:
+            processor.get_mesh_instance(res, mesh, 0)
+        self.assertEqual(res, [])
+        self.assertEqual(warning.call_count, 1)
+        self.assertIn('not over any room', warning.call_args.args[0])
+        res = []
+        with patch.object(processor, 'find_block', return_value=4), patch.object(json_processor.report, 'warning') as warning:
+            processor.get_mesh_instance(res, mesh, 0)
+        self.assertEqual([e.name for e in res], ['0,5_INST'])
+        self.assertEqual(warning.call_count, 0)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1490,6 +1490,9 @@ class JsonProcessor:
             is_prop = mesh.get('type') == 'individualProp' # the other mesh instances (and the parametric objects) are INST meshes
             if not is_prop:
                 block = self.find_block(np.add(mref['position'], (0.0, dict_mesh['boundsMin'][1], 0.0)))
+                if block < 0:
+                    report.warning('the INST mesh ' + mesh['name'] + ' is not over any room, skipped',
+                                   element=mesh['name'], kind='meshInstance', position=[float(c) for c in mref['position']])
             if block >= 0 or is_prop:
                 cur_block = block + 1
                 elem = ExportedCityElement()
