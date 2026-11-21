@@ -432,7 +432,7 @@
 	"CREATE_PROP_LINE": "Prop line",
 	"CREATE_PARKED_CAR": "Parked car",
 	"PARKED_CAR_PREVIEW_HINT": "Example car only. The game chooses the model and paint and may leave this slot empty.",
-	"CREATE_PROP_POLYGON": "Polygon",
+	"CREATE_PROP_POLYGON": "Prop polygon",
 	"PROP_LINE_WIDTH": "Width (m)",
 	"PROP_LINE_SPACING": "Spacing (m; steps of 0.25 m)",
 	"CREATE_OPPONENT": "Opponent",
