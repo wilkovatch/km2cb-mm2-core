@@ -100,6 +100,8 @@ The `rail` custom elements (splines through perimeter points, following the peri
 
 Until 2026-11-21 a vertex was written with every room it was a vertex of, in the order of the rooms, so the last one, taken as the neighbour of the next edge, was often wrong (16% of the points of the MM3 Paris conversion, 0.4% in stock SF and London), and an edge leading out of the city from a vertex shared with a room led to that room. `tools/_test_psdl_perimeters.py` checks these rules. A `RAILC` mask has a bit for each written pair, the bit of an edge being on the first pair of its end vertex (`process_part_railc`).
 
+The trace walks along the boundary edges (`walk_perimeter`: the edges of a single face with area seen from above, against the winding of the faces), taking the widest turn where a vertex has several ways on. A face without area seen from above (`MIN_FACE_AREA`, e.g. a sidewalk section on a road end line) is not part of the boundary. Until 2026-11-21 it still counted for the direction of the walk: where the boundary goes to a vertex and back along the same line (a slit, as between an intersection surface and a sidewalk on a road end line), its edge gave the previous vertex as a second way on, both at -180 degrees, and the walk went on from vertex 0 instead ("Perimeter error: dead end", the room written empty). `tools/_test_psdl_perimeter_walk.py` checks the walk.
+
 ## The BAI
 
 The BAI is built as a model (`traffic/model.py`) before being written, from the roads and intersections as the processor exports them.

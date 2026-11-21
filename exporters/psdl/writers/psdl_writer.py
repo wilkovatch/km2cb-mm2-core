@@ -35,6 +35,7 @@ class PerimeterVert:
 
 
 PROP_BLOCK_MAX_MAT_ID = 255  # the texture references of the blocks with props need subtype 0 (see process_materials)
+MIN_FACE_AREA = 0.00001  # faces with less area seen from above are not part of the perimeters (see trace_perimeter)
 
 SectVert = namedtuple("SectVert", "pos ID")
 VertWSects = namedtuple("VertWSects", "pos sects bloc")
@@ -491,7 +492,7 @@ class PSDLWriter:
                         p0 = self.get_vertex_2(obj, ff[0])
                         p1 = self.get_vertex_2(obj, ff[1])
                         p2 = self.get_vertex_2(obj, ff[2])
-                        if self.get_triangle_area(p0, p1, p2) > 0.00001:
+                        if self.get_triangle_area(p0, p1, p2) > MIN_FACE_AREA:
                             assoc_faces.append(f)
                     else:
                         assoc_faces.append(f)
@@ -513,13 +514,14 @@ class PSDLWriter:
         return res
 
     def get_next_or_prev_verts(self, obj, vert, vertlist, prev, is_bmesh=True):
+        # only the faces with area, as in get_verts_on_isolated_edges: a face without area seen from above (e.g. a
+        # sidewalk section on a road end line) would give a perimeter vertex a second neighbour, the one before it
         assoc_faces = []
         num_faces = obj.num_triangles()  # bmesh
         for f in range(num_faces):
             ff = self.get_face_array(obj, f, is_bmesh)
-            for v in ff:
-                if v == vert:
-                    assoc_faces.append(f)
+            if vert in ff and self.get_triangle_area(*[self.get_vertex_2(obj, v) for v in ff]) > MIN_FACE_AREA:
+                assoc_faces.append(f)
         return self.get_next_or_prev_verts_2(obj, vert, vertlist, assoc_faces, prev, is_bmesh)
 
     def get_next_or_prev_verts_2(self, obj, vert, vertlist, faces, prev, is_bmesh=True):
@@ -625,12 +627,61 @@ class PSDLWriter:
             return None
         return self.simplify_perimeter(perimeter, positions, bi)
 
+    def walk_perimeter(self, mesh, max_per_verts, block_desc):
+        # the vertices of the perimeter of the mesh in order, along its boundary edges (those of a single face with
+        # area) against the winding of the faces, from the first of max_per_verts on the boundary
+        perimeter0 = []
+        first = 0
+        second = -1
+        for i in range(len(max_per_verts)):
+            assoc_verts = self.get_verts_on_isolated_edges(mesh, max_per_verts[i])
+            prev_verts = self.get_next_or_prev_verts(mesh, max_per_verts[i], assoc_verts, True)
+            if len(prev_verts) == 1:
+                first = max_per_verts[i]
+                second = prev_verts[0]
+            else:
+                next_verts = self.get_next_or_prev_verts(mesh, max_per_verts[i], assoc_verts, False)
+                if len(next_verts) == 1:
+                    second = max_per_verts[i]
+                    first = next_verts[0]
+            if second != -1:
+                break
+        if second == -1:
+            raise Exception("Perimeter error on block " + block_desc)
+        perimeter0.append(first)
+        perimeter0.append(second)
+        loop_index = 0
+        while perimeter0[0] != perimeter0[-1]:
+            loop_index += 1
+            if loop_index > 65536:
+                raise Exception("Perimeter error: infinite loop on block " + block_desc)
+            assoc_verts = self.get_verts_on_isolated_edges(mesh, perimeter0[-1])
+            prev_verts = self.get_next_or_prev_verts(mesh, perimeter0[-1], assoc_verts, True)
+            if len(prev_verts) == 0:
+                raise Exception("Perimeter error: dead end on block " + block_desc)
+            if len(prev_verts) == 1:
+                perimeter0.append(prev_verts[0])
+            else:
+                # the widest turn (an angle of -180 goes back along the same line: without a better one, the first)
+                perim_v = prev_verts[0]
+                max_ang = float('-inf')
+                for i in range(len(prev_verts)):
+                    O = self.get_vertex_2(mesh, perimeter0[-1])
+                    A = self.get_vertex_2(mesh, perimeter0[-2])
+                    B = self.get_vertex_2(mesh, prev_verts[i])
+                    ang = self.get_angle(O, A, B)
+                    if ang > max_ang:
+                        perim_v = prev_verts[i]
+                        max_ang = ang
+                perimeter0.append(perim_v)
+        perimeter0.pop()
+        return perimeter0
+
     def trace_perimeter(self, the_block, bi, precise):
         # the perimeter followed around the faces of the block (the inner vertices of the divided road ends excluded),
         # with its positions: (None, None) if the block has no faces
         perimeter = []
         perimeter_v = []
-        perimeter0 = []
         excl_v = []
         block_index = the_block[0].geo.block
         prop = the_block[0].geo.properties
@@ -693,49 +744,7 @@ class PSDLWriter:
                 if abs(maxx - new_block_verts_2[v][0]) < 0.1:
                     if v not in max_per_verts:
                         max_per_verts.append(v)
-        first = 0
-        second = -1
-        for i in range(len(max_per_verts)):
-            assoc_verts = self.get_verts_on_isolated_edges(new_block, max_per_verts[i])
-            prev_verts = self.get_next_or_prev_verts(new_block, max_per_verts[i], assoc_verts, True)
-            if len(prev_verts) == 1:
-                first = max_per_verts[i]
-                second = prev_verts[0]
-            else:
-                next_verts = self.get_next_or_prev_verts(new_block, max_per_verts[i], assoc_verts, False)
-                if len(next_verts) == 1:
-                    second = max_per_verts[i]
-                    first = next_verts[0]
-            if second != -1:
-                break
-        if second == -1:
-            raise Exception("Perimeter error on block " + str(block_index) + orig_obj_msg)
-        perimeter0.append(first)
-        perimeter0.append(second)
-        loop_index = 0
-        while perimeter0[0] != perimeter0[-1]:
-            loop_index += 1
-            if loop_index > 65536:
-                raise Exception("Perimeter error: infinite loop on block " + str(block_index) + orig_obj_msg)
-            assoc_verts = self.get_verts_on_isolated_edges(new_block, perimeter0[-1])
-            prev_verts = self.get_next_or_prev_verts(new_block, perimeter0[-1], assoc_verts, True)
-            if len(prev_verts) == 0:
-                raise Exception("Perimeter error: dead end on block " + str(block_index) + orig_obj_msg)
-            if len(prev_verts) == 1:
-                perimeter0.append(prev_verts[0])
-            else:
-                perim_v = 0
-                max_ang = -180
-                for i in range(len(prev_verts)):
-                    O = self.get_vertex_2(new_block, perimeter0[-1])
-                    A = self.get_vertex_2(new_block, perimeter0[-2])
-                    B = self.get_vertex_2(new_block, prev_verts[i])
-                    ang = self.get_angle(O, A, B)
-                    if ang > max_ang:
-                        perim_v = prev_verts[i]
-                        max_ang = ang
-                perimeter0.append(perim_v)
-        perimeter0.pop()
+        perimeter0 = self.walk_perimeter(new_block, max_per_verts, str(block_index) + orig_obj_msg)
         for v in perimeter0:
             vpos = self.get_vertex_2(new_block, v)
             vid = self.get_vert_index(vpos)
