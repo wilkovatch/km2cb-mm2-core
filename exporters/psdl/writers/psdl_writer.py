@@ -1065,7 +1065,9 @@ class PSDLWriter:
                             a_section_0 = []
                             a_section_1 = []
                             a_section_2 = []
-                            for i2 in range(i + 4 * sectsdone):
+                            # the sections before the quad and its first one (i is 4 * sectsdone here), none for the
+                            # first quad (a single section draws nothing)
+                            for i2 in range(i + 4 if i > 0 else 0):
                                 a_section_0.append(a_section[i2])
                             if coplanar_fix_reverse:
                                 list_a = a_section_2
@@ -1170,7 +1172,9 @@ class PSDLWriter:
                             # Non-coplanar, split
                             a_section_0 = []
                             a_section_1 = []
-                            for i2 in range(i + 2 * sectsdone):
+                            # the sections before the quad and its first one (i is 2 * sectsdone here), none for the
+                            # first quad (a single section draws nothing)
+                            for i2 in range(i + 2 if i > 0 else 0):
                                 a_section_0.append(a_section[i2])
                             a_section_1.append(a_section[i + 3])
                             a_section_1.append(a_section[i])
