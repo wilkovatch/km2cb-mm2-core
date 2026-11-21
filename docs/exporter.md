@@ -71,7 +71,7 @@ A part is named `<prefix,><room>_<TYPE>`: the room (block) number, 0 for the par
 | `ROADN` | Road without sidewalks | |
 | `ROADD`, `ROADDN` | Divided road | `divider_type`, `divider_param`, `caps` |
 | `RAIL`, `RAILC` | Road and junction tunnels (`RAILC` also from the `rail` elements, see below) | `road_name`, `is_rail`, `curved_sides`, `is_wall`, offsets and caps |
-| `SW`, `CW` | Sidewalk strip, crosswalk. An intersection sidewalk is a `SW` strip (outer, inner pairs), or a `ROADS` part with `fixSidewalksUV` (road-style UV). With different inner and outer segments (`fields.sidewalksMatch` false) the sections repeat the vertices of the side that doesn't advance (degenerate quads, as a self-intersecting corner already makes), and both kinds take them as they are; the road-style U follows the middle of the sections, so it advances with either side | `cap` |
+| `SW`, `CW` | Sidewalk strip, crosswalk. An intersection sidewalk is a `SW` strip (outer, inner pairs), or a `ROADS` part with `fixSidewalksUV` (road-style UV). With different inner and outer segments (`fields.sidewalksMatch` false) the sections repeat the vertices of the side that doesn't advance (degenerate quads), and both kinds take them as they are; the road-style U follows the middle of the sections, so it advances with either side | `cap` |
 | `IS`, `BLOCK`, `NUL` | Road surface, terrain, invisible surface (triangle fans) | `no_coplanar_fix` |
 | `ROOF`, `FAC`, `FACB`, `SLIVER` | Roof, facade, facade bound, sliver | `tiling`, `u_tiling`, `v_tiling` |
 | `INST` | A mesh instance (position, rotation, scale) | `object`, `flags` |

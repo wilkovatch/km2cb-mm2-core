@@ -1,5 +1,5 @@
-"""Synthetic checks for the version-11 migration: the force straight sidewalk flags of the roads become sidewalk overrides
-of the intersections (one outer segment skipping the crosswalks), on the sidewalks they straightened."""
+"""Synthetic checks for the version-11 migration: the sidewalks straightened by the force straight flags of the roads or by
+a negative size increase become sidewalk overrides of the intersections (one outer segment skipping the crosswalks)."""
 import gzip
 import importlib.util
 import json
@@ -111,6 +111,29 @@ class Migration(unittest.TestCase):
         self.assertEqual(straightened(source), [0])
         source['roads'][1]['instanceState']['forceStraightLeftStartSidewalk'] = True
         self.assertEqual(straightened(source), [0, 1])
+
+    def test_negative_size_increases(self):
+        # the end of road 2 on the intersection 1 m smaller: both its sidewalks (south west from road 2, south east from 1)
+        source = t_junction()
+        source['roads'][2]['state']['endIntersectionAdd'] = -1.0
+        self.assertEqual(straightened(source), [1, 2])
+        # unless the intersection makes up for it
+        source['intersections'][0]['state']['sizeIncrease'] = 1.0
+        self.assertEqual(straightened(source), [])
+        # the intersection smaller: all its sidewalks
+        source = t_junction()
+        source['intersections'][0]['state']['sizeIncrease'] = -0.5
+        self.assertEqual(straightened(source), [0, 1, 2])
+        # the value of the end on the intersection (road 1 starts there)
+        source = t_junction()
+        source['roads'][1]['state']['endIntersectionAdd'] = -1.0
+        self.assertEqual(straightened(source), [])
+        source['roads'][1]['state']['startIntersectionAdd'] = -1.0
+        self.assertEqual(straightened(source), [0, 1])
+        # not on a convex corner
+        source = bend()
+        source['roads'][0]['state']['endIntersectionAdd'] = -1.0
+        self.assertEqual(straightened(source), [1])
 
     def test_folder(self):
         with tempfile.TemporaryDirectory() as tmp:

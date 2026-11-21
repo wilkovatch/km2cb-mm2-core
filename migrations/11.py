@@ -1,18 +1,23 @@
-"""The force straight sidewalk flags of the roads (removed) become sidewalk overrides of the intersections.
+"""The sidewalks made straight by the roads become sidewalk overrides of the intersections.
 
-A road had four flags (forceStraight{Left,Right}{Start,End}Sidewalk) that made the outer side of an intersection
-sidewalk straight. The sidewalk overrides of the intersections do the same: one outer segment skipping the crosswalks
-gives the same outer side. Each flag is moved to the sidewalk it affected, keeping the geometry. The junction read, for
+The outer side of an intersection sidewalk was made straight by four flags of the roads
+(forceStraight{Left,Right}{Start,End}Sidewalk, removed), and, without a flag, where one of its two roads ended with a
+negative size increase (its startIntersectionAdd or endIntersectionAdd plus the sizeIncrease of the intersection, the
+selfIntersectingSpline of the junction): the straight outer side is no longer automatic. The sidewalk overrides of the
+intersections do the same: one outer segment skipping the crosswalks gives the same outer side. Each such sidewalk gets
+that override, keeping the geometry (later changes of the size increases don't straighten or curve it again). The
+junction read, for
 the sidewalk between a road A and the next road B clockwise (the sidewalk on the left of A and on the right of B, seen
 from the roads toward the intersection), the Left flag of A and the Right flag of B, of the end of the road on the
 intersection. At the start of a road those are the opposite sides of what the names said, so a flag is moved to the
 sidewalk it straightened, not to the one its name gave. A flag had no effect on a convex corner: such sidewalks get no
-override. The order of the roads and the convex corners are computed as the builder does
+override, as the negative size increases. The order of the roads and the convex corners are computed as the builder does
 (IntersectionGenerator.CalculateVerticesAndCenters and ProcessRoad), from the control points next to the ends of the
 roads in place of the first points of their curves.
 """
 import copy
 import math
+import struct
 import sys
 import MigrationHelper
 
@@ -37,6 +42,17 @@ def strip_flags(road):
         if isinstance(source, dict):
             for name in FLAGS:
                 source.pop(name, None)
+
+
+def f32(value):
+    return struct.unpack('<f', struct.pack('<f', value))[0]
+
+
+def size_increase(road, intersection):
+    # Road.GetIntersectionAdd plus the size increase of the intersection, as the builder adds them (in single precision)
+    state = road.get('state') or {}
+    end = 'startIntersectionAdd' if road.get('startIntersectionId') == intersection.get('id') else 'endIntersectionAdd'
+    return f32(f32(state.get(end) or 0.0) + f32((intersection.get('state') or {}).get('sizeIncrease') or 0.0))
 
 
 def direction_to_center(road, intersection_id, center):
@@ -80,7 +96,8 @@ def is_convex(dir_i, dir_j):
 
 
 def straightened_sidewalks(intersection, roads_by_id):
-    """The indices (in the roads of the intersection) of the first roads of the sidewalks the flags made straight."""
+    """The indices (in the roads of the intersection) of the first roads of the sidewalks made straight by the flags or
+    by a negative size increase."""
     iid = intersection.get('id')
     center = intersection.get('center')
     ids = intersection.get('roads') or []
@@ -100,7 +117,8 @@ def straightened_sidewalks(intersection, roads_by_id):
         a_at_end = road_a.get('endIntersectionId') == iid
         b_at_end = road_b.get('endIntersectionId') == iid
         forced = flag(road_a, 'forceStraightLeftEndSidewalk' if a_at_end else 'forceStraightLeftStartSidewalk') \
-            or flag(road_b, 'forceStraightRightEndSidewalk' if b_at_end else 'forceStraightRightStartSidewalk')
+            or flag(road_b, 'forceStraightRightEndSidewalk' if b_at_end else 'forceStraightRightStartSidewalk') \
+            or size_increase(road_a, intersection) < 0 or size_increase(road_b, intersection) < 0
         if forced and not is_convex(directions[i], directions[j]) and i not in res:
             res.append(i)
     return res
@@ -145,7 +163,8 @@ def process_folder(helper):
     preferences = helper.read_and_backup('preferences.json', False)
     helper.save(city, 'city.json.gz', True)
     if changed:
-        print('intersections with sidewalks made straight by the roads, now overridden: ' + ', '.join(changed))
+        print('intersections with sidewalks made straight by the roads (force straight or negative size increase), now '
+              'overridden: ' + ', '.join(changed))
     preferences['coreVersion'] = 11
     helper.save(preferences, 'preferences.json', False)
 

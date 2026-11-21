@@ -295,11 +295,6 @@
 			"value": "lerp(A_swh, B_swh, percentAnchor)"
 		},
 		{
-			"name": "v0",
-			"type": "vec3",
-			"value": "if(selfIntersectingSpline and z > 0 and z < totalLength, v0_0, v0)"
-		},
-		{
 			"name": "absX0",
 			"type": "float",
 			"value": "v3x(v0)"
