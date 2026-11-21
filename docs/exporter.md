@@ -89,6 +89,17 @@ The `rail` custom elements (splines through perimeter points, following the peri
 
 **Rooms.** The PSDL writes only the rooms that have surfaces (`scene.is_surface`), in the order of their numbers: `Scene.blocks` lists them, and `Scene.block_index` gives the index of a room number in the PSDL. The PSDL, INST and BAI writers use the same table.
 
+## The room perimeters
+
+`PSDLWriter.process_blocks_loop` traces the perimeter of every room first (`trace_perimeter` around the faces of its surfaces, `simplify_perimeter`, `remove_spikes`), then gives each point its neighbours (`assign_neighbours`) and writes the rooms. A perimeter point is a pair (vertex, room), and the game takes the room of a pair as the neighbour across the edge to the next pair (0: out of the city, see `tools/psdl_check.py`). As in the stock files, a vertex is written once for each other room that only touches it there (a corner, lowest room first), then once with the room across the edge to the next vertex; the room across the edge from the previous vertex is left out, since it is the previous vertex's. The room across an edge is:
+
+1. a room whose perimeter has the same two vertices one after the other: the one going the other way (a neighbour) before one going the same way (a room on top), the lowest first; the others are written before it;
+2. else the room with the longest edge along it within 10 cm (`edge_overlap`): a vertex in the middle of an edge of the other room, or corners of two rooms a few cm apart (farther than the 3 cm of the vertex merging);
+3. else, for an edge shorter than the spikes (10 cm), the room of its start or end vertex (a crack between two road ends): out of the city, the cars crossing it would be lost;
+4. else none.
+
+Until 2026-11-21 a vertex was written with every room it was a vertex of, in the order of the rooms, so the last one, taken as the neighbour of the next edge, was often wrong (16% of the points of the MM3 Paris conversion, 0.4% in stock SF and London), and an edge leading out of the city from a vertex shared with a room led to that room. `tools/_test_psdl_perimeters.py` checks these rules. A `RAILC` mask has a bit for each written pair, the bit of an edge being on the first pair of its end vertex (`process_part_railc`).
+
 ## The BAI
 
 The BAI is built as a model (`traffic/model.py`) before being written, from the roads and intersections as the processor exports them.

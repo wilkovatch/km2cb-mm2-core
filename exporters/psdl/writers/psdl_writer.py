@@ -30,7 +30,8 @@ class BlockFlag:
 class PerimeterVert:
     def __init__(self, ID, blocks):
         self.ID = ID
-        self.blocks = blocks
+        self.blocks = blocks  # the other blocks with a vertex here (which keeps the point when simplifying)
+        self.neighbours = [0]  # the room numbers written with this point, the last one across the edge to the next point
 
 
 PROP_BLOCK_MAX_MAT_ID = 255  # the texture references of the blocks with props need subtype 0 (see process_materials)
@@ -160,6 +161,7 @@ class PSDLWriter:
         self.already_rotated = {}
         self.epsilon = 0.03
         self.spike_width = 0.1  # thinner spikes in the perimeters are removed (see remove_spikes)
+        self.shared_edge_tolerance = 0.1  # an edge along the edge of another perimeter (see edge_overlap)
         self.height_epsilon = 0.001
         self.tex_warning = 0
         self.tex_warning_2 = 0
@@ -1407,7 +1409,7 @@ class PSDLWriter:
                 rail_empty = False
             else:
                 verts1.append(0)
-            for bb in range(1, len(self.perim_points[ip].blocks)):
+            for bb in range(1, len(self.perim_points[ip].neighbours)):
                 verts1.append(0)
         remain = len(verts1) % 16
         if rail_empty:
@@ -1597,31 +1599,154 @@ class PSDLWriter:
             res.insert(res.index(road), rail)
         return res
 
+    def block_perimeter(self, b, bi):
+        # the perimeter of a block (counterclockwise), or the exception when it fails and the errors are collected
+        try:
+            try:
+                perimeter = self.get_perimeter(b, bi, False)
+            except Exception:
+                print("Perimeter Error, retrying with more precision...")
+                perimeter = self.get_perimeter(b, bi, True)
+            if perimeter is None:
+                raise Exception("Perimeter error on block " + str(bi+1))
+            perimeter.reverse()  # Picked it clockwise, as said in the wiki, but it's counterclockwise actually
+            # two vertices of the faces merged in the same PSDL vertex (get_vert_index) are one point
+            perimeter = [pv for k, pv in enumerate(perimeter) if k == 0 or pv.ID != perimeter[k - 1].ID]
+            while len(perimeter) > 1 and perimeter[0].ID == perimeter[-1].ID:
+                perimeter.pop()
+            return perimeter
+        except Exception as e:
+            if not report.collecting():
+                raise
+            return e
+
+    def shared_edges_grid(self, perimeters):
+        # the perimeter edges of every block (block, start, end) by the 10 m cells around them, for find_edge_rooms
+        grid = {}
+        tol = self.shared_edge_tolerance
+        for bi, perimeter in enumerate(perimeters):
+            if not isinstance(perimeter, list):
+                continue
+            n = len(perimeter)
+            for k in range(n):
+                p0 = self.vertices[perimeter[k].ID - 1]
+                p1 = self.vertices[perimeter[(k + 1) % n].ID - 1]
+                for cx in range(math.floor((min(p0[0], p1[0]) - tol) / 10), math.floor((max(p0[0], p1[0]) + tol) / 10) + 1):
+                    for cy in range(math.floor((min(p0[1], p1[1]) - tol) / 10), math.floor((max(p0[1], p1[1]) + tol) / 10) + 1):
+                        grid.setdefault((cx, cy), []).append((bi, p0, p1))
+        return grid
+
+    def point_segment_dist(self, p, a, b):
+        ab = np.subtract(b, a)
+        l2 = float(np.dot(ab, ab))
+        t = 0.0 if l2 < 1e-12 else min(1.0, max(0.0, float(np.dot(np.subtract(p, a), ab)) / l2))
+        return float(np.linalg.norm(np.subtract(p, np.add(a, t * ab))))
+
+    def edge_overlap(self, p0, p1, q0, q1):
+        # the length of the part of the edge p0-p1 that goes along the edge q0-q1 (within shared_edge_tolerance)
+        d = np.subtract(p1, p0)
+        length = float(np.linalg.norm(d))
+        if length < 1e-9:
+            return 0.0
+        u = d / length
+        tq0 = float(np.dot(np.subtract(q0, p0), u))
+        tq1 = float(np.dot(np.subtract(q1, p0), u))
+        lo = max(0.0, min(tq0, tq1))
+        hi = min(length, max(tq0, tq1))
+        if hi - lo < self.epsilon:
+            return 0.0
+        tol = self.shared_edge_tolerance
+        if self.point_segment_dist(np.add(p0, lo * u), q0, q1) > tol or self.point_segment_dist(np.add(p0, hi * u), q0, q1) > tol:
+            return 0.0
+        return hi - lo
+
+    def find_edge_rooms(self, bi, a, b, rooms_of_edge, grid):
+        # the other blocks across the perimeter edge from vertex a to vertex b of block bi, the one written as its
+        # neighbour last: the blocks whose perimeter has the same edge (the neighbours go along it the other way, blocks
+        # on top of each other the same way); or else the one with the longest edge along it, for the edges whose ends
+        # are not both vertices of the other block (a vertex in the middle of an edge of the other block, or the corners
+        # of the two blocks a few cm apart, farther than the vertices merged by remove_doubles)
+        opposite = sorted(set(rooms_of_edge.get((b, a), [])) - {bi})
+        same = sorted(set(rooms_of_edge.get((a, b), [])) - {bi} - set(opposite))
+        if len(opposite) == 0 and len(same) == 0 and a != b:
+            p0 = self.vertices[a - 1]
+            p1 = self.vertices[b - 1]
+            tol = self.shared_edge_tolerance
+            best = {}  # block -> longest overlap
+            seen = set()
+            for cx in range(math.floor((min(p0[0], p1[0]) - tol) / 10), math.floor((max(p0[0], p1[0]) + tol) / 10) + 1):
+                for cy in range(math.floor((min(p0[1], p1[1]) - tol) / 10), math.floor((max(p0[1], p1[1]) + tol) / 10) + 1):
+                    for edge in grid.get((cx, cy), []):
+                        bj, q0, q1 = edge
+                        if bj == bi or id(edge) in seen:
+                            continue
+                        seen.add(id(edge))
+                        overlap = self.edge_overlap(p0, p1, q0, q1)
+                        if overlap > best.get(bj, 0.0):
+                            best[bj] = overlap
+            return sorted(best, key=lambda bj: (best[bj], -bj))
+        door = opposite[:1] or same[:1]
+        return [r for r in opposite + same if r not in door] + door
+
+    def assign_neighbours(self, perimeters):
+        # The neighbours of the perimeter points, as in the stock cities: a point is written once for each other block
+        # that only touches it (a corner of that block), then once with the block across the edge to the next point
+        # (0: none, the edge leads out of the city). The game takes the last one as the neighbour of that edge, the
+        # others give an edge of no length. The block across the edge from the previous point is left out (it is the
+        # neighbour of the previous point).
+        rooms_of_vertex = {}
+        rooms_of_edge = {}
+        for bi, perimeter in enumerate(perimeters):
+            if not isinstance(perimeter, list):
+                continue
+            n = len(perimeter)
+            for k in range(n):
+                rooms_of_vertex.setdefault(perimeter[k].ID, set()).add(bi)
+                rooms_of_edge.setdefault((perimeter[k].ID, perimeter[(k + 1) % n].ID), []).append(bi)
+        grid = self.shared_edges_grid(perimeters)
+        for bi, perimeter in enumerate(perimeters):
+            if not isinstance(perimeter, list):
+                continue
+            n = len(perimeter)
+            across = [self.find_edge_rooms(bi, perimeter[k].ID, perimeter[(k + 1) % n].ID, rooms_of_edge, grid)
+                      for k in range(n)]
+            for k in range(n):
+                # a crack thinner than the spikes (e.g. the corners of two road ends a few cm apart) leads to a block
+                # at its ends, the start one first: out of the city, the cars crossing it would be lost
+                a, b = perimeter[k].ID, perimeter[(k + 1) % n].ID
+                if len(across[k]) == 0 and np.linalg.norm(np.subtract(self.vertices[a - 1], self.vertices[b - 1])) < self.spike_width:
+                    ends = sorted(rooms_of_vertex[a] - {bi}) or sorted(rooms_of_vertex[b] - {bi})
+                    across[k] = ends[:1]
+            for k in range(n):
+                corners = sorted(rooms_of_vertex[perimeter[k].ID] - {bi} - set(across[k]) - set(across[k - 1]))
+                perimeter[k].neighbours = [r + 1 for r in corners + across[k]]
+                if len(across[k]) == 0:
+                    perimeter[k].neighbours.append(0)
+
     def process_blocks_loop(self):
+        sorted_blocks = [self.block_sorted_by_type(["NUL",
+                                                    "RAIL", "RAILC",
+                                                    "ROADS", "ROADSN", "ROADN", "ROADD", "ROADDN",
+                                                    "BLOCK",
+                                                    "IS", "SW", "CW",
+                                                    "SLIVER", ["FAC", "FACB"], "ROOF",
+                                                    ""], b) for b in self.blocks]
+        # every perimeter first: the neighbours of a point depend on the perimeters of the other blocks
+        print("tracing the perimeters...")
+        perimeters = [self.block_perimeter(b, bi) for bi, b in enumerate(sorted_blocks)]
+        self.assign_neighbours(perimeters)
         for bi in range(len(self.blocks)):
             print("Processing block " + str(bi+1) + " of " + str(len(self.blocks)) + "...")
-            b = self.block_sorted_by_type(["NUL",
-                                           "RAIL", "RAILC",
-                                           "ROADS", "ROADSN", "ROADN", "ROADD", "ROADDN",
-                                           "BLOCK",
-                                           "IS", "SW", "CW",
-                                           "SLIVER", ["FAC", "FACB"], "ROOF",
-                                           ""], self.blocks[bi])
+            b = sorted_blocks[bi]
             self.block_flags.append(BlockFlag())
             self.perim_points = []
             self.shorts_lists = []
             # when the errors are collected (see report.collecting), a block that fails is written empty (the other
             # blocks keep their index) and the export goes on, so that every error is reported at once
             try:
-                try:
-                    self.perim_points = self.get_perimeter(b, bi, False)
-                except Exception:
-                    print("Perimeter Error, retrying with more precision...")
-                    self.perim_points = self.get_perimeter(b, bi, True)
-
-                if self.perim_points is None:
-                    raise Exception("Perimeter error on block " + str(bi+1))
-                self.perim_points.reverse()  # Picked it clockwise, as said in the wiki, but it's counterclockwise actually
+                if isinstance(perimeters[bi], Exception):
+                    raise perimeters[bi]
+                self.perim_points = perimeters[bi]
                 self.process_block_parts(b, bi)
             except Exception:
                 if not report.collecting():
@@ -1630,13 +1755,7 @@ class PSDLWriter:
                 self.perim_points = []
                 self.shorts_lists = []
 
-            n_perim_points = 0
-
-            for p in self.perim_points:
-                if len(p.blocks) == 0:
-                    n_perim_points += 1
-                else:
-                    n_perim_points += len(p.blocks)
+            n_perim_points = sum(len(p.neighbours) for p in self.perim_points)
             n_shorts = 0
             for a in self.shorts_lists:
                 for s in a:
@@ -1645,13 +1764,9 @@ class PSDLWriter:
             file.write_uint32(n_perim_points)
             file.write_uint32(n_shorts)
             for p in self.perim_points:
-                if len(p.blocks) == 0:
+                for neighbour in p.neighbours:
                     file.write_uint16(p.ID)  # unsigned
-                    file.write_uint16(0)
-                else:
-                    for bID in p.blocks:
-                        file.write_uint16(p.ID)  # unsigned
-                        file.write_uint16(bID + 1)
+                    file.write_uint16(neighbour)
             for a in self.shorts_lists:
                 for s in a:
                     file.write_uint16(s)  # unsigned
