@@ -29,6 +29,6 @@ The cable car lanes are not drawn in the game: the rails are [decals](decals.md)
 - On a road, check **Rail decals** in its **Traffic** tab (with **Cable car line**) to draw both rails along it.
 - On an intersection, check **Cable car rails** in its **Rails** tab (with 2 or 4 cable car roads) to draw the rails across it, along the path the cars take in the game. The rails arriving there from roads with rail decals then stop where the cars leave the road, so that they join the curves.
 - Where two rails cross, the intersection adds a square crossing decal (`r4i_railsX_f`); check **No rail crossings** to leave them out.
-- **Rail texture** (`r4i_rails_f` if empty), **Rail decal width** (2 m if empty) and **Rail crossing texture** (`r4i_railsX_f` if empty) change the look.
+- **Rail texture** (`texture/r4i_rails_f.tex` if empty), **Rail decal width** (2 m if empty) and **Rail crossing texture** (`texture/r4i_railsX_f.tex` if empty) change the look.
 
 These decals follow the roads and intersections when you edit them, and they can't be selected or edited on their own. For different rails, leave the options off and place [decals](decals.md) by hand.
