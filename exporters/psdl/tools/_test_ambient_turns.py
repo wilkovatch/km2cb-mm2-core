@@ -12,6 +12,7 @@ CORE = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(CORE / 'exporters/psdl'))
 from traffic.ambient import CAR_FRONT, LEFT, RIGHT, STRAIGHT, IntersectionTraffic  # noqa: E402
 from traffic.model import BaiIntersection, BaiRoad, BaiSide, RoadPaths  # noqa: E402
+from traffic.network import BaiNetworkBuilder  # noqa: E402
 
 LANE = 3.5
 
@@ -188,6 +189,37 @@ class LeftHandTraffic(unittest.TestCase):
         self.assertEqual(codes(res[('S', 0)]), ['traffic_left_hand_lanes'])
         self.assertEqual(codes(res[('S', 1)]), [])
         self.assertEqual(codes(results(crossing(S=(2, 0))[0], drive_on_left=True)[('S', 0)]), [])
+
+
+class OneWayOrientation(unittest.TestCase):
+    # the BAI roads of the one-way roads have their lanes on the second side (start to end), whichever way the roads
+    # were drawn: an ambient car turning around at the start of a road crashes the game when that side has no lanes
+    LANES = {1: (0, 2), 2: (2, 0), 3: (2, 0), 4: (1, 1), 5: (0, 1)}  # (forward, backward)
+
+    def chains(self, roads, joints):
+        builder = BaiNetworkBuilder.__new__(BaiNetworkBuilder)
+        builder.records = {rid: {'road': {'startIntersectionId': s, 'endIntersectionId': e}} for rid, (s, e) in roads.items()}
+
+        def layout(road_id, reverse):
+            f, b = self.LANES[road_id]
+            return {'forward_lanes': b if reverse else f, 'backward_lanes': f if reverse else b}
+        builder.layout = layout
+        return builder, builder.get_chains({j: {'roads': rs} for j, rs in joints.items()})
+
+    def test_flipped(self):
+        # 1 goes from A (10) to the seamless joint J (20), with its lanes towards A; 2 is drawn from B (30) to J, with its
+        # lanes towards J: the chain A-J-B drives B-J-A, so it starts on 2
+        builder, chains = self.chains({1: (10, 20), 2: (30, 20)}, {20: (1, 2)})
+        self.assertEqual(chains, [[(2, False), (1, True)]])
+        first_id, first_rev = chains[0][0]
+        self.assertEqual(builder.layout(first_id, first_rev), {'forward_lanes': 2, 'backward_lanes': 0})
+        self.assertEqual(builder.near_intersection(2, False), 30)
+        self.assertEqual(builder.far_intersection(1, True), 10)
+
+    def test_kept(self):
+        # one-way forwards, two-way and one-way drawn backwards on its own
+        _, chains = self.chains({3: (10, 20), 4: (20, 30), 5: (30, 40)}, {})
+        self.assertEqual(chains, [[(3, False)], [(4, False)], [(5, True)]])
 
 
 if __name__ == '__main__':

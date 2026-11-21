@@ -177,7 +177,17 @@ class BaiNetworkBuilder:
         if len(looped) > 0:
             names = ', '.join(self.road_name(r) for r in looped)
             report.warning('the roads ' + names + ' form a loop of seamless intersections without other intersections, no BAI road for them')
-        return chains
+        return [self.one_way_oriented(chain) for chain in chains]
+
+    def one_way_oriented(self, chain):
+        # a one-way chain with its lanes on the second side of the BAI (from its start to its end), as in the stock
+        # cities: an ambient car at the end of its road whose next road isn't active turns around onto the other side
+        # unless the first side has no cars, and with no lanes there the game crashes (see the agent notes)
+        road_id, reverse = chain[0]
+        layout = self.layout(road_id, reverse)
+        if layout['forward_lanes'] == 0 and layout['backward_lanes'] > 0:
+            return [(r, not rev) for r, rev in reversed(chain)]
+        return chain
 
     def bai_road_end(self, road_id, at_road_start):
         # the end of the BAI road (0: start, 1: end) on the start or end of a road, None if it isn't one

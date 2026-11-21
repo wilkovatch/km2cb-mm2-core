@@ -10,6 +10,7 @@
 #           the stock centre, which is midway between the curb at road level and the outer edge.
 # --lint:   checks the conventions of the stock files (the right side lanes and rails from the end to the start,
 #           the sidewalks from the start to the end, at least 4 sections, unit vectors, 1 m traffic light axes,
+#           one-way roads with cars only on the left side,
 #           flat flag, road ends and intersections consistent, at most 11 roads per intersection), exits with 1 if
 #           something is wrong.
 # Without options both are done.
@@ -215,6 +216,9 @@ def lint(roads, intersections, verbose):
                 problem(name + ' ' + side_name + ': lane offsets out of the road ' + str(s['offsets']))
             if s['lanes'] > 4:
                 problem(name + ' ' + side_name + ': more than 4 lanes')
+        # an ambient car turning around at the start of the road (next road not active) crashes the game
+        if rd['left']['lanes'] == 0 and rd['right']['lanes'] > 0 and not rd['right']['ambient'] & 1:
+            problem(name + ': one-way with cars on the right side only (the ambient cars crash the game)')
         for end_name in ('start', 'end'):
             e = rd[end_name]
             if e['index'] != CDCDCDCD:
