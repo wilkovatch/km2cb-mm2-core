@@ -48,8 +48,7 @@
 				},
 				{
 					"name": "fixSidewalksUV",
-					"width": 1.5,
-					"enabledWhen": "sidewalks.roadStyleUVAvailable"
+					"width": 1.5
 				},
 				{
 					"name": "sidewalkListGroup",

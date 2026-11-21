@@ -10,7 +10,7 @@ namespace Api {
     public partial class ApiSelfTest {
         //the segments of the sidewalks of the intersections: the inner and outer sides with different segments (joined by
         //a strip with repeated vertices), the outer side skipping the crosswalks, the overrides of single sidewalks (kept by
-        //the road they start at), their list and outlines in the panel, and the road-style UV only where the sides match
+        //the road they start at), their list and outlines in the panel, and the road-style UV of the strips with repeated vertices
         async Task IntersectionSidewalks() {
             Log("intersection sidewalks");
             object End(int road, string end = "end") => new { roadEnd = new { road, end } };
@@ -157,21 +157,31 @@ namespace Api {
             await Call("intersections.setSidewalkOverride", new { intersection = id, road = rC, clear = true });
             Check("clearing the override", !Of(await Sidewalks(), rC)["overridden"].Value<bool>());
 
-            //the road-style UV is available only while the sides match, and exported only for the sidewalks where they do
-            await Call("state.setParam", new { @ref = id, name = "fixSidewalksUV", value = true });
-            Check("the road-style UV is available with matching sides", CoreElementTool.Evaluate("sidewalks.roadStyleUVAvailable", intersection, "test"));
-            await Call("state.setBuiltin", new { @ref = id, name = "sidewalkOuterSegments", value = 2 });
-            Check("but not with other outer segments", !CoreElementTool.Evaluate("sidewalks.roadStyleUVAvailable", intersection, "test"));
-            await Call("state.setBuiltin", new { @ref = id, name = "sidewalkOuterSegments", value = 0 });
-            await Call("state.setBuiltin", new { @ref = id, name = "sidewalkOuterSkipsCrosswalks", value = true });
-            Check("nor with the outer side skipping the crosswalks", !CoreElementTool.Evaluate("sidewalks.roadStyleUVAvailable", intersection, "test"));
-            await Call("state.setBuiltin", new { @ref = id, name = "sidewalkOuterSkipsCrosswalks", value = false });
+            //the road-style UV also on the sidewalks with other segments on the two sides: the strip repeats the outer vertices
+            //(fewer outer segments) or the inner ones (more outer segments), the U following the middle of the sections
+            //(the surfaces share the vertex arrays of the mesh: the UVs of a submesh are those of its indices)
+            List<Vector2> SidewalkUVs() {
+                var res = new List<Vector2>();
+                var gen = intersection.generator;
+                var uvs = GameEngine.Mesh.GetUVs(gen.m);
+                for (int s = 0; s < GameEngine.Mesh.GetSubmeshCount(gen.m) && s < gen.partsInfo.Count; s++) {
+                    if (!gen.partsInfo[s].StartsWith("junction_0.")) continue;
+                    foreach (var index in GameEngine.Mesh.GetIndices(gen.m, s)) res.Add(uvs[index]);
+                }
+                return res;
+            }
+            bool RoadStyle(List<Vector2> uvs) => uvs.Count > 0 && uvs.All(uv => Mathf.Abs(uv.Y) < 1e-4f || Mathf.Abs(uv.Y - 1) < 1e-4f);
             await Call("intersections.setSidewalkOverride", new { intersection = id, road = rC, outerSegments = 2 });
+            await Call("intersections.setSidewalkOverride", new { intersection = id, road = rA, outerSegments = 6 });
+            Check("without fixSidewalksUV the sidewalks have the normal UV", !RoadStyle(SidewalkUVs()));
+            await Call("state.setParam", new { @ref = id, name = "fixSidewalksUV", value = true });
+            sw = await Sidewalks();
+            Check("with it, the road-style UV also where the sides don't match", sw.All(s => !s["sidesMatch"].Value<bool>()) && RoadStyle(SidewalkUVs()));
             using var geometry = new CityEncoder.ExportGeometry(History.ElementRegistry.GetId);
             var exported = geometry.GetIntersection(intersection, id);
             var matches = exported.data.fields.Array<bool>("sidewalksMatch");
-            Check("the export says which sidewalks match", matches != null && matches.Length == 2 && matches.Count(m => !m) == 1);
-            //a dry export: the PSDL writer takes the road-style sidewalk and the one with repeated outer vertices
+            Check("the export says which sidewalks match", matches != null && matches.Length == 2 && matches.All(m => !m));
+            //a dry export: the PSDL writer takes the road-style sidewalks with repeated outer and inner vertices
             var res = await Call("city.validate");
             var name = GO.GetName(intersection.geo);
             Log("     city.validate: " + res["errors"] + " errors, " + res["warnings"] + " warnings in " + res["durationMs"].Value<double>().ToString("0") + " ms");

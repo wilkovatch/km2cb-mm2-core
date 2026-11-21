@@ -158,30 +158,6 @@
 		},
 		{
 			"fromStart": true,
-			"name": "forceStraightLeftStartSidewalk",
-			"type": "bool",
-			"newName": "A_forcedStart"
-		},
-		{
-			"fromStart": true,
-			"name": "forceStraightLeftEndSidewalk",
-			"type": "bool",
-			"newName": "A_forcedEnd"
-		},
-		{
-			"fromStart": false,
-			"name": "forceStraightRightStartSidewalk",
-			"type": "bool",
-			"newName": "B_forcedStart"
-		},
-		{
-			"fromStart": false,
-			"name": "forceStraightRightEndSidewalk",
-			"type": "bool",
-			"newName": "B_forcedEnd"
-		},
-		{
-			"fromStart": true,
 			"name": "startCrosswalkSize",
 			"type": "float",
 			"newName": "CwASizeS"
@@ -282,21 +258,6 @@
 			"value": "if(AHasWall or AHasGallery, 0, 1)"
 		},
 		{
-			"name": "forcedStraightStart",
-			"type": "bool",
-			"value": "(thisIsEndA and A_forcedEnd) or (not thisIsEndA and A_forcedStart)"
-		},
-		{
-			"name": "forcedStraightEnd",
-			"type": "bool",
-			"value": "(thisIsEndB and B_forcedEnd) or (not thisIsEndB and B_forcedStart)"
-		},
-		{
-			"name": "forcedStraight",
-			"type": "bool",
-			"value": "not convex and (forcedStraightStart or forcedStraightEnd)"
-		},
-		{
 			"name": "CwASize",
 			"type": "float",
 			"value": "if(thisIsEndA, CwASizeE, CwASizeS)"
@@ -336,7 +297,7 @@
 		{
 			"name": "v0",
 			"type": "vec3",
-			"value": "if((selfIntersectingSpline or forcedStraight) and z > 0 and z < totalLength, v0_0, v0)"
+			"value": "if(selfIntersectingSpline and z > 0 and z < totalLength, v0_0, v0)"
 		},
 		{
 			"name": "absX0",

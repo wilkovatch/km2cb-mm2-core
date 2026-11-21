@@ -81,22 +81,6 @@
 				{
 					"name": "textureCW1",
 					"width": 1.5
-				},
-				{
-					"name": "forceStraightLeftStartSidewalk",
-					"width": 0.75
-				},
-				{
-					"name": "forceStraightRightStartSidewalk",
-					"width": 0.75
-				},
-				{
-					"name": "forceStraightLeftEndSidewalk",
-					"width": 0.75
-				},
-				{
-					"name": "forceStraightRightEndSidewalk",
-					"width": 0.75
 				}
 			]
 		},

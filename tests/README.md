@@ -18,6 +18,7 @@ The scratch city folder must be new for creation scenarios. Logs and screenshots
 |---|---|
 | `roads`, `creation`, `dependencies` | Roads, deferred API creation, shared points and attachment dependencies |
 | `geometrylessRoads` | BAI-only roads: no meshes, intersections sized without them or without surface, picking, type changes, export JSON, validation warnings and the BAI of the exporter (`exporters/psdl/tools/_test_geometryless_roads.py` on the exported JSON) |
+| `intersectionSidewalks` | Intersection sidewalks: inner and outer segments, the outer side skipping the crosswalks, the overrides of single sidewalks, their list, outlines and picking in the panel, and the road-style UV also on the strips with repeated vertices (other segments on the two sides). The conversion of the removed force straight flags of the roads into sidewalk overrides (migration 11) is checked by `exporters/psdl/tools/_test_force_straight_migration.py` |
 | `customElementPresets`, `listLabels`, `independentPoints` | Custom element presets, list-only labels and inline point storage |
 | `splines`, `splineState`, `projection` | Decals and rails, curve components, spline instance values, history, reload and surface projection |
 | `rails` | The `rail` elements (room perimeter railings): accepted targets, spans following the perimeters and road anchors, loops, reversing, history and export |

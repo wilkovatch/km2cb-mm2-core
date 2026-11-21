@@ -230,30 +230,6 @@
 			"instanceSpecific": true
 		},
 		{
-			"name": "forceStraightLeftEndSidewalk",
-			"label": "RD_FRC_L_E_SW",
-			"type": "bool",
-			"instanceSpecific": true
-		},
-		{
-			"name": "forceStraightRightEndSidewalk",
-			"label": "RD_FRC_R_E_SW",
-			"type": "bool",
-			"instanceSpecific": true
-		},
-		{
-			"name": "forceStraightLeftStartSidewalk",
-			"label": "RD_FRC_L_S_SW",
-			"type": "bool",
-			"instanceSpecific": true
-		},
-		{
-			"name": "forceStraightRightStartSidewalk",
-			"label": "RD_FRC_R_S_SW",
-			"type": "bool",
-			"instanceSpecific": true
-		},
-		{
 			"name": "divider",
 			"label": "TYPE",
 			"type": "enum",

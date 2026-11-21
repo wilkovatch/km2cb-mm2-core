@@ -817,11 +817,10 @@ class JsonProcessor:
                 elem = ExportedCityElement()
                 sw_indices = []
                 sw_vertices = []
-                # the road-style sections need the same sections on the two sides of the sidewalk (not where its outer side
-                # has other segments, see sidewalksMatch in the builder's ExportGeometry)
-                sides_match = intersection['data']['fields'].get('sidewalksMatch')
-                road_style = state_bool(state, 'fixSidewalksUV') and (sides_match is None or cur_junction < 0
-                    or cur_junction >= len(sides_match) or sides_match[cur_junction])
+                # the sections of the junction are pairs of the two sides, each repeating its vertices where only the other
+                # one advances (other segments on the outer side, see sidewalksMatch in the builder's ExportGeometry): the
+                # road-style sections take them as they are
+                road_style = state_bool(state, 'fixSidewalksUV')
                 if road_style:
                     for j in range(len(p['vertices']) - 4, -1, -4):
                         for n in range(3):

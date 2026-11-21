@@ -33,22 +33,22 @@
 		{
 			"name": "uv0U",
 			"type": "float",
-			"value": "if(fixSidewalksUV and sidewalkSidesMatch, zSw, absX1 * (-0.25))"
+			"value": "if(fixSidewalksUV, zSw, absX1 * (-0.25))"
 		},
 		{
 			"name": "uv0V",
 			"type": "float",
-			"value": "if(fixSidewalksUV and sidewalkSidesMatch, 1, absZ1 * (-0.25))"
+			"value": "if(fixSidewalksUV, 1, absZ1 * (-0.25))"
 		},
 		{
 			"name": "uv1U",
 			"type": "float",
-			"value": "if(fixSidewalksUV and sidewalkSidesMatch, zSw, absX0 * (-0.25))"
+			"value": "if(fixSidewalksUV, zSw, absX0 * (-0.25))"
 		},
 		{
 			"name": "uv1V",
 			"type": "float",
-			"value": "if(fixSidewalksUV and sidewalkSidesMatch, 0, absZ0 * (-0.25))"
+			"value": "if(fixSidewalksUV, 0, absZ0 * (-0.25))"
 		}
 	],
 	"mainMesh": {
